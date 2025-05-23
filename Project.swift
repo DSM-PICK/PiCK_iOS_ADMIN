@@ -25,22 +25,7 @@ let project = Project(
             destinations: .iOS,
             product: .unitTests,
             bundleId: "io.tuist.PiCK-iOS-ADMINTests",
-            infoPlist: .extendingDefault(
-                with: [
-                    "UILaunchStoryboardName": "LaunchScreen.storyboard",
-                    "UIApplicationSceneManifest": [
-                        "UIApplicationSupportsMultipleScenes": false,
-                        "UISceneConfigurations": [
-                            "UIWindowSceneSessionRoleApplication": [
-                                [
-                                    "UISceneConfigurationName": "Default Configuration",
-                                    "UISceneDelegateClassName": "$(PRODUCT_MODULE_NAME).SceneDelegate"
-                                ],
-                            ]
-                        ]
-                    ],
-                ]
-            ),
+            infoPlist: .default,
             sources: ["PiCK_iOS_ADMIN/Tests/**"],
             resources: [],
             dependencies: [.target(name: "PiCK_iOS_ADMIN")]
