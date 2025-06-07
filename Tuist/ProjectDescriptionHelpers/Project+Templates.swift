@@ -23,7 +23,7 @@ public extension Project {
         resources: ResourceFileElements? = nil,
         resourceSynthesizers: [ResourceSynthesizer] = .default + [],
         settings: SettingsDictionary = [:],
-        additionalPlistRows: [String: ProjectDescription.InfoPlist.Value] = [:]
+        additionalPlistRows: [String: Plist.Value] = [:]
     ) -> Project {
         let scripts: [TargetScript] = isCI ? [] : [.swiftLint]
 

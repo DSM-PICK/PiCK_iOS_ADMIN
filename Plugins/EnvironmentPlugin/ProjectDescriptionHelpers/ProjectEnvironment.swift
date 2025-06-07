@@ -1,21 +1,19 @@
 import ProjectDescription
 
 public struct ProjectEnvironment {
-    public let appName: String
     public let targetName: String
     public let targetTestName: String
     public let organizationName: String
-    public let deploymentTarget: DeploymentTarget
-    public let platform: Platform
+    public let deploymentTarget: ProjectDescription.DeploymentTargets
+    public let platform: ProjectDescription.Platform
     public let baseSetting: SettingsDictionary
 }
 
 public let env = ProjectEnvironment(
-    appName: "PiCK_iOS_ADMIN",
-    targetName: "PiCK_iOS_ADMIN",
+    targetName: "DSM-PiCK",
     targetTestName: "DSM-PiCKTests",
     organizationName: "com.team.pick",
-    deploymentTarget: .iOS(targetVersion: "15.0", devices: [.iphone, .ipad]),
-    platform: .iOS,
+    deploymentTarget: .iOS("15.0"),
+    platform: ProjectDescription.Platform.iOS,
     baseSetting: ["OTHER_LDFLAGS": ["$(inherited) -Objc"]]
 )
