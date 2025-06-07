@@ -1,8 +1,8 @@
-import ConfigurationPlugin
-import DependencyPlugin
-import EnvironmentPlugin
 import Foundation
 import ProjectDescription
+import DependencyPlugin
+import EnvironmentPlugin
+import ConfigurationPlugin
 
 let isCI = (ProcessInfo.processInfo.environment["TUIST_CI"] ?? "0") == "1" ? true : false
 
@@ -11,21 +11,29 @@ public enum ModuleTarget {
     case demo
 }
 
-public extension Project {
-    static func makeModule(
+extension Project {
+    public static func makeModule(
         name: String,
-        platform: Platform = env.platform,
-        product: Product,
-        targets: Set<ModuleTarget>,
-        packages: [Package] = [],
-        dependencies: [TargetDependency] = [],
+        organizationName: String = env.organizationName,
         sources: SourceFilesList = .sources,
         resources: ResourceFileElements? = nil,
         resourceSynthesizers: [ResourceSynthesizer] = .default + [],
+        destination: Destinations = env.destination,
+        product: Product,
+        packages: [Package] = [],
+        deploymentTarget: DeploymentTargets = env.deploymentTargets,
+        includeTargets: Set<ModuleTarget> = [],
+        dependencies: [TargetDependency] = [],
         settings: SettingsDictionary = [:],
-        additionalPlistRows: [String: Plist.Value] = [:]
+        configurations: [Configuration] = [],
+        additionalPlistRows: [String: ProjectDescription.Plist.Value] = [:]
     ) -> Project {
+
         let scripts: [TargetScript] = isCI ? [] : [.swiftLint]
+
+        let ldFlagsSettings: SettingsDictionary = product == .framework ?
+        ["OTHER_LDFLAGS": .string("$(inherited) -all_load")] :
+        ["OTHER_LDFLAGS": .string("$(inherited)")]
 
         let configurations: [Configuration] = isCI ?
         [
@@ -42,17 +50,19 @@ public extension Project {
         let settings: Settings = .settings(
             base: env.baseSetting
                 .merging(.codeSign)
-                .merging(settings),
+                .merging(settings)
+                .merging(ldFlagsSettings),
             configurations: configurations,
             defaultSettings: .recommended
         )
+
         var allTargets: [Target] = [
-            Target(
+            .target(
                 name: name,
-                platform: platform,
+                destinations: destination,
                 product: product,
-                bundleId: "\(env.organizationName).\(name)",
-                deploymentTarget: env.deploymentTarget,
+                bundleId: "\(organizationName).\(name)",
+                deploymentTargets: deploymentTarget,
                 infoPlist: .extendingDefault(with: additionalPlistRows),
                 sources: sources,
                 resources: resources,
@@ -61,14 +71,14 @@ public extension Project {
             )
         ]
 
-        if targets.contains(.unitTest) {
+        if includeTargets.contains(.unitTest) {
             allTargets.append(
-                Target(
+                .target(
                     name: "\(name)Tests",
-                    platform: platform,
+                    destinations: destination,
                     product: .unitTests,
-                    bundleId: "\(env.organizationName).\(name)Tests",
-                    deploymentTarget: env.deploymentTarget,
+                    bundleId: "\(organizationName).\(name)Tests",
+                    deploymentTargets: deploymentTarget,
                     infoPlist: .default,
                     sources: .unitTests,
                     scripts: scripts,
@@ -77,16 +87,15 @@ public extension Project {
             )
         }
 
-        // MARK: - Demo App
-        if targets.contains(.demo) {
+        if includeTargets.contains(.demo) {
             let demoDependencies: [TargetDependency] = [.target(name: name)]
             allTargets.append(
-                Target(
+                .target(
                     name: "\(name)DemoApp",
-                    platform: platform,
+                    destinations: destination,
                     product: .app,
-                    bundleId: "\(env.organizationName).\(name)DemoApp",
-                    deploymentTarget: env.deploymentTarget,
+                    bundleId: "\(organizationName).\(name)DemoApp",
+                    deploymentTargets: deploymentTarget,
                     infoPlist: .extendingDefault(with: [
                         "UIMainStoryboardFile": "",
                         "UILaunchStoryboardName": "LaunchScreen",
@@ -100,13 +109,13 @@ public extension Project {
             )
         }
 
-        let schemes: [Scheme] = targets.contains(.demo) ?
+        let schemes: [Scheme] = includeTargets.contains(.demo) ?
         [.makeScheme(target: .dev, name: name), .makeDemoScheme(target: .dev, name: name)] :
         [.makeScheme(target: .dev, name: name)]
 
         return Project(
             name: name,
-            organizationName: env.organizationName,
+            organizationName: organizationName,
             packages: packages,
             settings: settings,
             targets: allTargets,
@@ -118,7 +127,7 @@ public extension Project {
 
 extension Scheme {
     static func makeScheme(target: ConfigurationName, name: String) -> Scheme {
-        return Scheme(
+        return .scheme(
             name: name,
             shared: true,
             buildAction: .buildAction(targets: ["\(name)"]),
@@ -135,8 +144,8 @@ extension Scheme {
     }
 
     static func makeDemoScheme(target: ConfigurationName, name: String) -> Scheme {
-        return Scheme(
-            name: name,
+        return .scheme(
+            name: "\(name)DemoApp",
             shared: true,
             buildAction: .buildAction(targets: ["\(name)DemoApp"]),
             testAction: .targets(

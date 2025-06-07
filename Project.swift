@@ -13,16 +13,30 @@ let project = Project(
         ]
     ),
     targets: [
-        Target(
+        .target(
             name: "PiCK_iOS_ADMIN",
-            platform: .iOS,
+            destinations: .iOS,
             product: .app,
-            bundleId: "com.pick.PiCK_iOS_ADMIN",
-            deploymentTarget: .iOS(targetVersion: "15.0", devices: .iphone),
-            infoPlist: .default,
+            bundleId: "com.pick.PiCK-iOS-ADMIN",
+            infoPlist: .extendingDefault(
+                with: [
+                    "UILaunchStoryboardName": "LaunchScreen.storyboard",
+                    "UIApplicationSceneManifest": [
+                        "UIApplicationSupportsMultipleScenes": false,
+                        "UISceneConfigurations": [
+                            "UIWindowSceneSessionRoleApplication": [
+                                [
+                                    "UISceneConfigurationName": "Default Configuration",
+                                    "UISceneDelegateClassName": "$(PRODUCT_MODULE_NAME).SceneDelegate"
+                                ],
+                            ]
+                        ]
+                    ],
+                ]
+            ),
             sources: ["PiCK_iOS_ADMIN/Sources/**"],
             resources: ["PiCK_iOS_ADMIN/Resources/**"],
             dependencies: []
         )
     ]
-) 
+)
