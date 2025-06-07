@@ -19,7 +19,7 @@ let settings: Settings = .settings(
     defaultSettings: .recommended
 )
 
-let scripts: [TargetScript] = isCI ? [] : [.swiftLint, .googleInfoPlistScripts]
+let scripts: [TargetScript] = isCI ? [.googleInfoPlistScripts] : [.swiftLint, .googleInfoPlistScripts]
 
 let targets: [Target] = [
     .init(
@@ -34,7 +34,8 @@ let targets: [Target] = [
         entitlements: "Support/\(env.appName).entitlements",
         scripts: scripts,
         dependencies: [
-            .Projects.flow
+            .Projects.flow,
+            .SPM.FCM
         ],
         settings: .settings(base: env.baseSetting)
     ),
@@ -95,7 +96,7 @@ let schemes: [Scheme] = [
 let project = Project(
     name: env.targetName,
     organizationName: env.organizationName,
-    packages: [],
+    packages: [.FCM],
     settings: settings,
     targets: targets,
     schemes: schemes
