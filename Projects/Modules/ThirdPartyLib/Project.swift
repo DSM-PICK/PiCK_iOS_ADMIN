@@ -5,8 +5,8 @@ import DependencyPlugin
 let project = Project.makeModule(
     name: "ThirdPartyLib",
     product: .staticFramework,
-    targets: [],
     packages: [.FCM],
+    includeTargets: [],
     dependencies: [
         .SPM.RxCocoa,
         .SPM.RxFlow,

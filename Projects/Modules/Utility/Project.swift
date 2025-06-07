@@ -5,7 +5,7 @@ import DependencyPlugin
 let project = Project.makeModule(
     name: "Utility",
     product: .framework,
-    targets: [],
+    includeTargets: [],
     dependencies: [
         .Projects.core
     ]

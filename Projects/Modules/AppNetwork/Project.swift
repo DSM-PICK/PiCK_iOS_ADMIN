@@ -5,7 +5,7 @@ import DependencyPlugin
 let project = Project.makeModule(
     name: "AppNetwork",
     product: .staticFramework,
-    targets: [.unitTest],
+    includeTargets: [.unitTest],
     dependencies: [
         .Modules.utility
     ]

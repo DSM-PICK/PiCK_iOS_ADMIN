@@ -21,13 +21,14 @@ let settings: Settings = .settings(
 
 let scripts: [TargetScript] = isCI ? [.googleInfoPlistScripts] : [.swiftLint, .googleInfoPlistScripts]
 
+
 let targets: [Target] = [
-    .init(
+    .target(
         name: env.targetName,
-        platform: env.platform,
+        destinations: env.destination,
         product: .app,
         bundleId: "$(APP_BUNDLE_ID)",
-        deploymentTarget: env.deploymentTarget,
+        deploymentTargets: env.deploymentTargets,
         infoPlist: .file(path: "Support/Info.plist"),
         sources: .sources,
         resources: .resources,
@@ -38,57 +39,45 @@ let targets: [Target] = [
         ],
         settings: .settings(base: env.baseSetting)
     ),
-    .init(
-        name: env.targetTestName,
-        platform: .iOS,
-        product: .unitTests,
-        bundleId: "\(env.organizationName).\(env.targetName)Tests",
-        deploymentTarget: env.deploymentTarget,
-        infoPlist: .default,
-        sources: .unitTests,
-        dependencies: [
-            .target(name: env.targetName)
-        ]
-    )
 ]
 
 let schemes: [Scheme] = [
-    .init(
-      name: "\(env.targetName)-DEV",
-      shared: true,
-      buildAction: .buildAction(targets: ["\(env.targetName)"]),
-      testAction: TestAction.targets(
-          ["\(env.targetTestName)"],
-          configuration: .dev,
-          options: TestActionOptions.options(
-              coverage: true,
-              codeCoverageTargets: ["\(env.targetName)"]
-          )
-      ),
-      runAction: .runAction(configuration: .dev),
-      archiveAction: .archiveAction(configuration: .dev),
-      profileAction: .profileAction(configuration: .dev),
-      analyzeAction: .analyzeAction(configuration: .dev)
+    .scheme(
+        name: "\(env.targetName)-DEV",
+        shared: true,
+        buildAction: .buildAction(targets: [TargetReference(stringLiteral: env.targetName)]),
+        testAction: .targets(
+            [TestableTarget(stringLiteral: env.targetName)],
+            configuration: .dev,
+            options: .options(
+                coverage: true,
+                codeCoverageTargets: [TargetReference(stringLiteral: env.targetName)]
+            )
+        ),
+        runAction: .runAction(configuration: .dev),
+        archiveAction: .archiveAction(configuration: .dev),
+        profileAction: .profileAction(configuration: .dev),
+        analyzeAction: .analyzeAction(configuration: .dev)
     ),
-    .init(
-      name: "\(env.targetName)-PROD",
-      shared: true,
-      buildAction: BuildAction(targets: ["\(env.targetName)"]),
-      testAction: nil,
-      runAction: .runAction(configuration: .prod),
-      archiveAction: .archiveAction(configuration: .prod),
-      profileAction: .profileAction(configuration: .prod),
-      analyzeAction: .analyzeAction(configuration: .prod)
+    .scheme(
+        name: "\(env.targetName)-PROD",
+        shared: true,
+        buildAction: .buildAction(targets: [TargetReference(stringLiteral: env.targetName)]),
+        testAction: nil,
+        runAction: .runAction(configuration: .prod),
+        archiveAction: .archiveAction(configuration: .prod),
+        profileAction: .profileAction(configuration: .prod),
+        analyzeAction: .analyzeAction(configuration: .prod)
     ),
-    .init(
-      name: "\(env.targetName)-STAGE",
-      shared: true,
-      buildAction: BuildAction(targets: ["\(env.targetName)"]),
-      testAction: nil,
-      runAction: .runAction(configuration: .stage),
-      archiveAction: .archiveAction(configuration: .stage),
-      profileAction: .profileAction(configuration: .stage),
-      analyzeAction: .analyzeAction(configuration: .stage)
+    .scheme(
+        name: "\(env.targetName)-STAGE",
+        shared: true,
+        buildAction: .buildAction(targets: [TargetReference(stringLiteral: env.targetName)]),
+        testAction: nil,
+        runAction: .runAction(configuration: .stage),
+        archiveAction: .archiveAction(configuration: .stage),
+        profileAction: .profileAction(configuration: .stage),
+        analyzeAction: .analyzeAction(configuration: .stage)
     )
 ]
 

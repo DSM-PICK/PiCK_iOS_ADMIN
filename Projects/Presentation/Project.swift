@@ -5,7 +5,7 @@ import DependencyPlugin
 let project = Project.makeModule(
     name: "Presentation",
     product: .staticLibrary,
-    targets: [.unitTest],
+    includeTargets: [.unitTest],
     dependencies: [
         .Projects.domain,
         .Modules.designSystem
