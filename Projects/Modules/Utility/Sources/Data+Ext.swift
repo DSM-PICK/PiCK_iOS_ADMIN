@@ -16,10 +16,10 @@ public extension String {
     func toDateFormat(
         _ format: String,
         locale: Locale = .current
-    ) -> Date {
+      ) -> Date? {
         let formatter = DateFormatter()
         formatter.dateFormat = format
         formatter.locale = locale
-        return formatter.date(from: self) ?? .init()
+        return formatter.date(from: self)
     }
 }
