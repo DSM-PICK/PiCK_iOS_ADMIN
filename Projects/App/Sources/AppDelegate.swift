@@ -20,11 +20,6 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
         assembler = Assembler([
-            KeychainAssembly(),
-            DataSourceAssembly(),
-            RepositoryAssembly(),
-            UseCaseAssembly(),
-            PresentationAssembly()
          ], container: AppDelegate.container)
 
         // Firebase 설정
