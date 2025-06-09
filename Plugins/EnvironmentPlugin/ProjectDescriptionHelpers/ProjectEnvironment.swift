@@ -11,7 +11,7 @@ public struct ProjectEnvironment {
 
 public let env = ProjectEnvironment(
     appName: "PiCK_iOS_ADMIN",
-    targetName: "DSM-PiCKTests",
+    targetName: "PiCK_iOS_ADMIN",
     organizationName: "com.team.pick",
     deploymentTargets: .iOS("15.0"),
     destination: .iOS,
