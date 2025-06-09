@@ -17,6 +17,7 @@ import PackageDescription
             base: env.baseSetting,
             configurations: [
                 .debug(name:  "STAGE"),
+                .debug(name: "DEV"),
                 .release(name: "PROD")
             ]
         )
