@@ -30,8 +30,8 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/Moya/Moya.git", from: "15.0.3"),
         .package(url: "https://github.com/ReactiveX/RxSwift", from: "6.7.1"),
-        .package(url: "https://github.com/SnapKit/SnapKit.git", from: "5.0.1"),
-        .package(url: "https://github.com/devxoul/Then.git", from: "3.0.0"),
+        .package(url: "https://github.com/layoutBox/PinLayout.git", from: "1.10.5"),
+        .package(url: "https://github.com/layoutBox/FlexLayout.git", from: "2.2.1"),
         .package(url: "https://github.com/onevcat/Kingfisher.git", from: "7.4.1"),
         .package(url: "https://github.com/evgenyneu/keychain-swift.git", from: "24.0.0"),
         .package(url: "https://github.com/RxSwiftCommunity/RxFlow.git", from: "2.13.0"),
