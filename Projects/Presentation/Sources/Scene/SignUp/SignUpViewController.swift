@@ -2,9 +2,8 @@ import UIKit
 import PinLayout
 import FlexLayout
 
-class SignUpViewController: BaseReactorViewController<SignUpReactor> {
+public final class SignUpViewController: BaseReactorViewController<SignUpReactor> {
+    private let 
     
-    view.flex.define { (flex) in
         
     }
-}
