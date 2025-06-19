@@ -7,8 +7,8 @@ public extension TargetDependency {
 public extension TargetDependency.SPM {
     static let RxSwift = TargetDependency.external(name: "RxSwift")
     static let RxCocoa = TargetDependency.external(name: "RxCocoa")
-    static let PinLayout = TargetDependency.external(name: "PinLayout")
-    static let FlexLayout = TargetDependency.external(name: "FlexLayout")
+    static let SnapKit = TargetDependency.external(name: "SnapKit")
+    static let Then = TargetDependency.external(name: "Then")
     static let RxFlow = TargetDependency.external(name: "RxFlow")
     static let Swinject = TargetDependency.external(name: "Swinject")
     static let Moya = TargetDependency.external(name: "Moya")
