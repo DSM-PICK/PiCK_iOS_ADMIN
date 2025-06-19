@@ -1,5 +1,5 @@
 {
-  "originHash" : "23564aa7845545e1c2cadbda49efe8b320742da075b1357d826205d76e9e12f4",
+  "originHash" : "a3c8181e2cd914a1470bd2613f7464de5ac745e13083899c72d3901c8be4ed68",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -35,15 +35,6 @@
       "state" : {
         "revision" : "45d327fcbe7793747295346c2209ad419bdead74",
         "version" : "11.14.0"
-      }
-    },
-    {
-      "identity" : "flexlayout",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/layoutBox/FlexLayout.git",
-      "state" : {
-        "revision" : "d5bec8389cb70a37a37f3575d7502f144c807540",
-        "version" : "2.2.1"
       }
     },
     {
@@ -173,15 +164,6 @@
       }
     },
     {
-      "identity" : "pinlayout",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/layoutBox/PinLayout.git",
-      "state" : {
-        "revision" : "8eaa3a15e4dcabaca4c95aea4c0ff0c9b4a67213",
-        "version" : "1.10.5"
-      }
-    },
-    {
       "identity" : "promises",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/promises.git",
@@ -245,6 +227,15 @@
       }
     },
     {
+      "identity" : "snapkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/SnapKit/SnapKit.git",
+      "state" : {
+        "revision" : "2842e6e84e82eb9a8dac0100ca90d9444b0307f4",
+        "version" : "5.7.1"
+      }
+    },
+    {
       "identity" : "starscream",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/daltoniam/Starscream.git",
@@ -272,21 +263,21 @@
       }
     },
     {
+      "identity" : "then",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/devxoul/Then.git",
+      "state" : {
+        "revision" : "d41ef523faef0f911369f79c0b96815d9dbb6d7a",
+        "version" : "3.0.0"
+      }
+    },
+    {
       "identity" : "weakmaptable",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ReactorKit/WeakMapTable.git",
       "state" : {
         "revision" : "cb05d64cef2bbf51e85c53adee937df46540a74e",
         "version" : "1.2.1"
-      }
-    },
-    {
-      "identity" : "yoga",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/facebook/yoga.git",
-      "state" : {
-        "revision" : "042f5013152eb81c1552dec945b88f7b95ca350f",
-        "version" : "3.2.1"
       }
     }
   ],
