@@ -15,7 +15,7 @@ public class PiCKTextField: BaseTextField {
         didSet {
             textHideButton.isHidden = !isSecurity
             self.isSecureTextEntry = true
-            self.addLeftAndRightView()
+            self.addHorizontalPadding()
         }
     }
     private var borderColor: UIColor {
@@ -64,8 +64,8 @@ public class PiCKTextField: BaseTextField {
         self.backgroundColor = .gray50
         self.layer.cornerRadius = 4
         self.layer.border(color: borderColor, width: 1)
-        self.addLeftView()
-        self.addRightView()
+        self.addLeftPadding()
+        self.addRightPadding()
         self.autocapitalizationType = .none
         self.autocorrectionType = .no
         self.keyboardType = .alphabet

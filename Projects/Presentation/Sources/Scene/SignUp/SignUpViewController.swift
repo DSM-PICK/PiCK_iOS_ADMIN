@@ -1,9 +1,9 @@
 import UIKit
-import PinLayout
-import FlexLayout
+import SnapKit
+import Then
 
 public final class SignUpViewController: BaseReactorViewController<SignUpReactor> {
-    private let 
-    
+    private let titleLabel = UILabel().then {
         
     }
+}
