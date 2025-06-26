@@ -36,6 +36,9 @@ public class PiCKTextField: BaseTextField {
         textColor: .error,
         font: .pickFont(.caption2)
     )
+    private let requestButton = PiCKButton().then {
+        
+    }
 
     public init(
         titleText: String? = nil,
