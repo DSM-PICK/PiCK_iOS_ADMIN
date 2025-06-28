@@ -1,14 +1,17 @@
 import UIKit
-import Then
-import SnapKit
+
 import RxSwift
 import RxCocoa
 
+import Then
+import SnapKit
+
 open class BaseButton: UIButton {
+    public let disposeBag = DisposeBag()
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        addView()
+        attribute()
         bindAction()
     }
     required public init?(coder: NSCoder) {
@@ -16,13 +19,17 @@ open class BaseButton: UIButton {
     }
     open override func layoutSubviews() {
         super.layoutSubviews()
-        setLayout()
+        layout()
     }
 
-    public func addView() {}
-
-    public func setLayout() {}
-
-    public func bindAction() {}
+    open func attribute() {
+        // UIButton 관련 설정을 하는 함수
+    }
+    open func layout() {
+        // UIButton의 레이아웃을 설정하는 함수
+    }
+    open func bindAction() {
+        // 버튼의 이벤트와 관련된 함수
+    }
 
 }
