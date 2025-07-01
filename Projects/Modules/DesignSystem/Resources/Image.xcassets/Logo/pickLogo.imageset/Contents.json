@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "logo.svg",
+      "filename" : "PiCKMan.svg",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "blackLogo.svg",
+      "filename" : "PiCKMan 1.svg",
       "idiom" : "universal"
     }
   ],
