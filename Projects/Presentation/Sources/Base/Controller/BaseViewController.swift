@@ -37,7 +37,7 @@ public class BaseViewController<ViewModel: BaseViewModel>: UIViewController,
 
     public override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .gray100
+        self.view.backgroundColor = .background
 
         bind()
         configureViewController()
