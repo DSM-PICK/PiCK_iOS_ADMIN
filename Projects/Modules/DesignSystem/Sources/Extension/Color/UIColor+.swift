@@ -4,7 +4,9 @@ public extension UIColor {
     // MARK: background
     static let background = DesignSystemAsset.Color.background.color
     // MARK: error
-    static let error = DesignSystemAsset.Color.error.color
+    static let error100 = DesignSystemAsset.Color.error100.color
+    static let error200 = DesignSystemAsset.Color.error200.color
+    static let error300 = DesignSystemAsset.Color.error300.color
     // MARK: gray
     static let gray50 = DesignSystemAsset.Color.gray50.color
     static let gray100 = DesignSystemAsset.Color.gray100.color
