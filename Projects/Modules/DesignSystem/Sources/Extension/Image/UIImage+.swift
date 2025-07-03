@@ -35,7 +35,7 @@ public extension UIImage {
     static let bottomArrowBlack = DesignSystemAsset.Image.bottomArrowBlack.image
     static let outing = DesignSystemAsset.Image.outing.image
     static let record = DesignSystemAsset.Image.record.image
-    static let passwordChagne = DesignSystemAsset.Image.passwordChange.image
+    static let passwordChange = DesignSystemAsset.Image.passwordChange.image
     static let attendance = DesignSystemAsset.Image.attendance.image
     // MARK: TabBarIcon
     static let homeIcon = DesignSystemAsset.Image.homeIcon.image
