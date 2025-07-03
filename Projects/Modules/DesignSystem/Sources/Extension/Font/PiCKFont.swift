@@ -8,18 +8,18 @@ public extension UIFont {
 
 extension PiCKFontStyle {
     func uiFont() -> UIFont {
-        let wantedSans = DesignSystemFontFamily.WantedSans.self
+        let pretendard = DesignSystemFontFamily.Pretendard.self
 
         switch self {
 
         case .heading1, .heading2, .heading3, .heading4, .subTitle1, .subTitle2, .subTitle3, .button1, .button2:
-            return wantedSans.semiBold.font(size: self.size())
+            return pretendard.semiBold.font(size: self.size())
 
         case .body1, .body2, .body3, .label1, .label2:
-            return wantedSans.medium.font(size: self.size())
+            return pretendard.medium.font(size: self.size())
 
         case .caption1, .caption2:
-            return wantedSans.regular.font(size: self.size())
+            return pretendard.regular.font(size: self.size())
         }
     }
 
