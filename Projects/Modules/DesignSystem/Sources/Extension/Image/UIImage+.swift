@@ -7,10 +7,8 @@ public extension UIImage {
     // MARK: Icon
     static let navigationSetting = DesignSystemAsset.Image.navigationSetting.image
     static let displayMode = DesignSystemAsset.Image.displayMode.image
-    static let alert = DesignSystemAsset.Image.alert.image
     static let profile = DesignSystemAsset.Image.profile.image
     static let newNotice = DesignSystemAsset.Image.newNotice.image
-    static let notice = DesignSystemAsset.Image.notice.image
     static let eyeOn = DesignSystemAsset.Image.eyeOn.image
     static let eyeOff = DesignSystemAsset.Image.eyeOff.image
     static let topArrow = DesignSystemAsset.Image.topArrow.image
@@ -19,7 +17,6 @@ public extension UIImage {
     static let bottomArrow = DesignSystemAsset.Image.bottomArrow.image
     static let weekendMeal = DesignSystemAsset.Image.weekendMeal.image
     static let classroomMove = DesignSystemAsset.Image.classRoomMove.image
-    static let outing = DesignSystemAsset.Image.outing.image
     static let earlyLeave = DesignSystemAsset.Image.earlyLeave.image
     static let studentIDCard = DesignSystemAsset.Image.studentIdCard.image
     static let voice = DesignSystemAsset.Image.voice.image
@@ -34,6 +31,12 @@ public extension UIImage {
     static let mainIcon = DesignSystemAsset.Image.main.image
     static let timeIcon = DesignSystemAsset.Image.time.image
     static let calendarIcon = DesignSystemAsset.Image.calendar.image
+    static let apply = DesignSystemAsset.Image.apply.image
+    static let bottomArrowBlack = DesignSystemAsset.Image.bottomArrowBlack.image
+    static let outing = DesignSystemAsset.Image.outing.image
+    static let record = DesignSystemAsset.Image.record.image
+    static let passwordChagne = DesignSystemAsset.Image.passwordChange.image
+    static let attendance = DesignSystemAsset.Image.attendance.image
     // MARK: TabBarIcon
     static let homeIcon = DesignSystemAsset.Image.homeIcon.image
     static let schoolMealIcon = DesignSystemAsset.Image.schoolMealIcon.image
