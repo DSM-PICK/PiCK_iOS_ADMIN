@@ -14,8 +14,5 @@ public final class UseCaseAssembly: Assembly {
         container.register(RefreshTokenUseCase.self) { resolver in
             RefreshTokenUseCase(repository: resolver.resolve(AuthRepository.self)!)
         }
-        container.register(RefreshTokenUseCase.self) { resolver in
-            RefreshTokenUseCase(repository: resolver.resolve(AuthRepository.self)!)
-        }
     }
 }
