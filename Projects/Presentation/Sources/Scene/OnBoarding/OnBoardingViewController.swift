@@ -14,7 +14,8 @@ public class OnboardingViewController: BaseViewController<OnboardingViewModel> {
 
     public override func bind() {
         let input = OnboardingViewModel.Input(
-            viewWillAppear: viewWillAppearRelay.asObservable()
+            viewWillAppear: viewWillAppearRelay.asObservable(),
+            onboardingButtonDidTap: onboardingButton.buttonTap.asObservable()
         )
         let output = viewModel.transform(input: input)
 

@@ -24,6 +24,7 @@ public class OnboardingViewModel: BaseViewModel, Stepper {
 
     public struct Input {
         let viewWillAppear: Observable<Void>
+        let onboardingButtonDidTap: Observable<Void>
     }
     public struct Output {
         let presentAlert: Signal<Void>
@@ -52,6 +53,12 @@ public class OnboardingViewModel: BaseViewModel, Stepper {
             }
             .bind(to: steps)
             .disposed(by: disposeBag)
+
+        input.onboardingButtonDidTap
+            .map { PiCKStep.loginIsRequired }
+            .bind(to: steps)
+            .disposed(by: disposeBag)
+
         return Output(
             presentAlert: presentAlert.asSignal()
         )
