@@ -19,6 +19,7 @@ public class BaseViewController<ViewModel: BaseViewModel>: UIViewController,
     public var viewDidAppearPublisher = PublishRelay<Void>()
     public var viewWillDisappearPublisher = PublishRelay<Void>()
     public var viewDidDisappearPublisher = PublishRelay<Void>()
+    public var viewWillAppearRelay = PublishRelay<Void>()
 
     public init(_ viewModel: ViewModel) {
         self.viewModel = viewModel
@@ -37,7 +38,7 @@ public class BaseViewController<ViewModel: BaseViewModel>: UIViewController,
 
     public override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .gray100
+        self.view.backgroundColor = .background
 
         bind()
         configureViewController()

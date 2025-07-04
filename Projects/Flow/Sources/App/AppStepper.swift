@@ -9,5 +9,7 @@ public final class AppStepper: Stepper {
     private let disposeBag = DisposeBag()
 
     public init() {}
-
+    public var initialStep: Step {
+        return PiCKStep.onboardingIsRequired
+    }
 }

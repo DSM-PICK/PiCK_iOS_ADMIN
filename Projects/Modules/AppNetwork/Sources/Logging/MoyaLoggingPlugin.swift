@@ -1,7 +1,6 @@
 import Foundation
 import Moya
 
-#if DEBUG
 // swiftlint: disable line_length
 public final class MoyaLoggingPlugin: PluginType {
     public init() {}
@@ -63,4 +62,3 @@ public final class MoyaLoggingPlugin: PluginType {
     }
 }
 // swiftlint: enable line_length
-#endif
