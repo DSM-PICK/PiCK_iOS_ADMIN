@@ -46,7 +46,13 @@ public class OnboardingViewModel: BaseViewModel, Stepper {
                             guard let error = error as? PiCKError
                             else { return .never() }
 
-                            return .never()
+                            switch error {
+                            case .serverError:
+                                self.presentAlert.accept(())
+                                return .never()
+                            default:
+                                return .never()
+                            }
                         }
                     }
                     .andThen(Single.just(PiCKStep.tabIsRequired))

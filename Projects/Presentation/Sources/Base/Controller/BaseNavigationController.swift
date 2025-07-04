@@ -30,9 +30,9 @@ open class BaseNavigationController: UINavigationController {
         appearance.backButtonAppearance = backButtonAppearance
         appearance2.backButtonAppearance = backButtonAppearance
         navigationBar.standardAppearance = appearance2
-        navigationController?.setNeedsStatusBarAppearanceUpdate()
+        setNeedsStatusBarAppearanceUpdate()
         navigationBar.scrollEdgeAppearance = appearance
-        self.navigationController?.navigationBar.backItem?.title = nil
+        navigationBar.backItem?.title = nil
     }
 
     static func makeNavigationController(rootViewController: UIViewController) -> BaseNavigationController {

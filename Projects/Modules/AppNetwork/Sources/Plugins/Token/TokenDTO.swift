@@ -1,8 +1,8 @@
 import Foundation
 
 public struct TokenDTO: Codable {
-    let accessToken: String
-    let refreshToken: String
+    public let accessToken: String
+    public let refreshToken: String
 
     enum CodingKeys: String, CodingKey {
         case accessToken = "access_token"

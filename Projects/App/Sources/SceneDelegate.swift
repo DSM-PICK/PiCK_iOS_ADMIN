@@ -19,13 +19,14 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     ) {
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
-        let appFlow = AppFlow(window: window!, container: AppDelegate.container)
+        guard let window = window else { return }
+        let appFlow = AppFlow(window: window, container: AppDelegate.container)
         self.coordinator.coordinate(
             flow: appFlow,
             with: AppStepper(),
             allowStepWhenDismissed: false
         )
-        window?.makeKeyAndVisible()
+        window.makeKeyAndVisible()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {}
