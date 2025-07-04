@@ -3,23 +3,28 @@ import UserNotifications
 import Firebase
 import FirebaseMessaging
 
+import RxFlow
+
+import Flow
+
 final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    var coordinator = FlowCoordinator()
 
     func scene(
         _ scene: UIScene,
         willConnectTo session: UISceneSession,
         options connectionOptions: UIScene.ConnectionOptions
     ) {
-        guard let windowScene = (scene as? UIWindowScene) else { return }
-        window = UIWindow(frame: windowScene.coordinateSpace.bounds)
-        window?.windowScene = windowScene
-
-        let viewController = UIViewController()
-        viewController.view.backgroundColor = .systemPurple
-
-        window?.rootViewController = viewController
+        guard let scene = (scene as? UIWindowScene) else { return }
+        window = UIWindow(windowScene: scene)
+        let appFlow = AppFlow(window: window!, container: AppDelegate.container)
+        self.coordinator.coordinate(
+            flow: appFlow,
+            with: AppStepper(),
+            allowStepWhenDismissed: false
+        )
         window?.makeKeyAndVisible()
     }
 
