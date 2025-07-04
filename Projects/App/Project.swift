@@ -21,7 +21,6 @@ let settings: Settings = .settings(
 
 let scripts: [TargetScript] = isCI ? [] : [.swiftLint]
 
-
 let targets: [Target] = [
     .target(
         name: env.targetName,
