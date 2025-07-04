@@ -19,6 +19,7 @@ public class BaseViewController<ViewModel: BaseViewModel>: UIViewController,
     public var viewDidAppearPublisher = PublishRelay<Void>()
     public var viewWillDisappearPublisher = PublishRelay<Void>()
     public var viewDidDisappearPublisher = PublishRelay<Void>()
+    public var viewWillAppearRelay = PublishRelay<Void>()
 
     public init(_ viewModel: ViewModel) {
         self.viewModel = viewModel
