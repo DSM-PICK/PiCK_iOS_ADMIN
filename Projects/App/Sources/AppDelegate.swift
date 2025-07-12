@@ -1,6 +1,7 @@
 import UIKit
 import Swinject
-import Firebase // ✅ 추가
+import Firebase
+import FirebaseMessaging
 
 import Core
 import Data
