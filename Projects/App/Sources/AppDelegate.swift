@@ -18,7 +18,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
         // ✅ Firebase 초기화
-        FirebaseApp.configure()
+//        FirebaseApp.configure()
 
         assembler = Assembler([
             KeychainAssembly(),
