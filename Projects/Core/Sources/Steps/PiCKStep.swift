@@ -6,6 +6,7 @@ public enum PiCKStep: Step {
     case appIsRequired
     case onboardingIsRequired
     case loginIsRequired
+    case signUpIsRequired
 
     case tabIsRequired
 }

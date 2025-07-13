@@ -1,5 +1,7 @@
 import UIKit
 import Swinject
+import Firebase
+import FirebaseMessaging
 
 import Core
 import Data
@@ -15,13 +17,16 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
+        // ✅ Firebase 초기화
+//        FirebaseApp.configure()
+
         assembler = Assembler([
             KeychainAssembly(),
             DataSourceAssembly(),
             RepositoryAssembly(),
             UseCaseAssembly(),
             PresentationAssembly()
-         ], container: AppDelegate.container)
+        ], container: AppDelegate.container)
 
         return true
     }
