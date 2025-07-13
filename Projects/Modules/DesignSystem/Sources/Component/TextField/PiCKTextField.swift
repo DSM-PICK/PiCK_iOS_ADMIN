@@ -14,10 +14,24 @@ public class PiCKTextField: BaseTextField {
     public var isSecurity: Bool = false {
         didSet {
             textHideButton.isHidden = !isSecurity
-            self.isSecureTextEntry = true
-            self.addHorizontalPadding()
+            emailLabel.isHidden = isSecurity
+            self.isSecureTextEntry = isSecurity
+
+            if isSecurity {
+                self.addLeftAndRightView()
+            } else {
+                self.addLeftView()
+                self.addRightView()
+            }
         }
     }
+
+    public var showEmail: Bool = false {
+        didSet {
+            emailLabel.isHidden = !showEmail || isSecurity
+        }
+    }
+
     private var borderColor: UIColor {
         isEditing ? .main500 : .clear
     }
@@ -32,24 +46,31 @@ public class PiCKTextField: BaseTextField {
         $0.contentMode = .scaleAspectFit
         $0.isHidden = true
     }
+    private let emailLabel = PiCKLabel(
+        text: "@dsm.hs.kr",
+        textColor: .gray500,
+        font: .pickFont(.caption2)
+    ).then {
+        $0.isHidden = true
+    }
+
     private let errorLabel = PiCKLabel(
-        textColor: .error300,
+        textColor: .error,
         font: .pickFont(.caption2)
     )
-//    private let requestButton = PiCKButton().then {
-//        
-//    }
 
     public init(
         titleText: String? = nil,
         placeholder: String? = nil,
-        buttonIsHidden: Bool? = nil
+        buttonIsHidden: Bool? = nil,
+        showEmailSuffix: Bool = false
     ) {
         super.init(frame: .zero)
         self.titleLabel.text = titleText
         self.placeholder = placeholder
         self.textHideButton.isHidden = buttonIsHidden ?? true
-
+        self.showEmail = showEmailSuffix
+        self.emailLabel.isHidden = !showEmailSuffix
         setPlaceholder()
     }
     required init?(coder: NSCoder) {
@@ -67,8 +88,8 @@ public class PiCKTextField: BaseTextField {
         self.backgroundColor = .gray50
         self.layer.cornerRadius = 4
         self.layer.border(color: borderColor, width: 1)
-        self.addLeftPadding()
-        self.addRightPadding()
+        self.addLeftView()
+        self.addRightView()
         self.autocapitalizationType = .none
         self.autocorrectionType = .no
         self.keyboardType = .alphabet
@@ -77,6 +98,7 @@ public class PiCKTextField: BaseTextField {
         [
             titleLabel,
             textHideButton,
+            emailLabel,
             errorLabel
         ].forEach { self.addSubview($0) }
 
@@ -85,6 +107,10 @@ public class PiCKTextField: BaseTextField {
             $0.leading.equalToSuperview()
         }
         textHideButton.snp.makeConstraints {
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(16)
+        }
+        emailLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview().inset(16)
         }
@@ -130,7 +156,7 @@ public class PiCKTextField: BaseTextField {
             .bind { [weak self] content in
                 self?.errorLabel.isHidden = content == nil
                 guard let content = content else { return }
-                self?.layer.borderColor = UIColor.error300.cgColor
+                self?.layer.borderColor = UIColor.error.cgColor
                 self?.errorLabel.text = "\(content)"
             }.disposed(by: disposeBag)
     }
