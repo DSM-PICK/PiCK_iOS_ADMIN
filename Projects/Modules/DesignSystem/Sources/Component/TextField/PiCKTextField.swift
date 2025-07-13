@@ -55,7 +55,7 @@ public class PiCKTextField: BaseTextField {
     }
 
     private let errorLabel = PiCKLabel(
-        textColor: .error,
+        textColor: .error100,
         font: .pickFont(.caption2)
     )
 
@@ -156,7 +156,7 @@ public class PiCKTextField: BaseTextField {
             .bind { [weak self] content in
                 self?.errorLabel.isHidden = content == nil
                 guard let content = content else { return }
-                self?.layer.borderColor = UIColor.error.cgColor
+                self?.layer.borderColor = UIColor.error100.cgColor
                 self?.errorLabel.text = "\(content)"
             }.disposed(by: disposeBag)
     }

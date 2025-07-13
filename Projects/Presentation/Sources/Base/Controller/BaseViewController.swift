@@ -4,6 +4,7 @@ import RxSwift
 import DesignSystem
 
 public class BaseViewController<ViewModel: BaseViewModel>: UIViewController,
+                                                           UIGestureRecognizerDelegate,
                                                            ViewControllable,
                                                            LifeCyclePublishable,
                                                            HasDisposeBag,
@@ -77,6 +78,11 @@ public class BaseViewController<ViewModel: BaseViewModel>: UIViewController,
         let tap = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing(_:)))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
+    }
+
+    open func attribute() {
+        view.backgroundColor = .background
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
 
     public func addView() {}
