@@ -5,12 +5,12 @@ import DesignSystem
 
 public class BaseViewController<ViewModel: BaseViewModel>: UIViewController,
                                                            UIGestureRecognizerDelegate,
+                                                           Bindable,
                                                            ViewControllable,
                                                            LifeCyclePublishable,
                                                            HasDisposeBag,
                                                            AddViewable,
                                                            SetLayoutable,
-                                                           Bindable,
                                                            ViewControllerConfigurable,
                                                            NavigationConfigurable {
     public let viewModel: ViewModel
