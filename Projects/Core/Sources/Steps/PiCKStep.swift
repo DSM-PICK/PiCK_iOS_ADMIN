@@ -29,7 +29,7 @@ public enum PiCKStep: Step {
 
     // MARK: apply
     case applyIsRequired
-
+    case applyAlertIsRequired(successType: SuccessType, alertType: DisappearAlertType)
     // weekendMeal
     case weekendMealApplyIsRequired
     // classroom
