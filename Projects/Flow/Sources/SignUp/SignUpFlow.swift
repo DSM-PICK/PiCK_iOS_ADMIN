@@ -36,7 +36,7 @@ public class SignUpFlow: Flow {
     }
 
     private func navigateToInfoSetting() -> FlowContributors {
-        let vc = InfoSettingViewController(viewModel: container.resolve(InfoSettingViewModel.self)!)
+        let vc = InfoSettingViewController(container.resolve(InfoSettingViewModel.self)!)
         self.rootViewController.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(
             withNextPresentable: vc,
@@ -45,7 +45,7 @@ public class SignUpFlow: Flow {
     }
 
     private func navigateToVerifyEmail() -> FlowContributors {
-        let vc = VerifyEmailViewController(viewModel: container.resolve(VerifyEmailViewModel.self)!)
+        let vc = VerifyEmailViewController(container.resolve(VerifyEmailViewModel.self)!)
         self.rootViewController.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(
             withNextPresentable: vc,
@@ -54,7 +54,7 @@ public class SignUpFlow: Flow {
     }
 
     private func navigateToPasswordSetting() -> FlowContributors {
-        let vc = PasswordSettingViewController(viewModel: container.resolve(PasswordSettingViewModel.self)!)
+        let vc = PasswordSettingViewController(container.resolve(PasswordSettingViewModel.self)!)
         self.rootViewController.pushViewController(vc, animated: true)
         return .one(flowContributor: .contribute(
             withNextPresentable: vc,
