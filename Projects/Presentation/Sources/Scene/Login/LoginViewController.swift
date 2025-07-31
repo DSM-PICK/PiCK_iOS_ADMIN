@@ -22,7 +22,8 @@ public class LoginViewController: BaseReactorViewController<LoginReactor> {
     private let idTextField = PiCKTextField(
         titleText: "아이디",
         placeholder: "아이디를 입력해주세요",
-        buttonIsHidden: true
+        buttonIsHidden: true,
+        showEmailSuffix: true
     )
     private let passwordTextField = PiCKTextField(
         titleText: "비밀번호",
