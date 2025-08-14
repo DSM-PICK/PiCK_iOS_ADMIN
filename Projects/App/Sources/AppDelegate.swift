@@ -1,11 +1,13 @@
 import UIKit
-import Swinject
-import Firebase
-import FirebaseMessaging
 
 import Core
 import Data
 import Presentation
+
+import Swinject
+import Firebase
+import FirebaseMessaging
+import Pulse
 
 @main
 final class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -27,6 +29,8 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             UseCaseAssembly(),
             PresentationAssembly()
         ], container: AppDelegate.container)
+
+        URLSessionProxyDelegate.enableAutomaticRegistration()
 
         return true
     }

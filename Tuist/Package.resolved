@@ -1,5 +1,5 @@
 {
-  "originHash" : "a3c8181e2cd914a1470bd2613f7464de5ac745e13083899c72d3901c8be4ed68",
+  "originHash" : "b60e65e03d8310c1e837dc675380260aceb3bf50047189ccefac7e84b56534f2",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -170,6 +170,15 @@
       "state" : {
         "revision" : "540318ecedd63d883069ae7f1ed811a2df00b6ac",
         "version" : "2.4.0"
+      }
+    },
+    {
+      "identity" : "pulse",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/kean/Pulse.git",
+      "state" : {
+        "revision" : "3ac5ee35ab233e900aa484919803d51791d1e351",
+        "version" : "4.2.7"
       }
     },
     {
