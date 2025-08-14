@@ -4,12 +4,13 @@ import RxSwift
 import DesignSystem
 
 public class BaseViewController<ViewModel: BaseViewModel>: UIViewController,
+                                                           UIGestureRecognizerDelegate,
+                                                           Bindable,
                                                            ViewControllable,
                                                            LifeCyclePublishable,
                                                            HasDisposeBag,
                                                            AddViewable,
                                                            SetLayoutable,
-                                                           Bindable,
                                                            ViewControllerConfigurable,
                                                            NavigationConfigurable {
     public let viewModel: ViewModel
@@ -77,6 +78,11 @@ public class BaseViewController<ViewModel: BaseViewModel>: UIViewController,
         let tap = UITapGestureRecognizer(target: view, action: #selector(UIView.endEditing(_:)))
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
+    }
+
+    open func attribute() {
+        view.backgroundColor = .background
+        navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
 
     public func addView() {}

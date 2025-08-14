@@ -1,5 +1,4 @@
 import UIKit
-
 import RxFlow
 import Swinject
 
@@ -23,8 +22,25 @@ public class LoginFlow: Flow {
         switch step {
         case .loginIsRequired:
             return navigateToLogin()
+        case .signUpIsRequired:
+            return navigateToSignUp()
+        case .changePasswordIsRequired:
+            return navigateToPasswordChange()
+        case .newPasswordIsRequired:
+            return navigateToNewPassword()
+        // SignUp Step
+        case .verifyEmailIsRequired:
+            return navigateToVerifyEmail()
+        case .passwordSettingIsRequired:
+            return navigateToPasswordSetting()
+        case .infoSettingIsRequired:
+            return navigateToInfoSetting()
         case .tabIsRequired:
             return .end(forwardToParentFlowWithStep: PiCKStep.tabIsRequired)
+        case .testIsRequired:
+            return .end(forwardToParentFlowWithStep: PiCKStep.testIsRequired)
+        case .logoutIsRequired:
+            return .end(forwardToParentFlowWithStep: PiCKStep.onboardingIsRequired)
         default:
             return .none
         }
@@ -39,4 +55,57 @@ public class LoginFlow: Flow {
         ))
     }
 
+    private func navigateToSignUp() -> FlowContributors {
+        let vc = VerifyEmailViewController(container.resolve(VerifyEmailViewModel.self)!)
+        self.rootViewController.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(
+            withNextPresentable: vc,
+            withNextStepper: vc.viewModel
+        ))
+    }
+
+    private func navigateToPasswordChange() -> FlowContributors {
+        let vc = ChangePasswordViewController(container.resolve(ChangePasswordViewModel.self)!)
+        self.rootViewController.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(
+            withNextPresentable: vc,
+            withNextStepper: vc.viewModel
+        ))
+    }
+
+    private func navigateToNewPassword() -> FlowContributors {
+        let vc = NewPasswordViewController(container.resolve(NewPasswordViewModel.self)!)
+        self.rootViewController.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(
+            withNextPresentable: vc,
+            withNextStepper: vc.viewModel
+        ))
+    }
+
+    private func navigateToVerifyEmail() -> FlowContributors {
+        let vc = VerifyEmailViewController(container.resolve(VerifyEmailViewModel.self)!)
+        self.rootViewController.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(
+            withNextPresentable: vc,
+            withNextStepper: vc.viewModel
+        ))
+    }
+
+    private func navigateToPasswordSetting() -> FlowContributors {
+        let vc = PasswordSettingViewController(container.resolve(PasswordSettingViewModel.self)!)
+        self.rootViewController.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(
+            withNextPresentable: vc,
+            withNextStepper: vc.viewModel
+        ))
+    }
+
+    private func navigateToInfoSetting() -> FlowContributors {
+        let vc = InfoSettingViewController(container.resolve(InfoSettingViewModel.self)!)
+        self.rootViewController.pushViewController(vc, animated: true)
+        return .one(flowContributor: .contribute(
+            withNextPresentable: vc,
+            withNextStepper: vc.viewModel
+        ))
+    }
 }

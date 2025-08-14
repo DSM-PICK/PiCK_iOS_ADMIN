@@ -1,34 +1,24 @@
 import UIKit
 
 public extension UITextField {
-
-    private func createPaddingView(width: CGFloat) -> UIView {
-        return UIView(frame: CGRect(x: 0, y: 0, width: width, height: frame.height))
+    func addLeftView() {
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: self.frame.height))
+        self.leftView = paddingView
+        self.leftViewMode = ViewMode.always
     }
 
-    func addLeftPadding(_ width: CGFloat = 16) {
-        leftView = createPaddingView(width: width)
-        leftViewMode = .always
+    func addRightView() {
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: self.frame.height))
+        self.rightView = paddingView
+        self.rightViewMode = ViewMode.always
     }
 
-    func addRightPadding(_ width: CGFloat = 16) {
-        rightView = createPaddingView(width: width)
-        rightViewMode = .always
-    }
-
-    func addHorizontalPadding(left: CGFloat = 16, right: CGFloat = 16) {
-        addLeftPadding(left)
-        addRightPadding(right)
-    }
-
-    func addHorizontalPadding(_ padding: CGFloat = 16) {
-        addHorizontalPadding(left: padding, right: padding)
-    }
-
-    func removePadding() {
-        leftView = nil
-        rightView = nil
-        leftViewMode = .never
-        rightViewMode = .never
+    func addLeftAndRightView() {
+        let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: self.frame.height))
+        let rightPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 34, height: self.frame.height))
+        self.leftView = leftPaddingView
+        self.leftViewMode = ViewMode.always
+        self.rightView = rightPaddingView
+        self.rightViewMode = ViewMode.always
     }
 }
