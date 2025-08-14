@@ -1,22 +1,22 @@
 import Foundation
 
 public struct LoginRequestParams: Encodable {
-    public let accountID: String
+    public let adminId: String
     public let password: String
     public let deviceToken: String
 
     public init(
-        accountID: String,
+        adminId: String,
         password: String,
         deviceToken: String
     ) {
-        self.accountID = accountID
+        self.adminId = adminId
         self.password = password
         self.deviceToken = deviceToken
     }
 
     enum CodingKeys: String, CodingKey {
-        case accountID = "account_id"
+        case adminId = "admin_id"
         case password
         case deviceToken = "device_token"
     }

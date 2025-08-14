@@ -15,7 +15,7 @@ extension AuthAPI: PiCKAPI {
     public typealias ErrorType = AuthError
 
     public var domain: PiCKDomain {
-        return .user
+        return .admin
     }
 
     public var urlPath: String {

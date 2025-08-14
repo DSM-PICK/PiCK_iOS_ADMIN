@@ -38,7 +38,7 @@ public class OnboardingViewModel: BaseViewModel, Stepper {
                 self.refreshTokenUseCase.execute()
                     .catch { _ in
                         return self.loginUseCase.execute(req: .init(
-                            accountID: self.keychain.load(type: .id),
+                            adminId: self.keychain.load(type: .id),
                             password: self.keychain.load(type: .password),
                             deviceToken: ""
                         ))

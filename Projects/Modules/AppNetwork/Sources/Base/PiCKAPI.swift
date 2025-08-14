@@ -51,6 +51,7 @@ public enum PiCKDomain: String {
     case schedule
     case bug
     case notification
+    case admin
 
     var asURLString: String {
         "/\(self.rawValue)"

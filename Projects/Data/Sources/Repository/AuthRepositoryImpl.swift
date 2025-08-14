@@ -26,7 +26,7 @@ class AuthRepositoryImpl: AuthRepository {
                     self.keyChain.save(type: .accessToken, value: tokenData.accessToken)
                     self.keyChain.save(type: .refreshToken, value: tokenData.refreshToken)
 
-                    self.keyChain.save(type: .id, value: req.accountID)
+                    self.keyChain.save(type: .id, value: req.adminId)
                     self.keyChain.save(type: .password, value: req.password)
                     completable(.completed)
                 }, onFailure: {
