@@ -106,7 +106,7 @@ extension LoginReactor {
 
     private func loginButtonDidTap(id: String, password: String) -> Observable<Mutation> {
         return self.loginUseCase.execute(req: .init(
-            accountID: id,
+            adminId: id,
             password: password,
             deviceToken: Messaging.messaging().fcmToken ?? ""
         ))
