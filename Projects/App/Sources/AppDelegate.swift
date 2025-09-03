@@ -30,7 +30,10 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
             PresentationAssembly()
         ], container: AppDelegate.container)
 
-        URLSessionProxyDelegate.enableAutomaticRegistration()
+        #if DEBUG
+        // Disabled to prevent crash: "NSArray element failed to match the Swift Array Element type"
+        // URLSessionProxyDelegate.enableAutomaticRegistration()
+        #endif
 
         return true
     }
