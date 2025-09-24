@@ -23,7 +23,8 @@ let project = Project.makeModule(
         .SPM.RxGesture,
         .SPM.FCM,
         .SPM.Pulse,
-        .SPM.PulseUI
+        .SPM.PulseUI,
+        .SPM.ComposableArchitecture
 //        .SPM.DGCharts
     ]
 )

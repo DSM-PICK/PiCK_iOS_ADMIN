@@ -20,6 +20,7 @@ public extension TargetDependency.SPM {
     static let RxGesture = TargetDependency.external(name: "RxGesture")
     static let Pulse = TargetDependency.external(name: "Pulse")
     static let PulseUI = TargetDependency.external(name: "PulseUI")
+    static let ComposableArchitecture = TargetDependency.external(name: "ComposableArchitecture")
 //    static let DGCharts = TargetDependency.external(name: "DGCharts")
     static let FCM = TargetDependency.package(product: "FirebaseMessaging")
 }
