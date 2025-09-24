@@ -19,11 +19,8 @@ public final class PresentationAssembly: Assembly {
             )
         }
 
-        container.register(LoginViewController.self) { resolver in
-            LoginViewController(reactor: resolver.resolve(LoginReactor.self)!)
-        }
-        container.register(LoginReactor.self) { resolver in
-            LoginReactor(
+        container.register(LoginFeature.self) { resolver in
+            LoginFeature(
                 loginUseCase: resolver.resolve(LoginUseCase.self)!
             )
         }
