@@ -24,7 +24,8 @@ let project = Project.makeModule(
         .SPM.FCM,
         .SPM.Pulse,
         .SPM.PulseUI,
-        .SPM.ComposableArchitecture
+        .SPM.ComposableArchitecture,
+        .SPM.PDS
 //        .SPM.DGCharts
     ]
 )

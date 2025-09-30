@@ -22,6 +22,7 @@ public extension TargetDependency.SPM {
     static let PulseUI = TargetDependency.external(name: "PulseUI")
     static let ComposableArchitecture = TargetDependency.external(name: "ComposableArchitecture")
 //    static let DGCharts = TargetDependency.external(name: "DGCharts")
+    static let PDS = TargetDependency.external(name: "PiCK_iOS_DesignSystem")
     static let FCM = TargetDependency.package(product: "FirebaseMessaging")
 }
 
