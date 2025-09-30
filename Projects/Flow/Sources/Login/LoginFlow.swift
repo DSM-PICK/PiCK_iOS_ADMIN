@@ -4,6 +4,8 @@ import Swinject
 
 import Core
 import Presentation
+import SwiftUI
+import ComposableArchitecture
 
 public class LoginFlow: Flow {
     public let container: Container
@@ -48,11 +50,9 @@ public class LoginFlow: Flow {
 
     private func navigateToLogin() -> FlowContributors {
         let vc = LoginViewController(reactor: container.resolve(LoginReactor.self)!)
+
         self.rootViewController.pushViewController(vc, animated: true)
-        return .one(flowContributor: .contribute(
-            withNextPresentable: vc,
-            withNextStepper: vc.reactor
-        ))
+        return .one(flowContributor: .contribute(withNextPresentable: vc, withNextStepper: vc.reactor))
     }
 
     private func navigateToSignUp() -> FlowContributors {

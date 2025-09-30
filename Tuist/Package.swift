@@ -43,7 +43,8 @@ let package = Package(
         .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "11.8.0"),
         .package(url: "https://github.com/daltoniam/Starscream.git", from: "4.0.6"),
         .package(url: "https://github.com/ReactorKit/ReactorKit.git", from: "3.0.0"),
-        .package(url: "https://github.com/kean/Pulse.git", from: "4.2.0")
+        .package(url: "https://github.com/kean/Pulse.git", from: "4.2.0"),
+        .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", from: "1.1.0")
     ],
     targets: [
         .target(
@@ -63,6 +64,7 @@ let package = Package(
                 "RxDataSources",
                 "ReactorKit",
                 "Starscream",
+                "ComposableArchitecture",
                 .product(name: "FirebaseMessaging", package: "firebase-ios-sdk"),
                 .product(name: "FirebaseAnalytics", package: "firebase-ios-sdk"),
                 .product(name: "FirebaseAnalyticsWithoutAdIdSupport", package: "firebase-ios-sdk"),
