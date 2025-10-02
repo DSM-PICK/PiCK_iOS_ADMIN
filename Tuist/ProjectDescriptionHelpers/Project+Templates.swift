@@ -11,7 +11,33 @@ public enum ModuleTarget {
     case demo
 }
 
-extension Project {
+public extension Project {
+    static func makeFeature(
+        name: String,
+        product: Product = .staticFramework,
+        includeTargets: Set<ModuleTarget> = [],
+        dependencies: [TargetDependency] = []
+    ) -> Project {
+        return makeModule(
+            name: name,
+            product: product,
+            includeTargets: includeTargets,
+            dependencies: dependencies
+        )
+    }
+
+    static func makeShared(
+        name: String,
+        product: Product = .staticFramework,
+        dependencies: [TargetDependency] = []
+    ) -> Project {
+        return makeModule(
+            name: name,
+            product: product,
+            dependencies: dependencies
+        )
+    }
+
     public static func makeModule(
         name: String,
         organizationName: String = env.organizationName,
@@ -35,7 +61,14 @@ extension Project {
         ["OTHER_LDFLAGS": .string("$(inherited) -all_load")] :
         ["OTHER_LDFLAGS": .string("$(inherited)")]
 
-        let configurations: [Configuration] = isCI ?
+        let configurations: [Configuration] = 
+        [
+          .debug(name: .dev),
+          .debug(name: .stage),
+          .release(name: .prod)
+        ]
+        /*
+        isCI ?
         [
           .debug(name: .dev),
           .debug(name: .stage),
@@ -46,6 +79,7 @@ extension Project {
           .debug(name: .stage, xcconfig: .relativeToXCConfig(type: .stage, name: name)),
           .release(name: .prod, xcconfig: .relativeToXCConfig(type: .prod, name: name))
         ]
+        */
 
         let settings: Settings = .settings(
             base: env.baseSetting
