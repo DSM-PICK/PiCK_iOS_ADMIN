@@ -35,6 +35,7 @@ let targets: [Target] = [
         scripts: scripts,
         dependencies: [
             .Features.baseFeature,
+            .Features.microFeature,
             .Shared.thirdPartyLib,
             .SPM.FCM
         ],

@@ -22,6 +22,10 @@ public extension TargetDependency.Features {
         target: "BaseFeature",
         path: .relativeToRoot("Projects/Feature/BaseFeature")
     )
+    static let microFeature = TargetDependency.project(
+        target: "MicroFeature",
+        path: .relativeToRoot("Projects/Feature/MicroFeature")
+    )
     // Add other features here
 }
 
