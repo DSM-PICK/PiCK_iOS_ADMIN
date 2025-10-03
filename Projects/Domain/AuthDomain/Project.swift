@@ -5,10 +5,9 @@ import ProjectDescriptionHelpers
 let project = Project.makeModule(
     name: "AuthDomain",
     product: .staticFramework,
+    sources: ["Sources/**", "Interface/**"],
     dependencies: [
-        .SPM.RxSwift,
-        .SPM.RxMoya,
-        .SPM.Moya,
+        .Shared.thirdPartyLib,
         .Projects.core
     ]
 )

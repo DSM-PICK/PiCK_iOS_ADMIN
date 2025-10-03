@@ -16,11 +16,13 @@ public extension Project {
         name: String,
         product: Product = .staticFramework,
         includeTargets: Set<ModuleTarget> = [],
+        sources: SourceFilesList = .sources,
         dependencies: [TargetDependency] = []
     ) -> Project {
         return makeModule(
             name: name,
             product: product,
+            sources: sources,
             includeTargets: includeTargets,
             dependencies: dependencies
         )
@@ -40,12 +42,12 @@ public extension Project {
 
     public static func makeModule(
         name: String,
+        product: Product,
         organizationName: String = env.organizationName,
         sources: SourceFilesList = .sources,
         resources: ResourceFileElements? = nil,
         resourceSynthesizers: [ResourceSynthesizer] = .default + [],
         destination: Destinations = env.destination,
-        product: Product,
         packages: [Package] = [],
         deploymentTarget: DeploymentTargets = env.deploymentTargets,
         includeTargets: Set<ModuleTarget> = [],
