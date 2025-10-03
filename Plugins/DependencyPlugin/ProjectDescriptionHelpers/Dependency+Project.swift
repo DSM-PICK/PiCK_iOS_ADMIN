@@ -15,6 +15,10 @@ public extension TargetDependency.Projects {
         target: "Domain",
         path: .relativeToRoot("Projects/Domain")
     )
+    static let authDomain = TargetDependency.project(
+        target: "AuthDomain",
+        path: .relativeToRoot("Projects/Domain/AuthDomain")
+    )
 }
 
 public extension TargetDependency.Features {

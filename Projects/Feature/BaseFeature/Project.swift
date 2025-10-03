@@ -5,7 +5,7 @@ let project = Project.makeFeature(
     name: "BaseFeature",
     dependencies: [
         .Projects.core,
-        .Projects.domain,
+        .Projects.authDomain,
         .Shared.utility
     ]
 )
