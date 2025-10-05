@@ -31,12 +31,14 @@ public extension Project {
     static func makeShared(
         name: String,
         product: Product = .staticFramework,
+        settings: SettingsDictionary = [:],
         dependencies: [TargetDependency] = []
     ) -> Project {
         return makeModule(
             name: name,
             product: product,
-            dependencies: dependencies
+            dependencies: dependencies,
+            settings: settings
         )
     }
 

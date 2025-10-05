@@ -7,6 +7,7 @@ import EnvironmentPlugin
 let project = Project.makeShared(
     name: "ThirdPartyLib",
     product: .framework,
+    settings: ["DEFINES_MODULE": "NO"],
     dependencies: [
         .SPM.RxSwift,
         .SPM.RxCocoa,

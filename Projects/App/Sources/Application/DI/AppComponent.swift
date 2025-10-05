@@ -12,7 +12,7 @@ public final class AppComponent: BootstrapComponent {
     }
 
     public func makeRootView() -> some View {
-        authFactory.makeView()
+        rootComponent.makeView()
     }
 
     public var keychain: any Keychain {
@@ -20,9 +20,15 @@ public final class AppComponent: BootstrapComponent {
             _keychain
         }
     }
+
+    var rootComponent: RootComponent {
+        shared {
+            RootComponent(parent: self)
+        }
+    }
 }
 
-// MARK: - Auth
+// MARK: - Features
 public extension AppComponent {
     var authFactory: any AuthFactory {
         AuthComponent(parent: self)
