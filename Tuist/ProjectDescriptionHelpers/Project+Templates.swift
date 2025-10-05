@@ -162,11 +162,11 @@ public extension Project {
 }
 
 public extension Scheme {
-    static func makeScheme(target: ConfigurationName, name: String) -> Scheme {
+    static func makeScheme(target: ConfigurationName, name: String, preActions: [ExecutionAction] = []) -> Scheme {
         return .scheme(
             name: name,
             shared: true,
-            buildAction: .buildAction(targets: ["\(name)"]),
+            buildAction: .buildAction(targets: ["\(name)"], preActions: preActions),
             testAction: .targets(
                 ["\(name)Tests"],
                 configuration: target,

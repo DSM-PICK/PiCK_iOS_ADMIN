@@ -1,10 +1,16 @@
 import SwiftUI
+import KeychainModule
 
 @main
 struct PiCK_iOS_ADMINApp: App {
+    
+    init() {
+        registerProviderFactories()
+    }
+
     var body: some Scene {
         WindowGroup {
-            Text("Hello, World!")
+            AppComponent(keychain: KeychainImpl()).makeRootView()
         }
     }
 }

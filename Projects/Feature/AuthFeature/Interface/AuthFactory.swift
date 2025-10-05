@@ -1,5 +1,7 @@
 import Foundation
 
+import SwiftUI
+
 public protocol AuthFactory {
-    func makeSomething()
+    func makeView() -> some View
 }

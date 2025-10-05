@@ -13,7 +13,6 @@ let project = Project.makeShared(
         .SPM.SnapKit,
         .SPM.Then,
         .SPM.RxFlow,
-        .SPM.Swinject,
         .SPM.Moya,
         .SPM.RxMoya,
         .SPM.Lottie,

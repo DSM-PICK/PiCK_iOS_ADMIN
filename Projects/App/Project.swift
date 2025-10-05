@@ -27,6 +27,9 @@ let project = Project(
             sources: ["Sources/**"],
             resources: ["Resources/**"],
             entitlements: .file(path: "Support/PiCK_iOS_ADMIN.entitlements"),
+            scripts: [
+                .pre(script: "/opt/homebrew/bin/needle generate Projects/App/Sources/Application/DI/NeedleGenerated.swift ${PROJECT_DIR}/Projects", name: "Run Needle")
+            ],
             dependencies: [
                 .Features.baseFeature,
                 .Features.authFeature,
