@@ -29,7 +29,6 @@ let project = Project(
             entitlements: .file(path: "Support/PiCK_iOS_ADMIN.entitlements"),
             dependencies: [
                 .Features.baseFeature,
-                .Features.microFeature,
                 .Features.authFeature,
                 .Shared.thirdPartyLib,
                 .SPM.FCM

@@ -26,10 +26,6 @@ public extension TargetDependency.Features {
         target: "BaseFeature",
         path: .relativeToRoot("Projects/Feature/BaseFeature")
     )
-    static let microFeature = TargetDependency.project(
-        target: "MicroFeature",
-        path: .relativeToRoot("Projects/Feature/MicroFeature")
-    )
     static let authFeature = TargetDependency.project(
         target: "AuthFeature",
         path: .relativeToRoot("Projects/Feature/AuthFeature")
