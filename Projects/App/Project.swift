@@ -30,6 +30,7 @@ let project = Project(
             dependencies: [
                 .Features.baseFeature,
                 .Features.microFeature,
+                .Features.authFeature,
                 .Shared.thirdPartyLib,
                 .SPM.FirebaseMessaging
             ]
