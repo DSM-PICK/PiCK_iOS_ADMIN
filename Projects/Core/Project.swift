@@ -9,5 +9,7 @@ let project = Project.makeModule(
     name: "Core",
     product: .staticFramework,
     sources: ["Sources/**"],
-    dependencies: []
+    dependencies: [
+        .Shared.thirdPartyLib
+    ]
 )

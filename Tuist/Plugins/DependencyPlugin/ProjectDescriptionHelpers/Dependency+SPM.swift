@@ -23,9 +23,4 @@ public extension TargetDependency.SPM {
     static let ComposableArchitecture = TargetDependency.external(name: "ComposableArchitecture")
 //    static let DGCharts = TargetDependency.external(name: "DGCharts")
     static let PDS = TargetDependency.external(name: "PiCK_iOS_DesignSystem")
-    static let FCM = TargetDependency.package(product: "FirebaseMessaging")
-}
-
-public extension Package {
-    static let FCM = Package.remote(url: "https://github.com/firebase/firebase-ios-sdk", requirement: .upToNextMajor(from: "10.0.0"))
 }

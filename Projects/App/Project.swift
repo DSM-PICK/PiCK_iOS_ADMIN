@@ -33,8 +33,7 @@ let project = Project(
             dependencies: [
                 .Features.baseFeature,
                 .Features.authFeature,
-                .Shared.thirdPartyLib,
-                .SPM.FCM
+                .Shared.thirdPartyLib
             ]
         )
     ],
