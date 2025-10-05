@@ -161,7 +161,7 @@ public extension Project {
     }
 }
 
-extension Scheme {
+public extension Scheme {
     static func makeScheme(target: ConfigurationName, name: String) -> Scheme {
         return .scheme(
             name: name,
@@ -179,7 +179,7 @@ extension Scheme {
         )
     }
 
-    static func makeDemoScheme(target: ConfigurationName, name: String) -> Scheme {
+    public static func makeDemoScheme(target: ConfigurationName, name: String) -> Scheme {
         return .scheme(
             name: "\(name)DemoApp",
             shared: true,

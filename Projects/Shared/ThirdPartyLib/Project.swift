@@ -1,5 +1,8 @@
 import ProjectDescription
 import ProjectDescriptionHelpers
+import DependencyPlugin
+import ConfigurationPlugin
+import EnvironmentPlugin
 
 let project = Project.makeShared(
     name: "ThirdPartyLib",
@@ -14,12 +17,11 @@ let project = Project.makeShared(
         .SPM.Moya,
         .SPM.RxMoya,
         .SPM.Lottie,
-        .SPM.kingfisher,
+        .SPM.Kingfisher,
         .SPM.KeychainSwift,
         .SPM.ReactorKit,
         .SPM.RxGesture,
         .SPM.Pulse,
-        .SPM.PulseUI,
         .SPM.ComposableArchitecture
     ]
 )

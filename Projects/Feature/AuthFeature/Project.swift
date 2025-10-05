@@ -4,11 +4,10 @@ import DependencyPlugin
 import ConfigurationPlugin
 import EnvironmentPlugin
 
-let project = Project.makeModule(
-    name: "Domain",
-    product: .staticFramework,
-    sources: [],
+let project = Project.makeFeature(
+    name: "AuthFeature",
+    sources: ["Sources/**", "Interface/**"],
     dependencies: [
-        .Projects.authDomain
+        .Features.baseFeature
     ]
 )

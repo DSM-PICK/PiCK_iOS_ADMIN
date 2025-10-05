@@ -1,11 +1,15 @@
 import ProjectDescription
 import ProjectDescriptionHelpers
+import DependencyPlugin
+import ConfigurationPlugin
+import EnvironmentPlugin
 
 let project = Project.makeModule(
     name: "Shared",
-    product: .framework,
+    product: .staticFramework,
+    sources: [],
     dependencies: [
-        .project(target: "ThirdPartyLib", path: .relativeToParent("ThirdPartyLib")),
-        .project(target: "Utility", path: .relativeToParent("Utility")),
+        .Shared.thirdPartyLib,
+        .Shared.utility
     ]
 )
