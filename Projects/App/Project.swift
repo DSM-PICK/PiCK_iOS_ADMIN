@@ -32,7 +32,7 @@ let project = Project(
                 .Features.microFeature,
                 .Features.authFeature,
                 .Shared.thirdPartyLib,
-                .SPM.FirebaseMessaging
+                .SPM.FCM
             ]
         )
     ],

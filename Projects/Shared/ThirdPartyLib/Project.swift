@@ -17,7 +17,7 @@ let project = Project.makeShared(
         .SPM.Moya,
         .SPM.RxMoya,
         .SPM.Lottie,
-        .SPM.Kingfisher,
+        .SPM.kingfisher,
         .SPM.KeychainSwift,
         .SPM.ReactorKit,
         .SPM.RxGesture,

@@ -1,15 +1,19 @@
-
 import ProjectDescription
 
-public enum Environment {
-    public static let appName = "PiCK_iOS_ADMIN"
-    public static let targetName = "PiCK_iOS_ADMIN"
-    public static let organizationName = "com.pick"
-    public static let deploymentTargets: DeploymentTargets = .iOS("17.0")
-    public static let destination: Destinations = [.iPhone]
-    public static let baseSetting: SettingsDictionary = SettingsDictionary()
-        .marketingVersion("1.0.0")
-        .currentProjectVersion("1")
+public struct ProjectEnvironment {
+    public let appName: String
+    public let targetName: String
+    public let organizationName: String
+    public let deploymentTargets: DeploymentTargets
+    public let destination: Destinations
+    public let baseSetting: SettingsDictionary
 }
 
-public let env = Environment.self
+public let env = ProjectEnvironment(
+    appName: "PiCK_iOS_ADMIN",
+    targetName: "PiCK_iOS_ADMIN",
+    organizationName: "com.team.pick",
+    deploymentTargets: .iOS("15.0"),
+    destination: .iOS,
+    baseSetting: ["OTHER_LDFLAGS": ["$(inherited) -Objc"]]
+)
