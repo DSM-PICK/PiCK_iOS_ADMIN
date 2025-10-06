@@ -6,6 +6,8 @@ import AuthFeature
 import AuthFeatureInterface
 import ComposableArchitecture
 import Core
+import KeychainSwift
+import Moya
 import NeedleFoundation
 import SwiftUI
 
@@ -54,12 +56,13 @@ extension AppComponent: NeedleFoundation.Registration {
     public func registerItems() {
 
         localTable["keychain-any Keychain"] = { [unowned self] in self.keychain as Any }
+        localTable["authProvider-MoyaProvider<AuthAPI>"] = { [unowned self] in self.authProvider as Any }
         localTable["localAuthDataSource-any LocalAuthDataSource"] = { [unowned self] in self.localAuthDataSource as Any }
         localTable["remoteAuthDataSource-any RemoteAuthDataSource"] = { [unowned self] in self.remoteAuthDataSource as Any }
         localTable["authRepository-any AuthRepository"] = { [unowned self] in self.authRepository as Any }
         localTable["loginUseCase-any LoginUseCase"] = { [unowned self] in self.loginUseCase as Any }
+        localTable["refreshTokenUseCase-any RefreshTokenUseCase"] = { [unowned self] in self.refreshTokenUseCase as Any }
         localTable["authFactory-any AuthFactory"] = { [unowned self] in self.authFactory as Any }
-        localTable["keychain-any Keychain"] = { [unowned self] in self.keychain as Any }
         localTable["userDefault-any UserDefault"] = { [unowned self] in self.userDefault as Any }
     }
 }

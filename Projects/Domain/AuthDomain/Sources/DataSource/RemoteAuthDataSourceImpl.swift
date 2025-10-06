@@ -1,6 +1,7 @@
 import Foundation
 import AuthDomainInterface
 import Moya
+import RxMoya
 import RxSwift
 
 public class RemoteAuthDataSourceImpl: RemoteAuthDataSource {
