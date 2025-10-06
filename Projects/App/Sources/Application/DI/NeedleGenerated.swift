@@ -4,10 +4,10 @@ import AuthDomain
 import AuthDomainInterface
 import AuthFeature
 import AuthFeatureInterface
-import KeychainModule
+import ComposableArchitecture
+import Core
 import NeedleFoundation
 import SwiftUI
-import UserDefaultModule
 
 // swiftlint:disable unused_declaration
 private let needleDependenciesHash : String? = nil
@@ -22,6 +22,19 @@ private func parent1(_ component: NeedleFoundation.Scope) -> NeedleFoundation.Sc
 
 #if !NEEDLE_DYNAMIC
 
+private class RootDependency3944cc797a4a88956fb5Provider: RootDependency {
+    var authFactory: any AuthFactory {
+        return appComponent.authFactory
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->RootComponent
+private func factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return RootDependency3944cc797a4a88956fb5Provider(appComponent: parent1(component) as! AppComponent)
+}
 private class AuthDependency66debf38ba68676d3271Provider: AuthDependency {
     var loginUseCase: any LoginUseCase {
         return appComponent.loginUseCase
@@ -50,6 +63,11 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["userDefault-any UserDefault"] = { [unowned self] in self.userDefault as Any }
     }
 }
+extension RootComponent: NeedleFoundation.Registration {
+    public func registerItems() {
+        keyPathToName[\RootDependency.authFactory] = "authFactory-any AuthFactory"
+    }
+}
 extension AuthComponent: NeedleFoundation.Registration {
     public func registerItems() {
         keyPathToName[\AuthDependency.loginUseCase] = "loginUseCase-any LoginUseCase"
@@ -72,6 +90,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
 
 @inline(never) private func register1() {
     registerProviderFactory("^->AppComponent", factoryEmptyDependencyProvider)
+    registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AuthComponent", factorybe7a1f90226e27d1b2e4f47b58f8f304c97af4d5)
 }
 #endif

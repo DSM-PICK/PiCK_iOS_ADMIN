@@ -1,6 +1,6 @@
 import NeedleFoundation
 import SwiftUI
-import KeychainModule
+import Core
 import AuthFeature
 import AuthFeatureInterface
 

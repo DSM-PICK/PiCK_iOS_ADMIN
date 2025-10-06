@@ -1,5 +1,5 @@
 import SwiftUI
-import KeychainModule
+import Core
 
 @main
 struct PiCK_iOS_ADMINApp: App {

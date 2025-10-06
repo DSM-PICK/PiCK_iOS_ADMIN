@@ -1,13 +1,8 @@
 import NeedleFoundation
-import KeychainModule
-import UserDefaultModule
+import Core
+import KeychainSwift
 
 public extension AppComponent {
-    var keychain: any Keychain {
-        shared {
-            KeychainImpl()
-        }
-    }
 
     var userDefault: any UserDefault {
         shared {
