@@ -12,15 +12,19 @@ struct SigninView: View {
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             VStack(alignment: .leading, spacing: 0) {
-                Text("PiCK에 로그인하기")
-                    .pickText(type: .heading2)
-                    .padding(.top, 124)
-                    .padding(.leading, 24)
+                HStack(spacing: 0) {
+                    Text("PiCK")
+                        .foregroundColor(Color.Primary.primary500)
+                    Text("에 로그인하기")
+                }
+                .pickText(type: .heading2)
+                .padding(.top, 80)
+                .padding(.leading, 24)
                 
                 Text("PiCK 계정으로 로그인 해주세요.")
                     .pickText(type: .body1)
                     .padding(.leading, 24)
-                    .padding(.top, 8)
+                    .padding(.top, 12)
                 
                 PiCKTextField(
                     text: .constant(""),
