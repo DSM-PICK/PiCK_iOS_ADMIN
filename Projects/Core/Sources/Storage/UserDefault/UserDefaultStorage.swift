@@ -9,6 +9,8 @@ public enum UserDefaultKeys: String {
 }
 
 public struct UserDefaultStorage: UserDefault {
+    public init() {}
+
     public static let shared = UserDefaultStorage()
 
     public func set<T>(to: T, forKey: UserDefaultKeys) {

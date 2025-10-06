@@ -11,15 +11,45 @@ public enum ModuleTarget {
     case demo
 }
 
-extension Project {
+public extension Project {
+    static func makeFeature(
+        name: String,
+        product: Product = .staticFramework,
+        includeTargets: Set<ModuleTarget> = [],
+        sources: SourceFilesList = .sources,
+        dependencies: [TargetDependency] = []
+    ) -> Project {
+        return makeModule(
+            name: name,
+            product: product,
+            sources: sources,
+            includeTargets: includeTargets,
+            dependencies: dependencies
+        )
+    }
+
+    static func makeShared(
+        name: String,
+        product: Product = .staticFramework,
+        settings: SettingsDictionary = [:],
+        dependencies: [TargetDependency] = []
+    ) -> Project {
+        return makeModule(
+            name: name,
+            product: product,
+            dependencies: dependencies,
+            settings: settings
+        )
+    }
+
     public static func makeModule(
         name: String,
+        product: Product,
         organizationName: String = env.organizationName,
         sources: SourceFilesList = .sources,
         resources: ResourceFileElements? = nil,
         resourceSynthesizers: [ResourceSynthesizer] = .default + [],
         destination: Destinations = env.destination,
-        product: Product,
         packages: [Package] = [],
         deploymentTarget: DeploymentTargets = env.deploymentTargets,
         includeTargets: Set<ModuleTarget> = [],
@@ -32,10 +62,17 @@ extension Project {
         let scripts: [TargetScript] = isCI ? [] : [.swiftLint]
 
         let ldFlagsSettings: SettingsDictionary = product == .framework ?
-        ["OTHER_LDFLAGS": .string("$(inherited) -all_load")] :
+        ["OTHER_LDFLAGS": .string("$(inherited)")] :
         ["OTHER_LDFLAGS": .string("$(inherited)")]
 
-        let configurations: [Configuration] = isCI ?
+        let configurations: [Configuration] = 
+        [
+          .debug(name: .dev),
+          .debug(name: .stage),
+          .release(name: .prod)
+        ]
+        /*
+        isCI ?
         [
           .debug(name: .dev),
           .debug(name: .stage),
@@ -46,6 +83,7 @@ extension Project {
           .debug(name: .stage, xcconfig: .relativeToXCConfig(type: .stage, name: name)),
           .release(name: .prod, xcconfig: .relativeToXCConfig(type: .prod, name: name))
         ]
+        */
 
         let settings: Settings = .settings(
             base: env.baseSetting
@@ -125,12 +163,12 @@ extension Project {
     }
 }
 
-extension Scheme {
-    static func makeScheme(target: ConfigurationName, name: String) -> Scheme {
+public extension Scheme {
+    static func makeScheme(target: ConfigurationName, name: String, preActions: [ExecutionAction] = []) -> Scheme {
         return .scheme(
             name: name,
             shared: true,
-            buildAction: .buildAction(targets: ["\(name)"]),
+            buildAction: .buildAction(targets: ["\(name)"], preActions: preActions),
             testAction: .targets(
                 ["\(name)Tests"],
                 configuration: target,
@@ -143,7 +181,7 @@ extension Scheme {
         )
     }
 
-    static func makeDemoScheme(target: ConfigurationName, name: String) -> Scheme {
+    public static func makeDemoScheme(target: ConfigurationName, name: String) -> Scheme {
         return .scheme(
             name: "\(name)DemoApp",
             shared: true,

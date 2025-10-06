@@ -5,10 +5,11 @@ import ConfigurationPlugin
 import EnvironmentPlugin
 
 let project = Project.makeModule(
-    name: "Domain",
+    name: "Shared",
     product: .staticFramework,
     sources: [],
     dependencies: [
-        .Projects.authDomain
+        .Shared.thirdPartyLib,
+        .Shared.utility
     ]
 )
