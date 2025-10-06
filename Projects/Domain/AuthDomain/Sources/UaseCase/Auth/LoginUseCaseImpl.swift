@@ -1,8 +1,8 @@
 import Foundation
-
 import RxSwift
+import AuthDomainInterface
 
-public class LoginUseCase {
+public class LoginUseCaseImpl: LoginUseCase {
     let repository: AuthRepository
 
     public init(repository: AuthRepository) {

@@ -1,16 +1,51 @@
-
 import ProjectDescription
 import ProjectDescriptionHelpers
 import DependencyPlugin
 import ConfigurationPlugin
 import EnvironmentPlugin
 
-let project = Project.makeModule(
-    name: "AuthDomain",
-    product: .staticFramework,
-    sources: ["Sources/**", "Interface/**"],
+let configurations: [Configuration] = [
+    .debug(name: .dev),
+    .debug(name: .stage),
+    .release(name: .prod)
+]
+
+let settings: Settings = .settings(
+    base: env.baseSetting.merging(.codeSign),
+    configurations: configurations,
+    defaultSettings: .recommended
+)
+
+let interfaceTarget = Target.target(
+    name: "AuthDomainInterface",
+    destinations: env.destination,
+    product: .framework,
+    bundleId: "\(env.organizationName).AuthDomainInterface",
+    deploymentTargets: env.deploymentTargets,
+    infoPlist: .default,
+    sources: ["Interface/AuthDomainInterface.swift"],
     dependencies: [
-        .Shared.thirdPartyLib,
-        .Projects.core
+        .Projects.core,
+        .Shared.thirdPartyLib
     ]
+)
+
+let implementationTarget = Target.target(
+    name: "AuthDomain",
+    destinations: env.destination,
+    product: .staticFramework,
+    bundleId: "\(env.organizationName).AuthDomain",
+    deploymentTargets: env.deploymentTargets,
+    infoPlist: .default,
+    sources: ["Sources/**"],
+    dependencies: [
+        .target(name: "AuthDomainInterface")
+    ]
+)
+
+let project = Project(
+    name: "AuthDomain",
+    organizationName: env.organizationName,
+    settings: settings,
+    targets: [interfaceTarget, implementationTarget]
 )

@@ -4,19 +4,19 @@ import AuthDomainInterface
 import AuthFeatureInterface
 import ComposableArchitecture
 
-public protocol AuthDependency: Dependency {
+public protocol AuthDependency: NeedleFoundation.Dependency {
     var loginUseCase: any LoginUseCase { get }
 }
 
 public final class AuthComponent: Component<AuthDependency>, AuthFactory {
-    public func makeView() -> some View {
-        AuthView(
+    public func makeView() -> AnyView {
+        AnyView(AuthView(
             store: .init(
                 initialState: AuthReducer.State(),
                 reducer: {
                     AuthReducer(loginUseCase: self.dependency.loginUseCase)
                 }
             )
-        )
+        ))
     }
 }

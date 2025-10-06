@@ -19,6 +19,10 @@ public extension TargetDependency.Projects {
         target: "AuthDomain",
         path: .relativeToRoot("Projects/Domain/AuthDomain")
     )
+    static let authDomainInterface = TargetDependency.project(
+        target: "AuthDomainInterface",
+        path: .relativeToRoot("Projects/Domain/AuthDomain")
+    )
 }
 
 public extension TargetDependency.Features {
@@ -28,6 +32,10 @@ public extension TargetDependency.Features {
     )
     static let authFeature = TargetDependency.project(
         target: "AuthFeature",
+        path: .relativeToRoot("Projects/Feature/AuthFeature")
+    )
+    static let authFeatureInterface = TargetDependency.project(
+        target: "AuthFeatureInterface",
         path: .relativeToRoot("Projects/Feature/AuthFeature")
     )
     // Add other features here

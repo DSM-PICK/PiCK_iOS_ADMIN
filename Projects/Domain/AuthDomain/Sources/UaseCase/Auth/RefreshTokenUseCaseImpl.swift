@@ -1,8 +1,8 @@
 import Foundation
-
 import RxSwift
+import AuthDomainInterface
 
-public class RefreshTokenUseCase {
+public class RefreshTokenUseCaseImpl: RefreshTokenUseCase {
     let repository: AuthRepository
 
     public init(repository: AuthRepository) {

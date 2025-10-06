@@ -21,6 +21,7 @@ public extension TargetDependency.SPM {
     static let Pulse = TargetDependency.external(name: "Pulse")
     static let PulseUI = TargetDependency.external(name: "PulseUI")
     static let ComposableArchitecture = TargetDependency.external(name: "ComposableArchitecture")
+    static let NeedleFoundation = TargetDependency.external(name: "NeedleFoundation")
 //    static let DGCharts = TargetDependency.external(name: "DGCharts")
     static let PDS = TargetDependency.external(name: "PiCK_iOS_DesignSystem")
 }

@@ -37,6 +37,8 @@ let project = Project(
             dependencies: [
                 .Features.baseFeature,
                 .Features.authFeature,
+                .Features.authFeatureInterface,
+                .Projects.authDomainInterface,
                 .Shared.thirdPartyLib
             ]
         )
