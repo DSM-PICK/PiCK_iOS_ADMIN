@@ -17,7 +17,7 @@ public struct SignupReducer: Reducer {
     public enum Action {
         case emailChanged(String)
         case passwordChanged(String)
-        case loginButtonTapped
+        case signupButtonTapped
     }
 
     public var body: some Reducer<State, Action> {
@@ -29,7 +29,7 @@ public struct SignupReducer: Reducer {
             case let .passwordChanged(password):
                 state.password = password
                 return .none
-            case .loginButtonTapped:
+            case .signupButtonTapped:
                 // Handle login logic here
                 return .none
             }
