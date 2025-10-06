@@ -17,28 +17,28 @@ let settings: Settings = .settings(
 )
 
 let interfaceTarget = Target.target(
-    name: "AuthFeatureInterface",
+    name: "SigninFeatureInterface",
     destinations: env.destination,
     product: .framework,
-    bundleId: "\(env.organizationName).AuthFeatureInterface",
+    bundleId: "\(env.organizationName).SigninFeatureInterface",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
-    sources: ["Interface/AuthFeatureInterface.swift"],
+    sources: ["Interface/SigninFeatureInterface.swift"],
     dependencies: [
         .Features.baseFeature
     ]
 )
 
 let implementationTarget = Target.target(
-    name: "AuthFeature",
+    name: "SigninFeature",
     destinations: env.destination,
     product: .staticFramework,
-    bundleId: "\(env.organizationName).AuthFeature",
+    bundleId: "\(env.organizationName).SigninFeature",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Sources/**"],
     dependencies: [
-        .target(name: "AuthFeatureInterface"),
+        .target(name: "SigninFeatureInterface"),
         .Projects.authDomainInterface,
         .SPM.NeedleFoundation,
         .SPM.ComposableArchitecture
@@ -46,7 +46,7 @@ let implementationTarget = Target.target(
 )
 
 let project = Project(
-    name: "AuthFeature",
+    name: "SigninFeature",
     organizationName: env.organizationName,
     settings: settings,
     targets: [interfaceTarget, implementationTarget]

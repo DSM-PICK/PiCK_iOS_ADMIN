@@ -36,8 +36,10 @@ let project = Project(
             ],
             dependencies: [
                 .Features.baseFeature,
-                .Features.authFeature,
-                .Features.authFeatureInterface,
+                .Features.signinFeature,
+                .Features.signinFeatureInterface,
+                .Features.signupFeature,
+                .Features.signupFeatureInterface,
                 .Projects.authDomainInterface,
                 .Projects.core,
                 .Shared.thirdPartyLib

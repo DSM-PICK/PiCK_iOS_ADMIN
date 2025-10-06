@@ -30,13 +30,21 @@ public extension TargetDependency.Features {
         target: "BaseFeature",
         path: .relativeToRoot("Projects/Feature/BaseFeature")
     )
-    static let authFeature = TargetDependency.project(
-        target: "AuthFeature",
-        path: .relativeToRoot("Projects/Feature/AuthFeature")
+    static let signinFeature = TargetDependency.project(
+        target: "SigninFeature",
+        path: .relativeToRoot("Projects/Feature/SigninFeature")
     )
-    static let authFeatureInterface = TargetDependency.project(
-        target: "AuthFeatureInterface",
-        path: .relativeToRoot("Projects/Feature/AuthFeature")
+    static let signinFeatureInterface = TargetDependency.project(
+        target: "SigninFeatureInterface",
+        path: .relativeToRoot("Projects/Feature/SigninFeature")
+    )
+    static let signupFeature = TargetDependency.project(
+        target: "SignupFeature",
+        path: .relativeToRoot("Projects/Feature/SignupFeature")
+    )
+    static let signupFeatureInterface = TargetDependency.project(
+        target: "SignupFeatureInterface",
+        path: .relativeToRoot("Projects/Feature/SignupFeature")
     )
     // Add other features here
 }

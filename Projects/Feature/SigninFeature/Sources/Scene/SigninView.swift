@@ -1,10 +1,11 @@
 import SwiftUI
 import ComposableArchitecture
+import PiCK_iOS_DesignSystem
 
-struct AuthView: View {
-    let store: StoreOf<AuthReducer>
+struct SigninView: View {
+    let store: StoreOf<SigninReducer>
 
-    public init(store: StoreOf<AuthReducer>) {
+    public init(store: StoreOf<SigninReducer>) {
         self.store = store
     }
 
@@ -13,14 +14,14 @@ struct AuthView: View {
             VStack {
                 TextField(
                     "Email",
-                    text: viewStore.binding(get: \.email, send: AuthReducer.Action.emailChanged)
+                    text: viewStore.binding(get: \.email, send: SigninReducer.Action.emailChanged)
                 )
                 .textFieldStyle(.roundedBorder)
                 .padding()
 
                 SecureField(
                     "Password",
-                    text: viewStore.binding(get: \.password, send: AuthReducer.Action.passwordChanged)
+                    text: viewStore.binding(get: \.password, send: SigninReducer.Action.passwordChanged)
                 )
                 .textFieldStyle(.roundedBorder)
                 .padding()

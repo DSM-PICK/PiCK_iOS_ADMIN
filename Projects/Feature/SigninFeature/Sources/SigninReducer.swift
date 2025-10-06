@@ -1,7 +1,7 @@
 import ComposableArchitecture
 import AuthDomainInterface
 
-public struct AuthReducer: Reducer {
+public struct SigninReducer: Reducer {
     private let loginUseCase: any LoginUseCase
 
     public init(loginUseCase: any LoginUseCase) {

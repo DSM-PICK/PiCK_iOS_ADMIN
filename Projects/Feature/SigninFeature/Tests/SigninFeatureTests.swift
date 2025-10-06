@@ -1,6 +1,6 @@
 import XCTest
 
-final class AuthFeatureTests: XCTestCase {
+final class SigninFeatureTests: XCTestCase {
 
     override func setUpWithError() throws {
     }
