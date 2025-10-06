@@ -40,6 +40,8 @@ let project = Project(
                 .Features.signinFeatureInterface,
                 .Features.signupFeature,
                 .Features.signupFeatureInterface,
+                .Features.onboardingFeature,
+                .Features.onboardingFeatureInterface,
                 .Projects.authDomainInterface,
                 .Projects.core,
                 .Shared.thirdPartyLib

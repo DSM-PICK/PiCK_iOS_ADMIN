@@ -5,6 +5,8 @@ import SigninFeature
 import SigninFeatureInterface
 import SignupFeature
 import SignupFeatureInterface
+import OnboardingFeature
+import OnboardingFeatureInterface
 
 public final class AppComponent: BootstrapComponent {
     private let _keychain: any Keychain
@@ -37,5 +39,8 @@ public extension AppComponent {
     }
     var signupFactory: any SignupFactory {
         SignupComponent(parent: self)
+    }
+    var onboardingFactory: any OnboardingFactory {
+        OnboardingComponent(parent: self)
     }
 }

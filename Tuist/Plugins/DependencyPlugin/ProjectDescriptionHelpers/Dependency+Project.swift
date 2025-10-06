@@ -46,6 +46,14 @@ public extension TargetDependency.Features {
         target: "SignupFeatureInterface",
         path: .relativeToRoot("Projects/Feature/SignupFeature")
     )
+    static let onboardingFeature = TargetDependency.project(
+        target: "OnboardingFeature",
+        path: .relativeToRoot("Projects/Feature/OnboardingFeature")
+    )
+    static let onboardingFeatureInterface = TargetDependency.project(
+        target: "OnboardingFeatureInterface",
+        path: .relativeToRoot("Projects/Feature/OnboardingFeature")
+    )
     // Add other features here
 }
 

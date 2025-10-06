@@ -9,6 +9,8 @@ import Core
 import KeychainSwift
 import Moya
 import NeedleFoundation
+import OnboardingFeature
+import OnboardingFeatureInterface
 import SigninFeature
 import SigninFeatureInterface
 import SignupFeature
@@ -29,8 +31,8 @@ private func parent1(_ component: NeedleFoundation.Scope) -> NeedleFoundation.Sc
 #if !NEEDLE_DYNAMIC
 
 private class RootDependency3944cc797a4a88956fb5Provider: RootDependency {
-    var signinFactory: any SigninFactory {
-        return appComponent.signinFactory
+    var onboardingFactory: any OnboardingFactory {
+        return appComponent.onboardingFactory
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -40,6 +42,17 @@ private class RootDependency3944cc797a4a88956fb5Provider: RootDependency {
 /// ^->AppComponent->RootComponent
 private func factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return RootDependency3944cc797a4a88956fb5Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class OnboardingDependencyf77d0055983a00cf8835Provider: OnboardingDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->OnboardingComponent
+private func factory88dc13cc29c5719e2b01e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return OnboardingDependencyf77d0055983a00cf8835Provider()
 }
 private class SignupDependency1ff7d1355204bb65e850Provider: SignupDependency {
     var loginUseCase: any LoginUseCase {
@@ -75,6 +88,7 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["keychain-any Keychain"] = { [unowned self] in self.keychain as Any }
         localTable["signinFactory-any SigninFactory"] = { [unowned self] in self.signinFactory as Any }
         localTable["signupFactory-any SignupFactory"] = { [unowned self] in self.signupFactory as Any }
+        localTable["onboardingFactory-any OnboardingFactory"] = { [unowned self] in self.onboardingFactory as Any }
         localTable["userDefault-any UserDefault"] = { [unowned self] in self.userDefault as Any }
         localTable["authProvider-MoyaProvider<AuthAPI>"] = { [unowned self] in self.authProvider as Any }
         localTable["localAuthDataSource-any LocalAuthDataSource"] = { [unowned self] in self.localAuthDataSource as Any }
@@ -86,7 +100,12 @@ extension AppComponent: NeedleFoundation.Registration {
 }
 extension RootComponent: NeedleFoundation.Registration {
     public func registerItems() {
-        keyPathToName[\RootDependency.signinFactory] = "signinFactory-any SigninFactory"
+        keyPathToName[\RootDependency.onboardingFactory] = "onboardingFactory-any OnboardingFactory"
+    }
+}
+extension OnboardingComponent: NeedleFoundation.Registration {
+    public func registerItems() {
+
     }
 }
 extension SignupComponent: NeedleFoundation.Registration {
@@ -117,6 +136,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
 @inline(never) private func register1() {
     registerProviderFactory("^->AppComponent", factoryEmptyDependencyProvider)
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->OnboardingComponent", factory88dc13cc29c5719e2b01e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->SignupComponent", factory86602ff0d0dbaf2cb017f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->SigninComponent", factory2882a056d84a613debccf47b58f8f304c97af4d5)
 }
