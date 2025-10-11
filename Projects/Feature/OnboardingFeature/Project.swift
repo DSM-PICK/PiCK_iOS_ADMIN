@@ -40,7 +40,8 @@ let implementationTarget = Target.target(
     dependencies: [
         .target(name: "OnboardingFeatureInterface"),
         .SPM.NeedleFoundation,
-        .SPM.ComposableArchitecture
+        .SPM.ComposableArchitecture,
+        .Shared.utility
     ]
 )
 

@@ -29,7 +29,7 @@ let project = Project(
             entitlements: .file(path: "Support/PiCK_iOS_ADMIN.entitlements"),
             scripts: [
                 .pre(
-                    script: "/opt/homebrew/bin/needle generate Sources/Application/DI/NeedleGenerated.swift ../",
+                    script: "/opt/homebrew/bin/needle generate Sources/Application/DI/NeedleGenerated.swift Sources ../Feature",
                     name: "Run Needle",
                     outputPaths: ["Projects/App/Sources/Application/DI/NeedleGenerated.swift"]
                 )
@@ -44,7 +44,8 @@ let project = Project(
                 .Features.onboardingFeatureInterface,
                 .Projects.authDomainInterface,
                 .Projects.core,
-                .Shared.thirdPartyLib
+                .Shared.thirdPartyLib,
+                .Shared.utility
             ]
         )
     ],

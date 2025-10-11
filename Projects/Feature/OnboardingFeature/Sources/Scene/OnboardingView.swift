@@ -1,9 +1,11 @@
 import SwiftUI
 import ComposableArchitecture
 import PiCK_iOS_DesignSystem
+import Utility
 
 struct OnboardingView: View {
     let store: StoreOf<OnboardingReducer>
+    @EnvironmentObject var router: AppRouter
     
     public init(store: StoreOf<OnboardingReducer>) {
         self.store = store
@@ -20,7 +22,7 @@ struct OnboardingView: View {
                 PiCKButton(
                     buttonText: "Next",
                     action: {
-                        viewStore.send(.nextButtonTapped)
+                        router.path.append(.signin)
                     }
                 )
                 .padding(.horizontal, 24)
