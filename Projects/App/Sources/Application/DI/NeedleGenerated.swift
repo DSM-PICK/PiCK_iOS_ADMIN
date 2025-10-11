@@ -2,8 +2,6 @@
 
 import AuthDomain
 import AuthDomainInterface
-import AuthFeature
-import AuthFeatureInterface
 import ComposableArchitecture
 import Core
 import KeychainSwift
