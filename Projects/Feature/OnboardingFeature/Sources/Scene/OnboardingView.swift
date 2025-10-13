@@ -21,9 +21,7 @@ struct OnboardingView: View {
                 
                 PiCKButton(
                     buttonText: "Next",
-                    action: {
-                        router.path.append(.signin)
-                    }
+                    action: { viewStore.send(.nextButtonTapped) }
                 )
                 .padding(.horizontal, 24)
                 .padding(.bottom, 28)
