@@ -1,13 +1,13 @@
 import NeedleFoundation
 import SwiftUI
-import AuthFeatureInterface
+import OnboardingFeatureInterface
 
 protocol RootDependency: Dependency {
-    var authFactory: any AuthFactory { get }
+    var onboardingFactory: any OnboardingFactory { get }
 }
 
 final class RootComponent: Component<RootDependency> {
     func makeView() -> some View {
-        dependency.authFactory.makeView()
+        dependency.onboardingFactory.makeView()
     }
 }

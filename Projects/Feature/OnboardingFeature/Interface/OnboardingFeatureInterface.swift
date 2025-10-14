@@ -1,6 +1,6 @@
 import Foundation
 import SwiftUI
 
-public protocol AuthFactory {
+public protocol OnboardingFactory {
     func makeView() -> AnyView
 }

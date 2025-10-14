@@ -1,8 +1,12 @@
 import NeedleFoundation
 import SwiftUI
 import Core
-import AuthFeature
-import AuthFeatureInterface
+import SigninFeature
+import SigninFeatureInterface
+import SignupFeature
+import SignupFeatureInterface
+import OnboardingFeature
+import OnboardingFeatureInterface
 
 public final class AppComponent: BootstrapComponent {
     private let _keychain: any Keychain
@@ -30,7 +34,13 @@ public final class AppComponent: BootstrapComponent {
 
 // MARK: - Features
 public extension AppComponent {
-    var authFactory: any AuthFactory {
-        AuthComponent(parent: self)
+    var signinFactory: any SigninFactory {
+        SigninComponent(parent: self)
+    }
+    var signupFactory: any SignupFactory {
+        SignupComponent(parent: self)
+    }
+    var onboardingFactory: any OnboardingFactory {
+        OnboardingComponent(parent: self)
     }
 }

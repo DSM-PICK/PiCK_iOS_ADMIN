@@ -2,13 +2,17 @@
 
 import AuthDomain
 import AuthDomainInterface
-import AuthFeature
-import AuthFeatureInterface
 import ComposableArchitecture
 import Core
 import KeychainSwift
 import Moya
 import NeedleFoundation
+import OnboardingFeature
+import OnboardingFeatureInterface
+import SigninFeature
+import SigninFeatureInterface
+import SignupFeature
+import SignupFeatureInterface
 import SwiftUI
 
 // swiftlint:disable unused_declaration
@@ -25,8 +29,8 @@ private func parent1(_ component: NeedleFoundation.Scope) -> NeedleFoundation.Sc
 #if !NEEDLE_DYNAMIC
 
 private class RootDependency3944cc797a4a88956fb5Provider: RootDependency {
-    var authFactory: any AuthFactory {
-        return appComponent.authFactory
+    var onboardingFactory: any OnboardingFactory {
+        return appComponent.onboardingFactory
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -37,7 +41,18 @@ private class RootDependency3944cc797a4a88956fb5Provider: RootDependency {
 private func factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return RootDependency3944cc797a4a88956fb5Provider(appComponent: parent1(component) as! AppComponent)
 }
-private class AuthDependency66debf38ba68676d3271Provider: AuthDependency {
+private class OnboardingDependencyf77d0055983a00cf8835Provider: OnboardingDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->OnboardingComponent
+private func factory88dc13cc29c5719e2b01e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return OnboardingDependencyf77d0055983a00cf8835Provider()
+}
+private class SignupDependency1ff7d1355204bb65e850Provider: SignupDependency {
     var loginUseCase: any LoginUseCase {
         return appComponent.loginUseCase
     }
@@ -46,9 +61,22 @@ private class AuthDependency66debf38ba68676d3271Provider: AuthDependency {
         self.appComponent = appComponent
     }
 }
-/// ^->AppComponent->AuthComponent
-private func factorybe7a1f90226e27d1b2e4f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return AuthDependency66debf38ba68676d3271Provider(appComponent: parent1(component) as! AppComponent)
+/// ^->AppComponent->SignupComponent
+private func factory86602ff0d0dbaf2cb017f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return SignupDependency1ff7d1355204bb65e850Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class SigninDependencyde06a9d0b22764487733Provider: SigninDependency {
+    var loginUseCase: any LoginUseCase {
+        return appComponent.loginUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->SigninComponent
+private func factory2882a056d84a613debccf47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return SigninDependencyde06a9d0b22764487733Provider(appComponent: parent1(component) as! AppComponent)
 }
 
 #else
@@ -56,24 +84,36 @@ extension AppComponent: NeedleFoundation.Registration {
     public func registerItems() {
 
         localTable["keychain-any Keychain"] = { [unowned self] in self.keychain as Any }
+        localTable["signinFactory-any SigninFactory"] = { [unowned self] in self.signinFactory as Any }
+        localTable["signupFactory-any SignupFactory"] = { [unowned self] in self.signupFactory as Any }
+        localTable["onboardingFactory-any OnboardingFactory"] = { [unowned self] in self.onboardingFactory as Any }
+        localTable["userDefault-any UserDefault"] = { [unowned self] in self.userDefault as Any }
         localTable["authProvider-MoyaProvider<AuthAPI>"] = { [unowned self] in self.authProvider as Any }
         localTable["localAuthDataSource-any LocalAuthDataSource"] = { [unowned self] in self.localAuthDataSource as Any }
         localTable["remoteAuthDataSource-any RemoteAuthDataSource"] = { [unowned self] in self.remoteAuthDataSource as Any }
         localTable["authRepository-any AuthRepository"] = { [unowned self] in self.authRepository as Any }
         localTable["loginUseCase-any LoginUseCase"] = { [unowned self] in self.loginUseCase as Any }
         localTable["refreshTokenUseCase-any RefreshTokenUseCase"] = { [unowned self] in self.refreshTokenUseCase as Any }
-        localTable["authFactory-any AuthFactory"] = { [unowned self] in self.authFactory as Any }
-        localTable["userDefault-any UserDefault"] = { [unowned self] in self.userDefault as Any }
     }
 }
 extension RootComponent: NeedleFoundation.Registration {
     public func registerItems() {
-        keyPathToName[\RootDependency.authFactory] = "authFactory-any AuthFactory"
+        keyPathToName[\RootDependency.onboardingFactory] = "onboardingFactory-any OnboardingFactory"
     }
 }
-extension AuthComponent: NeedleFoundation.Registration {
+extension OnboardingComponent: NeedleFoundation.Registration {
     public func registerItems() {
-        keyPathToName[\AuthDependency.loginUseCase] = "loginUseCase-any LoginUseCase"
+
+    }
+}
+extension SignupComponent: NeedleFoundation.Registration {
+    public func registerItems() {
+        keyPathToName[\SignupDependency.loginUseCase] = "loginUseCase-any LoginUseCase"
+    }
+}
+extension SigninComponent: NeedleFoundation.Registration {
+    public func registerItems() {
+        keyPathToName[\SigninDependency.loginUseCase] = "loginUseCase-any LoginUseCase"
     }
 }
 
@@ -94,7 +134,9 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
 @inline(never) private func register1() {
     registerProviderFactory("^->AppComponent", factoryEmptyDependencyProvider)
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->AuthComponent", factorybe7a1f90226e27d1b2e4f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->OnboardingComponent", factory88dc13cc29c5719e2b01e3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->SignupComponent", factory86602ff0d0dbaf2cb017f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->SigninComponent", factory2882a056d84a613debccf47b58f8f304c97af4d5)
 }
 #endif
 

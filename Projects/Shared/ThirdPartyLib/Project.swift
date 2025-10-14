@@ -22,6 +22,7 @@ let project = Project.makeShared(
         .SPM.ReactorKit,
         .SPM.RxGesture,
         .SPM.Pulse,
-        .SPM.ComposableArchitecture
+        .SPM.ComposableArchitecture,
+        .SPM.PDS
     ]
 )
