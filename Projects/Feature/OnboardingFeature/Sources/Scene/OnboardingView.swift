@@ -5,7 +5,6 @@ import Utility
 
 struct OnboardingView: View {
     let store: StoreOf<OnboardingReducer>
-    @EnvironmentObject var router: AppRouter
     
     public init(store: StoreOf<OnboardingReducer>) {
         self.store = store
