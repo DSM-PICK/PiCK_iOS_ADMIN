@@ -5,6 +5,7 @@ import Utility
 
 struct OnboardingView: View {
     let store: StoreOf<OnboardingReducer>
+    @EnvironmentObject var router: AppRouter
     
     public init(store: StoreOf<OnboardingReducer>) {
         self.store = store
@@ -20,7 +21,7 @@ struct OnboardingView: View {
                 
                 PiCKButton(
                     buttonText: "Next",
-                    action: { viewStore.send(.nextButtonTapped) }
+                    action: { router.path.append(.home) }
                 )
                 .padding(.horizontal, 24)
                 .padding(.bottom, 28)

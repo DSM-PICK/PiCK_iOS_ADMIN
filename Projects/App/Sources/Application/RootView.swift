@@ -5,6 +5,7 @@ import OnboardingFeature
 import OnboardingFeatureInterface
 import SigninFeature
 import SigninFeatureInterface
+import HomeFeatureInterface
 import Utility
 
 
@@ -23,6 +24,9 @@ struct RootView: View {
                         .environmentObject(router)
                 case .signin:
                     appComponent.signinFactory.makeView()
+                        .environmentObject(router)
+                case .home:
+                    appComponent.homeFactory.makeView()
                         .environmentObject(router)
                 }
             }

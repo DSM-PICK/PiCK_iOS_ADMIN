@@ -1,5 +1,14 @@
-import Foundation
+import SwiftUI
+import ComposableArchitecture
 
-public struct HomeFeature {
-    public init() {}
+public struct HomeFeature: View {
+    let store: Store<HomeReducer.State, HomeReducer.Action>
+
+    public init(store: Store<HomeReducer.State, HomeReducer.Action>) {
+        self.store = store
+    }
+
+    public var body: some View {
+        HomeView()
+    }
 }
