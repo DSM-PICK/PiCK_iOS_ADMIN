@@ -8,10 +8,6 @@ import Core
 import AuthDomainInterface
 import BaseDomain
 
-protocol LocalAuthDataSource {
-    func logout()
-}
-
 public struct LocalAuthDataSourceImpl: LocalAuthDataSource {
     private let keychain: any Keychain
 

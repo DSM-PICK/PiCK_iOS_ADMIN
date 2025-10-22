@@ -19,9 +19,7 @@ extension LoginResponseDTO {
     func toDomain() -> TokenEntity {
         .init(
             accessToken: accessToken,
-            refreshToken: refreshToken,
-            accessExp: accessExp,
-            refreshExp: refreshExp
+            refreshToken: refreshToken
         )
     }
 }

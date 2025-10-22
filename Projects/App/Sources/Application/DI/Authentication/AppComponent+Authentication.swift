@@ -2,6 +2,7 @@ import NeedleFoundation
 import AuthDomain
 import AuthDomainInterface
 import Moya
+import Core
 
 public extension AppComponent {
     var authProvider: MoyaProvider<AuthAPI> {
@@ -17,15 +18,15 @@ public extension AppComponent {
     }
     var remoteAuthDataSource: any RemoteAuthDataSource {
         shared {
-            RemoteAuthDataSourceImpl(provider: authProvider)
+            RemoteAuthDataSourceImpl(keychain: authProvider as! Keychain)
         }
     }
 
     var authRepository: any AuthRepository {
         shared {
             AuthRepositoryImpl(
-                remoteAuthDataSource: remoteAuthDataSource,
-                localAuthDataSource: localAuthDataSource
+                localDataSource: localAuthDataSource,
+                remoteDataSource: remoteAuthDataSource
             )
         }
     }
