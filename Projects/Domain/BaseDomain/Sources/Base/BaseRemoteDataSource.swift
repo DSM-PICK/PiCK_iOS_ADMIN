@@ -2,8 +2,7 @@ import Combine
 import Foundation
 import Core
 import Moya
-import RxMoya
-import RxSwift
+import CombineMoya
 import Utility
 
 open class BaseRemoteDataSource<API: PiCKAPI> {
@@ -15,37 +14,21 @@ open class BaseRemoteDataSource<API: PiCKAPI> {
         self.provider = MoyaProvider<API>(plugins: [MoyaLoggingPlugin()])
     }
 
-    public func request(_ api: API) -> Single<Response> {
-        return .create { single in
-            var disposables: [Disposable] = []
-                disposables.append(
-                    self.defaultRequest(api)
-                        .subscribe(
-                            onSuccess: { single(.success($0)) },
-                            onFailure: { single(.failure($0)) }
-                        )
-                )
-            return Disposables.create(disposables)
-        }
-    }
-
-    func defaultRequest(_ api: API) -> Single<Response> {
-        return provider.rx
-            .request(api)
-            .timeout(.seconds(120), scheduler: MainScheduler.asyncInstance)
-            .catch { error in
-                guard let code = (error as? MoyaError)?.response?.statusCode else {
-                    return .error(error)
+    public func request(_ api: API) -> AnyPublisher<Response, Error> {
+        provider.requestPublisher(api)
+            .timeout(.seconds(120), scheduler: DispatchQueue.main)
+            .tryCatch { error -> AnyPublisher<Response, Error> in
+                guard let moyaError = error as? MoyaError,
+                      let code = moyaError.response?.statusCode else {
+                    throw error
                 }
-                return .error(
-                    api.errorMap?[code] ??
+                throw api.errorMap?[code] ??
                     PiCKError.error(
-                        message: (try? (error as? MoyaError)?
-                            .response?
+                        message: (try? moyaError.response?
                             .mapJSON() as? NSDictionary)?["message"] as? String ?? "",
                         errorBody: [:]
                     )
-                )
             }
+            .eraseToAnyPublisher()
     }
 }

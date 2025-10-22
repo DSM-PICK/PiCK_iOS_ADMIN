@@ -1,23 +1,23 @@
 import Foundation
-import RxSwift
+import Combine
 
 // MARK: - UseCases
 public protocol LoginUseCase {
-    func execute(req: LoginRequestParams) -> Completable
+    func execute(req: LoginRequestParams) -> AnyPublisher<Void, Error>
 }
 
 public protocol RefreshTokenUseCase {
-    func execute() -> Completable
+    func execute() -> AnyPublisher<Void, Error>
 }
 
 public protocol RemoteAuthDataSource {
-    func login(req: LoginRequestParams) -> Single<TokenDTO>
-    func refreshToken() -> Single<TokenDTO>
+    func login(req: LoginRequestParams) -> AnyPublisher<TokenDTO, Error>
+    func refreshToken() -> AnyPublisher<TokenDTO, Error>
 }
 
 public protocol AuthRepository {
-    func login(req: LoginRequestParams) -> Completable
-    func refreshToken() -> Completable
+    func login(req: LoginRequestParams) -> AnyPublisher<Void, Error>
+    func refreshToken() -> AnyPublisher<Void, Error>
     func logout()
 }
 

@@ -1,9 +1,5 @@
 import Foundation
 
-import RxSwift
-import RxMoya
-import Moya
-
 import Core
 import AuthDomainInterface
 import BaseDomain

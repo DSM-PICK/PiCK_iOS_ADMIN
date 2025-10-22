@@ -28,7 +28,7 @@ let package = Package(
     name: "PiCKPackage",
     platforms: [.iOS(.v16), .watchOS(.v9)],
     dependencies: [
-        .package(url: "https://github.com/Moya/Moya.git", from: "15.0.3"),
+        .package(url: "https://github.com/Moya/Moya.git", branch: "15.0.3"),
         .package(url: "https://github.com/ReactiveX/RxSwift", from: "6.7.1"),
         .package(url: "https://github.com/SnapKit/SnapKit.git", from: "5.0.1"),
         .package(url: "https://github.com/devxoul/Then.git", from: "3.0.0"),
@@ -55,7 +55,7 @@ let package = Package(
                 "RxSwift",
                 .product(name: "RxCocoa", package: "RxSwift"),
                 "Moya",
-                .product(name: "RxMoya", package: "Moya"),
+                .product(name: "CombineMoya", package: "Moya"),
                 "Kingfisher",
                 "RxGesture",
                 "KeychainSwift",

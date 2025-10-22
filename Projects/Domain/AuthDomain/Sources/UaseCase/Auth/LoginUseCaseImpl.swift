@@ -1,5 +1,5 @@
 import Foundation
-import RxSwift
+import Combine
 import AuthDomainInterface
 
 public class LoginUseCaseImpl: LoginUseCase {
@@ -9,8 +9,7 @@ public class LoginUseCaseImpl: LoginUseCase {
         self.repository = repository
     }
 
-    public func execute(req: LoginRequestParams) -> Completable {
-        return repository.login(req: req)
+    public func execute(req: LoginRequestParams) -> AnyPublisher<Void, Error> {
+        repository.login(req: req)
     }
-
 }

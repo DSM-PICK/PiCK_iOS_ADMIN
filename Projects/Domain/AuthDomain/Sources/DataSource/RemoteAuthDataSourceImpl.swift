@@ -1,16 +1,20 @@
 import AuthDomainInterface
 import BaseDomain
-import RxSwift
+import Combine
 
 public final class RemoteAuthDataSourceImpl: BaseRemoteDataSource<AuthAPI>, RemoteAuthDataSource {
-
-    public func login(req: LoginRequestParams) -> Single<TokenDTO> {
+    public func login(req: LoginRequestParams) -> AnyPublisher<TokenDTO, Error> {
         request(.login(req))
-            .map(TokenDTO.self)
+            .tryMap { response in
+                try response.map(TokenDTO.self)
+            }
+            .eraseToAnyPublisher()
     }
-
-    public func refreshToken() ->  Single<TokenDTO> {
+    public func refreshToken() -> AnyPublisher<TokenDTO, Error> {
         request(.refreshToken)
-            .map(TokenDTO.self)
+            .tryMap { response in
+                try response.map(TokenDTO.self)
+            }
+            .eraseToAnyPublisher()
     }
 }

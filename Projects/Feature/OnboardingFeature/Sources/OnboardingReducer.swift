@@ -8,24 +8,11 @@ public struct OnboardingReducer: Reducer {
         public init() {}
     }
 
-    public enum Action {
-        case nextButtonTapped
-        case delegate(DelegateAction)
-    }
+    public enum Action {}
 
     public enum DelegateAction {
         case moveToSignin
     }
 
-    public var body: some Reducer<State, Action> {
-        Reduce { state, action in
-            switch action {
-            case .nextButtonTapped:
-                return .send(.delegate(.moveToSignin))
-
-            case .delegate:
-                return .none
-            }
-        }
-    }
+    public var body: some Reducer<State, Action> {}
 }

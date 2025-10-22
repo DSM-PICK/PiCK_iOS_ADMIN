@@ -1,5 +1,5 @@
 {
-  "originHash" : "313a017e198c4dd81017aba68831e97c6cfccd067e3828193571e51ff14d327a",
+  "originHash" : "a397101938671a676fd891e28a7f2f27cf013ae7115296c1afa9a1aed4cbcbb6",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -159,8 +159,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Moya/Moya.git",
       "state" : {
-        "revision" : "c263811c1f3dbf002be9bd83107f7cdc38992b26",
-        "version" : "15.0.3"
+        "branch" : "15.0.3",
+        "revision" : "c263811c1f3dbf002be9bd83107f7cdc38992b26"
       }
     },
     {
