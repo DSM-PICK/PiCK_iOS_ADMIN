@@ -16,6 +16,6 @@ public struct HomeView: View {
             }
         }
         .toolbarBackground(.white, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
+        .toolbarBackground(.hidden, for: .navigationBar)
     }
 }
