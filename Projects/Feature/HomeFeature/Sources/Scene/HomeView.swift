@@ -18,6 +18,7 @@ public struct HomeView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 PiCKNavigationBar()
+                    .padding(.leading, 8)
             }
         }
         .toolbarBackground(.white, for: .navigationBar)
