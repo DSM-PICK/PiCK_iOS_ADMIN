@@ -16,15 +16,11 @@ public protocol LocalAuthDataSource {
     func loadAccessToken() -> String?
     func saveRefreshToken(_ token: String)
     func loadRefreshToken() -> String?
-    func saveAccessExp(_ time: String)
-    func loadAccessExp() -> String?
-    func saveRefreshExp(_ time: String)
-    func loadRefreshExp() -> String?
     func clearTokens()
 }
 
 public protocol RemoteAuthDataSource {
-    func login(req: LoginRequestParams) -> Single<TokenEntity>
+    func login(req: LoginRequestParams) -> Single<TokenDTO>
     func refreshToken() -> Completable
 }
 

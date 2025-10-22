@@ -3,8 +3,6 @@ import Foundation
 public enum KeychainType: String {
     case accessToken = "access_token"
     case refreshToken = "refresh_token"
-    case accessExp = "access_exp"
-    case refreshExp = "refresh_exp"
     case tokenIsEmpty
 
     case id
