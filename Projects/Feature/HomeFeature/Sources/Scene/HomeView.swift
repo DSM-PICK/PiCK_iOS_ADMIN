@@ -1,5 +1,5 @@
-
 import SwiftUI
+import PiCK_iOS_DesignSystem
 
 public struct HomeView: View {
     
@@ -7,7 +7,12 @@ public struct HomeView: View {
     
     public var body: some View {
         VStack(spacing: 0) {
-            TabBarView()
+            SelfStudyView()
+                .padding(.horizontal, 24)
+                .padding(.top, 24)
+                .frame(height: 72)
+            
+            Spacer()
         }
         .navigationBarBackButtonHidden(true)
         .toolbar {
