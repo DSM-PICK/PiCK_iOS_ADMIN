@@ -1,5 +1,5 @@
-
 import SwiftUI
+import PiCK_iOS_DesignSystem
 
 public struct TabBarView: View {
     
@@ -32,5 +32,6 @@ public struct TabBarView: View {
                     Label("전체", systemImage: "list.bullet")
                 }
         }
+        .tint(Color.Primary.primary500)
     }
 }
