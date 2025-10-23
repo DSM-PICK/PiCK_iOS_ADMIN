@@ -21,10 +21,10 @@ public struct HomeView: View {
                 
                 AllSelfStudyView()
                     .frame(maxWidth: .infinity)
-                    .frame(height: 160)
             }
             .padding(.horizontal, 24)
             .padding(.top, 24)
+            .padding(.bottom, 24)
         }
         .navigationBarBackButtonHidden(true)
         .toolbar {
