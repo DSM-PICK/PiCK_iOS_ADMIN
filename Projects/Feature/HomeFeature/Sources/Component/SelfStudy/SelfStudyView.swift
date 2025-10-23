@@ -15,7 +15,7 @@ public struct SelfStudyView: View {
             Spacer()
             
             Text("선생님은 층 자습감독 입니다")
-                .pickText(type: .body2)
+                .pickText(type: .body2, textColor: Color.Normal.black)
                 .padding(.bottom, 14)
                 .padding(.leading, 20)
         }

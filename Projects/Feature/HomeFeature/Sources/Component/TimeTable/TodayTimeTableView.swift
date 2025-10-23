@@ -1,4 +1,5 @@
 import SwiftUI
+import PiCK_iOS_DesignSystem
 
 public struct TodayTimeTableView: View {
     let schedules: [Schedule]
@@ -10,7 +11,7 @@ public struct TodayTimeTableView: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("오늘의 시간표")
-                .font(.system(size: 20, weight: .bold))
+                .pickText(type: .label1)
                 .foregroundColor(.black)
                 .padding(.top, 24)
                 .padding(.horizontal, 20)
@@ -30,7 +31,6 @@ public struct TodayTimeTableView: View {
         .frame(maxWidth: .infinity)
         .background(Color.white)
         .cornerRadius(12)
-        .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 2)
     }
 }
 
@@ -41,13 +41,11 @@ struct TimeTableRow: View {
     var body: some View {
         HStack(spacing: 16) {
             Text("\(period)교시")
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundColor(subject != nil ? Color(red: 0.45, green: 0.47, blue: 1.0) : .gray)
+                .pickText(type: .subTitle2, textColor: Color.Primary.primary500)
                 .frame(width: 60, alignment: .leading)
-            
+
             Text(subject ?? "-")
-                .font(.system(size: 16))
-                .foregroundColor(subject != nil ? .black : .gray.opacity(0.5))
+                .pickText(type: .label1, textColor: Color.Normal.black)
             
             Spacer()
         }
