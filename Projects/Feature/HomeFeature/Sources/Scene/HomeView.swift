@@ -18,6 +18,10 @@ public struct HomeView: View {
                     Schedule(period: 5, subject: "2학년 2반"),
                     Schedule(period: 6, subject: "2학년 2반")
                 ])
+                
+                AllSelfStudyView()
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 160)
             }
             .padding(.horizontal, 24)
             .padding(.top, 24)
