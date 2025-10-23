@@ -14,20 +14,26 @@ struct RootView: View {
     let appComponent: AppComponent
 
     var body: some View {
-        NavigationStack(path: $router.path) {
-            appComponent.onboardingFactory.makeView()
-            .environmentObject(router)
-            .navigationDestination(for: AppRoute.self) { route in
-                switch route {
-                case .onboarding:
+        Group {
+            if router.path.last == .home {
+                appComponent.homeFactory.makeView()
+                    .environmentObject(router)
+            } else {
+                NavigationStack(path: $router.path) {
                     appComponent.onboardingFactory.makeView()
-                        .environmentObject(router)
-                case .signin:
-                    appComponent.signinFactory.makeView()
-                        .environmentObject(router)
-                case .home:
-                    appComponent.homeFactory.makeView()
-                        .environmentObject(router)
+                    .environmentObject(router)
+                    .navigationDestination(for: AppRoute.self) { route in
+                        switch route {
+                        case .onboarding:
+                            appComponent.onboardingFactory.makeView()
+                                .environmentObject(router)
+                        case .signin:
+                            appComponent.signinFactory.makeView()
+                                .environmentObject(router)
+                        case .home:
+                            EmptyView()
+                        }
+                    }
                 }
             }
         }

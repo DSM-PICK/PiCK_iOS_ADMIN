@@ -20,11 +20,15 @@ public struct TabBarView: View {
                     Label("일정", systemImage: "calendar")
                 }
             
-            HomeView()
-                .tag(2)
-                .tabItem {
-                    Label("홈", systemImage: "house")
-                }
+            NavigationView {
+                HomeView()
+                    .navigationBarTitleDisplayMode(.inline)
+            }
+            .navigationViewStyle(.stack)
+            .tag(2)
+            .tabItem {
+                Label("홈", systemImage: "house")
+            }
             
             Text("수락")
                 .tag(3)
