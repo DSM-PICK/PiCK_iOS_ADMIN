@@ -40,9 +40,14 @@ struct TimeTableRow: View {
     
     var body: some View {
         HStack(spacing: 16) {
-            Text("\(period)교시")
-                .pickText(type: .subTitle2, textColor: Color.Primary.primary500)
-                .frame(width: 60, alignment: .leading)
+            HStack(spacing: 0) {
+                Text("\(period)")
+                    .pickText(type: .subTitle2, textColor: Color.Primary.primary500)
+                
+                Text("교시")
+                    .pickText(type: .subTitle2, textColor: Color.Normal.black)
+            }
+            .frame(width: 60, alignment: .leading)
 
             Text(subject ?? "-")
                 .pickText(type: .label1, textColor: Color.Normal.black)

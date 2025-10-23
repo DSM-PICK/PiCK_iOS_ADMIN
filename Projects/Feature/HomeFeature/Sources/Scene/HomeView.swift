@@ -29,7 +29,5 @@ public struct HomeView: View {
                     .padding(.leading, 8)
             }
         }
-        .toolbarBackground(.white, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
     }
 }
