@@ -51,24 +51,34 @@ public protocol AuthRepository {
 
 // MARK: - Parameters
 public struct LoginRequestParams: Encodable {
-    public let adminId: String
+    public let adminID: String
     public let password: String
     public let deviceToken: String
 
     public init(
-        adminId: String,
+        adminID: String,
         password: String,
         deviceToken: String
     ) {
-        self.adminId = adminId
+        self.adminID = adminID
         self.password = password
         self.deviceToken = deviceToken
     }
 
     enum CodingKeys: String, CodingKey {
-        case adminId = "admin_id"
+        case adminID = "admin_id"
         case password
         case deviceToken = "device_token"
+    }
+}
+
+public struct TokenDTO: Codable {
+    public let accessToken: String
+    public let refreshToken: String
+
+    enum CodingKeys: String, CodingKey {
+        case accessToken = "access_token"
+        case refreshToken = "refresh_token"
     }
 }
 

@@ -9,7 +9,7 @@ let project = Project.makeModule(
     product: .staticFramework,
     sources: [],
     dependencies: [
-        .Projects.authDomain,
-        .Projects.homeDomain
+        .Projects.baseDomain,
+        .Projects.authDomain
     ]
 )

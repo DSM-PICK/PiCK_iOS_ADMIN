@@ -17,35 +17,34 @@ let settings: Settings = .settings(
 )
 
 let interfaceTarget = Target.target(
-    name: "AuthDomainInterface",
+    name: "BaseDomainInterface",
     destinations: env.destination,
     product: .framework,
-    bundleId: "\(env.organizationName).AuthDomainInterface",
+    bundleId: "\(env.organizationName).BaseDomainInterface",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
-    sources: ["Interface/AuthDomainInterface.swift"],
+    sources: ["Interface/BaseDomainInterface.swift"],
     dependencies: [
         .Projects.core,
-        .Shared.thirdPartyLib,
-        .Projects.baseDomain
+        .Shared.thirdPartyLib
     ]
 )
 
 let implementationTarget = Target.target(
-    name: "AuthDomain",
+    name: "BaseDomain",
     destinations: env.destination,
     product: .staticFramework,
-    bundleId: "\(env.organizationName).AuthDomain",
+    bundleId: "\(env.organizationName).BaseDomain",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Sources/**"],
     dependencies: [
-        .target(name: "AuthDomainInterface")
+        .target(name: "BaseDomainInterface")
     ]
 )
 
 let project = Project(
-    name: "AuthDomain",
+    name: "BaseDomain",
     organizationName: env.organizationName,
     settings: settings,
     targets: [interfaceTarget, implementationTarget]
