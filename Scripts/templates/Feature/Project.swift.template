@@ -1,0 +1,52 @@
+import ProjectDescription
+import ProjectDescriptionHelpers
+import DependencyPlugin
+import ConfigurationPlugin
+import EnvironmentPlugin
+
+let configurations: [Configuration] = [
+    .debug(name: .dev),
+    .debug(name: .stage),
+    .release(name: .prod)
+]
+
+let settings: Settings = .settings(
+    base: env.baseSetting.merging(.codeSign),
+    configurations: configurations,
+    defaultSettings: .recommended
+)
+
+let interfaceTarget = Target.target(
+    name: "__FEATURE_NAME__FeatureInterface",
+    destinations: env.destination,
+    product: .framework,
+    bundleId: "\(env.organizationName).__FEATURE_NAME__FeatureInterface",
+    deploymentTargets: env.deploymentTargets,
+    infoPlist: .default,
+    sources: ["Interface/__FEATURE_NAME__Interface.swift"],
+    dependencies: [
+        .Features.baseFeature
+    ]
+)
+
+let implementationTarget = Target.target(
+    name: "__FEATURE_NAME__Feature",
+    destinations: env.destination,
+    product: .staticFramework,
+    bundleId: "\(env.organizationName).__FEATURE_NAME__Feature",
+    deploymentTargets: env.deploymentTargets,
+    infoPlist: .default,
+    sources: ["Sources/**"],
+    dependencies: [
+        .target(name: "__FEATURE_NAME__FeatureInterface"),
+        .SPM.NeedleFoundation,
+        .SPM.ComposableArchitecture
+    ]
+)
+
+let project = Project(
+    name: "__FEATURE_NAME__Feature",
+    organizationName: env.organizationName,
+    settings: settings,
+    targets: [interfaceTarget, implementationTarget]
+)

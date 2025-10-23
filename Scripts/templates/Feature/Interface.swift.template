@@ -1,0 +1,5 @@
+import Foundation
+
+public protocol __FEATURE_NAME__Interface {
+    
+}

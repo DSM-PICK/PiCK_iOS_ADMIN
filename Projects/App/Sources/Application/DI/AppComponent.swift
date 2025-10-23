@@ -7,8 +7,10 @@ import SignupFeature
 import SignupFeatureInterface
 import OnboardingFeature
 import OnboardingFeatureInterface
+import HomeFeature
+import HomeFeatureInterface
 
-public final class AppComponent: BootstrapComponent {
+public final class AppComponent: BootstrapComponent, HomeDependency {
     private let _keychain: any Keychain
 
     init(keychain: any Keychain) {
@@ -42,5 +44,8 @@ public extension AppComponent {
     }
     var onboardingFactory: any OnboardingFactory {
         OnboardingComponent(parent: self)
+    }
+    var homeFactory: any HomeFactory {
+        HomeComponent(parent: self)
     }
 }

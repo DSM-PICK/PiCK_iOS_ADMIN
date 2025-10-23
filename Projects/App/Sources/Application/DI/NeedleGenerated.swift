@@ -4,6 +4,8 @@ import AuthDomain
 import AuthDomainInterface
 import ComposableArchitecture
 import Core
+import HomeFeature
+import HomeFeatureInterface
 import KeychainSwift
 import Moya
 import NeedleFoundation
@@ -78,6 +80,17 @@ private class SigninDependencyde06a9d0b22764487733Provider: SigninDependency {
 private func factory2882a056d84a613debccf47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return SigninDependencyde06a9d0b22764487733Provider(appComponent: parent1(component) as! AppComponent)
 }
+private class HomeDependency443c4e1871277bd8432aProvider: HomeDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->HomeComponent
+private func factory67229cdf0f755562b2b1e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return HomeDependency443c4e1871277bd8432aProvider()
+}
 
 #else
 extension AppComponent: NeedleFoundation.Registration {
@@ -87,6 +100,7 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["signinFactory-any SigninFactory"] = { [unowned self] in self.signinFactory as Any }
         localTable["signupFactory-any SignupFactory"] = { [unowned self] in self.signupFactory as Any }
         localTable["onboardingFactory-any OnboardingFactory"] = { [unowned self] in self.onboardingFactory as Any }
+        localTable["homeFactory-any HomeFactory"] = { [unowned self] in self.homeFactory as Any }
         localTable["userDefault-any UserDefault"] = { [unowned self] in self.userDefault as Any }
         localTable["authProvider-MoyaProvider<AuthAPI>"] = { [unowned self] in self.authProvider as Any }
         localTable["localAuthDataSource-any LocalAuthDataSource"] = { [unowned self] in self.localAuthDataSource as Any }
@@ -116,6 +130,11 @@ extension SigninComponent: NeedleFoundation.Registration {
         keyPathToName[\SigninDependency.loginUseCase] = "loginUseCase-any LoginUseCase"
     }
 }
+extension HomeComponent: NeedleFoundation.Registration {
+    public func registerItems() {
+
+    }
+}
 
 
 #endif
@@ -137,6 +156,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->OnboardingComponent", factory88dc13cc29c5719e2b01e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->SignupComponent", factory86602ff0d0dbaf2cb017f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->SigninComponent", factory2882a056d84a613debccf47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->HomeComponent", factory67229cdf0f755562b2b1e3b0c44298fc1c149afb)
 }
 #endif
 

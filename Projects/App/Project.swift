@@ -44,6 +44,7 @@ let project = Project(
                 .Features.onboardingFeatureInterface,
                 .Projects.baseDomainInterface,
                 .Projects.authDomainInterface,
+                .Projects.homeDomainInterface,
                 .Projects.core,
                 .Shared.thirdPartyLib,
                 .Shared.utility
