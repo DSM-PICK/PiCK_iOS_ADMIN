@@ -1,15 +1,19 @@
 import SwiftUI
 
-struct TodayTimeTableView: View {
+public struct TodayTimeTableView: View {
     let schedules: [Schedule]
     
-    var body: some View {
+    public init(schedules: [Schedule]) {
+        self.schedules = schedules
+    }
+    
+    public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("오늘의 시간표")
                 .font(.system(size: 20, weight: .bold))
                 .foregroundColor(.black)
-                .padding(.horizontal, 20)
                 .padding(.top, 24)
+                .padding(.horizontal, 20)
                 .padding(.bottom, 16)
             
             VStack(spacing: 12) {
@@ -23,6 +27,7 @@ struct TodayTimeTableView: View {
             .padding(.horizontal, 20)
             .padding(.bottom, 24)
         }
+        .frame(maxWidth: .infinity)
         .background(Color.white)
         .cornerRadius(12)
         .shadow(color: Color.black.opacity(0.05), radius: 10, x: 0, y: 2)
@@ -50,8 +55,13 @@ struct TimeTableRow: View {
     }
 }
 
-struct Schedule: Identifiable {
-    let id = UUID()
-    let period: Int
-    let subject: String
+public struct Schedule: Identifiable {
+    public let id = UUID()
+    public let period: Int
+    public let subject: String
+    
+    public init(period: Int, subject: String) {
+        self.period = period
+        self.subject = subject
+    }
 }

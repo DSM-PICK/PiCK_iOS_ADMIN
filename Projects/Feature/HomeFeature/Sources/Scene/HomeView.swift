@@ -9,6 +9,7 @@ public struct HomeView: View {
         ScrollView {
             VStack(spacing: 24) {
                 SelfStudyView()
+                    .frame(maxWidth: .infinity)
                     .frame(height: 72)
                 
                 TodayTimeTableView(schedules: [
@@ -17,7 +18,6 @@ public struct HomeView: View {
                     Schedule(period: 5, subject: "2학년 2반"),
                     Schedule(period: 6, subject: "2학년 2반")
                 ])
-                .frame(height: 316)
             }
             .padding(.horizontal, 24)
             .padding(.top, 24)
