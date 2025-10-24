@@ -1,5 +1,6 @@
 import SwiftUI
 import Core
+import BaseFeature
 
 @main
 struct PiCK_iOS_ADMINApp: App {
@@ -9,6 +10,7 @@ struct PiCK_iOS_ADMINApp: App {
     init() {
         registerProviderFactories()
         self.appComponent = AppComponent(keychain: KeychainImpl())
+        BaseNavigation.configureAppearance()
     }
 
     var body: some Scene {

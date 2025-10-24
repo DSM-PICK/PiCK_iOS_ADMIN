@@ -27,7 +27,10 @@ struct SigninView: View {
                     .padding(.top, 12)
                 
                 PiCKTextField(
-                    text: .constant(""),
+                    text: viewStore.binding(
+                        get: \.email,
+                        send: SigninReducer.Action.emailChanged
+                    ),
                     placeholder: "학교 이메일을 입력해주세요",
                     titleText: "이메일",
                     showEmail: true
@@ -36,7 +39,10 @@ struct SigninView: View {
                 .padding(.top, 50)
                 
                 PiCKTextField(
-                    text: .constant(""),
+                    text: viewStore.binding(
+                        get: \.password,
+                        send: SigninReducer.Action.passwordChanged
+                    ),
                     placeholder: "비밀번호를 입력해주세요",
                     titleText: "비밀번호",
                     isSecurity: true
@@ -48,8 +54,8 @@ struct SigninView: View {
                 
                 PiCKButton(
                     buttonText: "로그인하기",
-                    isEnabled: false,
-                    action: {}
+                    isEnabled: !viewStore.email.isEmpty && !viewStore.password.isEmpty,
+                    action: { viewStore.send(.loginButtonTapped) }
                 )
                 .padding(.horizontal, 24)
                 .padding(.bottom, 28)

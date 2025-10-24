@@ -31,6 +31,14 @@ public extension TargetDependency.Projects {
         target: "AuthDomainInterface",
         path: .relativeToRoot("Projects/Domain/AuthDomain")
     )
+    static let homeDomain = TargetDependency.project(
+        target: "HomeDomain",
+        path: .relativeToRoot("Projects/Domain/HomeDomain")
+    )
+    static let homeDomainInterface = TargetDependency.project(
+        target: "HomeDomainInterface",
+        path: .relativeToRoot("Projects/Domain/HomeDomain")
+    )
 }
 
 public extension TargetDependency.Features {
@@ -62,7 +70,15 @@ public extension TargetDependency.Features {
         target: "OnboardingFeatureInterface",
         path: .relativeToRoot("Projects/Feature/OnboardingFeature")
     )
-    // Add other features here
+    static let homeFeature = TargetDependency.project(
+        target: "HomeFeature",
+        path: .relativeToRoot("Projects/Feature/HomeFeature")
+    )
+    static let homeFeatureInterface = TargetDependency.project(
+        target: "HomeFeatureInterface",
+        path: .relativeToRoot("Projects/Feature/HomeFeature")
+    )
+    // other Module
 }
 
 public extension TargetDependency.Shared {

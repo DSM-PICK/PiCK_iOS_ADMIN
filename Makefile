@@ -17,3 +17,8 @@ regenerate:
 	rm -rf *.xcworkspace
 	tuist install
 	tuist generate
+
+feature:
+	@read -p "Enter feature name: " feature_name; \
+	sh Scripts/new_feature.sh $$feature_name
+

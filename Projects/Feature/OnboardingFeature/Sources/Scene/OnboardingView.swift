@@ -14,8 +14,8 @@ struct OnboardingView: View {
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             VStack {
-                Text("Onboarding")
-                    .pickText(type: .heading2)
+                PiCKImage.adminLogo
+                    .padding(.top, 278)
                 
                 Spacer()
                 
