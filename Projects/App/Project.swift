@@ -55,8 +55,11 @@ let appDependencies: [TargetDependency] = [
     .Features.signupFeatureInterface,
     .Features.onboardingFeature,
     .Features.onboardingFeatureInterface,
+    .Features.homeFeature,
+    .Features.homeFeatureInterface,
     .Projects.baseDomainInterface,
     .Projects.authDomainInterface,
+    .Projects.homeDomainInterface,
     .Projects.core,
     .Shared.thirdPartyLib,
     .Shared.utility
