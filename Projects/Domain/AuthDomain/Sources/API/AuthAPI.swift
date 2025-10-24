@@ -1,7 +1,7 @@
 import Foundation
 import Moya
+import BaseDomain
 import AuthDomainInterface
-import Utility
 
 public enum AuthAPI {
     case login(LoginRequestParams)
@@ -19,19 +19,19 @@ extension LoginResponseDTO {
     func toDomain() -> TokenEntity {
         .init(
             accessToken: accessToken,
-            refreshToken: refreshToken,
-            accessExp: accessExp,
-            refreshExp: refreshExp
+            refreshToken: refreshToken
         )
     }
 }
 
-extension AuthAPI: TargetType {
-    public var baseURL: URL {
-        return URLUtil.baseURL
+extension AuthAPI: PiCKAPI {
+    public typealias ErrorType = AuthError
+
+    public var domain: PiCKDomain {
+        return .admin
     }
 
-    public var path: String {
+    public var urlPath: String {
         switch self {
         case .login:
             return "/admin/auth/login"
@@ -58,7 +58,24 @@ extension AuthAPI: TargetType {
         }
     }
 
-    public var headers: [String : String]? {
-        return ["Content-Type": "application/json"]
+    public var pickHeader: TokenType {
+        switch self {
+        case .refreshToken:
+            return .refreshToken
+        default:
+            return .tokenIsEmpty
+        }
+    }
+
+    public var errorMap: [Int : AuthDomainInterface.AuthError]? {
+        switch self {
+        case .login(let req):
+            return [
+                401: .passwordMismatch,
+                404: .idMismatch
+            ]
+        default:
+            return nil
+        }
     }
 }

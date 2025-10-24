@@ -1,24 +1,20 @@
-import Foundation
 import AuthDomainInterface
-import Moya
-import RxMoya
-import RxSwift
+import BaseDomain
+import Combine
 
-public class RemoteAuthDataSourceImpl: RemoteAuthDataSource {
-    private let provider: MoyaProvider<AuthAPI>
-
-    public init(provider: MoyaProvider<AuthAPI>) {
-        self.provider = provider
+public final class RemoteAuthDataSourceImpl: BaseRemoteDataSource<AuthAPI>, RemoteAuthDataSource {
+    public func login(req: LoginRequestParams) -> AnyPublisher<TokenDTO, Error> {
+        request(.login(req))
+            .tryMap { response in
+                try response.map(TokenDTO.self)
+            }
+            .eraseToAnyPublisher()
     }
-
-    public func login(req: LoginRequestParams) -> Single<TokenEntity> {
-        provider.rx.request(.login(req))
-            .map(LoginResponseDTO.self)
-            .map { $0.toDomain() }
-    }
-
-    public func refreshToken() -> Completable {
-        provider.rx.request(.refreshToken)
-            .asCompletable()
+    public func refreshToken() -> AnyPublisher<TokenDTO, Error> {
+        request(.refreshToken)
+            .tryMap { response in
+                try response.map(TokenDTO.self)
+            }
+            .eraseToAnyPublisher()
     }
 }

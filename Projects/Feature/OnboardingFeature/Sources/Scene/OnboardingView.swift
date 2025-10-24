@@ -20,8 +20,8 @@ struct OnboardingView: View {
                 Spacer()
                 
                 PiCKButton(
-                    buttonText: "Next",
-                    action: { router.path.append(.home) }
+                    buttonText: "로그인",
+                    action: { router.path.append(.signin) }
                 )
                 .padding(.horizontal, 24)
                 .padding(.bottom, 28)

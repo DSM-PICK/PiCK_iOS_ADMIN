@@ -1,55 +1,30 @@
 import Foundation
-import RxSwift
+import Combine
 
 // MARK: - UseCases
 public protocol LoginUseCase {
-    func execute(req: LoginRequestParams) -> Completable
+    func execute(req: LoginRequestParams) -> AnyPublisher<Void, Error>
 }
 
 public protocol RefreshTokenUseCase {
-    func execute() -> Completable
-}
-
-// MARK: - DataSource
-public protocol LocalAuthDataSource {
-    func saveAccessToken(_ token: String)
-    func loadAccessToken() -> String?
-    func saveRefreshToken(_ token: String)
-    func loadRefreshToken() -> String?
-    func saveAccessExp(_ time: String)
-    func loadAccessExp() -> String?
-    func saveRefreshExp(_ time: String)
-    func loadRefreshExp() -> String?
-    func clearTokens()
+    func execute() -> AnyPublisher<Void, Error>
 }
 
 public protocol RemoteAuthDataSource {
-    func login(req: LoginRequestParams) -> Single<TokenEntity>
-    func refreshToken() -> Completable
+    func login(req: LoginRequestParams) -> AnyPublisher<TokenDTO, Error>
+    func refreshToken() -> AnyPublisher<TokenDTO, Error>
 }
 
-// MARK: - Entities
-public struct TokenEntity: Equatable {
-    public let accessToken: String
-    public let refreshToken: String
-    public let accessExp: String
-    public let refreshExp: String
-
-    public init(accessToken: String, refreshToken: String, accessExp: String, refreshExp: String) {
-        self.accessToken = accessToken
-        self.refreshToken = refreshToken
-        self.accessExp = accessExp
-        self.refreshExp = refreshExp
-    }
-}
-
-// MARK: - Repository
 public protocol AuthRepository {
-    func login(req: LoginRequestParams) -> Completable
-    func refreshToken() -> Completable
+    func login(req: LoginRequestParams) -> AnyPublisher<Void, Error>
+    func refreshToken() -> AnyPublisher<Void, Error>
+    func logout()
 }
 
-// MARK: - Parameters
+public protocol LocalAuthDataSource {
+    func logout()
+}
+
 public struct LoginRequestParams: Encodable {
     public let adminID: String
     public let password: String
@@ -71,6 +46,21 @@ public struct LoginRequestParams: Encodable {
         case deviceToken = "device_token"
     }
 }
+
+
+// MARK: - Entities
+public struct TokenEntity: Equatable {
+    public let accessToken: String
+    public let refreshToken: String
+    public init(accessToken: String, refreshToken: String) {
+        self.accessToken = accessToken
+        self.refreshToken = refreshToken
+    }
+}
+
+// MARK: - Repository
+
+
 
 public struct TokenDTO: Codable {
     public let accessToken: String

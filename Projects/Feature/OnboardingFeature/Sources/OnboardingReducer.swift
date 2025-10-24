@@ -7,7 +7,7 @@ public struct OnboardingReducer: Reducer {
     public struct State: Equatable {
         public init() {}
     }
-
+  
     public enum Action {
     }
 

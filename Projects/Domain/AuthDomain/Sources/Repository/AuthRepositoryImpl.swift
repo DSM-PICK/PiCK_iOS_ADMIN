@@ -1,35 +1,42 @@
 import Foundation
 import AuthDomainInterface
-import RxSwift
+import Combine
+import Core
 
 public class AuthRepositoryImpl: AuthRepository {
-    private let remoteAuthDataSource: RemoteAuthDataSource
-    private let localAuthDataSource: LocalAuthDataSource
+    private let remoteDataSource: RemoteAuthDataSource
+    private let localDataSource: LocalAuthDataSource
+    private var cancellables = Set<AnyCancellable>()
+    private let keyChain = KeychainImpl()
 
-    public init(
-        remoteAuthDataSource: RemoteAuthDataSource,
-        localAuthDataSource: LocalAuthDataSource
-    ) {
-        self.remoteAuthDataSource = remoteAuthDataSource
-        self.localAuthDataSource = localAuthDataSource
+    public init(localDataSource: LocalAuthDataSource, remoteDataSource: RemoteAuthDataSource) {
+        self.localDataSource = localDataSource
+        self.remoteDataSource = remoteDataSource
     }
 
-    public func login(req: LoginRequestParams) -> Completable {
-        return remoteAuthDataSource.login(req: req)
-            .do(onSuccess: { [weak self] tokenEntity in
-                self?.saveTokens(tokenEntity)
+    public func login(req: LoginRequestParams) -> AnyPublisher<Void, Error> {
+        remoteDataSource.login(req: req)
+            .handleEvents(receiveOutput: { [weak self] tokenData in
+                guard let self = self else { return }
+                self.keyChain.save(type: .accessToken, value: tokenData.accessToken)
+                self.keyChain.save(type: .refreshToken, value: tokenData.refreshToken)
+                self.keyChain.save(type: .id, value: req.adminID)
+                self.keyChain.save(type: .password, value: req.password)
             })
-            .asCompletable()
+            .map { _ in () }
+            .eraseToAnyPublisher()
     }
 
-    public func refreshToken() -> Completable {
-        return remoteAuthDataSource.refreshToken()
+    public func refreshToken() -> AnyPublisher<Void, Error> {
+        remoteDataSource.refreshToken()
+            .handleEvents(receiveOutput: { [weak self] tokenData in
+                guard let self = self else { return }
+                self.keyChain.save(type: .accessToken, value: tokenData.accessToken)
+                self.keyChain.save(type: .refreshToken, value: tokenData.refreshToken)
+            })
+            .map { _ in () }
+            .eraseToAnyPublisher()
     }
 
-    private func saveTokens(_ tokenEntity: TokenEntity) {
-        localAuthDataSource.saveAccessToken(tokenEntity.accessToken)
-        localAuthDataSource.saveRefreshToken(tokenEntity.refreshToken)
-        localAuthDataSource.saveAccessExp(tokenEntity.accessExp)
-        localAuthDataSource.saveRefreshExp(tokenEntity.refreshExp)
-    }
+    public func logout() {}
 }

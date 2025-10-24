@@ -1,5 +1,5 @@
 import Foundation
-import RxSwift
+import Combine
 import AuthDomainInterface
 
 public class RefreshTokenUseCaseImpl: RefreshTokenUseCase {
@@ -9,8 +9,7 @@ public class RefreshTokenUseCaseImpl: RefreshTokenUseCase {
         self.repository = repository
     }
 
-    public func execute() -> Completable {
-        return repository.refreshToken()
+    public func execute() -> AnyPublisher<Void, Error> {
+        repository.refreshToken()
     }
-
 }
