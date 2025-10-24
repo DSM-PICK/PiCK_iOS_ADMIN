@@ -18,7 +18,7 @@ public extension AppComponent {
     }
     var remoteAuthDataSource: any RemoteAuthDataSource {
         shared {
-            RemoteAuthDataSourceImpl(keychain: authProvider as! Keychain)
+            RemoteAuthDataSourceImpl(keychain: keychain)
         }
     }
 
