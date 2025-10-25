@@ -1,10 +1,14 @@
 import SwiftUI
 import PiCK_iOS_DesignSystem
+import ComposableArchitecture
 
 public struct TabBarView: View {
     @State private var selectedTab = 2
+    let store: StoreOf<HomeReducer>
     
-    public init() {}
+    public init(store: StoreOf<HomeReducer>) {
+        self.store = store
+    }
     
     public var body: some View {
         TabView(selection: $selectedTab) {
@@ -21,7 +25,7 @@ public struct TabBarView: View {
                 }
             
             NavigationView {
-                HomeView()
+                HomeView(store: store)
                     .navigationBarTitleDisplayMode(.inline)
             }
             .navigationViewStyle(.stack)

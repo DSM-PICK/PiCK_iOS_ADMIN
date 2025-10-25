@@ -1,10 +1,6 @@
 import Foundation
 
-public protocol HomeRepository {
-    func getSelfStudyDirector(date: String) async throws -> [SelfStudyDirectorEntity]
-}
-
-public struct SelfStudyDirectorEntity: Equatable {
+public struct SelfStudyDirectorResponseDTO: Decodable {
     public let floor: Int
     public let teacherName: String
     

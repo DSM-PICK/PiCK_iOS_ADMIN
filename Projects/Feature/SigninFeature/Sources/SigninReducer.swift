@@ -11,6 +11,7 @@ public struct SigninReducer: Reducer {
     public struct State: Equatable {
         public var email = ""
         public var password = ""
+        public var isLoginSuccessful = false
         public init() {}
     }
 
@@ -18,6 +19,7 @@ public struct SigninReducer: Reducer {
         case emailChanged(String)
         case passwordChanged(String)
         case loginButtonTapped
+        case loginResponse(TaskResult<Void>)
     }
 
     public var body: some Reducer<State, Action> {
@@ -30,9 +32,26 @@ public struct SigninReducer: Reducer {
                 state.password = password
                 return .none
             case .loginButtonTapped:
-                // Handle login logic here
+                return .run { [state] send in
+                    await send(.loginResponse(await TaskResult {
+                        for try await _ in self.loginUseCase.execute(
+                            req: .init(
+                                adminID: state.email,
+                                password: state.password,
+                                deviceToken: ""
+                            )
+                        ).values {}
+                    }))
+                }
+
+            case .loginResponse(.success):
+                state.isLoginSuccessful = true
+                return .none
+
+            case .loginResponse(.failure):
                 return .none
             }
         }
     }
 }
+
