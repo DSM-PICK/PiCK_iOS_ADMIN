@@ -1,9 +1,11 @@
 import SwiftUI
 import ComposableArchitecture
 import PiCK_iOS_DesignSystem
+import Utility
 
 struct SigninView: View {
     let store: StoreOf<SigninReducer>
+    @EnvironmentObject var router: AppRouter
     
     public init(store: StoreOf<SigninReducer>) {
         self.store = store
@@ -61,6 +63,11 @@ struct SigninView: View {
                 .padding(.bottom, 28)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            .onChange(of: viewStore.isLoginSuccessful) { isLoginSuccessful in
+                if isLoginSuccessful {
+                    router.path = [.home]
+                }
+            }
         }
     }
 }

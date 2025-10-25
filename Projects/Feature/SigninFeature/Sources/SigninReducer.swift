@@ -11,6 +11,7 @@ public struct SigninReducer: Reducer {
     public struct State: Equatable {
         public var email = ""
         public var password = ""
+        public var isLoginSuccessful = false
         public init() {}
     }
 
@@ -44,6 +45,7 @@ public struct SigninReducer: Reducer {
                 }
 
             case .loginResponse(.success):
+                state.isLoginSuccessful = true
                 return .none
 
             case .loginResponse(.failure):
@@ -52,3 +54,4 @@ public struct SigninReducer: Reducer {
         }
     }
 }
+
