@@ -14,17 +14,13 @@ public struct AllTabView: View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             VStack(spacing: 20) {
                 if let myName = viewStore.myName {
-                    Text("이름: \(myName.name)")
-                        .pickText(type: .label1)
+                    Text("\(myName.name)")
+                        .pickText(type: .heading1)
                     
-                    Text("학년: \(myName.grade)")
-                        .pickText(type: .body1)
-                    
-                    Text("반: \(myName.classNum)")
+                    Text("\(myName.grade)학년 \(myName.classNum)반")
                         .pickText(type: .body1)
                 } else {
-                    Text("로딩 중...")
-                        .pickText(type: .body1)
+                    ProgressView()
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
