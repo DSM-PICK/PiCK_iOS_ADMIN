@@ -1,5 +1,2 @@
-import Foundation
-
-protocol HomeRepository {
-    func getSelfStudyDirector() async throws -> [SelfStudyDirectorEntity]
-}
+// This file is no longer needed - HomeRepository is defined in HomeDomainInterface
+// Removed to avoid duplication

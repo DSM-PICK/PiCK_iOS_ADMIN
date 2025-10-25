@@ -5,6 +5,9 @@ import AuthDomainInterface
 import BaseDomain
 import ComposableArchitecture
 import Core
+import Foundation
+import HomeDomain
+import HomeDomainInterface
 import HomeFeature
 import HomeFeatureInterface
 import KeychainSwift
@@ -82,15 +85,17 @@ private func factory2882a056d84a613debccf47b58f8f304c97af4d5(_ component: Needle
     return SigninDependencyde06a9d0b22764487733Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class HomeDependency443c4e1871277bd8432aProvider: HomeDependency {
-
-
-    init() {
-
+    var getSelfStudyDirectorUseCase: any GetSelfStudyDirectorUseCaseProtocol {
+        return appComponent.getSelfStudyDirectorUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
     }
 }
 /// ^->AppComponent->HomeComponent
-private func factory67229cdf0f755562b2b1e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return HomeDependency443c4e1871277bd8432aProvider()
+private func factory67229cdf0f755562b2b1f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return HomeDependency443c4e1871277bd8432aProvider(appComponent: parent1(component) as! AppComponent)
 }
 
 #else
@@ -98,6 +103,7 @@ extension AppComponent: NeedleFoundation.Registration {
     public func registerItems() {
 
         localTable["keychain-any Keychain"] = { [unowned self] in self.keychain as Any }
+        localTable["getSelfStudyDirectorUseCase-any GetSelfStudyDirectorUseCaseProtocol"] = { [unowned self] in self.getSelfStudyDirectorUseCase as Any }
         localTable["signinFactory-any SigninFactory"] = { [unowned self] in self.signinFactory as Any }
         localTable["signupFactory-any SignupFactory"] = { [unowned self] in self.signupFactory as Any }
         localTable["onboardingFactory-any OnboardingFactory"] = { [unowned self] in self.onboardingFactory as Any }
@@ -133,7 +139,7 @@ extension SigninComponent: NeedleFoundation.Registration {
 }
 extension HomeComponent: NeedleFoundation.Registration {
     public func registerItems() {
-
+        keyPathToName[\HomeDependency.getSelfStudyDirectorUseCase] = "getSelfStudyDirectorUseCase-any GetSelfStudyDirectorUseCaseProtocol"
     }
 }
 
@@ -157,7 +163,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->OnboardingComponent", factory88dc13cc29c5719e2b01e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->SignupComponent", factory86602ff0d0dbaf2cb017f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->SigninComponent", factory2882a056d84a613debccf47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->HomeComponent", factory67229cdf0f755562b2b1e3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->HomeComponent", factory67229cdf0f755562b2b1f47b58f8f304c97af4d5)
 }
 #endif
 

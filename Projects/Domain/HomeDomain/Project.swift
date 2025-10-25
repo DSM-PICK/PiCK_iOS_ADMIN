@@ -24,7 +24,7 @@ let interfaceTarget = Target.target(
     bundleId: "\(env.organizationName).HomeDomainInterface",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
-    sources: ["Interface/HomeDomainInterface.swift"],
+    sources: ["Interface/**"],
     dependencies: [
         .Projects.core,
         .Shared.thirdPartyLib
@@ -40,7 +40,9 @@ let implementationTarget = Target.target(
     infoPlist: .default,
     sources: ["Sources/**"],
     dependencies: [
-        .target(name: "HomeDomainInterface")
+        .target(name: "HomeDomainInterface"),
+        .Projects.baseDomain,
+        .Shared.thirdPartyLib
     ]
 )
 

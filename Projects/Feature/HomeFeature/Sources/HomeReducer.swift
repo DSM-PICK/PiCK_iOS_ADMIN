@@ -15,18 +15,18 @@ public struct HomeReducer: Reducer {
     }
 
     public enum Action {
-        case fetchSelfStudyDirector
+        case fetchSelfStudyDirector(date: String)
         case selfStudyDirectorResponse(TaskResult<[SelfStudyDirectorEntity]>)
     }
 
     public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
-            case .fetchSelfStudyDirector:
+            case let .fetchSelfStudyDirector(date):
                 return .run { send in
-                    await send(.selfStudyDirectorResponse(TaskResult {
-                        try await getSelfStudyDirectorUseCase.execute()
-                    }))
+                    await send(.selfStudyDirectorResponse(
+                        await TaskResult { try await getSelfStudyDirectorUseCase.execute(date: date) }
+                    ))
                 }
 
             case let .selfStudyDirectorResponse(.success(director)):

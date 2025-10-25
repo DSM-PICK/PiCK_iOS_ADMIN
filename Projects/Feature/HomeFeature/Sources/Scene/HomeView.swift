@@ -2,6 +2,7 @@ import SwiftUI
 import PiCK_iOS_DesignSystem
 import ComposableArchitecture
 import HomeDomainInterface
+import Utility
 
 public struct HomeView: View {
     let store: StoreOf<HomeReducer>
@@ -42,7 +43,7 @@ public struct HomeView: View {
                 }
             }
             .onAppear {
-                viewStore.send(.fetchSelfStudyDirector)
+                viewStore.send(.fetchSelfStudyDirector(date: Date.todayString()))
             }
         }
     }

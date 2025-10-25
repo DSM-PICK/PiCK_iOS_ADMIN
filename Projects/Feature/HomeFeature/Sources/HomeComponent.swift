@@ -10,13 +10,15 @@ public protocol HomeDependency: NeedleFoundation.Dependency {
 
 public final class HomeComponent: Component<HomeDependency>, HomeFactory {
     public func makeView() -> AnyView {
-        AnyView(HomeView(
-            store: .init(
-                initialState: HomeReducer.State(),
-                reducer: {
-                    HomeReducer(getSelfStudyDirectorUseCase: self.dependency.getSelfStudyDirectorUseCase)
-                }
+        AnyView(
+            HomeFeature(
+                store: .init(
+                    initialState: HomeReducer.State(),
+                    reducer: {
+                        HomeReducer(getSelfStudyDirectorUseCase: self.dependency.getSelfStudyDirectorUseCase)
+                    }
+                )
             )
-        ))
+        )
     }
 }

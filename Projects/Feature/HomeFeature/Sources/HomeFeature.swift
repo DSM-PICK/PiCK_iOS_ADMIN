@@ -9,6 +9,6 @@ public struct HomeFeature: View {
     }
 
     public var body: some View {
-        TabBarView()
+        TabBarView(store: store)
     }
 }
