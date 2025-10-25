@@ -1,5 +1,5 @@
 import Foundation
 
 public protocol GetSelfStudyDirectorUseCaseProtocol {
-    func execute() async throws -> [SelfStudyDirectorEntity]
+    func execute(date: String) async throws -> [SelfStudyDirectorEntity]
 }

@@ -2,37 +2,43 @@ import Foundation
 import BaseDomain
 import Moya
 
-enum SelfStudyAPI {
-    case getSelfStudyDirector
+public enum SelfStudyAPI {
+    case getSelfStudyDirector(date: String)
 }
 
 extension SelfStudyAPI: PiCKAPI {
-    typealias ErrorType = Never
+    public typealias ErrorType = Never
 
-    var domain: BaseDomain.PiCKDomain {
+    public var domain: BaseDomain.PiCKDomain {
         .selfStudy
     }
 
-    var urlPath: String {
+    public var urlPath: String {
         switch self {
         case .getSelfStudyDirector:
             return "/today"
         }
     }
 
-    var method: Moya.Method {
+    public var method: Moya.Method {
         .get
     }
 
-    var task: Moya.Task {
-        .requestPlain
+    public var task: Moya.Task {
+        switch self {
+        case let .getSelfStudyDirector(date):
+            return .requestParameters(
+                parameters: ["date": date],
+                encoding: URLEncoding.queryString
+            )
+        }
     }
 
-    var pickHeader: BaseDomain.TokenType {
+    public var pickHeader: BaseDomain.TokenType {
         .accessToken
     }
     
-    var errorMap: [Int : ErrorType]? {
+    public var errorMap: [Int : ErrorType]? {
         return nil
     }
 }

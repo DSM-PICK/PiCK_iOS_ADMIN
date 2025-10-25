@@ -1,14 +1,14 @@
 import Foundation
 import HomeDomainInterface
 
-class GetSelfStudyDirectorUseCase: GetSelfStudyDirectorUseCaseProtocol {
+public class GetSelfStudyDirectorUseCase: GetSelfStudyDirectorUseCaseProtocol {
     private let repository: HomeRepository
 
-    init(repository: HomeRepository) {
+    public init(repository: HomeRepository) {
         self.repository = repository
     }
 
-    func execute() async throws -> [SelfStudyDirectorEntity] {
-        try await repository.getSelfStudyDirector()
+    public func execute(date: String) async throws -> [SelfStudyDirectorEntity] {
+        try await repository.getSelfStudyDirector(date: date)
     }
 }

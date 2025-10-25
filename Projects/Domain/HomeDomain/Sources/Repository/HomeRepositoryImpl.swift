@@ -1,14 +1,15 @@
 import Foundation
+import HomeDomainInterface
 
-class HomeRepositoryImpl: HomeRepository {
+public class HomeRepositoryImpl: HomeRepository {
     private let dataSource: HomeDataSource
 
-    init(dataSource: HomeDataSource) {
+    public init(dataSource: HomeDataSource) {
         self.dataSource = dataSource
     }
 
-    func getSelfStudyDirector() async throws -> [SelfStudyDirectorEntity] {
-        try await dataSource.getSelfStudyDirector().map { $0.toEntity() }
+    public func getSelfStudyDirector(date: String) async throws -> [SelfStudyDirectorEntity] {
+        try await dataSource.getSelfStudyDirector(date: date).map { $0.toEntity() }
     }
 }
 

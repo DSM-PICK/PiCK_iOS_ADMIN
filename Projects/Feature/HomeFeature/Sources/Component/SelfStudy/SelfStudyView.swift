@@ -1,17 +1,18 @@
 import SwiftUI
 import PiCK_iOS_DesignSystem
 import HomeDomainInterface
+import Utility
 
 public struct SelfStudyView: View {
     public let selfStudyDirector: [SelfStudyDirectorEntity]
 
     public init(selfStudyDirector: [SelfStudyDirectorEntity]) {
-        selfStudyDirector = selfStudyDirector
+        self.selfStudyDirector = selfStudyDirector
     }
 
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text("1월 23일 화요일")
+            Text(Date().toKoreanDateString())
                 .pickText(type: .body3)
                 .padding(.top, 14)
                 .padding(.leading, 20)

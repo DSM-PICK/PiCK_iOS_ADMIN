@@ -1,5 +1,5 @@
 import Foundation
 
-protocol HomeDataSource {
-    func getSelfStudyDirector() async throws -> [SelfStudyDirectorResponseDTO]
+public protocol HomeDataSource {
+    func getSelfStudyDirector(date: String) async throws -> [SelfStudyDirectorResponseDTO]
 }
