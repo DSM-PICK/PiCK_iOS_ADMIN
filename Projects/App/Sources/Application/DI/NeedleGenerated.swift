@@ -2,6 +2,7 @@
 
 import AuthDomain
 import AuthDomainInterface
+import BaseDomain
 import ComposableArchitecture
 import Core
 import HomeFeature

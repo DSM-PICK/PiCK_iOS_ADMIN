@@ -3,11 +3,12 @@ import AuthDomain
 import AuthDomainInterface
 import Moya
 import Core
+import BaseDomain
 
 public extension AppComponent {
     var authProvider: MoyaProvider<AuthAPI> {
         shared {
-            MoyaProvider<AuthAPI>()
+            MoyaProvider<AuthAPI>(plugins: [MoyaLoggingPlugin()])
         }
     }
 

@@ -34,9 +34,9 @@ extension AuthAPI: PiCKAPI {
     public var urlPath: String {
         switch self {
         case .login:
-            return "/admin/auth/login"
+            return "/login"
         case .refreshToken:
-            return "/admin/auth/reissue"
+            return "/reissue"
         }
     }
 
