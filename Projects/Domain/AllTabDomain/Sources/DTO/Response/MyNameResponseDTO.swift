@@ -8,7 +8,7 @@ public struct MyNameResponseDTO: Decodable {
     enum CodingKeys: String, CodingKey {
         case name
         case grade
-        case classNum
+        case classNum = "class_num"
     }
     
     public init(name: String, grade: Int, classNum: Int) {
