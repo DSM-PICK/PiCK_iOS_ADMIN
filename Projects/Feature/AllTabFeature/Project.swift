@@ -40,6 +40,7 @@ let implementationTarget = Target.target(
     dependencies: [
         .target(name: "AllTabFeatureInterface"),
         .Projects.allTabDomainInterface,
+        .Features.homeFeature,
         .Shared.utility,
         .SPM.PDS,
         .SPM.NeedleFoundation,
