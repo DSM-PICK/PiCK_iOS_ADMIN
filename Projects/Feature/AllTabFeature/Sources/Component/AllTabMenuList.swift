@@ -2,7 +2,11 @@ import SwiftUI
 import PiCK_iOS_DesignSystem
 
 public struct AllTabMenuList: View {
-    public init() {}
+    let onLogoutTap: () -> Void
+    
+    public init(onLogoutTap: @escaping () -> Void) {
+        self.onLogoutTap = onLogoutTap
+    }
     
     public var body: some View {
         MenuListView(
@@ -17,7 +21,8 @@ public struct AllTabMenuList: View {
                     MenuItemModel(icon: PiCKImage.bug, title: "버그 제보")
                 ]),
                 MenuSectionModel(title: "계정", items: [
-                    MenuItemModel(icon: PiCKImage.changePassword, title: "비밀번호 변경")
+                    MenuItemModel(icon: PiCKImage.changePassword, title: "비밀번호 변경"),
+                    MenuItemModel(icon: PiCKImage.logout, title: "로그아웃", action: onLogoutTap)
                 ])
             ]
         )

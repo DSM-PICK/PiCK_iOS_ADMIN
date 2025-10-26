@@ -33,10 +33,12 @@ public struct MenuItemModel: Identifiable {
     public let id = UUID()
     public let icon: Image
     public let title: String
+    public let action: (() -> Void)?
     
-    public init(icon: Image, title: String) {
+    public init(icon: Image, title: String, action: (() -> Void)? = nil) {
         self.icon = icon
         self.title = title
+        self.action = action
     }
 }
 
@@ -65,7 +67,7 @@ struct MenuItemCell: View {
     
     var body: some View {
         Button(action: {
-            // 나중에 액션 추가
+            item.action?()
         }) {
             HStack(spacing: 20) {
                 item.icon

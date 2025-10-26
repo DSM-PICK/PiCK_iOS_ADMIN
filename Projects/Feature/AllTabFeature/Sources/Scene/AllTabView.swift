@@ -3,9 +3,11 @@ import PiCK_iOS_DesignSystem
 import ComposableArchitecture
 import AllTabDomainInterface
 import HomeFeature
+import Utility
 
 public struct AllTabView: View {
     let store: StoreOf<AllTabReducer>
+    @EnvironmentObject var router: AppRouter
     
     public init(store: StoreOf<AllTabReducer>) {
         self.store = store
@@ -20,8 +22,10 @@ public struct AllTabView: View {
                             TeacherInfoView(teacherName: myName.name)
                                 .padding(.top, 24)
                             
-                            AllTabMenuList()
-                                .padding(.top, 32)
+                            AllTabMenuList(onLogoutTap: {
+                                viewStore.send(.logoutButtonTapped)
+                            })
+                            .padding(.top, 32)
                         } else {
                             ProgressView()
                         }
@@ -30,6 +34,11 @@ public struct AllTabView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .onAppear {
                     viewStore.send(.fetchMyName)
+                }
+                .onChange(of: viewStore.shouldLogout) { shouldLogout in
+                    if shouldLogout {
+                        router.path = [.onboarding]
+                    }
                 }
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
