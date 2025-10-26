@@ -1,9 +1,13 @@
 import SwiftUI
 import PiCK_iOS_DesignSystem
+import HomeDomainInterface
 
 public struct AllSelfStudyView: View {
+    let selfStudyDirector: [SelfStudyDirectorEntity]
 
-    public init() {}
+    public init(selfStudyDirector: [SelfStudyDirectorEntity]) {
+        self.selfStudyDirector = selfStudyDirector
+    }
 
     public var body: some View {
         ZStack {
@@ -14,9 +18,12 @@ public struct AllSelfStudyView: View {
                     .padding(.leading, 20)
                 
                 VStack(alignment: .leading, spacing: 12) {
-                    FloorTeacherRow(floor: "2층", teacherName: "***")
-                    FloorTeacherRow(floor: "3층", teacherName: "***")
-                    FloorTeacherRow(floor: "4층", teacherName: "***")
+                    ForEach(selfStudyDirector, id: \.floor) { director in
+                        FloorTeacherRow(
+                            floor: "\(director.floor)층",
+                            teacherName: director.teacherName
+                        )
+                    }
                 }
                 .padding(.top, 16)
                 .padding(.leading, 20)
