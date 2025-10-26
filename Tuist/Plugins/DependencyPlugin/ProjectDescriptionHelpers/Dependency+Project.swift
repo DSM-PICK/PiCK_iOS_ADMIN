@@ -98,10 +98,6 @@ public extension TargetDependency.Features {
 }
 
 public extension TargetDependency.Shared {
-    static let designSystem = TargetDependency.project(
-        target: "DesignSystem",
-        path: .relativeToRoot("Projects/Shared/DesignSystem")
-    )
     static let thirdPartyLib = TargetDependency.project(
         target: "ThirdPartyLib",
         path: .relativeToRoot("Projects/Shared/ThirdPartyLib")

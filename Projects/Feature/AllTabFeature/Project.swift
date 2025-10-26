@@ -41,6 +41,7 @@ let implementationTarget = Target.target(
         .target(name: "AllTabFeatureInterface"),
         .Projects.allTabDomainInterface,
         .Shared.utility,
+        .SPM.PDS,
         .SPM.NeedleFoundation,
         .SPM.ComposableArchitecture
     ]
