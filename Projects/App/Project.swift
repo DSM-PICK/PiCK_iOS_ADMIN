@@ -83,9 +83,33 @@ let appTarget: Target = .target(
 )
 
 let schemes: [Scheme] = [
-    .makeScheme(target: .dev, name: "\(env.targetName)"),
-    .makeScheme(target: .stage, name: "\(env.targetName)"),
-    .makeScheme(target: .prod, name: "\(env.targetName)")
+    .scheme(
+        name: "\(env.targetName)-DEV",
+        shared: true,
+        buildAction: .buildAction(targets: ["\(env.targetName)"]),
+        runAction: .runAction(configuration: .dev),
+        archiveAction: .archiveAction(configuration: .dev),
+        profileAction: .profileAction(configuration: .dev),
+        analyzeAction: .analyzeAction(configuration: .dev)
+    ),
+    .scheme(
+        name: "\(env.targetName)-STAGE",
+        shared: true,
+        buildAction: .buildAction(targets: ["\(env.targetName)"]),
+        runAction: .runAction(configuration: .stage),
+        archiveAction: .archiveAction(configuration: .stage),
+        profileAction: .profileAction(configuration: .stage),
+        analyzeAction: .analyzeAction(configuration: .stage)
+    ),
+    .scheme(
+        name: "\(env.targetName)-PROD",
+        shared: true,
+        buildAction: .buildAction(targets: ["\(env.targetName)"]),
+        runAction: .runAction(configuration: .prod),
+        archiveAction: .archiveAction(configuration: .prod),
+        profileAction: .profileAction(configuration: .prod),
+        analyzeAction: .analyzeAction(configuration: .prod)
+    )
 ]
 
 let project = Project(
