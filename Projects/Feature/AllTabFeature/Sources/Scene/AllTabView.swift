@@ -14,15 +14,17 @@ public struct AllTabView: View {
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             NavigationStack {
-                VStack(spacing: 20) {
-                    if let myName = viewStore.myName {
-                        Text("\(myName.name)")
-                            .pickText(type: .heading1)
-                        
-                        Text("\(myName.grade)학년 \(myName.classNum)반")
-                            .pickText(type: .body1)
-                    } else {
-                        ProgressView()
+                ScrollView {
+                    VStack(spacing: 0) {
+                        if let myName = viewStore.myName {
+                            TeacherInfoView(teacherName: myName.name)
+                                .padding(.top, 24)
+                            
+                            MenuListView(sections: createMenuSections())
+                                .padding(.top, 32)
+                        } else {
+                            ProgressView()
+                        }
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
