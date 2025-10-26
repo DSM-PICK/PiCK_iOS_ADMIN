@@ -2,14 +2,20 @@ import Foundation
 import AuthDomainInterface
 import Combine
 import Core
+import BaseDomain
 
 public class AuthRepositoryImpl: AuthRepository {
     private let remoteDataSource: RemoteAuthDataSource
     private let localDataSource: LocalAuthDataSource
+    private let keyChain: Keychain
     private var cancellables = Set<AnyCancellable>()
-    private let keyChain = KeychainImpl()
 
-    public init(localDataSource: LocalAuthDataSource, remoteDataSource: RemoteAuthDataSource) {
+    public init(
+        keychain: Keychain,
+        localDataSource: LocalAuthDataSource,
+        remoteDataSource: RemoteAuthDataSource
+    ) {
+        self.keyChain = keychain
         self.localDataSource = localDataSource
         self.remoteDataSource = remoteDataSource
     }
@@ -17,11 +23,7 @@ public class AuthRepositoryImpl: AuthRepository {
     public func login(req: LoginRequestParams) -> AnyPublisher<Void, Error> {
         remoteDataSource.login(req: req)
             .handleEvents(receiveOutput: { [weak self] tokenData in
-                guard let self = self else { return }
-                self.keyChain.save(type: .accessToken, value: tokenData.accessToken)
-                self.keyChain.save(type: .refreshToken, value: tokenData.refreshToken)
-                self.keyChain.save(type: .id, value: req.adminID)
-                self.keyChain.save(type: .password, value: req.password)
+                self?.saveTokens(tokenData, with: req)
             })
             .map { _ in () }
             .eraseToAnyPublisher()
@@ -29,14 +31,23 @@ public class AuthRepositoryImpl: AuthRepository {
 
     public func refreshToken() -> AnyPublisher<Void, Error> {
         remoteDataSource.refreshToken()
-            .handleEvents(receiveOutput: { [weak self] tokenData in
-                guard let self = self else { return }
-                self.keyChain.save(type: .accessToken, value: tokenData.accessToken)
-                self.keyChain.save(type: .refreshToken, value: tokenData.refreshToken)
+            .handleEvents(receiveOutput: { tokenData in
+                JwtStore.shared.accessToken = tokenData.accessToken
+                JwtStore.shared.refreshToken = tokenData.refreshToken
             })
             .map { _ in () }
             .eraseToAnyPublisher()
     }
 
-    public func logout() {}
+    public func logout() {
+        JwtStore.shared.clearTokens()
+        localDataSource.logout()
+    }
+    
+    private func saveTokens(_ tokenData: TokenDTO, with req: LoginRequestParams) {
+        JwtStore.shared.accessToken = tokenData.accessToken
+        JwtStore.shared.refreshToken = tokenData.refreshToken
+        keyChain.save(type: .id, value: req.adminID)
+        keyChain.save(type: .password, value: req.password)
+    }
 }

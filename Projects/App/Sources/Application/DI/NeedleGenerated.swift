@@ -79,6 +79,9 @@ private class AllTabDependencyacdab75b3325eec9d649Provider: AllTabDependency {
     var getMyNameUseCase: any GetMyNameUseCaseProtocol {
         return appComponent.getMyNameUseCase
     }
+    var authRepository: any AuthRepository {
+        return appComponent.authRepository
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -157,6 +160,7 @@ extension SignupComponent: NeedleFoundation.Registration {
 extension AllTabComponent: NeedleFoundation.Registration {
     public func registerItems() {
         keyPathToName[\AllTabDependency.getMyNameUseCase] = "getMyNameUseCase-any GetMyNameUseCaseProtocol"
+        keyPathToName[\AllTabDependency.authRepository] = "authRepository-any AuthRepository"
     }
 }
 extension SigninComponent: NeedleFoundation.Registration {
