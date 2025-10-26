@@ -2,6 +2,7 @@ import SwiftUI
 import PiCK_iOS_DesignSystem
 import ComposableArchitecture
 import AllTabDomainInterface
+import HomeFeature
 
 public struct AllTabView: View {
     let store: StoreOf<AllTabReducer>
@@ -26,6 +27,13 @@ public struct AllTabView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .onAppear {
                 viewStore.send(.fetchMyName)
+            }
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    PiCKNavigationBar()
+                        .padding(.leading, 8)
+                }
             }
         }
     }
