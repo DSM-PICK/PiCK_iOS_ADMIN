@@ -33,11 +33,18 @@ public struct MenuItemModel: Identifiable {
     public let id = UUID()
     public let icon: Image
     public let title: String
+    public let iconColor: Color
     public let action: (() -> Void)?
     
-    public init(icon: Image, title: String, action: (() -> Void)? = nil) {
+    public init(
+        icon: Image,
+        title: String,
+        iconColor: Color = Color.Primary.primary500,
+        action: (() -> Void)? = nil
+    ) {
         self.icon = icon
         self.title = title
+        self.iconColor = iconColor
         self.action = action
     }
 }
@@ -74,7 +81,7 @@ struct MenuItemCell: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 24, height: 24)
-                    .foregroundColor(Color.Primary.primary500)
+                    .foregroundColor(item.iconColor)
                 
                 Text(item.title)
                     .pickText(type: .label1)

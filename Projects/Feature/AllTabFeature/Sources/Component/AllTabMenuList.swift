@@ -22,7 +22,12 @@ public struct AllTabMenuList: View {
                 ]),
                 MenuSectionModel(title: "계정", items: [
                     MenuItemModel(icon: PiCKImage.changePassword, title: "비밀번호 변경"),
-                    MenuItemModel(icon: PiCKImage.logout, title: "로그아웃", action: onLogoutTap)
+                    MenuItemModel(
+                        icon: PiCKImage.logout,
+                        title: "로그아웃",
+                        iconColor: Color.Error.error,
+                        action: onLogoutTap
+                    )
                 ])
             ]
         )
