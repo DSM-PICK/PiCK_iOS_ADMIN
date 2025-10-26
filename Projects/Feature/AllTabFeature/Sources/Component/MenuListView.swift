@@ -52,13 +52,8 @@ struct MenuSectionView: View {
                 .padding(.bottom, 16)
 
             VStack(spacing: 0) {
-                ForEach(Array(section.items.enumerated()), id: \.element.id) { index, item in
+                ForEach(section.items) { item in
                     MenuItemCell(item: item)
-                    
-                    if index < section.items.count - 1 {
-                        Divider()
-                            .padding(.leading, 44)
-                    }
                 }
             }
         }
