@@ -17,35 +17,39 @@ let settings: Settings = .settings(
 )
 
 let interfaceTarget = Target.target(
-    name: "FirstFeatureFeatureInterface",
+    name: "AllTabFeatureInterface",
     destinations: env.destination,
     product: .framework,
-    bundleId: ".FirstFeatureFeatureInterface",
+    bundleId: "\(env.organizationName).AllTabFeatureInterface",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
-    sources: ["Interface/FirstFeatureInterface.swift"],
+    sources: ["Interface/AllTabFeatureInterface.swift"],
     dependencies: [
         .Features.baseFeature
     ]
 )
 
 let implementationTarget = Target.target(
-    name: "FirstFeatureFeature",
+    name: "AllTabFeature",
     destinations: env.destination,
     product: .staticFramework,
-    bundleId: ".FirstFeatureFeature",
+    bundleId: "\(env.organizationName).AllTabFeature",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Sources/**"],
     dependencies: [
-        .target(name: "FirstFeatureFeatureInterface"),
+        .target(name: "AllTabFeatureInterface"),
+        .Projects.allTabDomainInterface,
+        .Features.homeFeature,
+        .Shared.utility,
+        .SPM.PDS,
         .SPM.NeedleFoundation,
         .SPM.ComposableArchitecture
     ]
 )
 
 let project = Project(
-    name: "FirstFeatureFeature",
+    name: "AllTabFeature",
     organizationName: env.organizationName,
     settings: settings,
     targets: [interfaceTarget, implementationTarget]

@@ -26,6 +26,7 @@ public extension AppComponent {
     var authRepository: any AuthRepository {
         shared {
             AuthRepositoryImpl(
+                keychain: keychain,
                 localDataSource: localAuthDataSource,
                 remoteDataSource: remoteAuthDataSource
             )

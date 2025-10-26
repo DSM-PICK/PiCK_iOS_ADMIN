@@ -17,35 +17,36 @@ let settings: Settings = .settings(
 )
 
 let interfaceTarget = Target.target(
-    name: "TestMakeFeatureFeatureInterface",
+    name: "AllTabDomainInterface",
     destinations: env.destination,
     product: .framework,
-    bundleId: "\(env.organizationName).TestMakeFeatureFeatureInterface",
+    bundleId: "\(env.organizationName).AllTabDomainInterface",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
-    sources: ["Interface/TestMakeFeatureInterface.swift"],
+    sources: ["Interface/**"],
     dependencies: [
-        .Features.baseFeature
+        .Projects.core,
+        .Shared.thirdPartyLib
     ]
 )
 
 let implementationTarget = Target.target(
-    name: "TestMakeFeatureFeature",
+    name: "AllTabDomain",
     destinations: env.destination,
     product: .staticFramework,
-    bundleId: "\(env.organizationName).TestMakeFeatureFeature",
+    bundleId: "\(env.organizationName).AllTabDomain",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Sources/**"],
     dependencies: [
-        .target(name: "TestMakeFeatureFeatureInterface"),
-        .SPM.NeedleFoundation,
-        .SPM.ComposableArchitecture
+        .target(name: "AllTabDomainInterface"),
+        .Projects.baseDomain,
+        .Shared.thirdPartyLib
     ]
 )
 
 let project = Project(
-    name: "TestMakeFeatureFeature",
+    name: "AllTabDomain",
     organizationName: env.organizationName,
     settings: settings,
     targets: [interfaceTarget, implementationTarget]

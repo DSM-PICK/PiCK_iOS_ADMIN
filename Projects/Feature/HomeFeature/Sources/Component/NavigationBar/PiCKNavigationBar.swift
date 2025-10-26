@@ -1,8 +1,10 @@
 import SwiftUI
 import PiCK_iOS_DesignSystem
 
-struct PiCKNavigationBar: View {
-    var body: some View {
+public struct PiCKNavigationBar: View {
+    public init() {}
+    
+    public var body: some View {
         PiCKImage.pickLogo
             .resizable()
             .scaledToFit()

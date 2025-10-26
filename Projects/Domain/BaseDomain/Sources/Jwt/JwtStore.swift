@@ -1,56 +1,72 @@
 import Foundation
 import Core
 
-public class JwtStore {
+public final class JwtStore {
     public static let shared = JwtStore()
-    private let keyChain = KeychainImpl()
+    
+    private let keyChain: Keychain
+    private let tokenPrefix = "Bearer "
+
+    public init(keychain: Keychain = KeychainImpl()) {
+        self.keyChain = keychain
+    }
 
     public var accessToken: String? {
-        set {
-            keyChain.save(type: .accessToken, value: newValue ?? "")
-        }
-        get {
-            keyChain.load(type: KeychainType.accessToken)
-        }
+        get { loadToken(for: .accessToken) }
+        set { saveToken(newValue, for: .accessToken) }
     }
 
     public var refreshToken: String? {
-        set {
-            keyChain.save(type: .refreshToken, value: newValue ?? "")
+        get { loadToken(for: .refreshToken) }
+        set { saveToken(newValue, for: .refreshToken) }
+    }
+    
+    public var hasValidToken: Bool {
+        guard let access = accessToken,
+              let refresh = refreshToken,
+              !access.isEmpty,
+              !refresh.isEmpty else {
+            return false
         }
-        get {
-            keyChain.load(type: KeychainType.refreshToken)
-        }
+        return true
     }
 
     public func toHeader(_ type: KeychainType) -> [String: String] {
-        guard let accessToken = self.accessToken,
-              let refreshToken = self.refreshToken
-        else {
-            return ["content-type": "application/json"]
-        }
-
+        var headers = ["content-type": "application/json"]
+        
         switch type {
         case .accessToken:
-            return [
-                "content-type": "application/json",
-                "Authorization": accessToken
-            ]
+            if let token = accessToken {
+                headers["Authorization"] = "\(tokenPrefix)\(token)"
+            }
         case .refreshToken:
-            return [
-                "content-type": "application/json",
-                "X-Refresh-Token": refreshToken
-            ]
-        case .tokenIsEmpty:
-            return ["content-type": "application/json"]
+            if let token = refreshToken {
+                headers["X-Refresh-Token"] = token
+            }
         default:
-            return [:]
+            break
         }
+        
+        return headers
     }
 
-    public func removeToken() {
-        self.accessToken = nil
-        self.refreshToken = nil
+    public func clearTokens() {
+        keyChain.delete(type: .accessToken)
+        keyChain.delete(type: .refreshToken)
     }
-
+    
+    private func loadToken(for type: KeychainType) -> String? {
+        let token = keyChain.load(type: type)
+        return token.isEmpty ? nil : token
+    }
+    
+    private func saveToken(_ token: String?, for type: KeychainType) {
+        guard let token = token, !token.isEmpty else {
+            keyChain.delete(type: type)
+            return
+        }
+        
+        let cleanToken = token.replacingOccurrences(of: tokenPrefix, with: "")
+        keyChain.save(type: type, value: cleanToken)
+    }
 }

@@ -1,4 +1,3 @@
-
 import SwiftUI
 import ComposableArchitecture
 import OnboardingFeature
@@ -6,36 +5,67 @@ import OnboardingFeatureInterface
 import SigninFeature
 import SigninFeatureInterface
 import HomeFeatureInterface
+import BaseDomain
 import Utility
-
 
 struct RootView: View {
     @StateObject var router = AppRouter()
     let appComponent: AppComponent
+    @State private var isCheckingAuth = true
 
     var body: some View {
         Group {
-            if router.path.last == .home {
-                appComponent.homeFactory.makeView()
-                    .environmentObject(router)
+            if isCheckingAuth {
+                authLoadingView
+            } else if router.path.last == .home {
+                homeView
             } else {
-                NavigationStack(path: $router.path) {
-                    appComponent.onboardingFactory.makeView()
-                    .environmentObject(router)
-                    .navigationDestination(for: AppRoute.self) { route in
-                        switch route {
-                        case .onboarding:
-                            appComponent.onboardingFactory.makeView()
-                                .environmentObject(router)
-                        case .signin:
-                            appComponent.signinFactory.makeView()
-                                .environmentObject(router)
-                        case .home:
-                            EmptyView()
-                        }
-                    }
-                }
+                navigationStackView
             }
         }
+        .onAppear(perform: checkAuthStatus)
+    }
+    
+    private var authLoadingView: some View {
+        VStack {
+            ProgressView()
+                .progressViewStyle(CircularProgressViewStyle())
+        }
+    }
+    
+    private var homeView: some View {
+        appComponent.homeFactory.makeView()
+            .environmentObject(router)
+    }
+    
+    private var navigationStackView: some View {
+        NavigationStack(path: $router.path) {
+            appComponent.onboardingFactory.makeView()
+                .environmentObject(router)
+                .navigationDestination(for: AppRoute.self) { route in
+                    routeDestination(for: route)
+                }
+        }
+    }
+    
+    @ViewBuilder
+    private func routeDestination(for route: AppRoute) -> some View {
+        switch route {
+        case .onboarding:
+            appComponent.onboardingFactory.makeView()
+                .environmentObject(router)
+        case .signin:
+            appComponent.signinFactory.makeView()
+                .environmentObject(router)
+        case .home:
+            EmptyView()
+        }
+    }
+    
+    private func checkAuthStatus() {
+        if JwtStore.shared.hasValidToken {
+            router.path = [.home]
+        }
+        isCheckingAuth = false
     }
 }
