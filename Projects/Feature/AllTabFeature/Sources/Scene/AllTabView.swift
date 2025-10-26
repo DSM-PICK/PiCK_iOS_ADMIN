@@ -20,7 +20,7 @@ public struct AllTabView: View {
                             TeacherInfoView(teacherName: myName.name)
                                 .padding(.top, 24)
                             
-                            MenuListView(sections: createMenuSections())
+                            AllTabMenuList()
                                 .padding(.top, 32)
                         } else {
                             ProgressView()
@@ -41,4 +41,3 @@ public struct AllTabView: View {
         }
     }
 }
-
