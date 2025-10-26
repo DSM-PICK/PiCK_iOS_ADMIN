@@ -37,7 +37,7 @@ public struct AllTabView: View {
                 }
                 .onChange(of: viewStore.shouldLogout) { shouldLogout in
                     if shouldLogout {
-                        router.path = [.onboarding]
+                        router.path.removeAll()
                     }
                 }
                 .toolbar {
