@@ -58,7 +58,7 @@ private class OnboardingDependencyf77d0055983a00cf8835Provider: OnboardingDepend
 private func factory88dc13cc29c5719e2b01e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
     return OnboardingDependencyf77d0055983a00cf8835Provider()
 }
-private class SignupDependency1ff7d1355204bb65e850Provider: SignupDependency {
+private class SecretKeyDependencyb3e8d2bd4c35431acda1Provider: SecretKeyDependency {
     var loginUseCase: any LoginUseCase {
         return appComponent.loginUseCase
     }
@@ -67,9 +67,9 @@ private class SignupDependency1ff7d1355204bb65e850Provider: SignupDependency {
         self.appComponent = appComponent
     }
 }
-/// ^->AppComponent->SignupComponent
-private func factory86602ff0d0dbaf2cb017f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return SignupDependency1ff7d1355204bb65e850Provider(appComponent: parent1(component) as! AppComponent)
+/// ^->AppComponent->SecretKeyComponent
+private func factorycc7ea4e12027ae637f9ff47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return SecretKeyDependencyb3e8d2bd4c35431acda1Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class SigninDependencyde06a9d0b22764487733Provider: SigninDependency {
     var loginUseCase: any LoginUseCase {
@@ -127,9 +127,9 @@ extension OnboardingComponent: NeedleFoundation.Registration {
 
     }
 }
-extension SignupComponent: NeedleFoundation.Registration {
+extension SecretKeyComponent: NeedleFoundation.Registration {
     public func registerItems() {
-        keyPathToName[\SignupDependency.loginUseCase] = "loginUseCase-any LoginUseCase"
+        keyPathToName[\SecretKeyDependency.loginUseCase] = "loginUseCase-any LoginUseCase"
     }
 }
 extension SigninComponent: NeedleFoundation.Registration {
@@ -161,7 +161,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent", factoryEmptyDependencyProvider)
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->OnboardingComponent", factory88dc13cc29c5719e2b01e3b0c44298fc1c149afb)
-    registerProviderFactory("^->AppComponent->SignupComponent", factory86602ff0d0dbaf2cb017f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->SecretKeyComponent", factorycc7ea4e12027ae637f9ff47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->SigninComponent", factory2882a056d84a613debccf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->HomeComponent", factory67229cdf0f755562b2b1f47b58f8f304c97af4d5)
 }

@@ -1,7 +1,7 @@
 import ComposableArchitecture
 import AuthDomainInterface
 
-public struct SignupReducer: Reducer {
+public struct SecretKeyReducer: Reducer {
     private let loginUseCase: any LoginUseCase
 
     public init(loginUseCase: any LoginUseCase) {
@@ -9,27 +9,22 @@ public struct SignupReducer: Reducer {
     }
 
     public struct State: Equatable {
-        public var email = ""
-        public var password = ""
+        public var secretKey = ""
         public init() {}
     }
 
     public enum Action {
-        case emailChanged(String)
-        case passwordChanged(String)
-        case signupButtonTapped
+        case secretKeyChanged(String)
+        case nextButtonTapped
     }
 
     public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
-            case let .emailChanged(email):
-                state.email = email
+            case let .secretKeyChanged(secretKey):
+                state.secretKey = secretKey
                 return .none
-            case let .passwordChanged(password):
-                state.password = password
-                return .none
-            case .signupButtonTapped:
+            case .nextButtonTapped:
                 // Handle login logic here
                 return .none
             }

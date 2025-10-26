@@ -30,6 +30,9 @@ struct RootView: View {
                         case .signin:
                             appComponent.signinFactory.makeView()
                                 .environmentObject(router)
+                        case .signup:
+                            appComponent.signupFactory.makeView()
+                                .environmentObject(router)
                         case .home:
                             EmptyView()
                         }
