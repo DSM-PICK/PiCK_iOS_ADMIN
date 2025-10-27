@@ -42,7 +42,7 @@ public extension AppComponent {
         SigninComponent(parent: self)
     }
     var signupFactory: any SignupFactory {
-        SignupComponent(parent: self)
+        SecretKeyComponent(parent: self)
     }
     var onboardingFactory: any OnboardingFactory {
         OnboardingComponent(parent: self)

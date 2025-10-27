@@ -3,8 +3,8 @@ import BaseDomain
 import Combine
 
 public final class RemoteAuthDataSourceImpl: BaseRemoteDataSource<AuthAPI>, RemoteAuthDataSource {
-    public func login(req: LoginRequestParams) -> AnyPublisher<TokenDTO, Error> {
-        request(.login(req))
+    public func signin(req: SigninRequestParams) -> AnyPublisher<TokenDTO, Error> {
+        request(.signin(req))
             .tryMap { response in
                 try response.map(TokenDTO.self)
             }

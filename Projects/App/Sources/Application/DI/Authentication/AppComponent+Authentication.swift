@@ -33,9 +33,9 @@ public extension AppComponent {
         }
     }
 
-    var loginUseCase: any LoginUseCase {
+    var signinUseCase: any SigninUseCase {
         shared {
-            LoginUseCaseImpl(repository: authRepository)
+            SigninUseCaseImpl(repository: authRepository)
         }
     }
 

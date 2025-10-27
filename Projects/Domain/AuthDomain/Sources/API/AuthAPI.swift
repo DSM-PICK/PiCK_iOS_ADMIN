@@ -4,18 +4,18 @@ import BaseDomain
 import AuthDomainInterface
 
 public enum AuthAPI {
-    case login(LoginRequestParams)
+    case signin(SigninRequestParams)
     case refreshToken
 }
 
-public struct LoginResponseDTO: Decodable {
+public struct SigninResponseDTO: Decodable {
     let accessToken: String
     let refreshToken: String
     let accessExp: String
     let refreshExp: String
 }
 
-extension LoginResponseDTO {
+extension SigninResponseDTO {
     func toDomain() -> TokenEntity {
         .init(
             accessToken: accessToken,
@@ -33,7 +33,7 @@ extension AuthAPI: PiCKAPI {
 
     public var urlPath: String {
         switch self {
-        case .login:
+        case .signin:
             return "/login"
         case .refreshToken:
             return "/reissue"
@@ -42,7 +42,7 @@ extension AuthAPI: PiCKAPI {
 
     public var method: Moya.Method {
         switch self {
-        case .login:
+        case .signin:
             return .post
         case .refreshToken:
             return .put
@@ -51,7 +51,7 @@ extension AuthAPI: PiCKAPI {
 
     public var task: Moya.Task {
         switch self {
-        case .login(let params):
+        case .signin(let params):
             return .requestJSONEncodable(params)
         default:
             return .requestPlain
@@ -69,7 +69,7 @@ extension AuthAPI: PiCKAPI {
 
     public var errorMap: [Int : AuthDomainInterface.AuthError]? {
         switch self {
-        case .login(let req):
+        case .signin(let req):
             return [
                 401: .passwordMismatch,
                 404: .idMismatch

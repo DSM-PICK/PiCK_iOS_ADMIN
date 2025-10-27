@@ -2,25 +2,24 @@ import ComposableArchitecture
 import AuthDomainInterface
 
 public struct SigninReducer: Reducer {
-    private let loginUseCase: any LoginUseCase
+    private let signinUseCase: any SigninUseCase
 
-    public init(loginUseCase: any LoginUseCase) {
-        self.loginUseCase = loginUseCase
+    public init(signinUseCase: any SigninUseCase) {
+        self.signinUseCase = signinUseCase
     }
 
     public struct State: Equatable {
         public var email = ""
         public var password = ""
-        public var isLoginSuccessful = false
-        
+        public var isSigninSuccessful = false
         public init() {}
     }
 
     public enum Action {
         case emailChanged(String)
         case passwordChanged(String)
-        case loginButtonTapped
-        case loginResponse(TaskResult<Void>)
+        case signinButtonTapped
+        case signinResponse(TaskResult<Void>)
     }
 
     public var body: some Reducer<State, Action> {
@@ -33,15 +32,22 @@ public struct SigninReducer: Reducer {
             case let .passwordChanged(password):
                 state.password = password
                 return .none
+
+            case .signinResponse(.success):
+                state.isSigninSuccessful = true
+                return .none
+
+            case .signinResponse(.failure):
+
                 
-            case .loginButtonTapped:
+            case .signinButtonTapped:
                 return performLogin(with: state)
                 
-            case .loginResponse(.success):
+            case .signinResponse(.success):
                 state.isLoginSuccessful = true
                 return .none
                 
-            case .loginResponse(.failure):
+            case .signinResponse(.failure):
                 return .none
             }
         }
@@ -49,9 +55,9 @@ public struct SigninReducer: Reducer {
     
     private func performLogin(with state: State) -> Effect<Action> {
         .run { send in
-            await send(.loginResponse(
+            await send(.signinResponse(
                 await TaskResult {
-                    for try await _ in loginUseCase.execute(
+                    for try await _ in signinUseCase.execute(
                         req: .init(
                             adminID: state.email,
                             password: state.password,

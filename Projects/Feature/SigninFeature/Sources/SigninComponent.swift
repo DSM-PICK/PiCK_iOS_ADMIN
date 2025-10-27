@@ -5,7 +5,7 @@ import SigninFeatureInterface
 import ComposableArchitecture
 
 public protocol SigninDependency: NeedleFoundation.Dependency {
-    var loginUseCase: any LoginUseCase { get }
+    var signinUseCase: any SigninUseCase { get }
 }
 
 public final class SigninComponent: Component<SigninDependency>, SigninFactory {
@@ -14,7 +14,7 @@ public final class SigninComponent: Component<SigninDependency>, SigninFactory {
             store: .init(
                 initialState: SigninReducer.State(),
                 reducer: {
-                    SigninReducer(loginUseCase: self.dependency.loginUseCase)
+                    SigninReducer(signinUseCase: self.dependency.signinUseCase)
                 }
             )
         ))

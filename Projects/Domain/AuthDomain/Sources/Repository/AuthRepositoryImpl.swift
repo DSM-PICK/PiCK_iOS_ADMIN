@@ -20,8 +20,8 @@ public class AuthRepositoryImpl: AuthRepository {
         self.remoteDataSource = remoteDataSource
     }
 
-    public func login(req: LoginRequestParams) -> AnyPublisher<Void, Error> {
-        remoteDataSource.login(req: req)
+    public func signin(req: SigninRequestParams) -> AnyPublisher<Void, Error> {
+        remoteDataSource.signin(req: req)
             .handleEvents(receiveOutput: { [weak self] tokenData in
                 self?.saveTokens(tokenData, with: req)
             })

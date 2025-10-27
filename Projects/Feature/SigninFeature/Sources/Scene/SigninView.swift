@@ -18,7 +18,7 @@ struct SigninView: View {
                 emailTextField(viewStore)
                 passwordTextField(viewStore)
                 Spacer()
-                loginButton(viewStore)
+                signinButton(viewStore)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .onChange(of: viewStore.isLoginSuccessful) { isSuccessful in
@@ -73,11 +73,11 @@ struct SigninView: View {
         .padding(.top, 44)
     }
     
-    private func loginButton(_ viewStore: ViewStoreOf<SigninReducer>) -> some View {
+    private func signinButton(_ viewStore: ViewStoreOf<SigninReducer>) -> some View {
         PiCKButton(
             buttonText: "로그인하기",
             isEnabled: !viewStore.email.isEmpty && !viewStore.password.isEmpty,
-            action: { viewStore.send(.loginButtonTapped) }
+            action: { viewStore.send(.signinButtonTapped) }
         )
         .padding(.horizontal, 24)
         .padding(.bottom, 28)
