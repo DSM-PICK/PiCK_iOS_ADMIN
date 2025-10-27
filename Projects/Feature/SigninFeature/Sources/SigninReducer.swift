@@ -33,13 +33,6 @@ public struct SigninReducer: Reducer {
                 state.password = password
                 return .none
 
-            case .signinResponse(.success):
-                state.isSigninSuccessful = true
-                return .none
-
-            case .signinResponse(.failure):
-
-                
             case .signinButtonTapped:
                 return performSignin(with: state)
                 

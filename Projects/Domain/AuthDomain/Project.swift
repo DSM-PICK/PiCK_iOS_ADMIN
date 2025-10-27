@@ -23,7 +23,7 @@ let interfaceTarget = Target.target(
     bundleId: "\(env.organizationName).AuthDomainInterface",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
-    sources: ["Interface/AuthDomainInterface.swift"],
+    sources: ["Interface/**"],
     dependencies: [
         .Projects.core,
         .Shared.thirdPartyLib,
