@@ -1,5 +1,9 @@
 
 
+import AllTabDomain
+import AllTabDomainInterface
+import AllTabFeature
+import AllTabFeatureInterface
 import AuthDomain
 import AuthDomainInterface
 import BaseDomain
@@ -71,6 +75,22 @@ private class SecretKeyDependencyb3e8d2bd4c35431acda1Provider: SecretKeyDependen
 private func factorycc7ea4e12027ae637f9ff47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return SecretKeyDependencyb3e8d2bd4c35431acda1Provider(appComponent: parent1(component) as! AppComponent)
 }
+private class AllTabDependencyacdab75b3325eec9d649Provider: AllTabDependency {
+    var getMyNameUseCase: any GetMyNameUseCaseProtocol {
+        return appComponent.getMyNameUseCase
+    }
+    var authRepository: any AuthRepository {
+        return appComponent.authRepository
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->AllTabComponent
+private func factoryfffd4c52463116b1a1a9f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return AllTabDependencyacdab75b3325eec9d649Provider(appComponent: parent1(component) as! AppComponent)
+}
 private class SigninDependencyde06a9d0b22764487733Provider: SigninDependency {
     var signinUseCase: any SigninUseCase {
         return appComponent.signinUseCase
@@ -88,6 +108,9 @@ private class HomeDependency443c4e1871277bd8432aProvider: HomeDependency {
     var getSelfStudyDirectorUseCase: any GetSelfStudyDirectorUseCaseProtocol {
         return appComponent.getSelfStudyDirectorUseCase
     }
+    var allTabFactory: any AllTabFactory {
+        return appComponent.allTabFactory
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -104,10 +127,12 @@ extension AppComponent: NeedleFoundation.Registration {
 
         localTable["keychain-any Keychain"] = { [unowned self] in self.keychain as Any }
         localTable["getSelfStudyDirectorUseCase-any GetSelfStudyDirectorUseCaseProtocol"] = { [unowned self] in self.getSelfStudyDirectorUseCase as Any }
+        localTable["getMyNameUseCase-any GetMyNameUseCaseProtocol"] = { [unowned self] in self.getMyNameUseCase as Any }
         localTable["signinFactory-any SigninFactory"] = { [unowned self] in self.signinFactory as Any }
         localTable["signupFactory-any SignupFactory"] = { [unowned self] in self.signupFactory as Any }
         localTable["onboardingFactory-any OnboardingFactory"] = { [unowned self] in self.onboardingFactory as Any }
         localTable["homeFactory-any HomeFactory"] = { [unowned self] in self.homeFactory as Any }
+        localTable["allTabFactory-any AllTabFactory"] = { [unowned self] in self.allTabFactory as Any }
         localTable["userDefault-any UserDefault"] = { [unowned self] in self.userDefault as Any }
         localTable["authProvider-MoyaProvider<AuthAPI>"] = { [unowned self] in self.authProvider as Any }
         localTable["localAuthDataSource-any LocalAuthDataSource"] = { [unowned self] in self.localAuthDataSource as Any }
@@ -132,6 +157,12 @@ extension SecretKeyComponent: NeedleFoundation.Registration {
         keyPathToName[\SecretKeyDependency.signinUseCase] = "signinUseCase-any SigninUseCase"
     }
 }
+extension AllTabComponent: NeedleFoundation.Registration {
+    public func registerItems() {
+        keyPathToName[\AllTabDependency.getMyNameUseCase] = "getMyNameUseCase-any GetMyNameUseCaseProtocol"
+        keyPathToName[\AllTabDependency.authRepository] = "authRepository-any AuthRepository"
+    }
+}
 extension SigninComponent: NeedleFoundation.Registration {
     public func registerItems() {
         keyPathToName[\SigninDependency.signinUseCase] = "signinUseCase-any SigninUseCase"
@@ -140,6 +171,7 @@ extension SigninComponent: NeedleFoundation.Registration {
 extension HomeComponent: NeedleFoundation.Registration {
     public func registerItems() {
         keyPathToName[\HomeDependency.getSelfStudyDirectorUseCase] = "getSelfStudyDirectorUseCase-any GetSelfStudyDirectorUseCaseProtocol"
+        keyPathToName[\HomeDependency.allTabFactory] = "allTabFactory-any AllTabFactory"
     }
 }
 
@@ -162,6 +194,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->OnboardingComponent", factory88dc13cc29c5719e2b01e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->SecretKeyComponent", factorycc7ea4e12027ae637f9ff47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->AllTabComponent", factoryfffd4c52463116b1a1a9f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->SigninComponent", factory2882a056d84a613debccf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->HomeComponent", factory67229cdf0f755562b2b1f47b58f8f304c97af4d5)
 }

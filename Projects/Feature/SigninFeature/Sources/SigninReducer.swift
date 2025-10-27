@@ -28,30 +28,44 @@ public struct SigninReducer: Reducer {
             case let .emailChanged(email):
                 state.email = email
                 return .none
+                
             case let .passwordChanged(password):
                 state.password = password
                 return .none
-            case .signinButtonTapped:
-                return .run { [state] send in
-                    await send(.signinResponse(await TaskResult {
-                        for try await _ in self.signinUseCase.execute(
-                            req: .init(
-                                adminID: state.email,
-                                password: state.password,
-                                deviceToken: ""
-                            )
-                        ).values {}
-                    }))
-                }
 
             case .signinResponse(.success):
                 state.isSigninSuccessful = true
                 return .none
 
             case .signinResponse(.failure):
+
+                
+            case .signinButtonTapped:
+                return performLogin(with: state)
+                
+            case .signinResponse(.success):
+                state.isLoginSuccessful = true
+                return .none
+                
+            case .signinResponse(.failure):
                 return .none
             }
         }
     }
+    
+    private func performLogin(with state: State) -> Effect<Action> {
+        .run { send in
+            await send(.signinResponse(
+                await TaskResult {
+                    for try await _ in signinUseCase.execute(
+                        req: .init(
+                            adminID: state.email,
+                            password: state.password,
+                            deviceToken: ""
+                        )
+                    ).values {}
+                }
+            ))
+        }
+    }
 }
-

@@ -1,13 +1,19 @@
 import SwiftUI
 import PiCK_iOS_DesignSystem
 import ComposableArchitecture
+import AllTabFeatureInterface
 
 public struct TabBarView: View {
     @State private var selectedTab = 2
     let store: StoreOf<HomeReducer>
+    let allTabFactory: any AllTabFactory
     
-    public init(store: StoreOf<HomeReducer>) {
+    public init(
+        store: StoreOf<HomeReducer>,
+        allTabFactory: any AllTabFactory
+    ) {
         self.store = store
+        self.allTabFactory = allTabFactory
     }
     
     public var body: some View {
@@ -40,7 +46,7 @@ public struct TabBarView: View {
                     Label("수락", systemImage: "checkmark.circle")
                 }
             
-            Text("전체")
+            allTabFactory.makeView()
                 .tag(4)
                 .tabItem {
                     Label("전체", systemImage: "list.bullet")

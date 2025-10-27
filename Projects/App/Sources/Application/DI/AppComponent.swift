@@ -9,8 +9,10 @@ import OnboardingFeature
 import OnboardingFeatureInterface
 import HomeFeature
 import HomeFeatureInterface
+import AllTabFeature
+import AllTabFeatureInterface
 
-public final class AppComponent: BootstrapComponent, HomeDependency {
+public final class AppComponent: BootstrapComponent, HomeDependency, AllTabDependency {
     private let _keychain: any Keychain
 
     init(keychain: any Keychain) {
@@ -47,5 +49,8 @@ public extension AppComponent {
     }
     var homeFactory: any HomeFactory {
         HomeComponent(parent: self)
+    }
+    var allTabFactory: any AllTabFactory {
+        AllTabComponent(parent: self)
     }
 }

@@ -10,6 +10,7 @@ let project = Project.makeModule(
     sources: [],
     dependencies: [
         .Projects.baseDomain,
-        .Projects.authDomain
+        .Projects.authDomain,
+        .Projects.allTabDomain
     ]
 )

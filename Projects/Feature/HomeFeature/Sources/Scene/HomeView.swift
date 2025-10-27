@@ -28,7 +28,7 @@ public struct HomeView: View {
                         Schedule(period: 6, subject: "2학년 2반")
                     ])
                     
-                    AllSelfStudyView()
+                    AllSelfStudyView(selfStudyDirector: viewStore.selfStudyDirector)
                         .frame(maxWidth: .infinity)
                 }
                 .padding(.horizontal, 24)
