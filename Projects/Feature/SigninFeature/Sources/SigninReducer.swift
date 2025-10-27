@@ -41,10 +41,10 @@ public struct SigninReducer: Reducer {
 
                 
             case .signinButtonTapped:
-                return performLogin(with: state)
+                return performSignin(with: state)
                 
             case .signinResponse(.success):
-                state.isLoginSuccessful = true
+                state.isSigninSuccessful = true
                 return .none
                 
             case .signinResponse(.failure):
@@ -53,7 +53,7 @@ public struct SigninReducer: Reducer {
         }
     }
     
-    private func performLogin(with state: State) -> Effect<Action> {
+    private func performSignin(with state: State) -> Effect<Action> {
         .run { send in
             await send(.signinResponse(
                 await TaskResult {

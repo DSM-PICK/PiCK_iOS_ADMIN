@@ -44,7 +44,7 @@ public class AuthRepositoryImpl: AuthRepository {
         localDataSource.logout()
     }
     
-    private func saveTokens(_ tokenData: TokenDTO, with req: LoginRequestParams) {
+    private func saveTokens(_ tokenData: TokenDTO, with req: SigninRequestParams) {
         JwtStore.shared.accessToken = tokenData.accessToken
         JwtStore.shared.refreshToken = tokenData.refreshToken
         keyChain.save(type: .id, value: req.adminID)

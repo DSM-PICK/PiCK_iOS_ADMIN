@@ -21,7 +21,7 @@ struct SigninView: View {
                 signinButton(viewStore)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .onChange(of: viewStore.isLoginSuccessful) { isSuccessful in
+            .onChange(of: viewStore.isSigninSuccessful) { isSuccessful in
                 if isSuccessful {
                     router.path = [.home]
                 }
