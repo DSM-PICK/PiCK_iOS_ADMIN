@@ -2,24 +2,24 @@ import ComposableArchitecture
 import AuthDomainInterface
 
 public struct SigninReducer: Reducer {
-    private let loginUseCase: any LoginUseCase
+    private let signinUseCase: any SigninUseCase
 
-    public init(loginUseCase: any LoginUseCase) {
-        self.loginUseCase = loginUseCase
+    public init(signinUseCase: any SigninUseCase) {
+        self.signinUseCase = signinUseCase
     }
 
     public struct State: Equatable {
         public var email = ""
         public var password = ""
-        public var isLoginSuccessful = false
+        public var isSigninSuccessful = false
         public init() {}
     }
 
     public enum Action {
         case emailChanged(String)
         case passwordChanged(String)
-        case loginButtonTapped
-        case loginResponse(TaskResult<Void>)
+        case signinButtonTapped
+        case signinResponse(TaskResult<Void>)
     }
 
     public var body: some Reducer<State, Action> {
@@ -31,10 +31,10 @@ public struct SigninReducer: Reducer {
             case let .passwordChanged(password):
                 state.password = password
                 return .none
-            case .loginButtonTapped:
+            case .signinButtonTapped:
                 return .run { [state] send in
-                    await send(.loginResponse(await TaskResult {
-                        for try await _ in self.loginUseCase.execute(
+                    await send(.signinResponse(await TaskResult {
+                        for try await _ in self.signinUseCase.execute(
                             req: .init(
                                 adminID: state.email,
                                 password: state.password,
@@ -44,11 +44,11 @@ public struct SigninReducer: Reducer {
                     }))
                 }
 
-            case .loginResponse(.success):
-                state.isLoginSuccessful = true
+            case .signinResponse(.success):
+                state.isSigninSuccessful = true
                 return .none
 
-            case .loginResponse(.failure):
+            case .signinResponse(.failure):
                 return .none
             }
         }

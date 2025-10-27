@@ -2,10 +2,10 @@ import ComposableArchitecture
 import AuthDomainInterface
 
 public struct SecretKeyReducer: Reducer {
-    private let loginUseCase: any LoginUseCase
+    private let signinUseCase: any SigninUseCase
 
-    public init(loginUseCase: any LoginUseCase) {
-        self.loginUseCase = loginUseCase
+    public init(signinUseCase: any SigninUseCase) {
+        self.signinUseCase = signinUseCase
     }
 
     public struct State: Equatable {

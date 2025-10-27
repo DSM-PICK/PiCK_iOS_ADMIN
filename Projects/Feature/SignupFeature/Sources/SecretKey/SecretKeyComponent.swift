@@ -5,7 +5,7 @@ import SignupFeatureInterface
 import ComposableArchitecture
 
 public protocol SecretKeyDependency: NeedleFoundation.Dependency {
-    var loginUseCase: any LoginUseCase { get }
+    var signinUseCase: any SigninUseCase { get }
 }
 
 public final class SecretKeyComponent: Component<SecretKeyDependency>, SignupFactory {
@@ -14,7 +14,7 @@ public final class SecretKeyComponent: Component<SecretKeyDependency>, SignupFac
             store: .init(
                 initialState: SecretKeyReducer.State(),
                 reducer: {
-                    SecretKeyReducer(loginUseCase: self.dependency.loginUseCase)
+                    SecretKeyReducer(signinUseCase: self.dependency.signinUseCase)
                 }
             )
         ))

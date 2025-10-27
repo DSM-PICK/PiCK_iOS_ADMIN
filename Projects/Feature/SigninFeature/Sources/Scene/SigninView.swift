@@ -57,14 +57,14 @@ struct SigninView: View {
                 PiCKButton(
                     buttonText: "로그인하기",
                     isEnabled: !viewStore.email.isEmpty && !viewStore.password.isEmpty,
-                    action: { viewStore.send(.loginButtonTapped) }
+                    action: { viewStore.send(.signinButtonTapped) }
                 )
                 .padding(.horizontal, 24)
                 .padding(.bottom, 28)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .onChange(of: viewStore.isLoginSuccessful) { isLoginSuccessful in
-                if isLoginSuccessful {
+            .onChange(of: viewStore.isSigninSuccessful) { isSigninSuccessful in
+                if isSigninSuccessful {
                     router.path = [.home]
                 }
             }

@@ -59,8 +59,8 @@ private func factory88dc13cc29c5719e2b01e3b0c44298fc1c149afb(_ component: Needle
     return OnboardingDependencyf77d0055983a00cf8835Provider()
 }
 private class SecretKeyDependencyb3e8d2bd4c35431acda1Provider: SecretKeyDependency {
-    var loginUseCase: any LoginUseCase {
-        return appComponent.loginUseCase
+    var signinUseCase: any SigninUseCase {
+        return appComponent.signinUseCase
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -72,8 +72,8 @@ private func factorycc7ea4e12027ae637f9ff47b58f8f304c97af4d5(_ component: Needle
     return SecretKeyDependencyb3e8d2bd4c35431acda1Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class SigninDependencyde06a9d0b22764487733Provider: SigninDependency {
-    var loginUseCase: any LoginUseCase {
-        return appComponent.loginUseCase
+    var signinUseCase: any SigninUseCase {
+        return appComponent.signinUseCase
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -113,7 +113,7 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["localAuthDataSource-any LocalAuthDataSource"] = { [unowned self] in self.localAuthDataSource as Any }
         localTable["remoteAuthDataSource-any RemoteAuthDataSource"] = { [unowned self] in self.remoteAuthDataSource as Any }
         localTable["authRepository-any AuthRepository"] = { [unowned self] in self.authRepository as Any }
-        localTable["loginUseCase-any LoginUseCase"] = { [unowned self] in self.loginUseCase as Any }
+        localTable["signinUseCase-any SigninUseCase"] = { [unowned self] in self.signinUseCase as Any }
         localTable["refreshTokenUseCase-any RefreshTokenUseCase"] = { [unowned self] in self.refreshTokenUseCase as Any }
     }
 }
@@ -129,12 +129,12 @@ extension OnboardingComponent: NeedleFoundation.Registration {
 }
 extension SecretKeyComponent: NeedleFoundation.Registration {
     public func registerItems() {
-        keyPathToName[\SecretKeyDependency.loginUseCase] = "loginUseCase-any LoginUseCase"
+        keyPathToName[\SecretKeyDependency.signinUseCase] = "signinUseCase-any SigninUseCase"
     }
 }
 extension SigninComponent: NeedleFoundation.Registration {
     public func registerItems() {
-        keyPathToName[\SigninDependency.loginUseCase] = "loginUseCase-any LoginUseCase"
+        keyPathToName[\SigninDependency.signinUseCase] = "signinUseCase-any SigninUseCase"
     }
 }
 extension HomeComponent: NeedleFoundation.Registration {
