@@ -6,6 +6,7 @@ import AuthDomainInterface
 public enum AuthAPI {
     case signin(SigninRequestParams)
     case refreshToken
+    case secretKey(SecretKeyRequestParams)
 }
 
 public struct SigninResponseDTO: Decodable {
@@ -37,6 +38,8 @@ extension AuthAPI: PiCKAPI {
             return "/login"
         case .refreshToken:
             return "/reissue"
+        case .secretKey:
+            return "/key"
         }
     }
 
@@ -46,6 +49,8 @@ extension AuthAPI: PiCKAPI {
             return .post
         case .refreshToken:
             return .put
+        case .secretKey:
+            return .post
         }
     }
 

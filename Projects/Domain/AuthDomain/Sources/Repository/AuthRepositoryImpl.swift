@@ -39,6 +39,12 @@ public class AuthRepositoryImpl: AuthRepository {
             .eraseToAnyPublisher()
     }
 
+    public func secretKey(req: SecretKeyRequestParams) -> AnyPublisher<Void, Error> {
+        remoteDataSource.secretKey(req: req)
+            .map { _ in () }
+            .eraseToAnyPublisher()
+    }
+
     public func logout() {
         JwtStore.shared.clearTokens()
         localDataSource.logout()
