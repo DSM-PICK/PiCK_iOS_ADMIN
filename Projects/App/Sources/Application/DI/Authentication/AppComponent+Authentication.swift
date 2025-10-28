@@ -44,4 +44,10 @@ public extension AppComponent {
             RefreshTokenUseCaseImpl(repository: authRepository)
         }
     }
+
+    var secretKeyUseCase: any SecretKeyUseCase {
+        shared {
+            SecretKeyUseCaseImpl(repository: authRepository)
+        }
+    }
 }

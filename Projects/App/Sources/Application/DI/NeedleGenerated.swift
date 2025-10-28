@@ -63,8 +63,8 @@ private func factory88dc13cc29c5719e2b01e3b0c44298fc1c149afb(_ component: Needle
     return OnboardingDependencyf77d0055983a00cf8835Provider()
 }
 private class SecretKeyDependencyb3e8d2bd4c35431acda1Provider: SecretKeyDependency {
-    var signinUseCase: any SigninUseCase {
-        return appComponent.signinUseCase
+    var secretKeyUseCase: any SecretKeyUseCase {
+        return appComponent.secretKeyUseCase
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -140,6 +140,7 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["authRepository-any AuthRepository"] = { [unowned self] in self.authRepository as Any }
         localTable["signinUseCase-any SigninUseCase"] = { [unowned self] in self.signinUseCase as Any }
         localTable["refreshTokenUseCase-any RefreshTokenUseCase"] = { [unowned self] in self.refreshTokenUseCase as Any }
+        localTable["secretKeyUseCase-any SecretKeyUseCase"] = { [unowned self] in self.secretKeyUseCase as Any }
     }
 }
 extension RootComponent: NeedleFoundation.Registration {
@@ -154,7 +155,7 @@ extension OnboardingComponent: NeedleFoundation.Registration {
 }
 extension SecretKeyComponent: NeedleFoundation.Registration {
     public func registerItems() {
-        keyPathToName[\SecretKeyDependency.signinUseCase] = "signinUseCase-any SigninUseCase"
+        keyPathToName[\SecretKeyDependency.secretKeyUseCase] = "secretKeyUseCase-any SecretKeyUseCase"
     }
 }
 extension AllTabComponent: NeedleFoundation.Registration {
