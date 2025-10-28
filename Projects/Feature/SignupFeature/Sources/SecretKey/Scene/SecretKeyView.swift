@@ -1,9 +1,11 @@
 import SwiftUI
 import ComposableArchitecture
 import PiCK_iOS_DesignSystem
+import Utility
 
 struct SecretKeyView: View {
     let store: StoreOf<SecretKeyReducer>
+    @EnvironmentObject var router: AppRouter
 
     public init(store: StoreOf<SecretKeyReducer>) {
         self.store = store
@@ -42,12 +44,17 @@ struct SecretKeyView: View {
                 PiCKButton(
                     buttonText: "다음",
                     isEnabled: !viewStore.secretKey.isEmpty,
-                    action: {}
+                    action: { viewStore.send(.nextButtonTapped) }
                 )
                 .padding(.horizontal, 24)
                 .padding(.bottom, 28)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            .onChange(of: viewStore.isSigninSuccessful) { isSuccessful in
+                if isSuccessful {
+                    router.path = [.home]
+                }
+            }
         }
     }
 }

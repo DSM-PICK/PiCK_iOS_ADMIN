@@ -2,20 +2,22 @@ import ComposableArchitecture
 import AuthDomainInterface
 
 public struct SecretKeyReducer: Reducer {
-    private let signinUseCase: any SigninUseCase
+    private let secretKeyUseCase: any SecretKeyUseCase
 
-    public init(signinUseCase: any SigninUseCase) {
-        self.signinUseCase = signinUseCase
+    public init(secretKeyUseCase: any SecretKeyUseCase) {
+        self.secretKeyUseCase = secretKeyUseCase
     }
 
     public struct State: Equatable {
         public var secretKey = ""
+        public var isSigninSuccessful = false
         public init() {}
     }
 
     public enum Action {
         case secretKeyChanged(String)
         case nextButtonTapped
+        case secretKeyResponse(TaskResult<Void>)
     }
 
     public var body: some Reducer<State, Action> {
@@ -25,9 +27,29 @@ public struct SecretKeyReducer: Reducer {
                 state.secretKey = secretKey
                 return .none
             case .nextButtonTapped:
-                // Handle login logic here
+                return performSecretKey(with: state)
+            case .secretKeyResponse(.success):
+                state.isSigninSuccessful = true
+                return .none
+            case .secretKeyResponse(.failure):
                 return .none
             }
+        }
+    }
+}
+
+extension SecretKeyReducer {
+    private func performSecretKey(with state: State) -> Effect<Action> {
+        .run { send in
+            await send(.secretKeyResponse(
+                await TaskResult {
+                    for try await _ in secretKeyUseCase.execute(
+                        req: .init(
+                            secretKey: state.secretKey
+                        )
+                    ).values {}
+                }
+            ))
         }
     }
 }
