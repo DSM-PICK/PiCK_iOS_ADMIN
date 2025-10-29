@@ -58,7 +58,7 @@ struct RootView: View {
             appComponent.signinFactory.makeView()
                 .environmentObject(router)
         case .secretKey:
-            appComponent.signupFactory.makeView()
+            appComponent.secretKeyFactory.makeView()
                 .environmentObject(router)
         case .home:
             EmptyView()

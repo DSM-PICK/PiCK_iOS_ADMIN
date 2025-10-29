@@ -8,7 +8,7 @@ public protocol SecretKeyDependency: NeedleFoundation.Dependency {
     var secretKeyUseCase: any SecretKeyUseCase { get }
 }
 
-public final class SecretKeyComponent: Component<SecretKeyDependency>, SignupFactory {
+public final class SecretKeyComponent: Component<SecretKeyDependency>, SecretKeyFactory {
     public func makeView() -> AnyView {
         AnyView(SecretKeyView(
             store: .init(
