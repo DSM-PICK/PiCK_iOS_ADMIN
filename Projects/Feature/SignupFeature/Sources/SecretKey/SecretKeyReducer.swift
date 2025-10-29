@@ -32,6 +32,7 @@ public struct SecretKeyReducer: Reducer {
                 return performSecretKey(with: state)
             case let .secretKeyResponse(.success(isValid)):
                 state.isSigninSuccessful = isValid
+                if !isValid { state.errorMessage = "올바른 시크릿 키를 입력해주세요" }
                 return .none
             case let .secretKeyResponse(.failure(error)):
                 let authError = error as? AuthDomainInterface.AuthError ?? .clientError
@@ -50,10 +51,13 @@ extension SecretKeyReducer {
         .run { send in
             await send(.secretKeyResponse(
                 await TaskResult<Bool> {
-                    for try await _ in secretKeyUseCase.execute(
+                    var response = false
+                    for try await result in secretKeyUseCase.execute(
                         req: .init(secretKey: state.secretKey)
-                    ).values {}
-                    return true
+                    ).values {
+                        response = result
+                    }
+                    return response
                 }
             ))
         }

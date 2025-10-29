@@ -58,6 +58,8 @@ extension AuthAPI: PiCKAPI {
         switch self {
         case .signin(let params):
             return .requestJSONEncodable(params)
+        case .secretKey(let params):
+            return .requestJSONEncodable(params)
         default:
             return .requestPlain
         }
