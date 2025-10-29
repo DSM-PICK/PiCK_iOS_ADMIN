@@ -15,15 +15,6 @@ struct SecretKeyView: View {
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             VStack(alignment: .leading, spacing: 0) {
-                Button(action: {
-                    dismiss()
-                }) {
-                    PiCKImage.leftArrow
-                        .resizable()
-                        .frame(width: 32, height: 32)
-                }
-                .padding([.top, .leading], 20)
-                .foregroundColor(.Normal.black)
                 HStack(spacing: 0) {
                     Text("PiCK")
                         .foregroundColor(Color.Primary.primary500)
@@ -62,7 +53,7 @@ struct SecretKeyView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .onChange(of: viewStore.isSigninSuccessful) { isSuccessful in
                 if isSuccessful {
-                    router.path = [.email(secretKey: viewStore.secretKey)]
+                    router.path.append(.email(secretKey: viewStore.secretKey))
                 }
             }
             .errorToast(
@@ -72,7 +63,17 @@ struct SecretKeyView: View {
                     send: .clearError
                 )
             )
-            .navigationBarHidden(true)
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: { router.pop() }) {
+                        PiCKImage.leftArrow
+                            .resizable()
+                            .frame(width: 32, height: 32)
+                            .foregroundColor(.Normal.black)
+                    }
+                }
+            }
         }
     }
 }
