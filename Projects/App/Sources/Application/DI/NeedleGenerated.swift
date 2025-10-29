@@ -62,6 +62,19 @@ private class OnboardingDependencyf77d0055983a00cf8835Provider: OnboardingDepend
 private func factory88dc13cc29c5719e2b01e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
     return OnboardingDependencyf77d0055983a00cf8835Provider()
 }
+private class VerifyEmailDependencyfed6858d0bf434c6ec56Provider: VerifyEmailDependency {
+    var secretKeyUseCase: any SecretKeyUseCase {
+        return appComponent.secretKeyUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->VerifyEmailComponent
+private func factoryeabc669822dd3244ed10f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return VerifyEmailDependencyfed6858d0bf434c6ec56Provider(appComponent: parent1(component) as! AppComponent)
+}
 private class SecretKeyDependencyb3e8d2bd4c35431acda1Provider: SecretKeyDependency {
     var secretKeyUseCase: any SecretKeyUseCase {
         return appComponent.secretKeyUseCase
@@ -130,6 +143,7 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["getMyNameUseCase-any GetMyNameUseCaseProtocol"] = { [unowned self] in self.getMyNameUseCase as Any }
         localTable["signinFactory-any SigninFactory"] = { [unowned self] in self.signinFactory as Any }
         localTable["secretKeyFactory-any SecretKeyFactory"] = { [unowned self] in self.secretKeyFactory as Any }
+        localTable["verifyEmailFactory-any VerifyEmailFactory"] = { [unowned self] in self.verifyEmailFactory as Any }
         localTable["onboardingFactory-any OnboardingFactory"] = { [unowned self] in self.onboardingFactory as Any }
         localTable["homeFactory-any HomeFactory"] = { [unowned self] in self.homeFactory as Any }
         localTable["allTabFactory-any AllTabFactory"] = { [unowned self] in self.allTabFactory as Any }
@@ -151,6 +165,11 @@ extension RootComponent: NeedleFoundation.Registration {
 extension OnboardingComponent: NeedleFoundation.Registration {
     public func registerItems() {
 
+    }
+}
+extension VerifyEmailComponent: NeedleFoundation.Registration {
+    public func registerItems() {
+        keyPathToName[\VerifyEmailDependency.secretKeyUseCase] = "secretKeyUseCase-any SecretKeyUseCase"
     }
 }
 extension SecretKeyComponent: NeedleFoundation.Registration {
@@ -194,6 +213,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent", factoryEmptyDependencyProvider)
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->OnboardingComponent", factory88dc13cc29c5719e2b01e3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->VerifyEmailComponent", factoryeabc669822dd3244ed10f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->SecretKeyComponent", factorycc7ea4e12027ae637f9ff47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AllTabComponent", factoryfffd4c52463116b1a1a9f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->SigninComponent", factory2882a056d84a613debccf47b58f8f304c97af4d5)

@@ -60,6 +60,9 @@ struct RootView: View {
         case .secretKey:
             appComponent.secretKeyFactory.makeView()
                 .environmentObject(router)
+        case let .email(secretKey):
+            appComponent.verifyEmailFactory.makeView(secretKey: secretKey)
+                .environmentObject(router)
         case .home:
             EmptyView()
         }

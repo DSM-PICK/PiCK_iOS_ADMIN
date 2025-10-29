@@ -44,6 +44,9 @@ public extension AppComponent {
     var secretKeyFactory: any SecretKeyFactory {
         SecretKeyComponent(parent: self)
     }
+    var verifyEmailFactory: any VerifyEmailFactory {
+        VerifyEmailComponent(parent: self)
+    }
     var onboardingFactory: any OnboardingFactory {
         OnboardingComponent(parent: self)
     }
