@@ -39,9 +39,9 @@ public class AuthRepositoryImpl: AuthRepository {
             .eraseToAnyPublisher()
     }
 
-    public func secretKey(req: SecretKeyRequestParams) -> AnyPublisher<Void, Error> {
+    public func secretKey(req: SecretKeyRequestParams) -> AnyPublisher<Bool, Error> {
         remoteDataSource.secretKey(req: req)
-            .map { _ in () }
+            .map { _ in true }
             .eraseToAnyPublisher()
     }
 

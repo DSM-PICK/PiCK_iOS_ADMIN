@@ -77,7 +77,15 @@ extension AuthAPI: PiCKAPI {
         case .signin(let req):
             return [
                 401: .passwordMismatch,
-                404: .idMismatch
+                404: .idMismatch,
+                500: .serverError
+            ]
+        case .secretKey(let req):
+            return [
+                400: .clientError,
+                403: .clientError,
+                404: .clientError,
+                500: .serverError
             ]
         default:
             return nil

@@ -55,6 +55,14 @@ struct SecretKeyView: View {
                     router.path = [.home]
                 }
             }
+            .errorToast(
+                message: viewStore.errorMessage ?? "에러발생!",
+                isPresented: viewStore.binding(
+                    get: { $0.errorMessage != nil },
+                    send: .clearError
+                )
+            )
         }
+        .navigationBarHidden(true)
     }
 }

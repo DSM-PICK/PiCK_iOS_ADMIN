@@ -9,7 +9,7 @@ public class SecretKeyUseCaseImpl: SecretKeyUseCase {
         self.repository = repository
     }
 
-    public func execute(req: SecretKeyRequestParams) -> AnyPublisher<Void, Error> {
+    public func execute(req: SecretKeyRequestParams) -> AnyPublisher<Bool, Error> {
         repository.secretKey(req: req)
     }
 }
