@@ -23,12 +23,26 @@ public extension AppComponent {
         }
     }
 
+    var remoteMailDataSource: any RemoteMailDataSource {
+        shared {
+            RemotMailDataSourceImpl(keychain: keychain)
+        }
+    }
+
     var authRepository: any AuthRepository {
         shared {
             AuthRepositoryImpl(
                 keychain: keychain,
                 localDataSource: localAuthDataSource,
                 remoteDataSource: remoteAuthDataSource
+            )
+        }
+    }
+
+    var mailRepository: any MailRepository {
+        shared {
+            MailRepositoryImpl(
+                remoteDataSource: remoteMailDataSource
             )
         }
     }
@@ -48,6 +62,12 @@ public extension AppComponent {
     var secretKeyUseCase: any SecretKeyUseCase {
         shared {
             SecretKeyUseCaseImpl(repository: authRepository)
+        }
+    }
+
+    var emailSendUseCase: any EmailSendUseCase {
+        shared {
+            EmailSendUseCaseImpl(repository: mailRepository)
         }
     }
 }

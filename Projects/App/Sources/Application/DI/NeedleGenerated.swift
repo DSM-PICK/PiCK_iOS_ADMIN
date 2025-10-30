@@ -63,8 +63,8 @@ private func factory88dc13cc29c5719e2b01e3b0c44298fc1c149afb(_ component: Needle
     return OnboardingDependencyf77d0055983a00cf8835Provider()
 }
 private class VerifyEmailDependencyfed6858d0bf434c6ec56Provider: VerifyEmailDependency {
-    var secretKeyUseCase: any SecretKeyUseCase {
-        return appComponent.secretKeyUseCase
+    var emailSendUseCase: any EmailSendUseCase {
+        return appComponent.emailSendUseCase
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -151,10 +151,13 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["authProvider-MoyaProvider<AuthAPI>"] = { [unowned self] in self.authProvider as Any }
         localTable["localAuthDataSource-any LocalAuthDataSource"] = { [unowned self] in self.localAuthDataSource as Any }
         localTable["remoteAuthDataSource-any RemoteAuthDataSource"] = { [unowned self] in self.remoteAuthDataSource as Any }
+        localTable["remoteMailDataSource-any RemoteMailDataSource"] = { [unowned self] in self.remoteMailDataSource as Any }
         localTable["authRepository-any AuthRepository"] = { [unowned self] in self.authRepository as Any }
+        localTable["mailRepository-any MailRepository"] = { [unowned self] in self.mailRepository as Any }
         localTable["signinUseCase-any SigninUseCase"] = { [unowned self] in self.signinUseCase as Any }
         localTable["refreshTokenUseCase-any RefreshTokenUseCase"] = { [unowned self] in self.refreshTokenUseCase as Any }
         localTable["secretKeyUseCase-any SecretKeyUseCase"] = { [unowned self] in self.secretKeyUseCase as Any }
+        localTable["emailSendUseCase-any EmailSendUseCase"] = { [unowned self] in self.emailSendUseCase as Any }
     }
 }
 extension RootComponent: NeedleFoundation.Registration {
@@ -169,7 +172,7 @@ extension OnboardingComponent: NeedleFoundation.Registration {
 }
 extension VerifyEmailComponent: NeedleFoundation.Registration {
     public func registerItems() {
-        keyPathToName[\VerifyEmailDependency.secretKeyUseCase] = "secretKeyUseCase-any SecretKeyUseCase"
+        keyPathToName[\VerifyEmailDependency.emailSendUseCase] = "emailSendUseCase-any EmailSendUseCase"
     }
 }
 extension SecretKeyComponent: NeedleFoundation.Registration {
