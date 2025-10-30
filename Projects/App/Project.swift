@@ -59,6 +59,8 @@ let appDependencies: [TargetDependency] = [
     .Features.homeFeatureInterface,
     .Features.allTabFeature,
     .Features.allTabFeatureInterface,
+    .Features.planFeature,
+    .Features.planFeatureInterface,
     .Projects.baseDomainInterface,
     .Projects.authDomain,
     .Projects.authDomainInterface,
@@ -66,6 +68,8 @@ let appDependencies: [TargetDependency] = [
     .Projects.homeDomainInterface,
     .Projects.allTabDomain,
     .Projects.allTabDomainInterface,
+    .Projects.planDomain,
+    .Projects.planDomainInterface,
     .Projects.core,
     .Shared.thirdPartyLib,
     .Shared.utility

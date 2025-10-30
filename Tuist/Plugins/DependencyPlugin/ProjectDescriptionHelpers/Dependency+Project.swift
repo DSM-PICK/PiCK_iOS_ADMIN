@@ -47,6 +47,14 @@ public extension TargetDependency.Projects {
         target: "AllTabDomainInterface",
         path: .relativeToRoot("Projects/Domain/AllTabDomain")
     )
+    static let planDomain = TargetDependency.project(
+        target: "PlanDomain",
+        path: .relativeToRoot("Projects/Domain/PlanDomain")
+    )
+    static let planDomainInterface = TargetDependency.project(
+        target: "PlanDomainInterface",
+        path: .relativeToRoot("Projects/Domain/PlanDomain")
+    )
 }
 
 public extension TargetDependency.Features {
@@ -93,6 +101,14 @@ public extension TargetDependency.Features {
     static let allTabFeatureInterface = TargetDependency.project(
         target: "AllTabFeatureInterface",
         path: .relativeToRoot("Projects/Feature/AllTabFeature")
+    )
+    static let planFeature = TargetDependency.project(
+        target: "PlanFeature",
+        path: .relativeToRoot("Projects/Feature/Plan")
+    )
+    static let planFeatureInterface = TargetDependency.project(
+        target: "PlanFeatureInterface",
+        path: .relativeToRoot("Projects/Feature/Plan")
     )
     // other Module
 }
