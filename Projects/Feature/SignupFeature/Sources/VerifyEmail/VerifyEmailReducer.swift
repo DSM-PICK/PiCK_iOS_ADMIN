@@ -2,11 +2,11 @@ import ComposableArchitecture
 import AuthDomainInterface
 
 public struct VerifyEmailReducer: Reducer {
-//    private let secretKeyUseCase: any SecretKeyUseCase
-//
-//    public init(secretKeyUseCase: any SecretKeyUseCase) {
-//        self.secretKeyUseCase = secretKeyUseCase
-//    }
+    private let emailSendUseCase: any EmailSendUseCase
+
+    public init(emailSendUseCase: any EmailSendUseCase) {
+        self.emailSendUseCase = emailSendUseCase
+    }
 
     public struct State: Equatable {
         public var secretKey = ""
