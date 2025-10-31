@@ -9,4 +9,12 @@ public final class RemotMailDataSourceImpl: BaseRemoteDataSource<EmailAPI>, Remo
             .tryMap { _ in }
             .eraseToAnyPublisher()
     }
+
+    public func codeCheck(req: CodeCheckRequestParams) -> AnyPublisher<Bool, any Error> {
+        request(.codeCheck(req))
+            .tryMap { response in
+                try response.map(Bool.self)
+            }
+            .eraseToAnyPublisher()
+    }
 }
