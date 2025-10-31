@@ -6,6 +6,7 @@ import ComposableArchitecture
 
 public protocol VerifyEmailDependency: NeedleFoundation.Dependency {
     var emailSendUseCase: any EmailSendUseCase { get }
+    var codeCheckUseCase: any CodeCheckUseCase { get }
 }
 
 public final class VerifyEmailComponent: Component<VerifyEmailDependency>, VerifyEmailFactory {
@@ -15,7 +16,10 @@ public final class VerifyEmailComponent: Component<VerifyEmailDependency>, Verif
                 store: .init(
                     initialState: VerifyEmailReducer.State(secretKey: secretKey),
                     reducer: {
-                        VerifyEmailReducer(emailSendUseCase: self.dependency.emailSendUseCase)
+                        VerifyEmailReducer(
+                            emailSendUseCase: self.dependency.emailSendUseCase,
+                            codeCheckUseCase: self.dependency.codeCheckUseCase
+                        )
                     }
                 )
             )

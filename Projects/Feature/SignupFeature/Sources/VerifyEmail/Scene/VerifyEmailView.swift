@@ -61,7 +61,7 @@ struct VerifyEmailView: View {
                     PiCKButton(
                         buttonText: "다음",
                         isEnabled: !viewStore.email.isEmpty && !viewStore.code.isEmpty,
-                        action: {  }
+                        action: { viewStore.send(.nextButtonTapped) }
                     )
                     .padding(.horizontal, 24)
                     .padding(.bottom, 28)

@@ -66,6 +66,9 @@ private class VerifyEmailDependencyfed6858d0bf434c6ec56Provider: VerifyEmailDepe
     var emailSendUseCase: any EmailSendUseCase {
         return appComponent.emailSendUseCase
     }
+    var codeCheckUseCase: any CodeCheckUseCase {
+        return appComponent.codeCheckUseCase
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -158,6 +161,7 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["refreshTokenUseCase-any RefreshTokenUseCase"] = { [unowned self] in self.refreshTokenUseCase as Any }
         localTable["secretKeyUseCase-any SecretKeyUseCase"] = { [unowned self] in self.secretKeyUseCase as Any }
         localTable["emailSendUseCase-any EmailSendUseCase"] = { [unowned self] in self.emailSendUseCase as Any }
+        localTable["codeCheckUseCase-any CodeCheckUseCase"] = { [unowned self] in self.codeCheckUseCase as Any }
     }
 }
 extension RootComponent: NeedleFoundation.Registration {
@@ -173,6 +177,7 @@ extension OnboardingComponent: NeedleFoundation.Registration {
 extension VerifyEmailComponent: NeedleFoundation.Registration {
     public func registerItems() {
         keyPathToName[\VerifyEmailDependency.emailSendUseCase] = "emailSendUseCase-any EmailSendUseCase"
+        keyPathToName[\VerifyEmailDependency.codeCheckUseCase] = "codeCheckUseCase-any CodeCheckUseCase"
     }
 }
 extension SecretKeyComponent: NeedleFoundation.Registration {

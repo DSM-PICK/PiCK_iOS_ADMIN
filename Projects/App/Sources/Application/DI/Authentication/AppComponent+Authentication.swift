@@ -70,4 +70,10 @@ public extension AppComponent {
             EmailSendUseCaseImpl(repository: mailRepository)
         }
     }
+
+    var codeCheckUseCase: any CodeCheckUseCase {
+        shared {
+            CodeCheckUseCaseImpl(repository: mailRepository)
+        }
+    }
 }
