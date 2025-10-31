@@ -2,6 +2,7 @@ import SwiftUI
 import PiCK_iOS_DesignSystem
 import ComposableArchitecture
 import AllTabFeatureInterface
+import PlanFeature
 
 public struct TabBarView: View {
     @State private var selectedTab = 2
@@ -24,7 +25,7 @@ public struct TabBarView: View {
                     Label("급식", systemImage: "fork.knife")
                 }
             
-            Text("일정")
+            PlanView()
                 .tag(1)
                 .tabItem {
                     Label("일정", systemImage: "calendar")
