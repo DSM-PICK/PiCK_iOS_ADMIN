@@ -76,13 +76,13 @@ extension AuthAPI: PiCKAPI {
 
     public var errorMap: [Int : AuthDomainInterface.AuthError]? {
         switch self {
-        case .signin(let req):
+        case .signin:
             return [
                 401: .passwordMismatch,
                 404: .idMismatch,
                 500: .serverError
             ]
-        case .secretKey(let req):
+        case .secretKey:
             return [
                 400: .clientError,
                 403: .clientError,

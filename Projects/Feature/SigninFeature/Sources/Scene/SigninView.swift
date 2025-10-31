@@ -26,6 +26,7 @@ struct SigninView: View {
                     router.path = [.home]
                 }
             }
+            .navigationBarHidden(true)
         }
     }
     

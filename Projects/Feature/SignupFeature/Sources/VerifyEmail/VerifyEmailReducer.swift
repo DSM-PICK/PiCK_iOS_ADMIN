@@ -77,7 +77,7 @@ extension VerifyEmailReducer {
                             req: .init(
                                 mail: state.email,
                                 title: "회원가입 인증",
-                                message: ""
+                                message: "회원가입 인증"
                             )
                         ).values {}
                     }
