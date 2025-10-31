@@ -37,7 +37,8 @@ struct VerifyEmailView: View {
                     ),
                     placeholder: "학교 이메일을 입력해주세요",
                     titleText: "이메일",
-                    showVerification: true
+                    showVerification: true,
+                    verificationButtonTapped: { viewStore.send(.verificationButtonTapped) }
                 )
                 .padding(.horizontal, 24)
                 .padding(.top, 50)
@@ -64,6 +65,13 @@ struct VerifyEmailView: View {
                 .padding(.bottom, 28)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            .errorToast(
+                message: viewStore.errorMessage ?? "에러발생!",
+                isPresented: viewStore.binding(
+                    get: { $0.errorMessage != nil },
+                    send: .clearError
+                )
+            )
             .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
