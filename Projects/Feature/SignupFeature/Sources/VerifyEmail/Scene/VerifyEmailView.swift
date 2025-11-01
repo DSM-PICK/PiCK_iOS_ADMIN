@@ -68,6 +68,15 @@ struct VerifyEmailView: View {
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            .onChange(of: viewStore.isSuccessful) { isSuccessful in
+                if isSuccessful {
+                    router.path.append(.password(
+                        secretKey: viewStore.secretKey,
+                        accountId: viewStore.email,
+                        code: viewStore.code
+                    ))
+                }
+            }
             .errorToast(
                 message: viewStore.errorMessage ?? "에러발생!",
                 isPresented: viewStore.binding(
