@@ -7,11 +7,12 @@ import BaseFeature
 struct VerifyEmailView: View {
     let store: StoreOf<VerifyEmailReducer>
     @EnvironmentObject var router: AppRouter
-    
+    @Environment(\.dismiss) var dismiss
+
     public init(store: StoreOf<VerifyEmailReducer>) {
         self.store = store
     }
-    
+
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             BaseView {
@@ -83,6 +84,18 @@ struct VerifyEmailView: View {
                     send: .clearError
                 )
             )
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: { router.pop() }) {
+                        PiCKImage.leftArrow
+                            .resizable()
+                            .frame(width: 32, height: 32)
+                            .foregroundColor(.Normal.black)
+                    }
+                }
+            }
+
         }
     }
 }
