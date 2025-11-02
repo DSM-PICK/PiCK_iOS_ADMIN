@@ -60,12 +60,19 @@ struct PasswordView: View {
                     PiCKButton(
                         buttonText: "다음",
                         isEnabled: !viewStore.password.isEmpty && !viewStore.passwordConfirm.isEmpty,
-                        action: {}
+                        action: { viewStore.send(.nextButtonTapped) }
                     )
                     .padding(.horizontal, 24)
                     .padding(.bottom, 28)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .errorToast(
+                    message: viewStore.errorMessage ?? "에러발생!",
+                    isPresented: viewStore.binding(
+                        get: { $0.errorMessage != nil },
+                        send: .clearError
+                    )
+                )
             }
         }
     }
