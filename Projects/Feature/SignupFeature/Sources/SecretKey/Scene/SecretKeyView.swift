@@ -7,7 +7,6 @@ import BaseFeature
 struct SecretKeyView: View {
     let store: StoreOf<SecretKeyReducer>
     @EnvironmentObject var router: AppRouter
-    @Environment(\.dismiss) var dismiss
 
     public init(store: StoreOf<SecretKeyReducer>) {
         self.store = store
@@ -66,17 +65,6 @@ struct SecretKeyView: View {
                     send: .clearError
                 )
             )
-            .navigationBarBackButtonHidden(true)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: { router.pop() }) {
-                        PiCKImage.leftArrow
-                            .resizable()
-                            .frame(width: 32, height: 32)
-                            .foregroundColor(.Normal.black)
-                    }
-                }
-            }
         }
     }
 }
