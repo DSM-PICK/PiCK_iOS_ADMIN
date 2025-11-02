@@ -6,6 +6,8 @@ public struct PasswordReducer: Reducer {
         public var secretKey = ""
         public var accountId = ""
         public var code = ""
+        public var password = ""
+        public var passwordConfirm = ""
 
         public init(secretKey: String = "", accountId: String = "", code: String = "") {
             self.secretKey = secretKey
@@ -14,7 +16,21 @@ public struct PasswordReducer: Reducer {
         }
     }
     
-    public enum Action {}
+    public enum Action {
+        case passwordChanged(String)
+        case passwordConfirmChanged(String)
+    }
     
-    public var body: some Reducer<State, Action> {}
+    public var body: some Reducer<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case let .passwordChanged(password):
+                state.password = password
+                return .none
+            case let .passwordConfirmChanged(password):
+                state.passwordConfirm = password
+                return .none
+            }
+        }
+    }
 }
