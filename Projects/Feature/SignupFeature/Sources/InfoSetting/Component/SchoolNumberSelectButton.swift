@@ -48,20 +48,20 @@ public struct SchoolNumberSelectView: View {
     
     public var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("교실")
-                .pickText(type: .label1, textColor: .Normal.black)
+            Text("담임하고 있는 교실을 입력해주세요")
+                .pickText(type: .label1, textColor: .Gray.gray600)
             HStack {
                 SchoolNumberSelectButton(
-                    text: (selectedGrade != nil) ? "\(selectedGrade!)" : "선택",
-                    isSelected: selectedGrade != nil
+                    text: (selectedGrade != 0) ? "\(selectedGrade!)" : "선택",
+                    isSelected: selectedGrade != 0
                 ) {
                     onTap()
                 }
                 Text("학년")
                     .pickText(type: .label1, textColor: .Normal.black)
                 SchoolNumberSelectButton(
-                    text: (selectedClass != nil) ? "\(selectedClass!)" : "선택",
-                    isSelected: selectedClass != nil
+                    text: (selectedClass != 0) ? "\(selectedClass!)" : "선택",
+                    isSelected: selectedClass != 0
                 ) {
                     onTap()
                 }

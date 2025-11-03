@@ -93,7 +93,7 @@ struct InfoSettingView: View {
                                 }
                                 return false
                             }(),
-                            action: {  }
+                            action: { viewStore.send(.finishButtonTapped) }
                         )
                         .padding(.horizontal, 24)
                         .padding(.bottom, 28)
@@ -123,6 +123,11 @@ struct InfoSettingView: View {
                     }
                 }
             }
+            .onChange(of: viewStore.isSignupSuccessful) { isSuccessful in
+                if isSuccessful {
+                    router.path = [.home]
+                }
+            }
             .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -134,6 +139,13 @@ struct InfoSettingView: View {
                     }
                 }
             }
+            .errorToast(
+                message: viewStore.errorMessage ?? "에러발생!",
+                isPresented: viewStore.binding(
+                    get: { $0.errorMessage != nil },
+                    send: .clearError
+                )
+            )
         }
     }
 }

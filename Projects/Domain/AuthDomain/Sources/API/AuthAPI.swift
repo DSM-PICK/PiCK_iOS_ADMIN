@@ -85,7 +85,7 @@ extension AuthAPI: PiCKAPI {
                 404: .idMismatch,
                 500: .serverError
             ]
-        case .secretKey:
+        case .secretKey, .signup:
             return [
                 400: .clientError,
                 403: .clientError,

@@ -63,15 +63,17 @@ private func factory88dc13cc29c5719e2b01e3b0c44298fc1c149afb(_ component: Needle
     return OnboardingDependencyf77d0055983a00cf8835Provider()
 }
 private class InfoSettingDependencyda5872b9bdd84990e780Provider: InfoSettingDependency {
-
-
-    init() {
-
+    var signupUseCase: any SignupUseCase {
+        return appComponent.signupUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
     }
 }
 /// ^->AppComponent->InfoSettingComponent
-private func factory15af88ecfb834319b78ce3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return InfoSettingDependencyda5872b9bdd84990e780Provider()
+private func factory15af88ecfb834319b78cf47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return InfoSettingDependencyda5872b9bdd84990e780Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class PasswordDependencyfd7427318599b626f4acProvider: PasswordDependency {
 
@@ -186,6 +188,7 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["secretKeyUseCase-any SecretKeyUseCase"] = { [unowned self] in self.secretKeyUseCase as Any }
         localTable["emailSendUseCase-any EmailSendUseCase"] = { [unowned self] in self.emailSendUseCase as Any }
         localTable["codeCheckUseCase-any CodeCheckUseCase"] = { [unowned self] in self.codeCheckUseCase as Any }
+        localTable["signupUseCase-any SignupUseCase"] = { [unowned self] in self.signupUseCase as Any }
     }
 }
 extension RootComponent: NeedleFoundation.Registration {
@@ -200,7 +203,7 @@ extension OnboardingComponent: NeedleFoundation.Registration {
 }
 extension InfoSettingComponent: NeedleFoundation.Registration {
     public func registerItems() {
-
+        keyPathToName[\InfoSettingDependency.signupUseCase] = "signupUseCase-any SignupUseCase"
     }
 }
 extension PasswordComponent: NeedleFoundation.Registration {
@@ -255,7 +258,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent", factoryEmptyDependencyProvider)
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->OnboardingComponent", factory88dc13cc29c5719e2b01e3b0c44298fc1c149afb)
-    registerProviderFactory("^->AppComponent->InfoSettingComponent", factory15af88ecfb834319b78ce3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->InfoSettingComponent", factory15af88ecfb834319b78cf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->PasswordComponent", factory9f8860811946a346ca2ae3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->VerifyEmailComponent", factoryeabc669822dd3244ed10f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->SecretKeyComponent", factorycc7ea4e12027ae637f9ff47b58f8f304c97af4d5)

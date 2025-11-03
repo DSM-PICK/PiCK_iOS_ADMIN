@@ -76,4 +76,10 @@ public extension AppComponent {
             CodeCheckUseCaseImpl(repository: mailRepository)
         }
     }
+
+    var signupUseCase: any SignupUseCase {
+        shared {
+            SignupUseCaseImpl(repository: authRepository)
+        }
+    }
 }
