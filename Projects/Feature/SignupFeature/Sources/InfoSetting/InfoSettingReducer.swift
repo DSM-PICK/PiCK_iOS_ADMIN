@@ -8,8 +8,8 @@ public struct InfoSettingReducer: Reducer {
         public var code = ""
         public var password = ""
         public var name = ""
-        public var selectedGrade: Int?
-        public var selectedClass: Int?
+        public var selectedGrade = 0
+        public var selectedClass = 0
 
         public init(secretKey: String = "", accountId: String = "", code: String = "", password: String = "") {
             self.secretKey = secretKey
@@ -32,10 +32,10 @@ public struct InfoSettingReducer: Reducer {
                 state.name = name
                 return .none
             case let .selectedGradeChanged(grade):
-                state.selectedGrade = grade
+                state.selectedGrade = grade ?? 0
                 return .none
             case let .selectedClassChanged(klass):
-                state.selectedClass = klass
+                state.selectedClass = klass ?? 0
                 return .none
             }
         }

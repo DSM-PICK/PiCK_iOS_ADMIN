@@ -9,8 +9,8 @@ struct InfoSettingView: View {
     @EnvironmentObject var router: AppRouter
     @Environment(\.dismiss) var dismiss
     @State private var isSheetPresented = false
-    @State private var tempGrade: Int = 1
-    @State private var tempClass: Int = 1
+    @State private var tempGrade: Int = 0
+    @State private var tempClass: Int = 0
     @State private var isTeacher = false
 
     public init(store: StoreOf<InfoSettingReducer>) {
@@ -59,8 +59,8 @@ struct InfoSettingView: View {
                                     send: InfoSettingReducer.Action.selectedClassChanged
                                 ),
                                 onTap: {
-                                    tempGrade = viewStore.selectedGrade ?? 1
-                                    tempClass = viewStore.selectedClass ?? 1
+                                    tempGrade = viewStore.selectedGrade == 0 ? 1 : viewStore.selectedGrade
+                                    tempClass = viewStore.selectedClass == 0 ? 1 : viewStore.selectedClass
                                     isSheetPresented = true
                                 }
                             )
@@ -83,7 +83,16 @@ struct InfoSettingView: View {
 
                         PiCKButton(
                             buttonText: "완료",
-                            isEnabled: !viewStore.name.isEmpty,
+                            isEnabled: {
+                                if !viewStore.name.isEmpty {
+                                    if isTeacher {
+                                        return viewStore.selectedGrade != 0 && viewStore.selectedClass != 0
+                                    } else {
+                                        return true
+                                    }
+                                }
+                                return false
+                            }(),
                             action: {  }
                         )
                         .padding(.horizontal, 24)
