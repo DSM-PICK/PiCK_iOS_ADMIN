@@ -104,11 +104,11 @@ public extension TargetDependency.Features {
     )
     static let planFeature = TargetDependency.project(
         target: "PlanFeature",
-        path: .relativeToRoot("Projects/Feature/Plan")
+        path: .relativeToRoot("Projects/Feature/PlanFeature")
     )
     static let planFeatureInterface = TargetDependency.project(
         target: "PlanFeatureInterface",
-        path: .relativeToRoot("Projects/Feature/Plan")
+        path: .relativeToRoot("Projects/Feature/PlanFeature")
     )
     // other Module
 }
