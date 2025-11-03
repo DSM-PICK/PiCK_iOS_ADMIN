@@ -43,7 +43,7 @@ public struct AllTabReducer: Reducer {
                 return .none
 
             case let .myNameResponse(.failure(error)):
-                return .send(.tokenRefreshNeeded)
+                return .none
                 
             case .tokenRefreshNeeded:
                 authRepository.logout()
