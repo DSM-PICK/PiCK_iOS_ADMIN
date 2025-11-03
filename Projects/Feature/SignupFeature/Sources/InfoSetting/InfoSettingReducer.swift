@@ -7,6 +7,9 @@ public struct InfoSettingReducer: Reducer {
         public var accountId = ""
         public var code = ""
         public var password = ""
+        public var name = ""
+        public var selectedGrade: Int?
+        public var selectedClass: Int?
 
         public init(secretKey: String = "", accountId: String = "", code: String = "", password: String = "") {
             self.secretKey = secretKey
@@ -16,7 +19,25 @@ public struct InfoSettingReducer: Reducer {
         }
     }
 
-    public enum Action {}
+    public enum Action {
+        case nameChanged(String)
+        case selectedGradeChanged(Int?)
+        case selectedClassChanged(Int?)
+    }
 
-    public var body: some Reducer<State, Action> {}
+    public var body: some Reducer<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case let .nameChanged(name):
+                state.name = name
+                return .none
+            case let .selectedGradeChanged(grade):
+                state.selectedGrade = grade
+                return .none
+            case let .selectedClassChanged(klass):
+                state.selectedClass = klass
+                return .none
+            }
+        }
+    }
 }
