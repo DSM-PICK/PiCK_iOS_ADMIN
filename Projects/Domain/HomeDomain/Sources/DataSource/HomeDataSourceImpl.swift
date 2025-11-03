@@ -36,4 +36,33 @@ public class HomeDataSourceImpl: HomeDataSource {
             }
         }
     }
+    
+    public func getAdminSelfStudyInfo() async throws -> String {
+        try await withCheckedThrowingContinuation { continuation in
+            provider.request(.getAdminSelfStudyInfo) { result in
+                switch result {
+                case .success(let response):
+                    if let text = String(data: response.data, encoding: .utf8) {
+                        continuation.resume(returning: text)
+                    } else {
+                        let error = NSError(
+                            domain: "EncodingError",
+                            code: -1,
+                            userInfo: [NSLocalizedDescriptionKey: "Failed to decode response"]
+                        )
+                        continuation.resume(throwing: error)
+                    }
+                case .failure(let error):
+                    if let moyaError = error as? MoyaError,
+                       let code = moyaError.response?.statusCode,
+                       let errorMap = SelfStudyAPI.getAdminSelfStudyInfo.errorMap,
+                       let mappedError = errorMap[code] {
+                        continuation.resume(throwing: mappedError)
+                    } else {
+                        continuation.resume(throwing: error)
+                    }
+                }
+            }
+        }
+    }
 }
