@@ -84,8 +84,7 @@ struct MenuItemCell: View {
                     .foregroundColor(item.iconColor)
                 
                 Text(item.title)
-                    .pickText(type: .label1)
-                    .foregroundColor(Color.Background.background)
+                    .pickText(type: .label1, textColor: Color.Normal.black)
                 
                 Spacer()
             }

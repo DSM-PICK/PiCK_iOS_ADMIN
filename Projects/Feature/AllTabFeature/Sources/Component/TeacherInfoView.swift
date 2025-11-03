@@ -19,12 +19,10 @@ public struct TeacherInfoView: View {
             
             VStack(alignment: .leading, spacing: 4) {
                 Text("대덕소프트웨어마이스터고등학교")
-                    .pickText(type: .label1)
-                    .foregroundColor(Color.Background.background)
+                    .pickText(type: .label1, textColor: Color.Normal.black)
                 
                 Text("\(teacherName ?? "") 선생님")
-                    .pickText(type: .label1)
-                    .foregroundColor(Color.Background.background)
+                    .pickText(type: .label1, textColor: Color.Normal.black)
             }
             .padding(.leading, 24)
             .padding(.top, 12)
