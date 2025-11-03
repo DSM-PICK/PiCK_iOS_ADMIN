@@ -77,7 +77,6 @@ struct SecretKeyView: View {
                     }
                 }
             }
-
         }
     }
 }

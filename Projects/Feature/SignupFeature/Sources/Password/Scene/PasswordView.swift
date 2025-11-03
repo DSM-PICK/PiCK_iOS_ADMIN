@@ -17,7 +17,6 @@ struct PasswordView: View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             BaseView {
                 VStack(alignment: .leading, spacing: 0) {
-                    
                     HStack(spacing: 0) {
                         Text("PiCK")
                             .foregroundColor(Color.Primary.primary500)
@@ -66,26 +65,35 @@ struct PasswordView: View {
                     .padding(.horizontal, 24)
                     .padding(.bottom, 28)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .errorToast(
-                    message: viewStore.errorMessage ?? "에러발생!",
-                    isPresented: viewStore.binding(
-                        get: { $0.errorMessage != nil },
-                        send: .clearError
-                    )
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .onChange(of: viewStore.isSuccessful) { isSuccessful in
+                if isSuccessful {
+                    router.path.append(.infoSetting(
+                        secretKey: viewStore.secretKey,
+                        accountId: viewStore.accountId,
+                        code: viewStore.code,
+                        password: viewStore.password
+                    ))
+                }
+            }
+            .errorToast(
+                message: viewStore.errorMessage ?? "에러발생!",
+                isPresented: viewStore.binding(
+                    get: { $0.errorMessage != nil },
+                    send: .clearError
                 )
-                .navigationBarBackButtonHidden(true)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(action: { router.pop() }) {
-                            PiCKImage.leftArrow
-                                .resizable()
-                                .frame(width: 32, height: 32)
-                                .foregroundColor(.Normal.black)
-                        }
+            )
+            .navigationBarBackButtonHidden(true)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: { router.pop() }) {
+                        PiCKImage.leftArrow
+                            .resizable()
+                            .frame(width: 32, height: 32)
+                            .foregroundColor(.Normal.black)
                     }
                 }
-
             }
         }
     }

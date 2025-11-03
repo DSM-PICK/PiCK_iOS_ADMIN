@@ -62,6 +62,17 @@ private class OnboardingDependencyf77d0055983a00cf8835Provider: OnboardingDepend
 private func factory88dc13cc29c5719e2b01e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
     return OnboardingDependencyf77d0055983a00cf8835Provider()
 }
+private class InfoSettingDependencyda5872b9bdd84990e780Provider: InfoSettingDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->InfoSettingComponent
+private func factory15af88ecfb834319b78ce3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return InfoSettingDependencyda5872b9bdd84990e780Provider()
+}
 private class PasswordDependencyfd7427318599b626f4acProvider: PasswordDependency {
 
 
@@ -159,6 +170,7 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["secretKeyFactory-any SecretKeyFactory"] = { [unowned self] in self.secretKeyFactory as Any }
         localTable["verifyEmailFactory-any VerifyEmailFactory"] = { [unowned self] in self.verifyEmailFactory as Any }
         localTable["passwordFactory-any PasswordFactory"] = { [unowned self] in self.passwordFactory as Any }
+        localTable["infoSettingFactory-any InfoSettingFactory"] = { [unowned self] in self.infoSettingFactory as Any }
         localTable["onboardingFactory-any OnboardingFactory"] = { [unowned self] in self.onboardingFactory as Any }
         localTable["homeFactory-any HomeFactory"] = { [unowned self] in self.homeFactory as Any }
         localTable["allTabFactory-any AllTabFactory"] = { [unowned self] in self.allTabFactory as Any }
@@ -182,6 +194,11 @@ extension RootComponent: NeedleFoundation.Registration {
     }
 }
 extension OnboardingComponent: NeedleFoundation.Registration {
+    public func registerItems() {
+
+    }
+}
+extension InfoSettingComponent: NeedleFoundation.Registration {
     public func registerItems() {
 
     }
@@ -238,6 +255,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent", factoryEmptyDependencyProvider)
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->OnboardingComponent", factory88dc13cc29c5719e2b01e3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->InfoSettingComponent", factory15af88ecfb834319b78ce3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->PasswordComponent", factory9f8860811946a346ca2ae3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->VerifyEmailComponent", factoryeabc669822dd3244ed10f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->SecretKeyComponent", factorycc7ea4e12027ae637f9ff47b58f8f304c97af4d5)

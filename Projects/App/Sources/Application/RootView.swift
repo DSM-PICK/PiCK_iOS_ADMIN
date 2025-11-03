@@ -65,6 +65,10 @@ struct RootView: View {
                 .environmentObject(router)
         case let .password(secretKey, accountId, code):
             appComponent.passwordFactory.makeView(secretKey: secretKey, accountId: accountId, code: code)
+                .environmentObject(router)
+        case let .infoSetting(secretKey, accountId, code, password):
+            appComponent.infoSettingFactory.makeView(secretKey: secretKey, accountId: accountId, code: code, password: password)
+                .environmentObject(router)
         case .home:
             EmptyView()
         }

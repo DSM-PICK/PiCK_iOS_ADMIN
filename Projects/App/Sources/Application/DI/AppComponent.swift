@@ -50,6 +50,9 @@ public extension AppComponent {
     var passwordFactory: any PasswordFactory {
         PasswordComponent(parent: self)
     }
+    var infoSettingFactory: any InfoSettingFactory {
+        InfoSettingComponent(parent: self)
+    }
     var onboardingFactory: any OnboardingFactory {
         OnboardingComponent(parent: self)
     }
