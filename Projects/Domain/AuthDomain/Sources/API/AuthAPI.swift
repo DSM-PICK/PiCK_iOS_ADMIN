@@ -7,6 +7,7 @@ public enum AuthAPI {
     case signin(SigninRequestParams)
     case refreshToken
     case secretKey(SecretKeyRequestParams)
+    case signup(SignupRequestParams)
 }
 
 public struct SigninResponseDTO: Decodable {
@@ -40,17 +41,17 @@ extension AuthAPI: PiCKAPI {
             return "/reissue"
         case .secretKey:
             return "/key"
+        case .signup:
+            return "/signup"
         }
     }
 
     public var method: Moya.Method {
         switch self {
-        case .signin:
+        case .signin, .secretKey, .signup:
             return .post
         case .refreshToken:
             return .put
-        case .secretKey:
-            return .post
         }
     }
 
@@ -59,6 +60,8 @@ extension AuthAPI: PiCKAPI {
         case .signin(let params):
             return .requestJSONEncodable(params)
         case .secretKey(let params):
+            return .requestJSONEncodable(params)
+        case .signup(let params):
             return .requestJSONEncodable(params)
         default:
             return .requestPlain
