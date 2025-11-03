@@ -57,8 +57,17 @@ struct RootView: View {
         case .signin:
             appComponent.signinFactory.makeView()
                 .environmentObject(router)
-        case .signup:
-            appComponent.signinFactory.makeView()
+        case .secretKey:
+            appComponent.secretKeyFactory.makeView()
+                .environmentObject(router)
+        case let .email(secretKey):
+            appComponent.verifyEmailFactory.makeView(secretKey: secretKey)
+                .environmentObject(router)
+        case let .password(secretKey, accountId, code):
+            appComponent.passwordFactory.makeView(secretKey: secretKey, accountId: accountId, code: code)
+                .environmentObject(router)
+        case let .infoSetting(secretKey, accountId, code, password):
+            appComponent.infoSettingFactory.makeView(secretKey: secretKey, accountId: accountId, code: code, password: password)
                 .environmentObject(router)
         case .home:
             EmptyView()

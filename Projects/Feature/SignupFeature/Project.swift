@@ -23,7 +23,7 @@ let interfaceTarget = Target.target(
     bundleId: "\(env.organizationName).SignupFeatureInterface",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
-    sources: ["Interface/SignupFeatureInterface.swift"],
+    sources: ["Interface/**"],
     dependencies: [
         .Features.baseFeature
     ]
