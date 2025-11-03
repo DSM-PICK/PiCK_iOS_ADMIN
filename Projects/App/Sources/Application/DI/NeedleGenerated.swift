@@ -128,6 +128,9 @@ private class HomeDependency443c4e1871277bd8432aProvider: HomeDependency {
     var getSelfStudyDirectorUseCase: any GetSelfStudyDirectorUseCaseProtocol {
         return appComponent.getSelfStudyDirectorUseCase
     }
+    var getAdminSelfStudyInfoUseCase: any GetAdminSelfStudyInfoUseCaseProtocol {
+        return appComponent.getAdminSelfStudyInfoUseCase
+    }
     var allTabFactory: any AllTabFactory {
         return appComponent.allTabFactory
     }
@@ -156,6 +159,7 @@ extension AppComponent: NeedleFoundation.Registration {
 
         localTable["keychain-any Keychain"] = { [unowned self] in self.keychain as Any }
         localTable["getSelfStudyDirectorUseCase-any GetSelfStudyDirectorUseCaseProtocol"] = { [unowned self] in self.getSelfStudyDirectorUseCase as Any }
+        localTable["getAdminSelfStudyInfoUseCase-any GetAdminSelfStudyInfoUseCaseProtocol"] = { [unowned self] in self.getAdminSelfStudyInfoUseCase as Any }
         localTable["fetchAcademicScheduleUseCase-any FetchAcademicScheduleUseCaseProtocol"] = { [unowned self] in self.fetchAcademicScheduleUseCase as Any }
         localTable["fetchMonthAcademicScheduleUseCase-any FetchMonthAcademicScheduleUseCaseProtocol"] = { [unowned self] in self.fetchMonthAcademicScheduleUseCase as Any }
         localTable["planFactory-any PlanFactory"] = { [unowned self] in self.planFactory as Any }
@@ -203,6 +207,7 @@ extension SigninComponent: NeedleFoundation.Registration {
 extension HomeComponent: NeedleFoundation.Registration {
     public func registerItems() {
         keyPathToName[\HomeDependency.getSelfStudyDirectorUseCase] = "getSelfStudyDirectorUseCase-any GetSelfStudyDirectorUseCaseProtocol"
+        keyPathToName[\HomeDependency.getAdminSelfStudyInfoUseCase] = "getAdminSelfStudyInfoUseCase-any GetAdminSelfStudyInfoUseCaseProtocol"
         keyPathToName[\HomeDependency.allTabFactory] = "allTabFactory-any AllTabFactory"
         keyPathToName[\HomeDependency.planFactory] = "planFactory-any PlanFactory"
     }
