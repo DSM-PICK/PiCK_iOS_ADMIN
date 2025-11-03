@@ -8,6 +8,7 @@ import PlanFeatureInterface
 
 public protocol HomeDependency: NeedleFoundation.Dependency {
     var getSelfStudyDirectorUseCase: any GetSelfStudyDirectorUseCaseProtocol { get }
+    var getAdminSelfStudyInfoUseCase: any GetAdminSelfStudyInfoUseCaseProtocol { get }
     var allTabFactory: any AllTabFactory { get }
     var planFactory: any PlanFactory { get }
 }
@@ -19,7 +20,10 @@ public final class HomeComponent: Component<HomeDependency>, HomeFactory {
                 store: .init(
                     initialState: HomeReducer.State(),
                     reducer: {
-                        HomeReducer(getSelfStudyDirectorUseCase: self.dependency.getSelfStudyDirectorUseCase)
+                        HomeReducer(
+                            getSelfStudyDirectorUseCase: self.dependency.getSelfStudyDirectorUseCase,
+                            getAdminSelfStudyInfoUseCase: self.dependency.getAdminSelfStudyInfoUseCase
+                        )
                     }
                 ),
                 allTabFactory: self.dependency.allTabFactory,

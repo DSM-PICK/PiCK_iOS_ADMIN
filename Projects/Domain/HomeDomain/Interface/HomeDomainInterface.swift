@@ -2,6 +2,7 @@ import Foundation
 
 public protocol HomeRepository {
     func getSelfStudyDirector(date: String) async throws -> [SelfStudyDirectorEntity]
+    func getAdminSelfStudyInfo() async throws -> String
 }
 
 public struct SelfStudyDirectorEntity: Equatable {

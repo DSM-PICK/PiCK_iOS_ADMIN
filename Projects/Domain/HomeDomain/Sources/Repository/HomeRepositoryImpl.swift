@@ -11,6 +11,10 @@ public class HomeRepositoryImpl: HomeRepository {
     public func getSelfStudyDirector(date: String) async throws -> [SelfStudyDirectorEntity] {
         try await dataSource.getSelfStudyDirector(date: date).map { $0.toEntity() }
     }
+    
+    public func getAdminSelfStudyInfo() async throws -> String {
+        try await dataSource.getAdminSelfStudyInfo()
+    }
 }
 
 extension SelfStudyDirectorResponseDTO {

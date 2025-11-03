@@ -4,6 +4,7 @@ import Moya
 
 public enum SelfStudyAPI {
     case getSelfStudyDirector(date: String)
+    case getAdminSelfStudyInfo
 }
 
 extension SelfStudyAPI: PiCKAPI {
@@ -17,6 +18,8 @@ extension SelfStudyAPI: PiCKAPI {
         switch self {
         case .getSelfStudyDirector:
             return "/today"
+        case .getAdminSelfStudyInfo:
+            return "/admin"
         }
     }
 
@@ -31,6 +34,8 @@ extension SelfStudyAPI: PiCKAPI {
                 parameters: ["date": date],
                 encoding: URLEncoding.queryString
             )
+        case .getAdminSelfStudyInfo:
+            return .requestPlain
         }
     }
 
