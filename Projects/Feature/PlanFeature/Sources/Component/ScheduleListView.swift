@@ -1,6 +1,7 @@
 import SwiftUI
 import PlanDomainInterface
 import PiCK_iOS_DesignSystem
+import Utility
 
 public struct ScheduleListView: View {
     let selectedDate: Date
@@ -55,15 +56,7 @@ public struct ScheduleListView: View {
     }
     
     private var dateText: String {
-        let month = calendar.component(.month, from: selectedDate)
-        let day = calendar.component(.day, from: selectedDate)
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ko_KR")
-        dateFormatter.dateFormat = "E"
-        let dayOfWeek = dateFormatter.string(from: selectedDate)
-        
-        return "\(month)월 \(day)일 \(dayOfWeek)요일"
+        return selectedDate.toKoreanDateString()
     }
 }
 

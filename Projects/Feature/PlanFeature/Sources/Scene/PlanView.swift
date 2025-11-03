@@ -3,6 +3,7 @@ import HomeFeature
 import ComposableArchitecture
 import PlanDomainInterface
 import PiCK_iOS_DesignSystem
+import Utility
 
 public struct PlanView: View {
     let store: StoreOf<PlanReducer>
@@ -103,9 +104,7 @@ struct MonthHeaderView: View {
     }
     
     private var headerText: String {
-        let year = calendar.component(.year, from: currentMonth)
-        let month = calendar.component(.month, from: currentMonth)
-        return "\(year)년 \(month)월"
+        return currentMonth.toKoreanYearMonthString()
     }
     
     private func changeMonth(by value: Int) {
