@@ -23,26 +23,12 @@ public extension AppComponent {
         }
     }
 
-    var remoteMailDataSource: any RemoteMailDataSource {
-        shared {
-            RemotMailDataSourceImpl(keychain: keychain)
-        }
-    }
-
     var authRepository: any AuthRepository {
         shared {
             AuthRepositoryImpl(
                 keychain: keychain,
                 localDataSource: localAuthDataSource,
                 remoteDataSource: remoteAuthDataSource
-            )
-        }
-    }
-
-    var mailRepository: any MailRepository {
-        shared {
-            MailRepositoryImpl(
-                remoteDataSource: remoteMailDataSource
             )
         }
     }
@@ -56,30 +42,6 @@ public extension AppComponent {
     var refreshTokenUseCase: any RefreshTokenUseCase {
         shared {
             RefreshTokenUseCaseImpl(repository: authRepository)
-        }
-    }
-
-    var secretKeyUseCase: any SecretKeyUseCase {
-        shared {
-            SecretKeyUseCaseImpl(repository: authRepository)
-        }
-    }
-
-    var emailSendUseCase: any EmailSendUseCase {
-        shared {
-            EmailSendUseCaseImpl(repository: mailRepository)
-        }
-    }
-
-    var codeCheckUseCase: any CodeCheckUseCase {
-        shared {
-            CodeCheckUseCaseImpl(repository: mailRepository)
-        }
-    }
-
-    var signupUseCase: any SignupUseCase {
-        shared {
-            SignupUseCaseImpl(repository: authRepository)
         }
     }
 }

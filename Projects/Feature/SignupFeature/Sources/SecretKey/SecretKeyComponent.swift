@@ -5,16 +5,16 @@ import SignupFeatureInterface
 import ComposableArchitecture
 
 public protocol SecretKeyDependency: NeedleFoundation.Dependency {
-    var secretKeyUseCase: any SecretKeyUseCase { get }
+    var signinUseCase: any SigninUseCase { get }
 }
 
-public final class SecretKeyComponent: Component<SecretKeyDependency>, SecretKeyFactory {
+public final class SecretKeyComponent: Component<SecretKeyDependency>, SignupFactory {
     public func makeView() -> AnyView {
         AnyView(SecretKeyView(
             store: .init(
                 initialState: SecretKeyReducer.State(),
                 reducer: {
-                    SecretKeyReducer(secretKeyUseCase: self.dependency.secretKeyUseCase)
+                    SecretKeyReducer(signinUseCase: self.dependency.signinUseCase)
                 }
             )
         ))

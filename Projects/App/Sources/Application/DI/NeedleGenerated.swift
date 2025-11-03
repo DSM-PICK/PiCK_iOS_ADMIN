@@ -62,49 +62,9 @@ private class OnboardingDependencyf77d0055983a00cf8835Provider: OnboardingDepend
 private func factory88dc13cc29c5719e2b01e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
     return OnboardingDependencyf77d0055983a00cf8835Provider()
 }
-private class InfoSettingDependencyda5872b9bdd84990e780Provider: InfoSettingDependency {
-    var signupUseCase: any SignupUseCase {
-        return appComponent.signupUseCase
-    }
-    private let appComponent: AppComponent
-    init(appComponent: AppComponent) {
-        self.appComponent = appComponent
-    }
-}
-/// ^->AppComponent->InfoSettingComponent
-private func factory15af88ecfb834319b78cf47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return InfoSettingDependencyda5872b9bdd84990e780Provider(appComponent: parent1(component) as! AppComponent)
-}
-private class PasswordDependencyfd7427318599b626f4acProvider: PasswordDependency {
-
-
-    init() {
-
-    }
-}
-/// ^->AppComponent->PasswordComponent
-private func factory9f8860811946a346ca2ae3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return PasswordDependencyfd7427318599b626f4acProvider()
-}
-private class VerifyEmailDependencyfed6858d0bf434c6ec56Provider: VerifyEmailDependency {
-    var emailSendUseCase: any EmailSendUseCase {
-        return appComponent.emailSendUseCase
-    }
-    var codeCheckUseCase: any CodeCheckUseCase {
-        return appComponent.codeCheckUseCase
-    }
-    private let appComponent: AppComponent
-    init(appComponent: AppComponent) {
-        self.appComponent = appComponent
-    }
-}
-/// ^->AppComponent->VerifyEmailComponent
-private func factoryeabc669822dd3244ed10f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return VerifyEmailDependencyfed6858d0bf434c6ec56Provider(appComponent: parent1(component) as! AppComponent)
-}
 private class SecretKeyDependencyb3e8d2bd4c35431acda1Provider: SecretKeyDependency {
-    var secretKeyUseCase: any SecretKeyUseCase {
-        return appComponent.secretKeyUseCase
+    var signinUseCase: any SigninUseCase {
+        return appComponent.signinUseCase
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -169,10 +129,7 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["getSelfStudyDirectorUseCase-any GetSelfStudyDirectorUseCaseProtocol"] = { [unowned self] in self.getSelfStudyDirectorUseCase as Any }
         localTable["getMyNameUseCase-any GetMyNameUseCaseProtocol"] = { [unowned self] in self.getMyNameUseCase as Any }
         localTable["signinFactory-any SigninFactory"] = { [unowned self] in self.signinFactory as Any }
-        localTable["secretKeyFactory-any SecretKeyFactory"] = { [unowned self] in self.secretKeyFactory as Any }
-        localTable["verifyEmailFactory-any VerifyEmailFactory"] = { [unowned self] in self.verifyEmailFactory as Any }
-        localTable["passwordFactory-any PasswordFactory"] = { [unowned self] in self.passwordFactory as Any }
-        localTable["infoSettingFactory-any InfoSettingFactory"] = { [unowned self] in self.infoSettingFactory as Any }
+        localTable["signupFactory-any SignupFactory"] = { [unowned self] in self.signupFactory as Any }
         localTable["onboardingFactory-any OnboardingFactory"] = { [unowned self] in self.onboardingFactory as Any }
         localTable["homeFactory-any HomeFactory"] = { [unowned self] in self.homeFactory as Any }
         localTable["allTabFactory-any AllTabFactory"] = { [unowned self] in self.allTabFactory as Any }
@@ -180,15 +137,9 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["authProvider-MoyaProvider<AuthAPI>"] = { [unowned self] in self.authProvider as Any }
         localTable["localAuthDataSource-any LocalAuthDataSource"] = { [unowned self] in self.localAuthDataSource as Any }
         localTable["remoteAuthDataSource-any RemoteAuthDataSource"] = { [unowned self] in self.remoteAuthDataSource as Any }
-        localTable["remoteMailDataSource-any RemoteMailDataSource"] = { [unowned self] in self.remoteMailDataSource as Any }
         localTable["authRepository-any AuthRepository"] = { [unowned self] in self.authRepository as Any }
-        localTable["mailRepository-any MailRepository"] = { [unowned self] in self.mailRepository as Any }
         localTable["signinUseCase-any SigninUseCase"] = { [unowned self] in self.signinUseCase as Any }
         localTable["refreshTokenUseCase-any RefreshTokenUseCase"] = { [unowned self] in self.refreshTokenUseCase as Any }
-        localTable["secretKeyUseCase-any SecretKeyUseCase"] = { [unowned self] in self.secretKeyUseCase as Any }
-        localTable["emailSendUseCase-any EmailSendUseCase"] = { [unowned self] in self.emailSendUseCase as Any }
-        localTable["codeCheckUseCase-any CodeCheckUseCase"] = { [unowned self] in self.codeCheckUseCase as Any }
-        localTable["signupUseCase-any SignupUseCase"] = { [unowned self] in self.signupUseCase as Any }
     }
 }
 extension RootComponent: NeedleFoundation.Registration {
@@ -201,25 +152,9 @@ extension OnboardingComponent: NeedleFoundation.Registration {
 
     }
 }
-extension InfoSettingComponent: NeedleFoundation.Registration {
-    public func registerItems() {
-        keyPathToName[\InfoSettingDependency.signupUseCase] = "signupUseCase-any SignupUseCase"
-    }
-}
-extension PasswordComponent: NeedleFoundation.Registration {
-    public func registerItems() {
-
-    }
-}
-extension VerifyEmailComponent: NeedleFoundation.Registration {
-    public func registerItems() {
-        keyPathToName[\VerifyEmailDependency.emailSendUseCase] = "emailSendUseCase-any EmailSendUseCase"
-        keyPathToName[\VerifyEmailDependency.codeCheckUseCase] = "codeCheckUseCase-any CodeCheckUseCase"
-    }
-}
 extension SecretKeyComponent: NeedleFoundation.Registration {
     public func registerItems() {
-        keyPathToName[\SecretKeyDependency.secretKeyUseCase] = "secretKeyUseCase-any SecretKeyUseCase"
+        keyPathToName[\SecretKeyDependency.signinUseCase] = "signinUseCase-any SigninUseCase"
     }
 }
 extension AllTabComponent: NeedleFoundation.Registration {
@@ -258,9 +193,6 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent", factoryEmptyDependencyProvider)
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->OnboardingComponent", factory88dc13cc29c5719e2b01e3b0c44298fc1c149afb)
-    registerProviderFactory("^->AppComponent->InfoSettingComponent", factory15af88ecfb834319b78cf47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->PasswordComponent", factory9f8860811946a346ca2ae3b0c44298fc1c149afb)
-    registerProviderFactory("^->AppComponent->VerifyEmailComponent", factoryeabc669822dd3244ed10f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->SecretKeyComponent", factorycc7ea4e12027ae637f9ff47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AllTabComponent", factoryfffd4c52463116b1a1a9f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->SigninComponent", factory2882a056d84a613debccf47b58f8f304c97af4d5)

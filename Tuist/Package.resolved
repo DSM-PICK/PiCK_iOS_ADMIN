@@ -1,5 +1,5 @@
 {
-  "originHash" : "7a08b1175501c8758eb481f79d3f2630ce94c34c445ac89e5de43878a7185504",
+  "originHash" : "fea03640ce0f057b011b049d8a27260aa8450d635191a48a7c13d20d435f6ffb",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/firebase/firebase-ios-sdk.git",
       "state" : {
-        "revision" : "793b67f4652e1a39d03fab6650033768afe6d15e",
-        "version" : "12.5.0"
+        "revision" : "45d327fcbe7793747295346c2209ad419bdead74",
+        "version" : "11.14.0"
       }
     },
     {
@@ -60,8 +60,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/googleads/google-ads-on-device-conversion-ios-sdk",
       "state" : {
-        "revision" : "35b601a60fbbea2de3ea461f604deaaa4d8bbd0c",
-        "version" : "3.2.0"
+        "revision" : "70a7857886f065a40486a7607268781c49db04ae",
+        "version" : "2.0.0"
       }
     },
     {
@@ -69,8 +69,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/google/GoogleAppMeasurement.git",
       "state" : {
-        "revision" : "c2d59acf17a8ba7ed80a763593c67c9c7c006ad1",
-        "version" : "12.5.0"
+        "revision" : "406f72d0d5e9445fd1cf782db3e9e338cee2bed4",
+        "version" : "11.14.0"
       }
     },
     {
@@ -186,8 +186,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/leejh08/PiCK_iOS_DesignSystem.git",
       "state" : {
-        "revision" : "7874a4a12341b33c943c74e6ed2dfba2bec318bd",
-        "version" : "1.1.5"
+        "revision" : "d3680ad6459b7e8d2dee0df48d67199f289c4007",
+        "version" : "1.1.4"
       }
     },
     {

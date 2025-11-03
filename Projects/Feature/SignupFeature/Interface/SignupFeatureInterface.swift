@@ -1,6 +1,6 @@
 import Foundation
 import SwiftUI
 
-public protocol SecretKeyFactory {
+public protocol SignupFactory {
     func makeView() -> AnyView
 }
