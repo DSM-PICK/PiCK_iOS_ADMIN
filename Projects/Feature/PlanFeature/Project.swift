@@ -17,39 +17,38 @@ let settings: Settings = .settings(
 )
 
 let interfaceTarget = Target.target(
-    name: "HomeFeatureInterface",
+    name: "PlanFeatureInterface",
     destinations: env.destination,
     product: .framework,
-    bundleId: "\(env.organizationName).HomeFeatureInterface",
+    bundleId: "\(env.organizationName).PlanFeatureInterface",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
-    sources: ["Interface/HomeFeatureInterface.swift"],
+    sources: ["Interface/**"],
     dependencies: [
         .Features.baseFeature
     ]
 )
 
 let implementationTarget = Target.target(
-    name: "HomeFeature",
+    name: "PlanFeature",
     destinations: env.destination,
     product: .staticFramework,
-    bundleId: "\(env.organizationName).HomeFeature",
+    bundleId: "\(env.organizationName).PlanFeature",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Sources/**"],
     dependencies: [
-        .target(name: "HomeFeatureInterface"),
-        .Projects.homeDomainInterface,
-        .Features.planFeatureInterface,
-        .Features.allTabFeatureInterface,
+        .target(name: "PlanFeatureInterface"),
+        .Projects.planDomainInterface,
         .Shared.utility,
+        .SPM.PDS,
         .SPM.NeedleFoundation,
         .SPM.ComposableArchitecture
     ]
 )
 
 let project = Project(
-    name: "HomeFeature",
+    name: "PlanFeature",
     organizationName: env.organizationName,
     settings: settings,
     targets: [interfaceTarget, implementationTarget]

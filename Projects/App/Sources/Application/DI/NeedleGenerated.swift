@@ -43,15 +43,20 @@ private func parent1(_ component: NeedleFoundation.Scope) -> NeedleFoundation.Sc
 #if !NEEDLE_DYNAMIC
 
 private class PlanDependency0acb045bed3f80b42d39Provider: PlanDependency {
-
-
-    init() {
-
+    var fetchAcademicScheduleUseCase: any FetchAcademicScheduleUseCaseProtocol {
+        return appComponent.fetchAcademicScheduleUseCase
+    }
+    var fetchMonthAcademicScheduleUseCase: any FetchMonthAcademicScheduleUseCaseProtocol {
+        return appComponent.fetchMonthAcademicScheduleUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
     }
 }
 /// ^->AppComponent->PlanComponent
-private func factory84293b45082cab95c524e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return PlanDependency0acb045bed3f80b42d39Provider()
+private func factory84293b45082cab95c524f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return PlanDependency0acb045bed3f80b42d39Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class RootDependency3944cc797a4a88956fb5Provider: RootDependency {
     var onboardingFactory: any OnboardingFactory {
@@ -142,7 +147,8 @@ private func factory67229cdf0f755562b2b1f47b58f8f304c97af4d5(_ component: Needle
 #else
 extension PlanComponent: NeedleFoundation.Registration {
     public func registerItems() {
-
+        keyPathToName[\PlanDependency.fetchAcademicScheduleUseCase] = "fetchAcademicScheduleUseCase-any FetchAcademicScheduleUseCaseProtocol"
+        keyPathToName[\PlanDependency.fetchMonthAcademicScheduleUseCase] = "fetchMonthAcademicScheduleUseCase-any FetchMonthAcademicScheduleUseCaseProtocol"
     }
 }
 extension AppComponent: NeedleFoundation.Registration {
@@ -150,6 +156,8 @@ extension AppComponent: NeedleFoundation.Registration {
 
         localTable["keychain-any Keychain"] = { [unowned self] in self.keychain as Any }
         localTable["getSelfStudyDirectorUseCase-any GetSelfStudyDirectorUseCaseProtocol"] = { [unowned self] in self.getSelfStudyDirectorUseCase as Any }
+        localTable["fetchAcademicScheduleUseCase-any FetchAcademicScheduleUseCaseProtocol"] = { [unowned self] in self.fetchAcademicScheduleUseCase as Any }
+        localTable["fetchMonthAcademicScheduleUseCase-any FetchMonthAcademicScheduleUseCaseProtocol"] = { [unowned self] in self.fetchMonthAcademicScheduleUseCase as Any }
         localTable["planFactory-any PlanFactory"] = { [unowned self] in self.planFactory as Any }
         localTable["getMyNameUseCase-any GetMyNameUseCaseProtocol"] = { [unowned self] in self.getMyNameUseCase as Any }
         localTable["signinFactory-any SigninFactory"] = { [unowned self] in self.signinFactory as Any }
@@ -215,7 +223,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
 #if !NEEDLE_DYNAMIC
 
 @inline(never) private func register1() {
-    registerProviderFactory("^->AppComponent->PlanComponent", factory84293b45082cab95c524e3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->PlanComponent", factory84293b45082cab95c524f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent", factoryEmptyDependencyProvider)
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->OnboardingComponent", factory88dc13cc29c5719e2b01e3b0c44298fc1c149afb)

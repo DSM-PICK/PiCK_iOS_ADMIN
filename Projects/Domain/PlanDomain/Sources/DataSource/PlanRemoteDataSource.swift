@@ -2,6 +2,8 @@ import Foundation
 import Moya
 import CombineMoya
 import Combine
+import BaseDomain
+import Core
 
 public protocol PlanRemoteDataSource {
     func fetchAcademicScheduleByDate(date: String) async throws -> AcademicScheduleResponseDTOArray
@@ -9,12 +11,12 @@ public protocol PlanRemoteDataSource {
 }
 
 public final class PlanRemoteDataSourceImpl: PlanRemoteDataSource {
+    private let keychain: any Keychain
     private let provider: MoyaProvider<PlanAPI>
     
-    public init(provider: MoyaProvider<PlanAPI> = MoyaProvider<PlanAPI>(
-        plugins: [NetworkLoggerPlugin(configuration: .init(logOptions: .verbose))]
-    )) {
-        self.provider = provider
+    public init(keychain: any Keychain) {
+        self.keychain = keychain
+        self.provider = MoyaProvider<PlanAPI>(plugins: [MoyaLoggingPlugin()])
     }
     
     public func fetchAcademicScheduleByDate(date: String) async throws -> AcademicScheduleResponseDTOArray {
