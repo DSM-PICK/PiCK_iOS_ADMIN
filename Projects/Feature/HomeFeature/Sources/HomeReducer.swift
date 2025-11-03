@@ -1,6 +1,7 @@
 
 import ComposableArchitecture
 import HomeDomainInterface
+import Combine
 
 public struct HomeReducer: Reducer {
     private let getSelfStudyDirectorUseCase: any GetSelfStudyDirectorUseCaseProtocol
@@ -22,19 +23,19 @@ public struct HomeReducer: Reducer {
 
     public enum Action {
         case fetchSelfStudyDirector(date: String)
-        case selfStudyDirectorResponse(TaskResult<[SelfStudyDirectorEntity]>)
+        case selfStudyDirectorResponse(Result<[SelfStudyDirectorEntity], Error>)
         case fetchAdminSelfStudyInfo
-        case adminSelfStudyInfoResponse(TaskResult<String>)
+        case adminSelfStudyInfoResponse(Result<String, Error>)
     }
 
     public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case let .fetchSelfStudyDirector(date):
-                return .run { send in
-                    await send(.selfStudyDirectorResponse(
-                        await TaskResult { try await getSelfStudyDirectorUseCase.execute(date: date) }
-                    ))
+                return .publisher {
+                    getSelfStudyDirectorUseCase.execute(date: date)
+                        .map { Action.selfStudyDirectorResponse(.success($0)) }
+                        .catch { Just(Action.selfStudyDirectorResponse(.failure($0))) }
                 }
 
             case let .selfStudyDirectorResponse(.success(director)):
@@ -45,10 +46,10 @@ public struct HomeReducer: Reducer {
                 return .none
                 
             case .fetchAdminSelfStudyInfo:
-                return .run { send in
-                    await send(.adminSelfStudyInfoResponse(
-                        await TaskResult { try await getAdminSelfStudyInfoUseCase.execute() }
-                    ))
+                return .publisher {
+                    getAdminSelfStudyInfoUseCase.execute()
+                        .map { Action.adminSelfStudyInfoResponse(.success($0)) }
+                        .catch { Just(Action.adminSelfStudyInfoResponse(.failure($0))) }
                 }
                 
             case let .adminSelfStudyInfoResponse(.success(teacher)):
@@ -56,7 +57,6 @@ public struct HomeReducer: Reducer {
                 return .none
                 
             case .adminSelfStudyInfoResponse(.failure):
-                // API 실패해도 UI는 그대로 유지
                 return .none
             }
         }

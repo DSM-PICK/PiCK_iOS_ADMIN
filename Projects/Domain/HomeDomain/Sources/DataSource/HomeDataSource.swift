@@ -1,6 +1,7 @@
 import Foundation
+import Combine
 
 public protocol HomeDataSource {
-    func getSelfStudyDirector(date: String) async throws -> [SelfStudyDirectorResponseDTO]
-    func getAdminSelfStudyInfo() async throws -> String
+    func getSelfStudyDirector(date: String) -> AnyPublisher<[SelfStudyDirectorResponseDTO], Error>
+    func getAdminSelfStudyInfo() -> AnyPublisher<String, Error>
 }

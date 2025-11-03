@@ -1,5 +1,6 @@
 import Foundation
 import HomeDomainInterface
+import Combine
 
 public class GetAdminSelfStudyInfoUseCase: GetAdminSelfStudyInfoUseCaseProtocol {
     private let repository: HomeRepository
@@ -8,7 +9,7 @@ public class GetAdminSelfStudyInfoUseCase: GetAdminSelfStudyInfoUseCaseProtocol 
         self.repository = repository
     }
 
-    public func execute() async throws -> String {
-        try await repository.getAdminSelfStudyInfo()
+    public func execute() -> AnyPublisher<String, Error> {
+        repository.getAdminSelfStudyInfo()
     }
 }

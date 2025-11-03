@@ -1,5 +1,6 @@
 import Foundation
 import HomeDomainInterface
+import Combine
 
 public class HomeRepositoryImpl: HomeRepository {
     private let dataSource: HomeDataSource
@@ -8,12 +9,14 @@ public class HomeRepositoryImpl: HomeRepository {
         self.dataSource = dataSource
     }
 
-    public func getSelfStudyDirector(date: String) async throws -> [SelfStudyDirectorEntity] {
-        try await dataSource.getSelfStudyDirector(date: date).map { $0.toEntity() }
+    public func getSelfStudyDirector(date: String) -> AnyPublisher<[SelfStudyDirectorEntity], Error> {
+        dataSource.getSelfStudyDirector(date: date)
+            .map { $0.map { $0.toEntity() } }
+            .eraseToAnyPublisher()
     }
     
-    public func getAdminSelfStudyInfo() async throws -> String {
-        try await dataSource.getAdminSelfStudyInfo()
+    public func getAdminSelfStudyInfo() -> AnyPublisher<String, Error> {
+        dataSource.getAdminSelfStudyInfo()
     }
 }
 

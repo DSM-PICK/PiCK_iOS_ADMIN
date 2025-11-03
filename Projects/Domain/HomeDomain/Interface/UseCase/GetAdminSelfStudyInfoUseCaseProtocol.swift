@@ -1,5 +1,6 @@
 import Foundation
+import Combine
 
 public protocol GetAdminSelfStudyInfoUseCaseProtocol {
-    func execute() async throws -> String
+    func execute() -> AnyPublisher<String, Error>
 }
