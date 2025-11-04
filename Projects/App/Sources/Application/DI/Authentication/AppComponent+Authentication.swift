@@ -25,7 +25,7 @@ public extension AppComponent {
 
     var remoteMailDataSource: any RemoteMailDataSource {
         shared {
-            RemotMailDataSourceImpl(keychain: keychain)
+            RemoteMailDataSourceImpl(keychain: keychain)
         }
     }
 

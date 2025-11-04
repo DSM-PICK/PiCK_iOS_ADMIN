@@ -14,7 +14,7 @@ extension EmailError: LocalizedError {
         case .serverError:
             return "서버와 연결이 끊겼습니다"
         case .codeMismatch:
-            return "인증 코드가 일치하지않습니다"
+            return "인증 코드가 일치하지 않습니다"
         }
     }
 }
