@@ -1,23 +1,28 @@
 import SwiftUI
 import ComposableArchitecture
 import AllTabFeatureInterface
+import PlanFeatureInterface
 
 public struct HomeFeature: View {
     let store: Store<HomeReducer.State, HomeReducer.Action>
     let allTabFactory: any AllTabFactory
+    let planFactory: any PlanFactory
 
     public init(
         store: Store<HomeReducer.State, HomeReducer.Action>,
-        allTabFactory: any AllTabFactory
+        allTabFactory: any AllTabFactory,
+        planFactory: any PlanFactory
     ) {
         self.store = store
         self.allTabFactory = allTabFactory
+        self.planFactory = planFactory
     }
 
     public var body: some View {
         TabBarView(
             store: store,
-            allTabFactory: allTabFactory
+            allTabFactory: allTabFactory,
+            planFactory: planFactory
         )
     }
 }

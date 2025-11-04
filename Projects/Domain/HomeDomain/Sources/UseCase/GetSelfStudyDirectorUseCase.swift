@@ -1,5 +1,6 @@
 import Foundation
 import HomeDomainInterface
+import Combine
 
 public class GetSelfStudyDirectorUseCase: GetSelfStudyDirectorUseCaseProtocol {
     private let repository: HomeRepository
@@ -8,7 +9,7 @@ public class GetSelfStudyDirectorUseCase: GetSelfStudyDirectorUseCaseProtocol {
         self.repository = repository
     }
 
-    public func execute(date: String) async throws -> [SelfStudyDirectorEntity] {
-        try await repository.getSelfStudyDirector(date: date)
+    public func execute(date: String) -> AnyPublisher<[SelfStudyDirectorEntity], Error> {
+        repository.getSelfStudyDirector(date: date)
     }
 }

@@ -40,6 +40,8 @@ let implementationTarget = Target.target(
     dependencies: [
         .target(name: "HomeFeatureInterface"),
         .Projects.homeDomainInterface,
+        .Features.planFeatureInterface,
+        .Features.allTabFeatureInterface,
         .Shared.utility,
         .SPM.NeedleFoundation,
         .SPM.ComposableArchitecture

@@ -31,4 +31,19 @@ open class BaseRemoteDataSource<API: PiCKAPI> {
             }
             .eraseToAnyPublisher()
     }
+    
+    public func requestText(_ api: API) -> AnyPublisher<String, Error> {
+        request(api)
+            .tryMap { response in
+                guard let text = String(data: response.data, encoding: .utf8) else {
+                    throw NSError(
+                        domain: "EncodingError",
+                        code: -1,
+                        userInfo: [NSLocalizedDescriptionKey: "Failed to decode response as UTF-8"]
+                    )
+                }
+                return text
+            }
+            .eraseToAnyPublisher()
+    }
 }

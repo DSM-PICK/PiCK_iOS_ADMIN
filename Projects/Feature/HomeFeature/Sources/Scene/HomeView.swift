@@ -16,7 +16,7 @@ public struct HomeView: View {
             ScrollView {
                 VStack(spacing: 24) {
                     SelfStudyView(
-                        selfStudyDirector: viewStore.selfStudyDirector
+                        adminMessage: viewStore.adminSelfStudyTeacher
                     )
                     .frame(maxWidth: .infinity)
                     .frame(height: 72)
@@ -44,6 +44,7 @@ public struct HomeView: View {
             }
             .onAppear {
                 viewStore.send(.fetchSelfStudyDirector(date: Date.todayString()))
+                viewStore.send(.fetchAdminSelfStudyInfo)
             }
         }
     }

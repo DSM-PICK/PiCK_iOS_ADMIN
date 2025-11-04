@@ -25,6 +25,7 @@ public struct AllTabReducer: Reducer {
         case fetchMyName
         case myNameResponse(TaskResult<MyNameEntity>)
         case logoutButtonTapped
+        case tokenRefreshNeeded
     }
 
     public var body: some Reducer<State, Action> {
@@ -41,7 +42,12 @@ public struct AllTabReducer: Reducer {
                 state.myName = myName
                 return .none
 
-            case .myNameResponse(.failure):
+            case let .myNameResponse(.failure(error)):
+                return .none
+                
+            case .tokenRefreshNeeded:
+                authRepository.logout()
+                state.shouldLogout = true
                 return .none
                 
             case .logoutButtonTapped:

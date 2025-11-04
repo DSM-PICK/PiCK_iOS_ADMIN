@@ -12,7 +12,7 @@ import HomeFeatureInterface
 import AllTabFeature
 import AllTabFeatureInterface
 
-public final class AppComponent: BootstrapComponent, HomeDependency, AllTabDependency {
+public final class AppComponent: BootstrapComponent, HomeDependency, AllTabDependency, PlanDependency {
     private let _keychain: any Keychain
 
     init(keychain: any Keychain) {

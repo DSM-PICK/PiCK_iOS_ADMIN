@@ -10,6 +10,12 @@ public extension AppComponent {
         }
     }
     
+    var getAdminSelfStudyInfoUseCase: any GetAdminSelfStudyInfoUseCaseProtocol {
+        shared {
+            GetAdminSelfStudyInfoUseCase(repository: homeRepository)
+        }
+    }
+    
     private var homeRepository: HomeRepository {
         shared {
             HomeRepositoryImpl(dataSource: homeDataSource)

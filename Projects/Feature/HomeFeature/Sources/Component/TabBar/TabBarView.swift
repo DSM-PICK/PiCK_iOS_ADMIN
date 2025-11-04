@@ -2,18 +2,22 @@ import SwiftUI
 import PiCK_iOS_DesignSystem
 import ComposableArchitecture
 import AllTabFeatureInterface
+import PlanFeatureInterface
 
 public struct TabBarView: View {
     @State private var selectedTab = 2
     let store: StoreOf<HomeReducer>
     let allTabFactory: any AllTabFactory
+    let planFactory: any PlanFactory
     
     public init(
         store: StoreOf<HomeReducer>,
-        allTabFactory: any AllTabFactory
+        allTabFactory: any AllTabFactory,
+        planFactory: any PlanFactory
     ) {
         self.store = store
         self.allTabFactory = allTabFactory
+        self.planFactory = planFactory
     }
     
     public var body: some View {
@@ -24,7 +28,7 @@ public struct TabBarView: View {
                     Label("급식", systemImage: "fork.knife")
                 }
             
-            Text("일정")
+            planFactory.makePlanView()
                 .tag(1)
                 .tabItem {
                     Label("일정", systemImage: "calendar")

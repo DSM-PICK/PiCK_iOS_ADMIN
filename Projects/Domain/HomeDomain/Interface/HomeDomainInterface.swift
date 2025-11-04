@@ -1,7 +1,9 @@
 import Foundation
+import Combine
 
 public protocol HomeRepository {
-    func getSelfStudyDirector(date: String) async throws -> [SelfStudyDirectorEntity]
+    func getSelfStudyDirector(date: String) -> AnyPublisher<[SelfStudyDirectorEntity], Error>
+    func getAdminSelfStudyInfo() -> AnyPublisher<String, Error>
 }
 
 public struct SelfStudyDirectorEntity: Equatable {

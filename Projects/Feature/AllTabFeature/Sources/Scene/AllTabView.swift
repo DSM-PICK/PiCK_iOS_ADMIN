@@ -18,17 +18,13 @@ public struct AllTabView: View {
             NavigationStack {
                 ScrollView {
                     VStack(spacing: 0) {
-                        if let myName = viewStore.myName {
-                            TeacherInfoView(teacherName: myName.name)
-                                .padding(.top, 24)
-                            
-                            AllTabMenuList(onLogoutTap: {
-                                viewStore.send(.logoutButtonTapped)
-                            })
-                            .padding(.top, 32)
-                        } else {
-                            ProgressView()
-                        }
+                        TeacherInfoView(teacherName: viewStore.myName?.name)
+                            .padding(.top, 24)
+                        
+                        AllTabMenuList(onLogoutTap: {
+                            viewStore.send(.logoutButtonTapped)
+                        })
+                        .padding(.top, 32)
                     }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
