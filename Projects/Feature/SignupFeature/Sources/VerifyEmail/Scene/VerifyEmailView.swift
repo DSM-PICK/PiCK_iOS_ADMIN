@@ -4,12 +4,12 @@ import PiCK_iOS_DesignSystem
 import Utility
 import BaseFeature
 
-struct SecretKeyView: View {
-    let store: StoreOf<SecretKeyReducer>
+struct VerifyEmailView: View {
+    let store: StoreOf<VerifyEmailReducer>
     @EnvironmentObject var router: AppRouter
     @Environment(\.dismiss) var dismiss
 
-    public init(store: StoreOf<SecretKeyReducer>) {
+    public init(store: StoreOf<VerifyEmailReducer>) {
         self.store = store
     }
 
@@ -17,6 +17,7 @@ struct SecretKeyView: View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             BaseView {
                 VStack(alignment: .leading, spacing: 0) {
+                    
                     HStack(spacing: 0) {
                         Text("PiCK")
                             .foregroundColor(Color.Primary.primary500)
@@ -26,27 +27,40 @@ struct SecretKeyView: View {
                     .padding(.top, 60)
                     .padding(.leading, 24)
                     
-                    Text("PiCK Admin의 시크릿 키를 입력해주세요.")
+                    Text("DSM 이메일로 인증해주세요.")
                         .pickText(type: .body1)
                         .padding(.leading, 24)
                         .padding(.top, 12)
-                    
+
                     PiCKTextField(
                         text: viewStore.binding(
-                            get: \.secretKey,
-                            send: SecretKeyReducer.Action.secretKeyChanged
+                            get: \.email,
+                            send: VerifyEmailReducer.Action.emailChanged
                         ),
-                        placeholder: "시크릿 키를 입력해주세요",
-                        titleText: "시크릿 키"
+                        placeholder: "학교 이메일을 입력해주세요",
+                        titleText: "이메일",
+                        showVerification: true,
+                        verificationButtonTapped: { viewStore.send(.verificationButtonTapped) }
                     )
                     .padding(.horizontal, 24)
                     .padding(.top, 50)
-                    
+
+                    PiCKTextField(
+                        text: viewStore.binding(
+                            get: \.code,
+                            send: VerifyEmailReducer.Action.codeChanged
+                        ),
+                        placeholder: "인증 코드를 입력해주세요",
+                        titleText: "인증 코드"
+                    )
+                    .padding(.horizontal, 24)
+                    .padding(.top, 44)
+
                     Spacer()
-                    
+
                     PiCKButton(
                         buttonText: "다음",
-                        isEnabled: !viewStore.secretKey.isEmpty,
+                        isEnabled: !viewStore.email.isEmpty && !viewStore.code.isEmpty,
                         action: { viewStore.send(.nextButtonTapped) }
                     )
                     .padding(.horizontal, 24)
@@ -54,9 +68,13 @@ struct SecretKeyView: View {
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .onChange(of: viewStore.isSigninSuccessful) { isSuccessful in
+            .onChange(of: viewStore.isSuccessful) { isSuccessful in
                 if isSuccessful {
-                    router.path.append(.email(secretKey: viewStore.secretKey))
+                    router.path.append(.password(
+                        secretKey: viewStore.secretKey,
+                        accountId: viewStore.email,
+                        code: viewStore.code
+                    ))
                 }
             }
             .errorToast(
@@ -77,6 +95,7 @@ struct SecretKeyView: View {
                     }
                 }
             }
+
         }
     }
 }
