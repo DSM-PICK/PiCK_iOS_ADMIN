@@ -32,7 +32,7 @@ let interfaceTarget = Target.target(
 let implementationTarget = Target.target(
     name: "PlanFeature",
     destinations: env.destination,
-    product: .staticFramework,
+    product: .framework,
     bundleId: "\(env.organizationName).PlanFeature",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
@@ -40,6 +40,7 @@ let implementationTarget = Target.target(
     dependencies: [
         .target(name: "PlanFeatureInterface"),
         .Projects.planDomainInterface,
+        .Features.homeFeature,
         .Shared.utility,
         .SPM.PDS,
         .SPM.NeedleFoundation,

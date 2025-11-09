@@ -34,7 +34,7 @@ let interfaceTarget = Target.target(
 let implementationTarget = Target.target(
     name: "HomeDomain",
     destinations: env.destination,
-    product: .staticFramework,
+    product: .framework,
     bundleId: "\(env.organizationName).HomeDomain",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,

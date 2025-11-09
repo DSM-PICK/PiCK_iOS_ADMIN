@@ -32,7 +32,7 @@ let interfaceTarget = Target.target(
 let implementationTarget = Target.target(
     name: "SigninFeature",
     destinations: env.destination,
-    product: .staticFramework,
+    product: .framework,
     bundleId: "\(env.organizationName).SigninFeature",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,

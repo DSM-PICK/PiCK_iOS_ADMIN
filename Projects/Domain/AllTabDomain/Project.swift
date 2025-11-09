@@ -33,7 +33,7 @@ let interfaceTarget = Target.target(
 let implementationTarget = Target.target(
     name: "AllTabDomain",
     destinations: env.destination,
-    product: .staticFramework,
+    product: .framework,
     bundleId: "\(env.organizationName).AllTabDomain",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,

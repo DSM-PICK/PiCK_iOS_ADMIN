@@ -34,7 +34,7 @@ let interfaceTarget = Target.target(
 let implementationTarget = Target.target(
     name: "AuthDomain",
     destinations: env.destination,
-    product: .staticFramework,
+    product: .framework,
     bundleId: "\(env.organizationName).AuthDomain",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,

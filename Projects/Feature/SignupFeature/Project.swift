@@ -32,7 +32,7 @@ let interfaceTarget = Target.target(
 let implementationTarget = Target.target(
     name: "SignupFeature",
     destinations: env.destination,
-    product: .staticFramework,
+    product: .framework,
     bundleId: "\(env.organizationName).SignupFeature",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,

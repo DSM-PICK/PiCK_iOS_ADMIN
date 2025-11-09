@@ -32,7 +32,7 @@ let interfaceTarget = Target.target(
 let implementationTarget = Target.target(
     name: "AllTabFeature",
     destinations: env.destination,
-    product: .staticFramework,
+    product: .framework,
     bundleId: "\(env.organizationName).AllTabFeature",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,

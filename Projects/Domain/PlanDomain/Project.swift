@@ -33,7 +33,7 @@ let interfaceTarget = Target.target(
 let implementationTarget = Target.target(
     name: "PlanDomain",
     destinations: env.destination,
-    product: .staticFramework,
+    product: .framework,
     bundleId: "com.team.pick.PlanDomain",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
