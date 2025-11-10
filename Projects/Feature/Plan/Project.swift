@@ -39,9 +39,7 @@ let implementationTarget = Target.target(
     sources: ["Sources/**"],
     dependencies: [
         .target(name: "PlanFeatureInterface"),
-        .SPM.NeedleFoundation,
-        .SPM.ComposableArchitecture,
-        .SPM.PDS
+        .Shared.thirdPartyLib
     ]
 )
 

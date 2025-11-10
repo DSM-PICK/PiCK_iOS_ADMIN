@@ -32,16 +32,15 @@ let interfaceTarget = Target.target(
 let implementationTarget = Target.target(
     name: "OnboardingFeature",
     destinations: env.destination,
-    product: .framework,
+    product: .staticFramework,
     bundleId: "\(env.organizationName).OnboardingFeature",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Sources/**"],
     dependencies: [
         .target(name: "OnboardingFeatureInterface"),
-        .SPM.NeedleFoundation,
-        .SPM.ComposableArchitecture,
-        .Shared.utility
+        .Shared.utility,
+        .Shared.thirdPartyLib
     ]
 )
 

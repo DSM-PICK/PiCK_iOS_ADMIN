@@ -23,6 +23,7 @@ let project = Project.makeShared(
         .SPM.RxGesture,
         .SPM.Pulse,
         .SPM.ComposableArchitecture,
+        .SPM.NeedleFoundation,
         .SPM.PDS
     ]
 )

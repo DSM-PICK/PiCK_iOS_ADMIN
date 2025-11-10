@@ -32,7 +32,7 @@ let interfaceTarget = Target.target(
 let implementationTarget = Target.target(
     name: "SigninFeature",
     destinations: env.destination,
-    product: .framework,
+    product: .staticFramework,
     bundleId: "\(env.organizationName).SigninFeature",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
@@ -40,8 +40,7 @@ let implementationTarget = Target.target(
     dependencies: [
         .target(name: "SigninFeatureInterface"),
         .Projects.authDomainInterface,
-        .SPM.NeedleFoundation,
-        .SPM.ComposableArchitecture
+        .Shared.thirdPartyLib
     ]
 )
 

@@ -32,7 +32,7 @@ let interfaceTarget = Target.target(
 let implementationTarget = Target.target(
     name: "AllTabFeature",
     destinations: env.destination,
-    product: .framework,
+    product: .staticFramework,
     bundleId: "\(env.organizationName).AllTabFeature",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
@@ -42,9 +42,7 @@ let implementationTarget = Target.target(
         .Projects.allTabDomainInterface,
         .Features.homeFeature,
         .Shared.utility,
-        .SPM.PDS,
-        .SPM.NeedleFoundation,
-        .SPM.ComposableArchitecture
+        .Shared.thirdPartyLib
     ]
 )
 
