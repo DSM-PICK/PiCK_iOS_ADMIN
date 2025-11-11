@@ -1,3 +1,7 @@
-import Foundation
+import SwiftUI
 
-public protocol AcceptFeatureInterface {}
+public protocol AcceptFactory {
+    func makeView() -> AnyView
+}
+
+public protocol AcceptFeatureInterface: AcceptFactory {}

@@ -1,5 +1,7 @@
 
 
+import AcceptFeature
+import AcceptFeatureInterface
 import AllTabDomain
 import AllTabDomainInterface
 import AllTabFeature
@@ -42,6 +44,17 @@ private func parent1(_ component: NeedleFoundation.Scope) -> NeedleFoundation.Sc
 
 #if !NEEDLE_DYNAMIC
 
+private class AcceptDependency380d0282470c8b91ca89Provider: AcceptDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->AcceptComponent
+private func factorye0727acbbfbe9e00fe23e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return AcceptDependency380d0282470c8b91ca89Provider()
+}
 private class PlanDependency0acb045bed3f80b42d39Provider: PlanDependency {
     var fetchAcademicScheduleUseCase: any FetchAcademicScheduleUseCaseProtocol {
         return appComponent.fetchAcademicScheduleUseCase
@@ -177,6 +190,9 @@ private class HomeDependency443c4e1871277bd8432aProvider: HomeDependency {
     var planFactory: any PlanFactory {
         return appComponent.planFactory
     }
+    var acceptFactory: any AcceptFactory {
+        return appComponent.acceptFactory
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -188,6 +204,11 @@ private func factory67229cdf0f755562b2b1f47b58f8f304c97af4d5(_ component: Needle
 }
 
 #else
+extension AcceptComponent: NeedleFoundation.Registration {
+    public func registerItems() {
+
+    }
+}
 extension PlanComponent: NeedleFoundation.Registration {
     public func registerItems() {
         keyPathToName[\PlanDependency.fetchAcademicScheduleUseCase] = "fetchAcademicScheduleUseCase-any FetchAcademicScheduleUseCaseProtocol"
@@ -200,6 +221,7 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["keychain-any Keychain"] = { [unowned self] in self.keychain as Any }
         localTable["getSelfStudyDirectorUseCase-any GetSelfStudyDirectorUseCaseProtocol"] = { [unowned self] in self.getSelfStudyDirectorUseCase as Any }
         localTable["getAdminSelfStudyInfoUseCase-any GetAdminSelfStudyInfoUseCaseProtocol"] = { [unowned self] in self.getAdminSelfStudyInfoUseCase as Any }
+        localTable["acceptFactory-any AcceptFactory"] = { [unowned self] in self.acceptFactory as Any }
         localTable["fetchAcademicScheduleUseCase-any FetchAcademicScheduleUseCaseProtocol"] = { [unowned self] in self.fetchAcademicScheduleUseCase as Any }
         localTable["fetchMonthAcademicScheduleUseCase-any FetchMonthAcademicScheduleUseCaseProtocol"] = { [unowned self] in self.fetchMonthAcademicScheduleUseCase as Any }
         localTable["planFactory-any PlanFactory"] = { [unowned self] in self.planFactory as Any }
@@ -275,6 +297,7 @@ extension HomeComponent: NeedleFoundation.Registration {
         keyPathToName[\HomeDependency.getAdminSelfStudyInfoUseCase] = "getAdminSelfStudyInfoUseCase-any GetAdminSelfStudyInfoUseCaseProtocol"
         keyPathToName[\HomeDependency.allTabFactory] = "allTabFactory-any AllTabFactory"
         keyPathToName[\HomeDependency.planFactory] = "planFactory-any PlanFactory"
+        keyPathToName[\HomeDependency.acceptFactory] = "acceptFactory-any AcceptFactory"
     }
 }
 
@@ -293,6 +316,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
 #if !NEEDLE_DYNAMIC
 
 @inline(never) private func register1() {
+    registerProviderFactory("^->AppComponent->AcceptComponent", factorye0727acbbfbe9e00fe23e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->PlanComponent", factory84293b45082cab95c524f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent", factoryEmptyDependencyProvider)
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
