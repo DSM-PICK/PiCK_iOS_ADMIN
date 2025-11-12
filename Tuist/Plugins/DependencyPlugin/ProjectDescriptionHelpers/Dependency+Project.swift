@@ -110,7 +110,14 @@ public extension TargetDependency.Features {
         target: "PlanFeatureInterface",
         path: .relativeToRoot("Projects/Feature/PlanFeature")
     )
-    // other Module
+    static let schoolMealFeature = TargetDependency.project(
+        target: "SchoolMealFeature",
+        path: .relativeToRoot("Projects/Feature/SchoolMealFeature")
+    )
+    static let schoolMealFeatureInterface = TargetDependency.project(
+        target: "SchoolMealFeatureInterface",
+        path: .relativeToRoot("Projects/Feature/SchoolMealFeature")
+    )
 }
 
 public extension TargetDependency.Shared {

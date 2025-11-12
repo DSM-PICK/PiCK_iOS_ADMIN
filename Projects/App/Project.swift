@@ -61,6 +61,8 @@ let appDependencies: [TargetDependency] = [
     .Features.allTabFeatureInterface,
     .Features.planFeature,
     .Features.planFeatureInterface,
+    .Features.schoolMealFeature,
+    .Features.schoolMealFeatureInterface,
     .Projects.baseDomainInterface,
     .Projects.authDomain,
     .Projects.authDomainInterface,
