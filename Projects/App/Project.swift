@@ -72,6 +72,8 @@ let appDependencies: [TargetDependency] = [
     .Projects.allTabDomainInterface,
     .Projects.planDomain,
     .Projects.planDomainInterface,
+    .Projects.schoolMealDomain,
+    .Projects.schoolMealDomainInterface,
     .Projects.core,
     .Shared.thirdPartyLib,
     .Shared.utility
