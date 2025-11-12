@@ -38,7 +38,7 @@ public struct AcademicScheduleCalendarView: View {
             }
             .padding(.bottom, 16)
 
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 24.33), count: 7), spacing: 20) {
+            LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 24.33), count: 7), spacing: 5) {
                 ForEach(calendarDates, id: \.self) { date in
                     if let date = date {
                         DateCell(
