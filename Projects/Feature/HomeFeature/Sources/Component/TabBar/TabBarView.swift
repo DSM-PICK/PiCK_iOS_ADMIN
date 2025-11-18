@@ -3,29 +3,37 @@ import PiCK_iOS_DesignSystem
 import ComposableArchitecture
 import AllTabFeatureInterface
 import PlanFeatureInterface
+import SchoolMealFeatureInterface
 
 public struct TabBarView: View {
     @State private var selectedTab = 2
     let store: StoreOf<HomeReducer>
     let allTabFactory: any AllTabFactory
     let planFactory: any PlanFactory
+    let schoolMealFactory: any SchoolMealFactory
     
     public init(
         store: StoreOf<HomeReducer>,
         allTabFactory: any AllTabFactory,
-        planFactory: any PlanFactory
+        planFactory: any PlanFactory,
+        schoolMealFactory: any SchoolMealFactory
     ) {
         self.store = store
         self.allTabFactory = allTabFactory
         self.planFactory = planFactory
+        self.schoolMealFactory = schoolMealFactory
     }
     
     public var body: some View {
         TabView(selection: $selectedTab) {
-            Text("급식")
+            schoolMealFactory.makeSchoolMealView()
                 .tag(0)
                 .tabItem {
-                    Label("급식", systemImage: "fork.knife")
+                    Label {
+                        Text("급식")
+                    } icon: {
+                        PiCKImage.schoolMealIcon
+                    }
                 }
             
             planFactory.makePlanView()
