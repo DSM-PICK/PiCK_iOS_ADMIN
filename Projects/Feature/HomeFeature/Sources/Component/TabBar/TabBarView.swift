@@ -31,6 +31,7 @@ public struct TabBarView: View {
                 .tabItem {
                     Label {
                         Text("급식")
+                            .pickText(type: .body3, textColor: .Normal.black)
                     } icon: {
                         PiCKImage.schoolMealIcon
                     }
@@ -39,7 +40,12 @@ public struct TabBarView: View {
             planFactory.makePlanView()
                 .tag(1)
                 .tabItem {
-                    Label("일정", systemImage: "calendar")
+                    Label {
+                        Text("일정")
+                            .pickText(type: .body3, textColor: .Normal.black)
+                    } icon: {
+                        PiCKImage.scheduleIcon
+                    }
                 }
             
             NavigationView {
@@ -49,19 +55,34 @@ public struct TabBarView: View {
             .navigationViewStyle(.stack)
             .tag(2)
             .tabItem {
-                Label("홈", systemImage: "house")
+                Label {
+                    Text("홈")
+                        .pickText(type: .body3, textColor: .Normal.black)
+                } icon: {
+                    PiCKImage.homeIcon
+                }
             }
             
             Text("수락")
                 .tag(3)
                 .tabItem {
-                    Label("수락", systemImage: "checkmark.circle")
+                    Label {
+                        Text("수락")
+                            .pickText(type: .body3, textColor: .Normal.black)
+                    } icon: {
+                        PiCKImage.applyIcon
+                    }
                 }
             
             allTabFactory.makeView()
                 .tag(4)
                 .tabItem {
-                    Label("전체", systemImage: "list.bullet")
+                    Label {
+                        Text("전체")
+                            .pickText(type: .body3, textColor: .Normal.black)
+                    } icon: {
+                        PiCKImage.allTabIcon
+                    }
                 }
         }
         .tint(Color.Primary.primary500)
