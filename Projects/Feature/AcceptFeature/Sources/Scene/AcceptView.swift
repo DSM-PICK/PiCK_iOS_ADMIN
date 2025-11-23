@@ -42,6 +42,29 @@ public struct AcceptView: View {
                 .padding(.top, 20)
                 .padding(.horizontal, 24)
 
+            Text("\(selectedOption == .outgoing ? "외출" : "교실 이동") 신청한 학생")
+                .pickText(type: .body2, textColor: .Gray.gray600)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.top, 17.5)
+                .padding(.leading, 24)
+
+            ScrollView {
+                VStack(spacing: 16) {
+                    ForEach(0..<5, id: \.self) { _ in
+                        AcceptStudentCell(
+                            studentNumber: "2301",
+                            studentName: "강해민",
+                            startTime: "14:20",
+                            endTime: "16:20",
+                            activityType: "외출",
+                            reason: "병원 진료sdfghjhgfdsdfghjhgfdsasdfghjn"
+                        )
+                    }
+                }
+                .padding(.top, 20)
+                .padding(.horizontal, 24)
+            }
+
             Spacer()
         }
         .navigationBarBackButtonHidden(true)
