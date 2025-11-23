@@ -11,7 +11,7 @@ struct AcceptActionButtons: View {
                 onAccept()
             } label: {
                 Text("수락")
-                    .pickText(type: .label2, textColor: .Normal.white)
+                    .pickText(type: .body2, textColor: .Normal.white)
                     .frame(width: 65, height: 34)
                     .background(Color.Primary.primary900)
                     .cornerRadius(8)
@@ -21,7 +21,7 @@ struct AcceptActionButtons: View {
                 onReject()
             } label: {
                 Text("거절")
-                    .pickText(type: .label2, textColor: .Normal.white)
+                    .pickText(type: .body2, textColor: .Normal.white)
                     .frame(width: 65, height: 34)
                     .background(Color.Error.error)
                     .cornerRadius(8)

@@ -35,6 +35,13 @@ public struct AcceptView: View {
             }
             .padding(.top, 24)
 
+            Rectangle()
+                .fill(Color.Gray.gray200)
+                .frame(height: 0.5)
+                .cornerRadius(0.5)
+                .padding(.top, 20)
+                .padding(.horizontal, 24)
+
             Spacer()
         }
         .navigationBarBackButtonHidden(true)
