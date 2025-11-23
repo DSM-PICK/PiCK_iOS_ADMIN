@@ -9,12 +9,31 @@ public struct AcceptView: View {
 
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
-            AcceptFilterButton(
-                selectedOption: selectedOption,
-                onTap: { isBottomSheetPresented = true }
-            )
+            HStack(spacing: 0) {
+                HStack(spacing: 16) {
+                    AcceptFilterButton(
+                        selectedOption: selectedOption,
+                        onTap: { isBottomSheetPresented = true }
+                    )
+
+                    Text("0월 0일")
+                        .pickText(type: .body2, textColor: .Gray.gray700)
+                }
+                .padding(.leading, 24)
+
+                Spacer()
+
+                AcceptActionButtons(
+                    onAccept: {
+                        // 수락 액션
+                    },
+                    onReject: {
+                        // 거절 액션
+                    }
+                )
+                .padding(.trailing, 24)
+            }
             .padding(.top, 24)
-            .padding(.leading, 24)
 
             Spacer()
         }
