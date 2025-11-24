@@ -36,4 +36,17 @@ public class AcceptDataSourceImpl: AcceptDataSource {
             }
         }
     }
+
+    public func updateApplicationStatus(status: String, idList: [String]) async throws {
+        try await withCheckedThrowingContinuation { continuation in
+            provider.request(.updateApplicationStatus(status: status, idList: idList)) { result in
+                switch result {
+                case .success:
+                    continuation.resume()
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
 }

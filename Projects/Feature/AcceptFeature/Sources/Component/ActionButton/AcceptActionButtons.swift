@@ -2,6 +2,7 @@ import SwiftUI
 import PiCK_iOS_DesignSystem
 
 struct AcceptActionButtons: View {
+    let isEnabled: Bool
     let onAccept: () -> Void
     let onReject: () -> Void
 
@@ -13,9 +14,10 @@ struct AcceptActionButtons: View {
                 Text("수락")
                     .pickText(type: .body2, textColor: .Normal.white)
                     .frame(width: 65, height: 34)
-                    .background(Color.Primary.primary900)
+                    .background(isEnabled ? Color.Primary.primary900 : Color.Gray.gray400)
                     .cornerRadius(8)
             }
+            .disabled(!isEnabled)
 
             Button {
                 onReject()
@@ -23,9 +25,10 @@ struct AcceptActionButtons: View {
                 Text("거절")
                     .pickText(type: .body2, textColor: .Normal.white)
                     .frame(width: 65, height: 34)
-                    .background(Color.Error.error)
+                    .background(isEnabled ? Color.Error.error : Color.Gray.gray400)
                     .cornerRadius(8)
             }
+            .disabled(!isEnabled)
         }
     }
 }

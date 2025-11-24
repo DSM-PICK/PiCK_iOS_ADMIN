@@ -32,11 +32,12 @@ public struct AcceptView: View {
                     Spacer()
 
                     AcceptActionButtons(
+                        isEnabled: !viewStore.selectedApplicationIds.isEmpty,
                         onAccept: {
-                            // 수락 액션
+                            viewStore.send(.approveSelectedApplications)
                         },
                         onReject: {
-                            // 거절 액션
+                            viewStore.send(.rejectSelectedApplications)
                         }
                     )
                     .padding(.trailing, 24)
@@ -73,7 +74,11 @@ public struct AcceptView: View {
                                 startTime: application.start,
                                 endTime: application.end,
                                 activityType: "외출",
-                                reason: application.reason
+                                reason: application.reason,
+                                isSelected: viewStore.selectedApplicationIds.contains(application.id),
+                                onTap: {
+                                    viewStore.send(.toggleSelection(id: application.id))
+                                }
                             )
                         }
                     }

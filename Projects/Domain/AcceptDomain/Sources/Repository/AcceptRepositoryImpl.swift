@@ -11,6 +11,10 @@ public class AcceptRepositoryImpl: AcceptRepository {
     public func getApplicationsByGrade(grade: Int, classNum: Int) async throws -> [ApplicationEntity] {
         try await dataSource.getApplicationsByGrade(grade: grade, classNum: classNum).map { $0.toEntity() }
     }
+
+    public func updateApplicationStatus(status: String, idList: [String]) async throws {
+        try await dataSource.updateApplicationStatus(status: status, idList: idList)
+    }
 }
 
 extension ApplicationResponseDTO {

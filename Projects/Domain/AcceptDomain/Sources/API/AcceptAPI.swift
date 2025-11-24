@@ -4,6 +4,7 @@ import Moya
 
 public enum AcceptAPI {
     case getApplicationsByGrade(grade: Int, classNum: Int)
+    case updateApplicationStatus(status: String, idList: [String])
 }
 
 extension AcceptAPI: PiCKAPI {
@@ -17,11 +18,18 @@ extension AcceptAPI: PiCKAPI {
         switch self {
         case .getApplicationsByGrade:
             return "/grade"
+        case .updateApplicationStatus:
+            return "/status"
         }
     }
 
     public var method: Moya.Method {
-        .get
+        switch self {
+        case .getApplicationsByGrade:
+            return .get
+        case .updateApplicationStatus:
+            return .patch
+        }
     }
 
     public var task: Moya.Task {
@@ -34,6 +42,10 @@ extension AcceptAPI: PiCKAPI {
                 ],
                 encoding: URLEncoding.queryString
             )
+        case let .updateApplicationStatus(status, idList):
+            return .requestJSONEncodable(
+                UpdateStatusRequest(status: status, idList: idList)
+            )
         }
     }
 
@@ -43,5 +55,15 @@ extension AcceptAPI: PiCKAPI {
 
     public var errorMap: [Int : ErrorType]? {
         return nil
+    }
+}
+
+struct UpdateStatusRequest: Encodable {
+    let status: String
+    let idList: [String]
+
+    enum CodingKeys: String, CodingKey {
+        case status
+        case idList = "id_list"
     }
 }
