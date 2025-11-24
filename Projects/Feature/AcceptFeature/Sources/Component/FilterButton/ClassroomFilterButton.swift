@@ -17,7 +17,8 @@ struct ClassroomFilterButton: View {
                     .font(.system(size: 10))
                     .foregroundColor(.Gray.gray800)
             }
-            .frame(width: 70, height: 34)
+            .padding(.horizontal, 12)
+            .frame(height: 34)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
                     .strokeBorder(Color.Gray.gray200, lineWidth: 1)

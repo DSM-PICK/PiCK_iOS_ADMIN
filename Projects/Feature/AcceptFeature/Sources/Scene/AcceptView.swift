@@ -10,6 +10,8 @@ public struct AcceptView: View {
     @State private var selectedGrade: Int = 1
     @State private var selectedClassNum: Int = 1
     @State private var isAllClassrooms: Bool = true
+    @State private var showApprovePopup = false
+    @State private var showRejectPopup = false
     let store: StoreOf<AcceptReducer>
 
     private var displayClassroomText: String {
@@ -28,8 +30,9 @@ public struct AcceptView: View {
     }
 
     public var body: some View {
-        WithViewStore(store, observe: { $0 }) { viewStore in
-            VStack(alignment: .leading, spacing: 0) {
+        ZStack {
+            WithViewStore(store, observe: { $0 }) { viewStore in
+                VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 0) {
                     HStack(spacing: 16) {
                         AcceptFilterButton(
@@ -47,10 +50,10 @@ public struct AcceptView: View {
                     AcceptActionButtons(
                         isEnabled: !viewStore.selectedItemIds.isEmpty,
                         onAccept: {
-                            viewStore.send(.approveSelectedApplications)
+                            showApprovePopup = true
                         },
                         onReject: {
-                            viewStore.send(.rejectSelectedApplications)
+                            showRejectPopup = true
                         }
                     )
                     .padding(.trailing, 24)
@@ -115,45 +118,90 @@ public struct AcceptView: View {
                     .padding(.horizontal, 24)
                 }
 
-                Spacer()
-            }
-            .navigationBarBackButtonHidden(true)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    PiCKNavigationBar()
-                        .padding(.leading, 8)
+                    Spacer()
                 }
-            }
-            .sheet(isPresented: $isApplyBottomSheetPresented) {
-                PiCK_iOS_DesignSystem.ApplyBottomSheet(isPresented: $isApplyBottomSheetPresented) { option in
-                    selectedOption = option
-                    let type: AcceptReducer.ApplicationType = option == .outgoing ? .outgoing : .classroomMove
-                    let grade = isAllClassrooms ? 5 : selectedGrade
-                    let classNum = isAllClassrooms ? 5 : selectedClassNum
-                    viewStore.send(.fetchApplications(type: type, grade: grade, classNum: classNum))
+                .onAppear {
+                    viewStore.send(.fetchApplications(type: .outgoing, grade: 5, classNum: 5))
                 }
-            }
-            .sheet(isPresented: $isClassroomBottomSheetPresented) {
-                ClassroomSelectionBottomSheet(
-                    isPresented: $isClassroomBottomSheetPresented,
-                    selectedGrade: $selectedGrade,
-                    selectedClassNum: $selectedClassNum
-                ) { isAll, grade, classNum in
-                    isAllClassrooms = isAll
-                    if !isAll {
-                        selectedGrade = grade
-                        selectedClassNum = classNum
+                .navigationBarBackButtonHidden(true)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        PiCKNavigationBar()
+                            .padding(.leading, 8)
                     }
-                    let type: AcceptReducer.ApplicationType = selectedOption == .outgoing ? .outgoing : .classroomMove
-                    let fetchGrade = isAll ? 5 : grade
-                    let fetchClassNum = isAll ? 5 : classNum
-                    viewStore.send(.fetchApplications(type: type, grade: fetchGrade, classNum: fetchClassNum))
                 }
-                .presentationDetents([.height(450)])
-                .presentationDragIndicator(.hidden)
+                .sheet(isPresented: $isApplyBottomSheetPresented) {
+                    PiCK_iOS_DesignSystem.ApplyBottomSheet(isPresented: $isApplyBottomSheetPresented) { option in
+                        selectedOption = option
+                        let type: AcceptReducer.ApplicationType = option == .outgoing ? .outgoing : .classroomMove
+                        let grade = isAllClassrooms ? 5 : selectedGrade
+                        let classNum = isAllClassrooms ? 5 : selectedClassNum
+                        viewStore.send(.fetchApplications(type: type, grade: grade, classNum: classNum))
+                    }
+                    .presentationDetents([.height(350)])
+                    .presentationDragIndicator(.hidden)
+                }
+                .sheet(isPresented: $isClassroomBottomSheetPresented) {
+                    ClassroomSelectionBottomSheet(
+                        isPresented: $isClassroomBottomSheetPresented,
+                        selectedGrade: $selectedGrade,
+                        selectedClassNum: $selectedClassNum
+                    ) { isAll, grade, classNum in
+                        isAllClassrooms = isAll
+                        if !isAll {
+                            selectedGrade = grade
+                            selectedClassNum = classNum
+                        }
+                        let type: AcceptReducer.ApplicationType = selectedOption == .outgoing ? .outgoing : .classroomMove
+                        let fetchGrade = isAll ? 5 : grade
+                        let fetchClassNum = isAll ? 5 : classNum
+                        viewStore.send(.fetchApplications(type: type, grade: fetchGrade, classNum: fetchClassNum))
+                    }
+                    .presentationDetents([.height(450)])
+                    .presentationDragIndicator(.hidden)
+                }
             }
-            .onAppear {
-                viewStore.send(.fetchApplications(type: .outgoing, grade: 5, classNum: 5))
+
+            if showApprovePopup {
+                Color.black.opacity(0.4)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        showApprovePopup = false
+                    }
+
+                WithViewStore(store, observe: { $0 }) { viewStore in
+                    PiCKConfirmPopUp(
+                        title: "선택한 신청을 수락하시겠습니까?",
+                        explain: "수락하면 학생에게 알림이 전송됩니다.",
+                        type: .accept,
+                        isPresented: $showApprovePopup
+                    ) { action in
+                        if action == .accept {
+                            viewStore.send(.approveSelectedApplications)
+                        }
+                    }
+                }
+            }
+
+            if showRejectPopup {
+                Color.black.opacity(0.4)
+                    .ignoresSafeArea()
+                    .onTapGesture {
+                        showRejectPopup = false
+                    }
+
+                WithViewStore(store, observe: { $0 }) { viewStore in
+                    PiCKConfirmPopUp(
+                        title: "선택한 신청을 거절하시겠습니까?",
+                        explain: "거절하면 학생에게 알림이 전송됩니다.",
+                        type: .reject,
+                        isPresented: $showRejectPopup
+                    ) { action in
+                        if action == .accept {
+                            viewStore.send(.rejectSelectedApplications)
+                        }
+                    }
+                }
             }
         }
     }
