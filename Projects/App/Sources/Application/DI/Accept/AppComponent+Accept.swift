@@ -9,6 +9,12 @@ public extension AppComponent {
         }
     }
 
+    var updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol {
+        shared {
+            UpdateApplicationStatusUseCase(repository: acceptRepository)
+        }
+    }
+
     private var acceptRepository: AcceptRepository {
         shared {
             AcceptRepositoryImpl(dataSource: acceptDataSource)
