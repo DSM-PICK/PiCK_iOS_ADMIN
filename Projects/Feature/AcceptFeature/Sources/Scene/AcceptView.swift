@@ -90,13 +90,13 @@ public struct AcceptView: View {
                                     }
                                 )
                             case .classroomMove(let move):
-                                AcceptStudentCell(
+                                ClassroomMoveCell(
                                     studentNumber: "\(move.grade)\(move.classNum)\(String(format: "%02d", move.num))",
                                     studentName: move.userName,
-                                    startTime: "\(move.start)교시",
-                                    endTime: "\(move.end)교시",
-                                    activityType: move.classroomName,
-                                    reason: move.move,
+                                    startPeriod: move.start,
+                                    endPeriod: move.end,
+                                    currentClassroom: "\(move.grade)학년 \(move.classNum)반",
+                                    moveToClassroom: move.classroomName,
                                     isSelected: viewStore.selectedItemIds.contains(move.id),
                                     onTap: {
                                         viewStore.send(.toggleSelection(id: move.id))
