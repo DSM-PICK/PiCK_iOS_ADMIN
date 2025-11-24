@@ -4,17 +4,20 @@ import Combine
 
 public struct AcceptReducer: Reducer {
     private let getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol
+    private let getApplicationsByFloorUseCase: any GetApplicationsByFloorUseCaseProtocol
     private let getClassroomMovesUseCase: any GetClassroomMovesUseCaseProtocol
     private let updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol
     private let updateClassroomMoveStatusUseCase: any UpdateClassroomMoveStatusUseCaseProtocol
 
     public init(
         getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol,
+        getApplicationsByFloorUseCase: any GetApplicationsByFloorUseCaseProtocol,
         getClassroomMovesUseCase: any GetClassroomMovesUseCaseProtocol,
         updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol,
         updateClassroomMoveStatusUseCase: any UpdateClassroomMoveStatusUseCaseProtocol
     ) {
         self.getAllApplicationsUseCase = getAllApplicationsUseCase
+        self.getApplicationsByFloorUseCase = getApplicationsByFloorUseCase
         self.getClassroomMovesUseCase = getClassroomMovesUseCase
         self.updateApplicationStatusUseCase = updateApplicationStatusUseCase
         self.updateClassroomMoveStatusUseCase = updateClassroomMoveStatusUseCase
@@ -45,6 +48,7 @@ public struct AcceptReducer: Reducer {
         public var isLoading: Bool = false
         public var currentGrade: Int = 5
         public var currentClassNum: Int = 5
+        public var currentFloor: Int = 2
         public var currentType: ApplicationType = .outgoing
         public var toastMessage: String? = nil
         public var showToast: Bool = false
@@ -54,6 +58,7 @@ public struct AcceptReducer: Reducer {
 
     public enum Action {
         case fetchApplications(type: ApplicationType, grade: Int, classNum: Int)
+        case fetchApplicationsByFloor(floor: Int)
         case applicationsResponse(Result<[ApplicationEntity], Error>)
         case classroomMovesResponse(Result<[ClassroomMoveEntity], Error>)
         case toggleSelection(id: String)
@@ -86,6 +91,18 @@ public struct AcceptReducer: Reducer {
                             .map { Action.classroomMovesResponse(.success($0)) }
                             .catch { Just(Action.classroomMovesResponse(.failure($0))) }
                     }
+                }
+
+            case let .fetchApplicationsByFloor(floor):
+                state.isLoading = true
+                state.currentFloor = floor
+                state.currentType = .classroomMove
+                state.selectedItemIds = []
+
+                return .publisher {
+                    getApplicationsByFloorUseCase.execute(floor: floor)
+                        .map { Action.applicationsResponse(.success($0)) }
+                        .catch { Just(Action.applicationsResponse(.failure($0))) }
                 }
 
             case let .applicationsResponse(.success(applications)):
@@ -165,7 +182,12 @@ public struct AcceptReducer: Reducer {
                 state.selectedItemIds = []
                 state.toastMessage = message
                 state.showToast = true
-                return .send(.fetchApplications(type: state.currentType, grade: state.currentGrade, classNum: state.currentClassNum))
+
+                if state.currentType == .classroomMove {
+                    return .send(.fetchApplicationsByFloor(floor: state.currentFloor))
+                } else {
+                    return .send(.fetchApplications(type: state.currentType, grade: state.currentGrade, classNum: state.currentClassNum))
+                }
 
             case .updateStatusResponse(.failure):
                 state.isLoading = false

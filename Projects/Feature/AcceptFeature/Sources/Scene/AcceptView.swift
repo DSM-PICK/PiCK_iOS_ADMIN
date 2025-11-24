@@ -5,18 +5,11 @@ import AcceptDomainInterface
 
 public struct AcceptView: View {
     @State private var isApplyBottomSheetPresented = false
-    @State private var isClassroomBottomSheetPresented = false
     @State private var selectedOption: PiCK_iOS_DesignSystem.ApplyBottomSheet.SelectionOption = .outgoing
-    @State private var selectedGrade: Int = 1
-    @State private var selectedClassNum: Int = 1
-    @State private var isAllClassrooms: Bool = true
+    @State private var selectedFloor: Int = 2
     @State private var showApprovePopup = false
     @State private var showRejectPopup = false
     let store: StoreOf<AcceptReducer>
-
-    private var displayClassroomText: String {
-        isAllClassrooms ? "전체" : "\(selectedGrade)학년 \(selectedClassNum)반"
-    }
 
     public init(store: StoreOf<AcceptReducer>) {
         self.store = store
@@ -67,17 +60,38 @@ public struct AcceptView: View {
                     .padding(.top, 20)
                     .padding(.horizontal, 24)
 
+                if selectedOption == .classroomMove {
+                    HStack(spacing: 0) {
+                        ForEach([2, 3, 4], id: \.self) { floor in
+                            Button {
+                                selectedFloor = floor
+                                viewStore.send(.fetchApplicationsByFloor(floor: floor))
+                            } label: {
+                                Text("\(floor)층")
+                                    .pickText(
+                                        type: .body1,
+                                        textColor: selectedFloor == floor ? .Primary.primary500 : .Gray.gray600
+                                    )
+                                    .frame(width: 114, height: 32)
+                                    .background(
+                                        selectedFloor == floor
+                                        ? Color.Primary.primary50
+                                        : Color.clear
+                                    )
+                                    .cornerRadius(8)
+                            }
+                        }
+                    }
+                    .padding(.top, 16)
+                    .padding(.horizontal, 24)
+                }
+
                 HStack(spacing: 0) {
                     Text("\(selectedOption == .outgoing ? "외출 수락" : "교실 이동") 신청한 학생")
                         .pickText(type: .body2, textColor: .Gray.gray600)
                         .frame(maxWidth: .infinity, alignment: .leading)
-
-                    ClassroomFilterButton(
-                        selectedClassroom: displayClassroomText,
-                        onTap: { isClassroomBottomSheetPresented = true }
-                    )
                 }
-                .padding(.top, 10)
+                .padding(.top, selectedOption == .classroomMove ? 16 : 10)
                 .padding(.leading, 24)
                 .padding(.trailing, 24)
 
@@ -133,31 +147,13 @@ public struct AcceptView: View {
                 .sheet(isPresented: $isApplyBottomSheetPresented) {
                     PiCK_iOS_DesignSystem.ApplyBottomSheet(isPresented: $isApplyBottomSheetPresented) { option in
                         selectedOption = option
-                        let type: AcceptReducer.ApplicationType = option == .outgoing ? .outgoing : .classroomMove
-                        let grade = isAllClassrooms ? 5 : selectedGrade
-                        let classNum = isAllClassrooms ? 5 : selectedClassNum
-                        viewStore.send(.fetchApplications(type: type, grade: grade, classNum: classNum))
+                        if option == .outgoing {
+                            viewStore.send(.fetchApplications(type: .outgoing, grade: 5, classNum: 5))
+                        } else {
+                            viewStore.send(.fetchApplicationsByFloor(floor: selectedFloor))
+                        }
                     }
                     .presentationDetents([.height(350)])
-                    .presentationDragIndicator(.hidden)
-                }
-                .sheet(isPresented: $isClassroomBottomSheetPresented) {
-                    ClassroomSelectionBottomSheet(
-                        isPresented: $isClassroomBottomSheetPresented,
-                        selectedGrade: $selectedGrade,
-                        selectedClassNum: $selectedClassNum
-                    ) { isAll, grade, classNum in
-                        isAllClassrooms = isAll
-                        if !isAll {
-                            selectedGrade = grade
-                            selectedClassNum = classNum
-                        }
-                        let type: AcceptReducer.ApplicationType = selectedOption == .outgoing ? .outgoing : .classroomMove
-                        let fetchGrade = isAll ? 5 : grade
-                        let fetchClassNum = isAll ? 5 : classNum
-                        viewStore.send(.fetchApplications(type: type, grade: fetchGrade, classNum: fetchClassNum))
-                    }
-                    .presentationDetents([.height(450)])
                     .presentationDragIndicator(.hidden)
                 }
 
