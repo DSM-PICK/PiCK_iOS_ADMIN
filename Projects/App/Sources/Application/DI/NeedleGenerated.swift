@@ -197,6 +197,9 @@ private class AcceptDependency380d0282470c8b91ca89Provider: AcceptDependency {
     var getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol {
         return appComponent.getAllApplicationsUseCase
     }
+    var getApplicationsByFloorUseCase: any GetApplicationsByFloorUseCaseProtocol {
+        return appComponent.getApplicationsByFloorUseCase
+    }
     var getClassroomMovesUseCase: any GetClassroomMovesUseCaseProtocol {
         return appComponent.getClassroomMovesUseCase
     }
@@ -230,6 +233,7 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["getSelfStudyDirectorUseCase-any GetSelfStudyDirectorUseCaseProtocol"] = { [unowned self] in self.getSelfStudyDirectorUseCase as Any }
         localTable["getAdminSelfStudyInfoUseCase-any GetAdminSelfStudyInfoUseCaseProtocol"] = { [unowned self] in self.getAdminSelfStudyInfoUseCase as Any }
         localTable["getAllApplicationsUseCase-any GetAllApplicationsUseCaseProtocol"] = { [unowned self] in self.getAllApplicationsUseCase as Any }
+        localTable["getApplicationsByFloorUseCase-any GetApplicationsByFloorUseCaseProtocol"] = { [unowned self] in self.getApplicationsByFloorUseCase as Any }
         localTable["getClassroomMovesUseCase-any GetClassroomMovesUseCaseProtocol"] = { [unowned self] in self.getClassroomMovesUseCase as Any }
         localTable["updateApplicationStatusUseCase-any UpdateApplicationStatusUseCaseProtocol"] = { [unowned self] in self.updateApplicationStatusUseCase as Any }
         localTable["updateClassroomMoveStatusUseCase-any UpdateClassroomMoveStatusUseCaseProtocol"] = { [unowned self] in self.updateClassroomMoveStatusUseCase as Any }
@@ -315,6 +319,7 @@ extension HomeComponent: NeedleFoundation.Registration {
 extension AcceptComponent: NeedleFoundation.Registration {
     public func registerItems() {
         keyPathToName[\AcceptDependency.getAllApplicationsUseCase] = "getAllApplicationsUseCase-any GetAllApplicationsUseCaseProtocol"
+        keyPathToName[\AcceptDependency.getApplicationsByFloorUseCase] = "getApplicationsByFloorUseCase-any GetApplicationsByFloorUseCaseProtocol"
         keyPathToName[\AcceptDependency.getClassroomMovesUseCase] = "getClassroomMovesUseCase-any GetClassroomMovesUseCaseProtocol"
         keyPathToName[\AcceptDependency.updateApplicationStatusUseCase] = "updateApplicationStatusUseCase-any UpdateApplicationStatusUseCaseProtocol"
         keyPathToName[\AcceptDependency.updateClassroomMoveStatusUseCase] = "updateClassroomMoveStatusUseCase-any UpdateClassroomMoveStatusUseCaseProtocol"
