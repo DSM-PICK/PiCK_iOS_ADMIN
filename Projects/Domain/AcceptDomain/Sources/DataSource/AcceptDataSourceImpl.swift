@@ -37,6 +37,31 @@ public class AcceptDataSourceImpl: AcceptDataSource {
         }
     }
 
+    public func getApplicationsByFloor(floor: Int) async throws -> ApplicationListResponseDTO {
+        try await withCheckedThrowingContinuation { continuation in
+            provider.request(.getApplicationsByFloor(floor: floor)) { result in
+                switch result {
+                case .success(let response):
+                    do {
+                        let data = try response.map(ApplicationListResponseDTO.self)
+                        continuation.resume(returning: data)
+                    } catch {
+                        continuation.resume(throwing: error)
+                    }
+                case .failure(let error):
+                    if let moyaError = error as? MoyaError,
+                       let code = moyaError.response?.statusCode,
+                       let errorMap = AcceptAPI.getApplicationsByFloor(floor: floor).errorMap,
+                       let mappedError = errorMap[code] {
+                        continuation.resume(throwing: mappedError)
+                    } else {
+                        continuation.resume(throwing: error)
+                    }
+                }
+            }
+        }
+    }
+
     public func getClassroomMovesByGrade(grade: Int, classNum: Int) async throws -> ClassroomMoveListResponseDTO {
         try await withCheckedThrowingContinuation { continuation in
             provider.request(.getClassroomMovesByGrade(grade: grade, classNum: classNum)) { result in

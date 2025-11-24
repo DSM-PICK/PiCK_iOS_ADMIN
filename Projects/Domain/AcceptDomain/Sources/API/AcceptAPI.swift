@@ -4,6 +4,7 @@ import Moya
 
 public enum AcceptAPI {
     case getApplicationsByGrade(grade: Int, classNum: Int)
+    case getApplicationsByFloor(floor: Int)
     case getClassroomMovesByGrade(grade: Int, classNum: Int)
     case updateApplicationStatus(status: String, idList: [String])
     case updateClassroomMoveStatus(status: String, idList: [String])
@@ -14,7 +15,7 @@ extension AcceptAPI: PiCKAPI {
 
     public var domain: BaseDomain.PiCKDomain {
         switch self {
-        case .getApplicationsByGrade, .updateApplicationStatus:
+        case .getApplicationsByGrade, .getApplicationsByFloor, .updateApplicationStatus:
             return .application
         case .getClassroomMovesByGrade, .updateClassroomMoveStatus:
             return .classroom
@@ -25,6 +26,8 @@ extension AcceptAPI: PiCKAPI {
         switch self {
         case .getApplicationsByGrade:
             return "/grade"
+        case .getApplicationsByFloor:
+            return "/floor"
         case .getClassroomMovesByGrade:
             return "/grade"
         case .updateApplicationStatus:
@@ -36,7 +39,7 @@ extension AcceptAPI: PiCKAPI {
 
     public var method: Moya.Method {
         switch self {
-        case .getApplicationsByGrade, .getClassroomMovesByGrade:
+        case .getApplicationsByGrade, .getApplicationsByFloor, .getClassroomMovesByGrade:
             return .get
         case .updateApplicationStatus, .updateClassroomMoveStatus:
             return .patch
@@ -50,6 +53,14 @@ extension AcceptAPI: PiCKAPI {
                 parameters: [
                     "grade": grade,
                     "class_num": classNum
+                ],
+                encoding: URLEncoding.queryString
+            )
+        case let .getApplicationsByFloor(floor):
+            return .requestParameters(
+                parameters: [
+                    "floor": floor,
+                    "status": "QUIET"
                 ],
                 encoding: URLEncoding.queryString
             )
