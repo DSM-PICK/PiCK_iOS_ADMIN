@@ -1,4 +1,7 @@
 import Foundation
-import AcceptDomainInterface
 
-public struct AcceptDomain: AcceptDomainInterface {}
+@_exported import AcceptDomainInterface
+
+public struct AcceptDomain {
+    public init() {}
+}

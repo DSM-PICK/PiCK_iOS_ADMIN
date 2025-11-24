@@ -1,10 +1,6 @@
 import Foundation
 
-public protocol AcceptRepository {
-    func getAllApplications() async throws -> [ApplicationEntity]
-}
-
-public struct ApplicationEntity: Equatable, Identifiable {
+public struct ApplicationResponseDTO: Decodable {
     public let id: String
     public let userId: String
     public let userName: String
@@ -14,6 +10,18 @@ public struct ApplicationEntity: Equatable, Identifiable {
     public let classNum: Int
     public let num: Int
     public let reason: String
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case userId = "user_id"
+        case userName = "user_name"
+        case start
+        case end
+        case grade
+        case classNum = "class_num"
+        case num
+        case reason
+    }
 
     public init(
         id: String,
@@ -38,4 +46,4 @@ public struct ApplicationEntity: Equatable, Identifiable {
     }
 }
 
-public protocol AcceptDomainInterface {}
+public typealias ApplicationListResponseDTO = [ApplicationResponseDTO]
