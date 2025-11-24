@@ -203,6 +203,9 @@ private class AcceptDependency380d0282470c8b91ca89Provider: AcceptDependency {
     var updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol {
         return appComponent.updateApplicationStatusUseCase
     }
+    var updateClassroomMoveStatusUseCase: any UpdateClassroomMoveStatusUseCaseProtocol {
+        return appComponent.updateClassroomMoveStatusUseCase
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -229,6 +232,7 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["getAllApplicationsUseCase-any GetAllApplicationsUseCaseProtocol"] = { [unowned self] in self.getAllApplicationsUseCase as Any }
         localTable["getClassroomMovesUseCase-any GetClassroomMovesUseCaseProtocol"] = { [unowned self] in self.getClassroomMovesUseCase as Any }
         localTable["updateApplicationStatusUseCase-any UpdateApplicationStatusUseCaseProtocol"] = { [unowned self] in self.updateApplicationStatusUseCase as Any }
+        localTable["updateClassroomMoveStatusUseCase-any UpdateClassroomMoveStatusUseCaseProtocol"] = { [unowned self] in self.updateClassroomMoveStatusUseCase as Any }
         localTable["fetchAcademicScheduleUseCase-any FetchAcademicScheduleUseCaseProtocol"] = { [unowned self] in self.fetchAcademicScheduleUseCase as Any }
         localTable["fetchMonthAcademicScheduleUseCase-any FetchMonthAcademicScheduleUseCaseProtocol"] = { [unowned self] in self.fetchMonthAcademicScheduleUseCase as Any }
         localTable["planFactory-any PlanFactory"] = { [unowned self] in self.planFactory as Any }
@@ -313,6 +317,7 @@ extension AcceptComponent: NeedleFoundation.Registration {
         keyPathToName[\AcceptDependency.getAllApplicationsUseCase] = "getAllApplicationsUseCase-any GetAllApplicationsUseCaseProtocol"
         keyPathToName[\AcceptDependency.getClassroomMovesUseCase] = "getClassroomMovesUseCase-any GetClassroomMovesUseCaseProtocol"
         keyPathToName[\AcceptDependency.updateApplicationStatusUseCase] = "updateApplicationStatusUseCase-any UpdateApplicationStatusUseCaseProtocol"
+        keyPathToName[\AcceptDependency.updateClassroomMoveStatusUseCase] = "updateClassroomMoveStatusUseCase-any UpdateClassroomMoveStatusUseCaseProtocol"
     }
 }
 

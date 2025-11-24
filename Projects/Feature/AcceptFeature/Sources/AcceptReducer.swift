@@ -6,15 +6,18 @@ public struct AcceptReducer: Reducer {
     private let getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol
     private let getClassroomMovesUseCase: any GetClassroomMovesUseCaseProtocol
     private let updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol
+    private let updateClassroomMoveStatusUseCase: any UpdateClassroomMoveStatusUseCaseProtocol
 
     public init(
         getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol,
         getClassroomMovesUseCase: any GetClassroomMovesUseCaseProtocol,
-        updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol
+        updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol,
+        updateClassroomMoveStatusUseCase: any UpdateClassroomMoveStatusUseCaseProtocol
     ) {
         self.getAllApplicationsUseCase = getAllApplicationsUseCase
         self.getClassroomMovesUseCase = getClassroomMovesUseCase
         self.updateApplicationStatusUseCase = updateApplicationStatusUseCase
+        self.updateClassroomMoveStatusUseCase = updateClassroomMoveStatusUseCase
     }
 
     public enum ApplicationType: Equatable {
@@ -112,20 +115,40 @@ public struct AcceptReducer: Reducer {
                 let idList = Array(state.selectedItemIds)
                 guard !idList.isEmpty else { return .none }
                 state.isLoading = true
-                return .publisher {
-                    updateApplicationStatusUseCase.execute(status: "OK", idList: idList)
-                        .map { Action.updateStatusResponse(.success(())) }
-                        .catch { Just(Action.updateStatusResponse(.failure($0))) }
+
+                switch state.currentType {
+                case .outgoing:
+                    return .publisher {
+                        updateApplicationStatusUseCase.execute(status: "OK", idList: idList)
+                            .map { Action.updateStatusResponse(.success(())) }
+                            .catch { Just(Action.updateStatusResponse(.failure($0))) }
+                    }
+                case .classroomMove:
+                    return .publisher {
+                        updateClassroomMoveStatusUseCase.execute(status: "OK", idList: idList)
+                            .map { Action.updateStatusResponse(.success(())) }
+                            .catch { Just(Action.updateStatusResponse(.failure($0))) }
+                    }
                 }
 
             case .rejectSelectedApplications:
                 let idList = Array(state.selectedItemIds)
                 guard !idList.isEmpty else { return .none }
                 state.isLoading = true
-                return .publisher {
-                    updateApplicationStatusUseCase.execute(status: "NO", idList: idList)
-                        .map { Action.updateStatusResponse(.success(())) }
-                        .catch { Just(Action.updateStatusResponse(.failure($0))) }
+
+                switch state.currentType {
+                case .outgoing:
+                    return .publisher {
+                        updateApplicationStatusUseCase.execute(status: "NO", idList: idList)
+                            .map { Action.updateStatusResponse(.success(())) }
+                            .catch { Just(Action.updateStatusResponse(.failure($0))) }
+                    }
+                case .classroomMove:
+                    return .publisher {
+                        updateClassroomMoveStatusUseCase.execute(status: "NO", idList: idList)
+                            .map { Action.updateStatusResponse(.success(())) }
+                            .catch { Just(Action.updateStatusResponse(.failure($0))) }
+                    }
                 }
 
             case .updateStatusResponse(.success):

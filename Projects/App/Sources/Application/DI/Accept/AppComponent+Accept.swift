@@ -21,6 +21,12 @@ public extension AppComponent {
         }
     }
 
+    var updateClassroomMoveStatusUseCase: any UpdateClassroomMoveStatusUseCaseProtocol {
+        shared {
+            UpdateClassroomMoveStatusUseCase(repository: acceptRepository)
+        }
+    }
+
     private var acceptRepository: AcceptRepository {
         shared {
             AcceptRepositoryImpl(dataSource: acceptDataSource)
