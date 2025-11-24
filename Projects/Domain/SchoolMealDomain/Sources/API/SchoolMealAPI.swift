@@ -3,7 +3,7 @@ import BaseDomain
 import Moya
 
 public enum SchoolMealAPI {
-    case getSchoolMeal(date: String)
+    case fetchSchoolMeal(date: String)
 }
 
 extension SchoolMealAPI: PiCKAPI {
@@ -15,7 +15,7 @@ extension SchoolMealAPI: PiCKAPI {
 
     public var urlPath: String {
         switch self {
-        case .getSchoolMeal:
+        case .fetchSchoolMeal:
             return "/date"
         }
     }
@@ -26,7 +26,7 @@ extension SchoolMealAPI: PiCKAPI {
 
     public var task: Moya.Task {
         switch self {
-        case let .getSchoolMeal(date):
+        case let .fetchSchoolMeal(date):
             return .requestParameters(
                 parameters:["date": date],
                 encoding: URLEncoding.queryString

@@ -1,4 +1,5 @@
 import Foundation
+import SchoolMealDomainInterface
 
 public struct SchoolMealDTO: Decodable {
     public let date: String
@@ -16,7 +17,7 @@ extension SchoolMealDTO {
     }
 }
 
-struct SchoolMealDTOElement: Decodable {
+public struct SchoolMealDTOElement: Decodable {
    public let breakfast, lunch, dinner: MealDTOElement
 }
 
@@ -32,11 +33,6 @@ extension SchoolMealDTOElement {
     }
 }
 
-struct MealDTOElement: Decodable {
-    public let menu: [String]
-    public let cal: String
-}
-
 extension MealDTOElement {
     func toDomain() -> MealEntityElement {
         return .init(
@@ -44,4 +40,9 @@ extension MealDTOElement {
             kcal: cal
         )
     }
+}
+
+public struct MealDTOElement: Decodable {
+    public let menu: [String]
+    public let cal: String
 }
