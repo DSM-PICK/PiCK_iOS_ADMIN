@@ -9,6 +9,12 @@ public extension AppComponent {
         }
     }
 
+    var getClassroomMovesUseCase: any GetClassroomMovesUseCaseProtocol {
+        shared {
+            GetClassroomMovesUseCase(repository: acceptRepository)
+        }
+    }
+
     var updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol {
         shared {
             UpdateApplicationStatusUseCase(repository: acceptRepository)
