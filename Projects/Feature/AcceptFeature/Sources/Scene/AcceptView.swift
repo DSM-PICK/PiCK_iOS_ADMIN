@@ -14,6 +14,13 @@ public struct AcceptView: View {
         self.store = store
     }
 
+    private var currentDateString: String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "M월 d일"
+        return formatter.string(from: Date())
+    }
+
     public var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
             VStack(alignment: .leading, spacing: 0) {
@@ -24,7 +31,7 @@ public struct AcceptView: View {
                             onTap: { isApplyBottomSheetPresented = true }
                         )
 
-                        Text("0월 0일")
+                        Text(currentDateString)
                             .pickText(type: .body2, textColor: .Gray.gray700)
                     }
                     .padding(.leading, 24)
