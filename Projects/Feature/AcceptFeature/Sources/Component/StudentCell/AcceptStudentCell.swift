@@ -43,11 +43,11 @@ struct AcceptStudentCell: View {
             }
             .frame(maxWidth: .infinity)
             .frame(height: 79)
-            .background(isSelected ? Color.Primary.primary100.opacity(0.2) : Color.Gray.gray50)
+            .background(Color.Gray.gray50)
             .cornerRadius(12)
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .strokeBorder(isSelected ? Color.Primary.primary100 : Color.clear, lineWidth: 2)
+                    .stroke(isSelected ? Color.Primary.primary500 : Color.clear, lineWidth: 2)
             )
         }
         .buttonStyle(PlainButtonStyle())
