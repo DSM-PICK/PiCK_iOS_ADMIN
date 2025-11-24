@@ -2,7 +2,7 @@ import SwiftUI
 import PiCK_iOS_DesignSystem
 
 struct AcceptFilterButton: View {
-    let selectedOption: ApplyBottomSheet.SelectionOption
+    let selectedOption: PiCK_iOS_DesignSystem.ApplyBottomSheet.SelectionOption
     let onTap: () -> Void
 
     var body: some View {

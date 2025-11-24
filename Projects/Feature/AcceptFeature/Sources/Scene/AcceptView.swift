@@ -6,9 +6,15 @@ import AcceptDomainInterface
 public struct AcceptView: View {
     @State private var isApplyBottomSheetPresented = false
     @State private var isClassroomBottomSheetPresented = false
-    @State private var selectedOption: ApplyBottomSheet.SelectionOption = .outgoing
-    @State private var selectedClassroom: ClassroomBottomSheet.ClassroomSelection = ClassroomBottomSheet.ClassroomSelection(grade: nil, classNum: nil)
+    @State private var selectedOption: PiCK_iOS_DesignSystem.ApplyBottomSheet.SelectionOption = .outgoing
+    @State private var selectedGrade: Int = 1
+    @State private var selectedClassNum: Int = 1
+    @State private var isAllClassrooms: Bool = true
     let store: StoreOf<AcceptReducer>
+
+    private var displayClassroomText: String {
+        isAllClassrooms ? "전체" : "\(selectedGrade)학년 \(selectedClassNum)반"
+    }
 
     public init(store: StoreOf<AcceptReducer>) {
         self.store = store
@@ -59,12 +65,12 @@ public struct AcceptView: View {
                     .padding(.horizontal, 24)
 
                 HStack(spacing: 0) {
-                    Text("\(selectedOption == .outgoing ? "외출" : "교실 이동") 신청한 학생")
+                    Text("\(selectedOption == .outgoing ? "외출 수락" : "교실 이동") 신청한 학생")
                         .pickText(type: .body2, textColor: .Gray.gray600)
                         .frame(maxWidth: .infinity, alignment: .leading)
 
                     ClassroomFilterButton(
-                        selectedClassroom: selectedClassroom.displayText,
+                        selectedClassroom: displayClassroomText,
                         onTap: { isClassroomBottomSheetPresented = true }
                     )
                 }
@@ -82,7 +88,7 @@ public struct AcceptView: View {
                                     studentName: application.userName,
                                     startTime: application.start,
                                     endTime: application.end,
-                                    activityType: "외출",
+                                    activityType: "외출 수락",
                                     reason: application.reason,
                                     isSelected: viewStore.selectedItemIds.contains(application.id),
                                     onTap: {
@@ -119,25 +125,31 @@ public struct AcceptView: View {
                 }
             }
             .sheet(isPresented: $isApplyBottomSheetPresented) {
-                ApplyBottomSheet(isPresented: $isApplyBottomSheetPresented) { option in
+                PiCK_iOS_DesignSystem.ApplyBottomSheet(isPresented: $isApplyBottomSheetPresented) { option in
                     selectedOption = option
                     let type: AcceptReducer.ApplicationType = option == .outgoing ? .outgoing : .classroomMove
-                    let grade = selectedClassroom.grade ?? 5
-                    let classNum = selectedClassroom.classNum ?? 5
+                    let grade = isAllClassrooms ? 5 : selectedGrade
+                    let classNum = isAllClassrooms ? 5 : selectedClassNum
                     viewStore.send(.fetchApplications(type: type, grade: grade, classNum: classNum))
                 }
-                .presentationDetents([.height(UIScreen.main.bounds.height * 0.5)])
-                .presentationDragIndicator(.hidden)
             }
             .sheet(isPresented: $isClassroomBottomSheetPresented) {
-                ClassroomBottomSheet(isPresented: $isClassroomBottomSheetPresented) { classroom in
-                    selectedClassroom = classroom
+                ClassroomSelectionBottomSheet(
+                    isPresented: $isClassroomBottomSheetPresented,
+                    selectedGrade: $selectedGrade,
+                    selectedClassNum: $selectedClassNum
+                ) { isAll, grade, classNum in
+                    isAllClassrooms = isAll
+                    if !isAll {
+                        selectedGrade = grade
+                        selectedClassNum = classNum
+                    }
                     let type: AcceptReducer.ApplicationType = selectedOption == .outgoing ? .outgoing : .classroomMove
-                    let grade = classroom.grade ?? 5
-                    let classNum = classroom.classNum ?? 5
-                    viewStore.send(.fetchApplications(type: type, grade: grade, classNum: classNum))
+                    let fetchGrade = isAll ? 5 : grade
+                    let fetchClassNum = isAll ? 5 : classNum
+                    viewStore.send(.fetchApplications(type: type, grade: fetchGrade, classNum: fetchClassNum))
                 }
-                .presentationDetents([.height(UIScreen.main.bounds.height * 0.5)])
+                .presentationDetents([.height(450)])
                 .presentationDragIndicator(.hidden)
             }
             .onAppear {
