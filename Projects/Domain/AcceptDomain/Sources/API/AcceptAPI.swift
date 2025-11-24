@@ -4,6 +4,7 @@ import Moya
 
 public enum AcceptAPI {
     case getApplicationsByGrade(grade: Int, classNum: Int)
+    case getClassroomMovesByGrade(grade: Int, classNum: Int)
     case updateApplicationStatus(status: String, idList: [String])
 }
 
@@ -11,12 +12,19 @@ extension AcceptAPI: PiCKAPI {
     public typealias ErrorType = Never
 
     public var domain: BaseDomain.PiCKDomain {
-        .application
+        switch self {
+        case .getApplicationsByGrade, .updateApplicationStatus:
+            return .application
+        case .getClassroomMovesByGrade:
+            return .classroom
+        }
     }
 
     public var urlPath: String {
         switch self {
         case .getApplicationsByGrade:
+            return "/grade"
+        case .getClassroomMovesByGrade:
             return "/grade"
         case .updateApplicationStatus:
             return "/status"
@@ -25,7 +33,7 @@ extension AcceptAPI: PiCKAPI {
 
     public var method: Moya.Method {
         switch self {
-        case .getApplicationsByGrade:
+        case .getApplicationsByGrade, .getClassroomMovesByGrade:
             return .get
         case .updateApplicationStatus:
             return .patch
@@ -35,6 +43,14 @@ extension AcceptAPI: PiCKAPI {
     public var task: Moya.Task {
         switch self {
         case let .getApplicationsByGrade(grade, classNum):
+            return .requestParameters(
+                parameters: [
+                    "grade": grade,
+                    "class_num": classNum
+                ],
+                encoding: URLEncoding.queryString
+            )
+        case let .getClassroomMovesByGrade(grade, classNum):
             return .requestParameters(
                 parameters: [
                     "grade": grade,

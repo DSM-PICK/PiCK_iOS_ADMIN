@@ -39,7 +39,7 @@ public struct AcceptView: View {
                     Spacer()
 
                     AcceptActionButtons(
-                        isEnabled: !viewStore.selectedApplicationIds.isEmpty,
+                        isEnabled: !viewStore.selectedItemIds.isEmpty,
                         onAccept: {
                             viewStore.send(.approveSelectedApplications)
                         },
@@ -74,19 +74,35 @@ public struct AcceptView: View {
 
                 ScrollView {
                     VStack(spacing: 16) {
-                        ForEach(viewStore.applications) { application in
-                            AcceptStudentCell(
-                                studentNumber: "\(application.grade)\(application.classNum)\(String(format: "%02d", application.num))",
-                                studentName: application.userName,
-                                startTime: application.start,
-                                endTime: application.end,
-                                activityType: "외출",
-                                reason: application.reason,
-                                isSelected: viewStore.selectedApplicationIds.contains(application.id),
-                                onTap: {
-                                    viewStore.send(.toggleSelection(id: application.id))
-                                }
-                            )
+                        ForEach(viewStore.studentItems) { item in
+                            switch item {
+                            case .application(let application):
+                                AcceptStudentCell(
+                                    studentNumber: "\(application.grade)\(application.classNum)\(String(format: "%02d", application.num))",
+                                    studentName: application.userName,
+                                    startTime: application.start,
+                                    endTime: application.end,
+                                    activityType: "외출",
+                                    reason: application.reason,
+                                    isSelected: viewStore.selectedItemIds.contains(application.id),
+                                    onTap: {
+                                        viewStore.send(.toggleSelection(id: application.id))
+                                    }
+                                )
+                            case .classroomMove(let move):
+                                AcceptStudentCell(
+                                    studentNumber: "\(move.grade)\(move.classNum)\(String(format: "%02d", move.num))",
+                                    studentName: move.userName,
+                                    startTime: "\(move.start)교시",
+                                    endTime: "\(move.end)교시",
+                                    activityType: move.classroomName,
+                                    reason: move.move,
+                                    isSelected: viewStore.selectedItemIds.contains(move.id),
+                                    onTap: {
+                                        viewStore.send(.toggleSelection(id: move.id))
+                                    }
+                                )
+                            }
                         }
                     }
                     .padding(.top, 20)
@@ -105,6 +121,10 @@ public struct AcceptView: View {
             .sheet(isPresented: $isApplyBottomSheetPresented) {
                 ApplyBottomSheet(isPresented: $isApplyBottomSheetPresented) { option in
                     selectedOption = option
+                    let type: AcceptReducer.ApplicationType = option == .outgoing ? .outgoing : .classroomMove
+                    let grade = selectedClassroom.grade ?? 5
+                    let classNum = selectedClassroom.classNum ?? 5
+                    viewStore.send(.fetchApplications(type: type, grade: grade, classNum: classNum))
                 }
                 .presentationDetents([.height(UIScreen.main.bounds.height * 0.5)])
                 .presentationDragIndicator(.hidden)
@@ -112,16 +132,16 @@ public struct AcceptView: View {
             .sheet(isPresented: $isClassroomBottomSheetPresented) {
                 ClassroomBottomSheet(isPresented: $isClassroomBottomSheetPresented) { classroom in
                     selectedClassroom = classroom
-
+                    let type: AcceptReducer.ApplicationType = selectedOption == .outgoing ? .outgoing : .classroomMove
                     let grade = classroom.grade ?? 5
                     let classNum = classroom.classNum ?? 5
-                    viewStore.send(.fetchApplications(grade: grade, classNum: classNum))
+                    viewStore.send(.fetchApplications(type: type, grade: grade, classNum: classNum))
                 }
                 .presentationDetents([.height(UIScreen.main.bounds.height * 0.5)])
                 .presentationDragIndicator(.hidden)
             }
             .onAppear {
-                viewStore.send(.fetchApplications(grade: 5, classNum: 5))
+                viewStore.send(.fetchApplications(type: .outgoing, grade: 5, classNum: 5))
             }
         }
     }
