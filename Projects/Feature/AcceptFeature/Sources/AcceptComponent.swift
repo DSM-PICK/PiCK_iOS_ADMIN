@@ -8,6 +8,7 @@ public protocol AcceptDependency: NeedleFoundation.Dependency {
     var getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol { get }
     var getClassroomMovesUseCase: any GetClassroomMovesUseCaseProtocol { get }
     var updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol { get }
+    var updateClassroomMoveStatusUseCase: any UpdateClassroomMoveStatusUseCaseProtocol { get }
 }
 
 public final class AcceptComponent: Component<AcceptDependency>, AcceptFactory {
@@ -21,7 +22,8 @@ public final class AcceptComponent: Component<AcceptDependency>, AcceptFactory {
                             AcceptReducer(
                                 getAllApplicationsUseCase: self.dependency.getAllApplicationsUseCase,
                                 getClassroomMovesUseCase: self.dependency.getClassroomMovesUseCase,
-                                updateApplicationStatusUseCase: self.dependency.updateApplicationStatusUseCase
+                                updateApplicationStatusUseCase: self.dependency.updateApplicationStatusUseCase,
+                                updateClassroomMoveStatusUseCase: self.dependency.updateClassroomMoveStatusUseCase
                             )
                         }
                     )

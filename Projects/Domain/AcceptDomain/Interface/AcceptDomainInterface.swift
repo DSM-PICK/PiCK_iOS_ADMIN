@@ -4,6 +4,7 @@ public protocol AcceptRepository {
     func getApplicationsByGrade(grade: Int, classNum: Int) async throws -> [ApplicationEntity]
     func getClassroomMovesByGrade(grade: Int, classNum: Int) async throws -> [ClassroomMoveEntity]
     func updateApplicationStatus(status: String, idList: [String]) async throws
+    func updateClassroomMoveStatus(status: String, idList: [String]) async throws
 }
 
 public struct ApplicationEntity: Equatable, Identifiable {

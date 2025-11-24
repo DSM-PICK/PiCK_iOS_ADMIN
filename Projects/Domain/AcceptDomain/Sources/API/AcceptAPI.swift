@@ -6,6 +6,7 @@ public enum AcceptAPI {
     case getApplicationsByGrade(grade: Int, classNum: Int)
     case getClassroomMovesByGrade(grade: Int, classNum: Int)
     case updateApplicationStatus(status: String, idList: [String])
+    case updateClassroomMoveStatus(status: String, idList: [String])
 }
 
 extension AcceptAPI: PiCKAPI {
@@ -15,7 +16,7 @@ extension AcceptAPI: PiCKAPI {
         switch self {
         case .getApplicationsByGrade, .updateApplicationStatus:
             return .application
-        case .getClassroomMovesByGrade:
+        case .getClassroomMovesByGrade, .updateClassroomMoveStatus:
             return .classroom
         }
     }
@@ -28,6 +29,8 @@ extension AcceptAPI: PiCKAPI {
             return "/grade"
         case .updateApplicationStatus:
             return "/status"
+        case .updateClassroomMoveStatus:
+            return "/status"
         }
     }
 
@@ -35,7 +38,7 @@ extension AcceptAPI: PiCKAPI {
         switch self {
         case .getApplicationsByGrade, .getClassroomMovesByGrade:
             return .get
-        case .updateApplicationStatus:
+        case .updateApplicationStatus, .updateClassroomMoveStatus:
             return .patch
         }
     }
@@ -59,6 +62,10 @@ extension AcceptAPI: PiCKAPI {
                 encoding: URLEncoding.queryString
             )
         case let .updateApplicationStatus(status, idList):
+            return .requestJSONEncodable(
+                UpdateStatusRequest(status: status, idList: idList)
+            )
+        case let .updateClassroomMoveStatus(status, idList):
             return .requestJSONEncodable(
                 UpdateStatusRequest(status: status, idList: idList)
             )

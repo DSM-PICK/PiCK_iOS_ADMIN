@@ -74,4 +74,17 @@ public class AcceptDataSourceImpl: AcceptDataSource {
             }
         }
     }
+
+    public func updateClassroomMoveStatus(status: String, idList: [String]) async throws {
+        try await withCheckedThrowingContinuation { continuation in
+            provider.request(.updateClassroomMoveStatus(status: status, idList: idList)) { result in
+                switch result {
+                case .success:
+                    continuation.resume()
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
 }
