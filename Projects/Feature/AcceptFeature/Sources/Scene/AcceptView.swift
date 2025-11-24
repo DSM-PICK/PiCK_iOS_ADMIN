@@ -2,24 +2,18 @@ import SwiftUI
 import PiCK_iOS_DesignSystem
 import ComposableArchitecture
 import AcceptDomainInterface
+import BaseFeature
 
 public struct AcceptView: View {
     @State private var isApplyBottomSheetPresented = false
     @State private var selectedOption: PiCK_iOS_DesignSystem.ApplyBottomSheet.SelectionOption = .outgoing
-    @State private var selectedFloor: Int = 2
+    @State private var selectedFloor: Int = 1
     @State private var showApprovePopup = false
     @State private var showRejectPopup = false
     let store: StoreOf<AcceptReducer>
 
     public init(store: StoreOf<AcceptReducer>) {
         self.store = store
-    }
-
-    private var currentDateString: String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ko_KR")
-        formatter.dateFormat = "M월 d일"
-        return formatter.string(from: Date())
     }
 
     public var body: some View {
@@ -33,7 +27,7 @@ public struct AcceptView: View {
                             onTap: { isApplyBottomSheetPresented = true }
                         )
 
-                        Text(currentDateString)
+                        Text(Date().koreanMonthDayString)
                             .pickText(type: .body2, textColor: .Gray.gray700)
                     }
                     .padding(.leading, 24)
@@ -61,29 +55,31 @@ public struct AcceptView: View {
                     .padding(.horizontal, 24)
 
                 if selectedOption == .classroomMove {
-                    HStack(spacing: 0) {
-                        ForEach([2, 3, 4], id: \.self) { floor in
-                            Button {
-                                selectedFloor = floor
-                                viewStore.send(.fetchApplicationsByFloor(floor: floor))
-                            } label: {
-                                Text("\(floor)층")
-                                    .pickText(
-                                        type: .body1,
-                                        textColor: selectedFloor == floor ? .Primary.primary500 : .Gray.gray600
-                                    )
-                                    .frame(width: 114, height: 32)
-                                    .background(
-                                        selectedFloor == floor
-                                        ? Color.Primary.primary50
-                                        : Color.clear
-                                    )
-                                    .cornerRadius(8)
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 8) {
+                            ForEach(1...5, id: \.self) { floor in
+                                Button {
+                                    selectedFloor = floor
+                                    viewStore.send(.fetchApplicationsByFloor(floor: floor))
+                                } label: {
+                                    Text("\(floor)층")
+                                        .pickText(
+                                            type: .body1,
+                                            textColor: selectedFloor == floor ? .Primary.primary500 : .Gray.gray600
+                                        )
+                                        .frame(width: 114, height: 32)
+                                        .background(
+                                            selectedFloor == floor
+                                            ? Color.Primary.primary50
+                                            : Color.clear
+                                        )
+                                        .cornerRadius(8)
+                                }
                             }
                         }
+                        .padding(.horizontal, 24)
                     }
                     .padding(.top, 16)
-                    .padding(.horizontal, 24)
                 }
 
                 HStack(spacing: 0) {

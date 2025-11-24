@@ -48,7 +48,7 @@ public struct AcceptReducer: Reducer {
         public var isLoading: Bool = false
         public var currentGrade: Int = 5
         public var currentClassNum: Int = 5
-        public var currentFloor: Int = 2
+        public var currentFloor: Int = 1
         public var currentType: ApplicationType = .outgoing
         public var toastMessage: String? = nil
         public var showToast: Bool = false
