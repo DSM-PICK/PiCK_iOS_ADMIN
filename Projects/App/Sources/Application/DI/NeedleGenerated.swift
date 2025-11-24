@@ -1,5 +1,7 @@
 
 
+import AcceptDomain
+import AcceptDomainInterface
 import AcceptFeature
 import AcceptFeatureInterface
 import AllTabDomain
@@ -44,17 +46,6 @@ private func parent1(_ component: NeedleFoundation.Scope) -> NeedleFoundation.Sc
 
 #if !NEEDLE_DYNAMIC
 
-private class AcceptDependency380d0282470c8b91ca89Provider: AcceptDependency {
-
-
-    init() {
-
-    }
-}
-/// ^->AppComponent->AcceptComponent
-private func factorye0727acbbfbe9e00fe23e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return AcceptDependency380d0282470c8b91ca89Provider()
-}
 private class PlanDependency0acb045bed3f80b42d39Provider: PlanDependency {
     var fetchAcademicScheduleUseCase: any FetchAcademicScheduleUseCaseProtocol {
         return appComponent.fetchAcademicScheduleUseCase
@@ -202,13 +193,21 @@ private class HomeDependency443c4e1871277bd8432aProvider: HomeDependency {
 private func factory67229cdf0f755562b2b1f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return HomeDependency443c4e1871277bd8432aProvider(appComponent: parent1(component) as! AppComponent)
 }
-
-#else
-extension AcceptComponent: NeedleFoundation.Registration {
-    public func registerItems() {
-
+private class AcceptDependency380d0282470c8b91ca89Provider: AcceptDependency {
+    var getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol {
+        return appComponent.getAllApplicationsUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
     }
 }
+/// ^->AppComponent->AcceptComponent
+private func factorye0727acbbfbe9e00fe23f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return AcceptDependency380d0282470c8b91ca89Provider(appComponent: parent1(component) as! AppComponent)
+}
+
+#else
 extension PlanComponent: NeedleFoundation.Registration {
     public func registerItems() {
         keyPathToName[\PlanDependency.fetchAcademicScheduleUseCase] = "fetchAcademicScheduleUseCase-any FetchAcademicScheduleUseCaseProtocol"
@@ -221,7 +220,7 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["keychain-any Keychain"] = { [unowned self] in self.keychain as Any }
         localTable["getSelfStudyDirectorUseCase-any GetSelfStudyDirectorUseCaseProtocol"] = { [unowned self] in self.getSelfStudyDirectorUseCase as Any }
         localTable["getAdminSelfStudyInfoUseCase-any GetAdminSelfStudyInfoUseCaseProtocol"] = { [unowned self] in self.getAdminSelfStudyInfoUseCase as Any }
-        localTable["acceptFactory-any AcceptFactory"] = { [unowned self] in self.acceptFactory as Any }
+        localTable["getAllApplicationsUseCase-any GetAllApplicationsUseCaseProtocol"] = { [unowned self] in self.getAllApplicationsUseCase as Any }
         localTable["fetchAcademicScheduleUseCase-any FetchAcademicScheduleUseCaseProtocol"] = { [unowned self] in self.fetchAcademicScheduleUseCase as Any }
         localTable["fetchMonthAcademicScheduleUseCase-any FetchMonthAcademicScheduleUseCaseProtocol"] = { [unowned self] in self.fetchMonthAcademicScheduleUseCase as Any }
         localTable["planFactory-any PlanFactory"] = { [unowned self] in self.planFactory as Any }
@@ -234,6 +233,7 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["onboardingFactory-any OnboardingFactory"] = { [unowned self] in self.onboardingFactory as Any }
         localTable["homeFactory-any HomeFactory"] = { [unowned self] in self.homeFactory as Any }
         localTable["allTabFactory-any AllTabFactory"] = { [unowned self] in self.allTabFactory as Any }
+        localTable["acceptFactory-any AcceptFactory"] = { [unowned self] in self.acceptFactory as Any }
         localTable["userDefault-any UserDefault"] = { [unowned self] in self.userDefault as Any }
         localTable["authProvider-MoyaProvider<AuthAPI>"] = { [unowned self] in self.authProvider as Any }
         localTable["localAuthDataSource-any LocalAuthDataSource"] = { [unowned self] in self.localAuthDataSource as Any }
@@ -300,6 +300,11 @@ extension HomeComponent: NeedleFoundation.Registration {
         keyPathToName[\HomeDependency.acceptFactory] = "acceptFactory-any AcceptFactory"
     }
 }
+extension AcceptComponent: NeedleFoundation.Registration {
+    public func registerItems() {
+        keyPathToName[\AcceptDependency.getAllApplicationsUseCase] = "getAllApplicationsUseCase-any GetAllApplicationsUseCaseProtocol"
+    }
+}
 
 
 #endif
@@ -316,7 +321,6 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
 #if !NEEDLE_DYNAMIC
 
 @inline(never) private func register1() {
-    registerProviderFactory("^->AppComponent->AcceptComponent", factorye0727acbbfbe9e00fe23e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->PlanComponent", factory84293b45082cab95c524f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent", factoryEmptyDependencyProvider)
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
@@ -328,6 +332,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->AllTabComponent", factoryfffd4c52463116b1a1a9f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->SigninComponent", factory2882a056d84a613debccf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->HomeComponent", factory67229cdf0f755562b2b1f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->AcceptComponent", factorye0727acbbfbe9e00fe23f47b58f8f304c97af4d5)
 }
 #endif
 

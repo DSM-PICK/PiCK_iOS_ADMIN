@@ -65,6 +65,6 @@ public extension AppComponent {
         AllTabComponent(parent: self)
     }
     var acceptFactory: any AcceptFactory {
-        AcceptFeature.AcceptComponent(parent: self)
+        AcceptComponent(parent: self)
     }
 }
