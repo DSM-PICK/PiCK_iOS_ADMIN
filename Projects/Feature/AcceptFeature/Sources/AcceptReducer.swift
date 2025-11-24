@@ -46,6 +46,8 @@ public struct AcceptReducer: Reducer {
         public var currentGrade: Int = 5
         public var currentClassNum: Int = 5
         public var currentType: ApplicationType = .outgoing
+        public var toastMessage: String? = nil
+        public var showToast: Bool = false
 
         public init() {}
     }
@@ -57,7 +59,8 @@ public struct AcceptReducer: Reducer {
         case toggleSelection(id: String)
         case approveSelectedApplications
         case rejectSelectedApplications
-        case updateStatusResponse(Result<Void, Error>)
+        case updateStatusResponse(Result<String, Error>)
+        case hideToast
     }
 
     public var body: some Reducer<State, Action> {
@@ -116,17 +119,20 @@ public struct AcceptReducer: Reducer {
                 guard !idList.isEmpty else { return .none }
                 state.isLoading = true
 
+                let count = idList.count
+                let typeText = state.currentType == .outgoing ? "외출 신청" : "교실 이동"
+
                 switch state.currentType {
                 case .outgoing:
                     return .publisher {
                         updateApplicationStatusUseCase.execute(status: "OK", idList: idList)
-                            .map { Action.updateStatusResponse(.success(())) }
+                            .map { Action.updateStatusResponse(.success("\(count)명의 \(typeText) 수락이 완료되었습니다!")) }
                             .catch { Just(Action.updateStatusResponse(.failure($0))) }
                     }
                 case .classroomMove:
                     return .publisher {
                         updateClassroomMoveStatusUseCase.execute(status: "OK", idList: idList)
-                            .map { Action.updateStatusResponse(.success(())) }
+                            .map { Action.updateStatusResponse(.success("\(count)명의 \(typeText) 수락이 완료되었습니다!")) }
                             .catch { Just(Action.updateStatusResponse(.failure($0))) }
                     }
                 }
@@ -136,28 +142,40 @@ public struct AcceptReducer: Reducer {
                 guard !idList.isEmpty else { return .none }
                 state.isLoading = true
 
+                let count = idList.count
+                let typeText = state.currentType == .outgoing ? "외출 신청" : "교실 이동"
+
                 switch state.currentType {
                 case .outgoing:
                     return .publisher {
                         updateApplicationStatusUseCase.execute(status: "NO", idList: idList)
-                            .map { Action.updateStatusResponse(.success(())) }
+                            .map { Action.updateStatusResponse(.success("\(count)명의 \(typeText) 거절이 완료되었습니다!")) }
                             .catch { Just(Action.updateStatusResponse(.failure($0))) }
                     }
                 case .classroomMove:
                     return .publisher {
                         updateClassroomMoveStatusUseCase.execute(status: "NO", idList: idList)
-                            .map { Action.updateStatusResponse(.success(())) }
+                            .map { Action.updateStatusResponse(.success("\(count)명의 \(typeText) 거절이 완료되었습니다!")) }
                             .catch { Just(Action.updateStatusResponse(.failure($0))) }
                     }
                 }
 
-            case .updateStatusResponse(.success):
+            case let .updateStatusResponse(.success(message)):
                 state.isLoading = false
                 state.selectedItemIds = []
+                state.toastMessage = message
+                state.showToast = true
                 return .send(.fetchApplications(type: state.currentType, grade: state.currentGrade, classNum: state.currentClassNum))
 
             case .updateStatusResponse(.failure):
                 state.isLoading = false
+                state.toastMessage = "처리에 실패했습니다"
+                state.showToast = true
+                return .none
+
+            case .hideToast:
+                state.showToast = false
+                state.toastMessage = nil
                 return .none
             }
         }

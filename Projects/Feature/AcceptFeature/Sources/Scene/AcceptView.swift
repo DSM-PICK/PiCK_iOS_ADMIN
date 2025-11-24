@@ -30,8 +30,8 @@ public struct AcceptView: View {
     }
 
     public var body: some View {
-        ZStack {
-            WithViewStore(store, observe: { $0 }) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
+            ZStack {
                 VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 0) {
                     HStack(spacing: 16) {
@@ -160,16 +160,14 @@ public struct AcceptView: View {
                     .presentationDetents([.height(450)])
                     .presentationDragIndicator(.hidden)
                 }
-            }
 
-            if showApprovePopup {
-                Color.black.opacity(0.4)
-                    .ignoresSafeArea()
-                    .onTapGesture {
-                        showApprovePopup = false
-                    }
+                if showApprovePopup {
+                    Color.black.opacity(0.4)
+                        .ignoresSafeArea()
+                        .onTapGesture {
+                            showApprovePopup = false
+                        }
 
-                WithViewStore(store, observe: { $0 }) { viewStore in
                     PiCKConfirmPopUp(
                         title: "선택한 신청을 수락하시겠습니까?",
                         explain: "수락하면 학생에게 알림이 전송됩니다.",
@@ -181,16 +179,14 @@ public struct AcceptView: View {
                         }
                     }
                 }
-            }
 
-            if showRejectPopup {
-                Color.black.opacity(0.4)
-                    .ignoresSafeArea()
-                    .onTapGesture {
-                        showRejectPopup = false
-                    }
+                if showRejectPopup {
+                    Color.black.opacity(0.4)
+                        .ignoresSafeArea()
+                        .onTapGesture {
+                            showRejectPopup = false
+                        }
 
-                WithViewStore(store, observe: { $0 }) { viewStore in
                     PiCKConfirmPopUp(
                         title: "선택한 신청을 거절하시겠습니까?",
                         explain: "거절하면 학생에게 알림이 전송됩니다.",
@@ -201,6 +197,35 @@ public struct AcceptView: View {
                             viewStore.send(.rejectSelectedApplications)
                         }
                     }
+                }
+
+                if viewStore.showToast, let message = viewStore.toastMessage {
+                    VStack {
+                        Spacer()
+
+                        HStack(spacing: 12) {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundColor(.Primary.primary500)
+                                .font(.system(size: 20))
+
+                            Text(message)
+                                .pickText(type: .body1, textColor: .Normal.black)
+                        }
+                        .padding(.horizontal, 16)
+                        .frame(height: 48)
+                        .background(Color.Gray.gray50)
+                        .cornerRadius(24)
+                        .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 4)
+                        .padding(.bottom, 40)
+                        .transition(.move(edge: .bottom).combined(with: .opacity))
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                                viewStore.send(.hideToast)
+                            }
+                        }
+                    }
+                    .zIndex(1000)
+                    .animation(.spring(response: 0.5, dampingFraction: 0.7), value: viewStore.showToast)
                 }
             }
         }
