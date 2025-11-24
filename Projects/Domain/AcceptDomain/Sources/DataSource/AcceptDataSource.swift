@@ -1,5 +1,5 @@
 import Foundation
 
 public protocol AcceptDataSource {
-    func getAllApplications() async throws -> ApplicationListResponseDTO
+    func getApplicationsByGrade(grade: Int, classNum: Int) async throws -> ApplicationListResponseDTO
 }

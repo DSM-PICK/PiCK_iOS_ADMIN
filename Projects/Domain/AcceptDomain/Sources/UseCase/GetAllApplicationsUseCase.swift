@@ -9,11 +9,11 @@ public class GetAllApplicationsUseCase: GetAllApplicationsUseCaseProtocol {
         self.repository = repository
     }
 
-    public func execute() -> AnyPublisher<[ApplicationEntity], Error> {
+    public func execute(grade: Int, classNum: Int) -> AnyPublisher<[ApplicationEntity], Error> {
         Future { promise in
             Task {
                 do {
-                    let applications = try await self.repository.getAllApplications()
+                    let applications = try await self.repository.getApplicationsByGrade(grade: grade, classNum: classNum)
                     promise(.success(applications))
                 } catch {
                     promise(.failure(error))

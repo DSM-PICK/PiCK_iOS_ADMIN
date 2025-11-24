@@ -8,8 +8,8 @@ public class AcceptRepositoryImpl: AcceptRepository {
         self.dataSource = dataSource
     }
 
-    public func getAllApplications() async throws -> [ApplicationEntity] {
-        try await dataSource.getAllApplications().map { $0.toEntity() }
+    public func getApplicationsByGrade(grade: Int, classNum: Int) async throws -> [ApplicationEntity] {
+        try await dataSource.getApplicationsByGrade(grade: grade, classNum: classNum).map { $0.toEntity() }
     }
 }
 

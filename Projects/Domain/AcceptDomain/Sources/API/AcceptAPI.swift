@@ -3,7 +3,7 @@ import BaseDomain
 import Moya
 
 public enum AcceptAPI {
-    case getAllApplications
+    case getApplicationsByGrade(grade: Int, classNum: Int)
 }
 
 extension AcceptAPI: PiCKAPI {
@@ -15,8 +15,8 @@ extension AcceptAPI: PiCKAPI {
 
     public var urlPath: String {
         switch self {
-        case .getAllApplications:
-            return "/reason/all"
+        case .getApplicationsByGrade:
+            return "/grade"
         }
     }
 
@@ -26,8 +26,14 @@ extension AcceptAPI: PiCKAPI {
 
     public var task: Moya.Task {
         switch self {
-        case .getAllApplications:
-            return .requestPlain
+        case let .getApplicationsByGrade(grade, classNum):
+            return .requestParameters(
+                parameters: [
+                    "grade": grade,
+                    "class_num": classNum
+                ],
+                encoding: URLEncoding.queryString
+            )
         }
     }
 

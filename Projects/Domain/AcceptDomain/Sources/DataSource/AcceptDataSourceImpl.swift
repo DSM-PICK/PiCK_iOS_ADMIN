@@ -12,9 +12,9 @@ public class AcceptDataSourceImpl: AcceptDataSource {
         self.provider = MoyaProvider<AcceptAPI>(plugins: [MoyaLoggingPlugin()])
     }
 
-    public func getAllApplications() async throws -> ApplicationListResponseDTO {
+    public func getApplicationsByGrade(grade: Int, classNum: Int) async throws -> ApplicationListResponseDTO {
         try await withCheckedThrowingContinuation { continuation in
-            provider.request(.getAllApplications) { result in
+            provider.request(.getApplicationsByGrade(grade: grade, classNum: classNum)) { result in
                 switch result {
                 case .success(let response):
                     do {
@@ -26,7 +26,7 @@ public class AcceptDataSourceImpl: AcceptDataSource {
                 case .failure(let error):
                     if let moyaError = error as? MoyaError,
                        let code = moyaError.response?.statusCode,
-                       let errorMap = AcceptAPI.getAllApplications.errorMap,
+                       let errorMap = AcceptAPI.getApplicationsByGrade(grade: grade, classNum: classNum).errorMap,
                        let mappedError = errorMap[code] {
                         continuation.resume(throwing: mappedError)
                     } else {

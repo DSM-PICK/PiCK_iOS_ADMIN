@@ -1,7 +1,7 @@
 import Foundation
 
 public protocol AcceptRepository {
-    func getAllApplications() async throws -> [ApplicationEntity]
+    func getApplicationsByGrade(grade: Int, classNum: Int) async throws -> [ApplicationEntity]
 }
 
 public struct ApplicationEntity: Equatable, Identifiable {
