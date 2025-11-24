@@ -19,17 +19,17 @@ public struct AcceptReducer: Reducer {
     }
 
     public enum Action {
-        case fetchAllApplications
+        case fetchApplications(grade: Int, classNum: Int)
         case applicationsResponse(Result<[ApplicationEntity], Error>)
     }
 
     public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
-            case .fetchAllApplications:
+            case let .fetchApplications(grade, classNum):
                 state.isLoading = true
                 return .publisher {
-                    getAllApplicationsUseCase.execute()
+                    getAllApplicationsUseCase.execute(grade: grade, classNum: classNum)
                         .map { Action.applicationsResponse(.success($0)) }
                         .catch { Just(Action.applicationsResponse(.failure($0))) }
                 }
