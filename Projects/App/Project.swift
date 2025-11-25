@@ -42,9 +42,16 @@ let targetSettings: Settings = .settings(
 )
 
 let needleScript: TargetScript = .pre(
-    script: "/opt/homebrew/bin/needle generate Sources/Application/DI/NeedleGenerated.swift Sources ../Feature",
+    script: """
+    if which needle >/dev/null; then
+      cd "${SRCROOT}/../.."
+      needle generate Projects/App/Sources/Application/DI/NeedleGenerated.swift Projects
+    else
+      echo "warning: Needle not installed, run: brew install needle"
+    fi
+    """,
     name: "Run Needle",
-    outputPaths: ["Projects/App/Sources/Application/DI/NeedleGenerated.swift"]
+    basedOnDependencyAnalysis: false
 )
 
 let appDependencies: [TargetDependency] = [
