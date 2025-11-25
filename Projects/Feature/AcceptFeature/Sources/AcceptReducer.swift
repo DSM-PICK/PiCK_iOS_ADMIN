@@ -101,8 +101,8 @@ public struct AcceptReducer: Reducer {
 
                 return .publisher {
                     getApplicationsByFloorUseCase.execute(floor: floor)
-                        .map { Action.applicationsResponse(.success($0)) }
-                        .catch { Just(Action.applicationsResponse(.failure($0))) }
+                        .map { Action.classroomMovesResponse(.success($0)) }
+                        .catch { Just(Action.classroomMovesResponse(.failure($0))) }
                 }
 
             case let .applicationsResponse(.success(applications)):

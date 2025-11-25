@@ -12,7 +12,7 @@ public class AcceptRepositoryImpl: AcceptRepository {
         try await dataSource.getApplicationsByGrade(grade: grade, classNum: classNum).map { $0.toEntity() }
     }
 
-    public func getApplicationsByFloor(floor: Int) async throws -> [ApplicationEntity] {
+    public func getApplicationsByFloor(floor: Int) async throws -> [ClassroomMoveEntity] {
         try await dataSource.getApplicationsByFloor(floor: floor).map { $0.toEntity() }
     }
 

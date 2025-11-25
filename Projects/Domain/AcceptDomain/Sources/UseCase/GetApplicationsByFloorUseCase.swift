@@ -9,12 +9,12 @@ public class GetApplicationsByFloorUseCase: GetApplicationsByFloorUseCaseProtoco
         self.repository = repository
     }
 
-    public func execute(floor: Int) -> AnyPublisher<[ApplicationEntity], Error> {
+    public func execute(floor: Int) -> AnyPublisher<[ClassroomMoveEntity], Error> {
         Future { promise in
             Task {
                 do {
-                    let applications = try await self.repository.getApplicationsByFloor(floor: floor)
-                    promise(.success(applications))
+                    let classroomMoves = try await self.repository.getApplicationsByFloor(floor: floor)
+                    promise(.success(classroomMoves))
                 } catch {
                     promise(.failure(error))
                 }

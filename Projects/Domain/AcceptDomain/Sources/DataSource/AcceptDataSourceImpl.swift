@@ -37,13 +37,13 @@ public class AcceptDataSourceImpl: AcceptDataSource {
         }
     }
 
-    public func getApplicationsByFloor(floor: Int) async throws -> ApplicationListResponseDTO {
+    public func getApplicationsByFloor(floor: Int) async throws -> ClassroomMoveListResponseDTO {
         try await withCheckedThrowingContinuation { continuation in
             provider.request(.getApplicationsByFloor(floor: floor)) { result in
                 switch result {
                 case .success(let response):
                     do {
-                        let data = try response.map(ApplicationListResponseDTO.self)
+                        let data = try response.map(ClassroomMoveListResponseDTO.self)
                         continuation.resume(returning: data)
                     } catch {
                         continuation.resume(throwing: error)

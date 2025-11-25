@@ -15,9 +15,9 @@ extension AcceptAPI: PiCKAPI {
 
     public var domain: BaseDomain.PiCKDomain {
         switch self {
-        case .getApplicationsByGrade, .getApplicationsByFloor, .updateApplicationStatus:
+        case .getApplicationsByGrade, .updateApplicationStatus:
             return .application
-        case .getClassroomMovesByGrade, .updateClassroomMoveStatus:
+        case .getApplicationsByFloor, .getClassroomMovesByGrade, .updateClassroomMoveStatus:
             return .classroom
         }
     }
