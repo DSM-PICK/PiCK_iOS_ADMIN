@@ -1,7 +1,7 @@
 import Foundation
 import SchoolMealDomainInterface
 
-public struct GetMealUseCaseImpl: GetMealUseCaseProtocol {
+public struct FetchSchoolMealUseCase: FetchSchoolMealUseCaseProtocol {
     private let repository: SchoolMealRepository
     
     public init(repository: SchoolMealRepository) {
