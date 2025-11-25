@@ -93,40 +93,52 @@ public struct AcceptView: View {
                 .padding(.trailing, 24)
 
                 ScrollView {
-                    VStack(spacing: 16) {
-                        ForEach(viewStore.studentItems) { item in
-                            switch item {
-                            case .application(let application):
-                                AcceptStudentCell(
-                                    studentNumber: "\(application.grade)\(application.classNum)\(String(format: "%02d", application.num))",
-                                    studentName: application.userName,
-                                    startTime: application.start,
-                                    endTime: application.end,
-                                    activityType: "외출 수락",
-                                    reason: application.reason,
-                                    isSelected: viewStore.selectedItemIds.contains(application.id),
-                                    onTap: {
-                                        viewStore.send(.toggleSelection(id: application.id))
-                                    }
-                                )
-                            case .classroomMove(let move):
-                                ClassroomMoveCell(
-                                    studentNumber: "\(move.grade)\(move.classNum)\(String(format: "%02d", move.num))",
-                                    studentName: move.userName,
-                                    startPeriod: move.start,
-                                    endPeriod: move.end,
-                                    currentClassroom: "\(move.grade)학년 \(move.classNum)반",
-                                    moveToClassroom: move.classroomName,
-                                    isSelected: viewStore.selectedItemIds.contains(move.id),
-                                    onTap: {
-                                        viewStore.send(.toggleSelection(id: move.id))
-                                    }
-                                )
+                    if viewStore.studentItems.isEmpty {
+                        VStack(spacing: 12) {
+                            PiCKImage.blackLogo
+                                .resizable()
+                                .frame(width: 88, height: 91)
+
+                            Text("아직 외출을 신청한 학생이 없어요")
+                                .pickText(type: .subTitle2, textColor: .Gray.gray500)
+                        }
+                        .frame(maxWidth: .infinity, minHeight: UIScreen.main.bounds.height - 400)
+                    } else {
+                        VStack(spacing: 16) {
+                            ForEach(viewStore.studentItems) { item in
+                                switch item {
+                                case .application(let application):
+                                    AcceptStudentCell(
+                                        studentNumber: "\(application.grade)\(application.classNum)\(String(format: "%02d", application.num))",
+                                        studentName: application.userName,
+                                        startTime: application.start,
+                                        endTime: application.end,
+                                        activityType: "외출 수락",
+                                        reason: application.reason,
+                                        isSelected: viewStore.selectedItemIds.contains(application.id),
+                                        onTap: {
+                                            viewStore.send(.toggleSelection(id: application.id))
+                                        }
+                                    )
+                                case .classroomMove(let move):
+                                    ClassroomMoveCell(
+                                        studentNumber: "\(move.grade)\(move.classNum)\(String(format: "%02d", move.num))",
+                                        studentName: move.userName,
+                                        startPeriod: move.start,
+                                        endPeriod: move.end,
+                                        currentClassroom: "\(move.grade)학년 \(move.classNum)반",
+                                        moveToClassroom: move.classroomName,
+                                        isSelected: viewStore.selectedItemIds.contains(move.id),
+                                        onTap: {
+                                            viewStore.send(.toggleSelection(id: move.id))
+                                        }
+                                    )
+                                }
                             }
                         }
+                        .padding(.top, 20)
+                        .padding(.horizontal, 24)
                     }
-                    .padding(.top, 20)
-                    .padding(.horizontal, 24)
                 }
 
                     Spacer()
