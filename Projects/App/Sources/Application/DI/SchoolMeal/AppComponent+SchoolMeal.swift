@@ -8,7 +8,7 @@ import SchoolMealDomainInterface
 import BaseDomain
 
 public protocol SchoolMealDependency: Dependency {
-    var fetchSchoolMealUseCase: FetchSchoolMealUseCaseProtocol { get }
+    var fetchSchoolMealUseCase: any FetchSchoolMealUseCaseProtocol { get }
 }
 
 public final class SchoolMealComponent: Component<SchoolMealDependency>, SchoolMealFactory {
