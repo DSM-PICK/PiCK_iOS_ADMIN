@@ -1,5 +1,5 @@
 {
-  "originHash" : "7a08b1175501c8758eb481f79d3f2630ce94c34c445ac89e5de43878a7185504",
+  "originHash" : "f13994cc2968f7ab227e4114289028fd1bd531da4dea4b4aaa0728ebe2ae8f57",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -186,8 +186,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/leejh08/PiCK_iOS_DesignSystem.git",
       "state" : {
-        "revision" : "7874a4a12341b33c943c74e6ed2dfba2bec318bd",
-        "version" : "1.1.5"
+        "revision" : "7bba249ce95712ea65525e104c59c3b11a77f68f",
+        "version" : "1.1.7"
       }
     },
     {
@@ -312,8 +312,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/pointfreeco/swift-composable-architecture.git",
       "state" : {
-        "revision" : "2d60d4082dfb4978974307acf0f00dfa20e5f621",
-        "version" : "1.22.3"
+        "revision" : "5b0890fabfd68a2d375d68502bc3f54a8548c494",
+        "version" : "1.23.1"
       }
     },
     {

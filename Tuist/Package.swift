@@ -40,12 +40,12 @@ let package = Package(
         .package(url: "https://github.com/airbnb/lottie-ios", from: "4.3.3"),
         .package(url: "https://github.com/WenchaoD/FSCalendar.git", from: "2.8.4"),
         .package(url: "https://github.com/RxSwiftCommunity/RxDataSources.git", from: "5.0.0"),
-        .package(url: "https://github.com/leejh08/PiCK_iOS_DesignSystem.git", from: "1.1.5"),
+        .package(url: "https://github.com/leejh08/PiCK_iOS_DesignSystem.git", from: "1.1.7"),
         .package(url: "https://github.com/firebase/firebase-ios-sdk.git", from: "12.5.0"),
         .package(url: "https://github.com/daltoniam/Starscream.git", from: "4.0.6"),
         .package(url: "https://github.com/ReactorKit/ReactorKit.git", from: "3.0.0"),
         .package(url: "https://github.com/kean/Pulse.git", from: "4.2.0"),
-        .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", from: "1.1.0"),
+        .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", from: "1.23.1"),
         .package(url: "https://github.com/uber/needle.git", from: "0.24.0")
     ],
     targets: [

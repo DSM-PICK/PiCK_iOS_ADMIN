@@ -36,10 +36,10 @@ let interfaceTarget = Target.target(
     name: "${FEATURE_NAME}FeatureInterface",
     destinations: env.destination,
     product: .framework,
-    bundleId: "$(env.organizationName).${FEATURE_NAME}FeatureInterface",
+    bundleId: "\$(env.organizationName).${FEATURE_NAME}FeatureInterface",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
-    sources: ["Interface/${FEATURE_NAME}Interface.swift"],
+    sources: ["Interface/**"],
     dependencies: [
         .Features.baseFeature
     ]
@@ -49,7 +49,7 @@ let implementationTarget = Target.target(
     name: "${FEATURE_NAME}Feature",
     destinations: env.destination,
     product: .staticFramework,
-    bundleId: "$(env.organizationName).${FEATURE_NAME}Feature",
+    bundleId: "\$(env.organizationName).${FEATURE_NAME}Feature",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Sources/**"],
@@ -107,10 +107,16 @@ final class ${FEATURE_NAME}Tests: XCTestCase {
 }
 EOF
 
-# Add to app dependencies
+# Convert to lowerCamelCase
 LOWER_CAMEL_CASE_FEATURE_NAME="$(tr '[:upper:]' '[:lower:]' <<< "${FEATURE_NAME:0:1}")${FEATURE_NAME:1}"
-sed -i '' "/.Features.homeFeatureInterface,/a\
-                .Features.${LOWER_CAMEL_CASE_FEATURE_NAME}Feature,\\n                .Features.${LOWER_CAMEL_CASE_FEATURE_NAME}FeatureInterface," Projects/App/Project.swift
+
+# Add to DependencyPlugin using Python script
+python3 Scripts/add_to_dependency.py feature "$FEATURE_NAME" "$LOWER_CAMEL_CASE_FEATURE_NAME"
+
+# Add to app dependencies
+sed -i '' "/.Features.acceptFeatureInterface,/a\\
+    .Features.${LOWER_CAMEL_CASE_FEATURE_NAME}Feature,\\
+    .Features.${LOWER_CAMEL_CASE_FEATURE_NAME}FeatureInterface," Projects/App/Project.swift
 
 echo "Feature '$FEATURE_NAME' created successfully."
 echo "Run 'tuist generate' to include it in the project."

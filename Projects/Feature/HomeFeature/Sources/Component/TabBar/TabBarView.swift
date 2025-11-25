@@ -3,21 +3,25 @@ import PiCK_iOS_DesignSystem
 import ComposableArchitecture
 import AllTabFeatureInterface
 import PlanFeatureInterface
+import AcceptFeatureInterface
 
 public struct TabBarView: View {
     @State private var selectedTab = 2
     let store: StoreOf<HomeReducer>
     let allTabFactory: any AllTabFactory
     let planFactory: any PlanFactory
+    let acceptFactory: any AcceptFactory
     
     public init(
         store: StoreOf<HomeReducer>,
         allTabFactory: any AllTabFactory,
-        planFactory: any PlanFactory
+        planFactory: any PlanFactory,
+        acceptFactory: any AcceptFactory
     ) {
         self.store = store
         self.allTabFactory = allTabFactory
         self.planFactory = planFactory
+        self.acceptFactory = acceptFactory
     }
     
     public var body: some View {
@@ -44,7 +48,7 @@ public struct TabBarView: View {
                 Label("홈", systemImage: "house")
             }
             
-            Text("수락")
+            acceptFactory.makeView()
                 .tag(3)
                 .tabItem {
                     Label("수락", systemImage: "checkmark.circle")
