@@ -1,6 +1,5 @@
 import ComposableArchitecture
 import AcceptDomainInterface
-import Combine
 
 public struct AcceptReducer: Reducer {
     private let getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol
@@ -81,16 +80,16 @@ public struct AcceptReducer: Reducer {
 
                 switch type {
                 case .outgoing:
-                    return .publisher {
-                        getAllApplicationsUseCase.execute(grade: grade, classNum: classNum)
-                            .map { Action.applicationsResponse(.success($0)) }
-                            .catch { Just(Action.applicationsResponse(.failure($0))) }
+                    return .run { send in
+                        await send(.applicationsResponse(TaskResult {
+                            try await getAllApplicationsUseCase.execute(grade: grade, classNum: classNum)
+                        }))
                     }
                 case .classroomMove:
-                    return .publisher {
-                        getClassroomMovesUseCase.execute(grade: grade, classNum: classNum)
-                            .map { Action.classroomMovesResponse(.success($0)) }
-                            .catch { Just(Action.classroomMovesResponse(.failure($0))) }
+                    return .run { send in
+                        await send(.classroomMovesResponse(TaskResult {
+                            try await getClassroomMovesUseCase.execute(grade: grade, classNum: classNum)
+                        }))
                     }
                 }
 
@@ -100,10 +99,10 @@ public struct AcceptReducer: Reducer {
                 state.currentType = .classroomMove
                 state.selectedItemIds = []
 
-                return .publisher {
-                    getApplicationsByFloorUseCase.execute(floor: floor)
-                        .map { Action.classroomMovesResponse(.success($0)) }
-                        .catch { Just(Action.classroomMovesResponse(.failure($0))) }
+                return .run { send in
+                    await send(.classroomMovesResponse(TaskResult {
+                        try await getApplicationsByFloorUseCase.execute(floor: floor)
+                    }))
                 }
 
             case let .applicationsResponse(.success(applications)):
@@ -139,19 +138,23 @@ public struct AcceptReducer: Reducer {
 
                 let count = idList.count
                 let typeText = state.currentType == .outgoing ? "외출 신청" : "교실 이동"
+                let currentType = state.currentType
 
-                switch state.currentType {
-                case .outgoing:
-                    return .publisher {
-                        updateApplicationStatusUseCase.execute(status: "OK", idList: idList)
-                            .map { Action.updateStatusResponse(.success("\(count)명의 \(typeText) 수락이 완료되었습니다!")) }
-                            .catch { Just(Action.updateStatusResponse(.failure($0))) }
+                return .run { send in
+                    let result = await TaskResult {
+                        switch currentType {
+                        case .outgoing:
+                            try await updateApplicationStatusUseCase.execute(status: "OK", idList: idList)
+                        case .classroomMove:
+                            try await updateClassroomMoveStatusUseCase.execute(status: "OK", idList: idList)
+                        }
                     }
-                case .classroomMove:
-                    return .publisher {
-                        updateClassroomMoveStatusUseCase.execute(status: "OK", idList: idList)
-                            .map { Action.updateStatusResponse(.success("\(count)명의 \(typeText) 수락이 완료되었습니다!")) }
-                            .catch { Just(Action.updateStatusResponse(.failure($0))) }
+
+                    switch result {
+                    case .success:
+                        await send(.updateStatusResponse(.success("\(count)명의 \(typeText) 수락이 완료되었습니다!")))
+                    case .failure(let error):
+                        await send(.updateStatusResponse(.failure(error)))
                     }
                 }
 
@@ -162,19 +165,23 @@ public struct AcceptReducer: Reducer {
 
                 let count = idList.count
                 let typeText = state.currentType == .outgoing ? "외출 신청" : "교실 이동"
+                let currentType = state.currentType
 
-                switch state.currentType {
-                case .outgoing:
-                    return .publisher {
-                        updateApplicationStatusUseCase.execute(status: "NO", idList: idList)
-                            .map { Action.updateStatusResponse(.success("\(count)명의 \(typeText) 거절이 완료되었습니다!")) }
-                            .catch { Just(Action.updateStatusResponse(.failure($0))) }
+                return .run { send in
+                    let result = await TaskResult {
+                        switch currentType {
+                        case .outgoing:
+                            try await updateApplicationStatusUseCase.execute(status: "NO", idList: idList)
+                        case .classroomMove:
+                            try await updateClassroomMoveStatusUseCase.execute(status: "NO", idList: idList)
+                        }
                     }
-                case .classroomMove:
-                    return .publisher {
-                        updateClassroomMoveStatusUseCase.execute(status: "NO", idList: idList)
-                            .map { Action.updateStatusResponse(.success("\(count)명의 \(typeText) 거절이 완료되었습니다!")) }
-                            .catch { Just(Action.updateStatusResponse(.failure($0))) }
+
+                    switch result {
+                    case .success:
+                        await send(.updateStatusResponse(.success("\(count)명의 \(typeText) 거절이 완료되었습니다!")))
+                    case .failure(let error):
+                        await send(.updateStatusResponse(.failure(error)))
                     }
                 }
 
