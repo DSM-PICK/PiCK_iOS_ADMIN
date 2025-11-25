@@ -5,6 +5,7 @@ import AcceptDomainInterface
 import BaseFeature
 
 public struct AcceptView: View {
+    @Environment(\.dismiss) var dismiss
     @State private var isApplyBottomSheetPresented = false
     @State private var selectedOption: PiCK_iOS_DesignSystem.ApplyBottomSheet.SelectionOption = .outgoing
     @State private var selectedFloor: Int = 1
@@ -218,6 +219,11 @@ public struct AcceptView: View {
                     }
                     .zIndex(1000)
                     .animation(.spring(response: 0.5, dampingFraction: 0.7), value: viewStore.showToast)
+                }
+            }
+            .onChange(of: viewStore.shouldDismiss) { shouldDismiss in
+                if shouldDismiss {
+                    dismiss()
                 }
             }
         }

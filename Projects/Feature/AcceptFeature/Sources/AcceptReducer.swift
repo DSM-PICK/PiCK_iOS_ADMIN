@@ -52,6 +52,7 @@ public struct AcceptReducer: Reducer {
         public var currentType: ApplicationType = .outgoing
         public var toastMessage: String? = nil
         public var showToast: Bool = false
+        public var shouldDismiss: Bool = false
 
         public init() {}
     }
@@ -179,15 +180,15 @@ public struct AcceptReducer: Reducer {
 
             case let .updateStatusResponse(.success(message)):
                 state.isLoading = false
+                let removedIds = state.selectedItemIds
+                state.studentItems.removeAll { item in
+                    removedIds.contains(item.id)
+                }
                 state.selectedItemIds = []
                 state.toastMessage = message
                 state.showToast = true
-
-                if state.currentType == .classroomMove {
-                    return .send(.fetchApplicationsByFloor(floor: state.currentFloor))
-                } else {
-                    return .send(.fetchApplications(type: state.currentType, grade: state.currentGrade, classNum: state.currentClassNum))
-                }
+                state.shouldDismiss = true
+                return .none
 
             case .updateStatusResponse(.failure):
                 state.isLoading = false
