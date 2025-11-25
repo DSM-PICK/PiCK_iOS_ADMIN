@@ -38,7 +38,7 @@ extension AuthAPI: PiCKAPI {
         case .signin:
             return "/login"
         case .refreshToken:
-            return "/reissue"
+            return "/refresh"
         case .secretKey:
             return "/key"
         case .signup:
