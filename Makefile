@@ -1,6 +1,7 @@
 generate:
 	tuist install
 	tuist generate
+
 clean:
 	tuist clean
 	rm -rf .build
@@ -9,6 +10,9 @@ clean:
 
 cache_clean:
 	rm -rf ~/Library/Developer/Xcode/DerivedData/*
+
+needle:
+	needle generate Projects/App/Sources/Application/DI/NeedleGenerated.swift Projects
 
 regenerate:
 	rm -rf **/**/**/*.xcodeproj
