@@ -81,15 +81,17 @@ public struct AcceptReducer: Reducer {
                 switch type {
                 case .outgoing:
                     return .run { send in
-                        await send(.applicationsResponse(TaskResult {
+                        let result = await TaskResult {
                             try await getAllApplicationsUseCase.execute(grade: grade, classNum: classNum)
-                        }))
+                        }
+                        await send(.applicationsResponse(Result(result)))
                     }
                 case .classroomMove:
                     return .run { send in
-                        await send(.classroomMovesResponse(TaskResult {
+                        let result = await TaskResult {
                             try await getClassroomMovesUseCase.execute(grade: grade, classNum: classNum)
-                        }))
+                        }
+                        await send(.classroomMovesResponse(Result(result)))
                     }
                 }
 
@@ -100,9 +102,10 @@ public struct AcceptReducer: Reducer {
                 state.selectedItemIds = []
 
                 return .run { send in
-                    await send(.classroomMovesResponse(TaskResult {
+                    let result = await TaskResult {
                         try await getApplicationsByFloorUseCase.execute(floor: floor)
-                    }))
+                    }
+                    await send(.classroomMovesResponse(Result(result)))
                 }
 
             case let .applicationsResponse(.success(applications)):
