@@ -4,6 +4,7 @@ import ComposableArchitecture
 import AllTabFeatureInterface
 import PlanFeatureInterface
 import SchoolMealFeatureInterface
+import AcceptFeatureInterface
 
 public struct TabBarView: View {
     @State private var selectedTab = 2
@@ -11,17 +12,20 @@ public struct TabBarView: View {
     let allTabFactory: any AllTabFactory
     let planFactory: any PlanFactory
     let schoolMealFactory: any SchoolMealFactory
+    let acceptFactory: any AcceptFactory
     
     public init(
         store: StoreOf<HomeReducer>,
         allTabFactory: any AllTabFactory,
         planFactory: any PlanFactory,
         schoolMealFactory: any SchoolMealFactory
+        acceptFactory: any AcceptFactory
     ) {
         self.store = store
         self.allTabFactory = allTabFactory
         self.planFactory = planFactory
         self.schoolMealFactory = schoolMealFactory
+        self.acceptFactory = acceptFactory
     }
     
     public var body: some View {
@@ -63,7 +67,7 @@ public struct TabBarView: View {
                 }
             }
             
-            Text("수락")
+            acceptFactory.makeView()
                 .tag(3)
                 .tabItem {
                     Label {

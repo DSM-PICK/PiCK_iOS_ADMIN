@@ -70,6 +70,8 @@ let appDependencies: [TargetDependency] = [
     .Features.planFeatureInterface,
     .Features.schoolMealFeature,
     .Features.schoolMealFeatureInterface,
+    .Features.acceptFeature,
+    .Features.acceptFeatureInterface,
     .Projects.baseDomainInterface,
     .Projects.authDomain,
     .Projects.authDomainInterface,
@@ -81,6 +83,8 @@ let appDependencies: [TargetDependency] = [
     .Projects.planDomainInterface,
     .Projects.schoolMealDomain,
     .Projects.schoolMealDomainInterface,
+    .Projects.acceptDomain,
+    .Projects.acceptDomainInterface,
     .Projects.core,
     .Shared.thirdPartyLib,
     .Shared.utility

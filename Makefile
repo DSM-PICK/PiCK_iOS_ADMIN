@@ -35,3 +35,7 @@ feature:
 	@read -p "Enter feature name: " feature_name; \
 	sh Scripts/new_feature.sh $$feature_name
 
+domain:
+	@read -p "Enter domain name: " domain_name; \
+	sh Scripts/new_domain.sh $$domain_name
+

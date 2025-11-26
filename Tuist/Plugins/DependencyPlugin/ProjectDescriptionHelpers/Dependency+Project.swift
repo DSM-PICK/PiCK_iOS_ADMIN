@@ -62,6 +62,13 @@ public extension TargetDependency.Projects {
     static let schoolMealDomainInterface = TargetDependency.project(
         target: "SchoolMealDomainInterface",
         path: .relativeToRoot("Projects/Domain/SchoolMealDomain")
+    static let acceptDomain = TargetDependency.project(
+        target: "AcceptDomain",
+        path: .relativeToRoot("Projects/Domain/AcceptDomain")
+    )
+    static let acceptDomainInterface = TargetDependency.project(
+        target: "AcceptDomainInterface",
+        path: .relativeToRoot("Projects/Domain/AcceptDomain")
     )
 }
 
@@ -126,6 +133,15 @@ public extension TargetDependency.Features {
         target: "SchoolMealFeatureInterface",
         path: .relativeToRoot("Projects/Feature/SchoolMealFeature")
     )
+    static let acceptFeature = TargetDependency.project(
+        target: "AcceptFeature",
+        path: .relativeToRoot("Projects/Feature/AcceptFeature")
+    )
+    static let acceptFeatureInterface = TargetDependency.project(
+        target: "AcceptFeatureInterface",
+        path: .relativeToRoot("Projects/Feature/AcceptFeature")
+    )
+    // other Module
 }
 
 public extension TargetDependency.Shared {

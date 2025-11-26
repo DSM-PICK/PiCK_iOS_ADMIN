@@ -11,6 +11,7 @@ let project = Project.makeModule(
     dependencies: [
         .Projects.baseDomain,
         .Projects.authDomain,
-        .Projects.allTabDomain
+        .Projects.allTabDomain,
+        .Projects.acceptDomain
     ]
 )
