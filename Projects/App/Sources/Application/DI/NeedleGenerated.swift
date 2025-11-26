@@ -27,6 +27,10 @@ import PlanDomain
 import PlanDomainInterface
 import PlanFeature
 import PlanFeatureInterface
+import SchoolMealDomain
+import SchoolMealDomainInterface
+import SchoolMealFeature
+import SchoolMealFeatureInterface
 import SigninFeature
 import SigninFeatureInterface
 import SignupFeature
@@ -74,6 +78,19 @@ private class RootDependency3944cc797a4a88956fb5Provider: RootDependency {
 /// ^->AppComponent->RootComponent
 private func factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return RootDependency3944cc797a4a88956fb5Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class SchoolMealDependencya734efcf6966c6d8c144Provider: SchoolMealDependency {
+    var fetchSchoolMealUseCase: any FetchSchoolMealUseCaseProtocol {
+        return appComponent.fetchSchoolMealUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->SchoolMealComponent
+private func factorya99b85c0783e43e9302df47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return SchoolMealDependencya734efcf6966c6d8c144Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class OnboardingDependencyf77d0055983a00cf8835Provider: OnboardingDependency {
 
@@ -181,6 +198,9 @@ private class HomeDependency443c4e1871277bd8432aProvider: HomeDependency {
     var planFactory: any PlanFactory {
         return appComponent.planFactory
     }
+    var schoolMealFactory: any SchoolMealFactory {
+        return appComponent.schoolMealFactory
+    }
     var acceptFactory: any AcceptFactory {
         return appComponent.acceptFactory
     }
@@ -249,6 +269,8 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["onboardingFactory-any OnboardingFactory"] = { [unowned self] in self.onboardingFactory as Any }
         localTable["homeFactory-any HomeFactory"] = { [unowned self] in self.homeFactory as Any }
         localTable["allTabFactory-any AllTabFactory"] = { [unowned self] in self.allTabFactory as Any }
+        localTable["fetchSchoolMealUseCase-any FetchSchoolMealUseCaseProtocol"] = { [unowned self] in self.fetchSchoolMealUseCase as Any }
+        localTable["schoolMealFactory-any SchoolMealFactory"] = { [unowned self] in self.schoolMealFactory as Any }
         localTable["acceptFactory-any AcceptFactory"] = { [unowned self] in self.acceptFactory as Any }
         localTable["userDefault-any UserDefault"] = { [unowned self] in self.userDefault as Any }
         localTable["authProvider-MoyaProvider<AuthAPI>"] = { [unowned self] in self.authProvider as Any }
@@ -268,6 +290,11 @@ extension AppComponent: NeedleFoundation.Registration {
 extension RootComponent: NeedleFoundation.Registration {
     public func registerItems() {
         keyPathToName[\RootDependency.onboardingFactory] = "onboardingFactory-any OnboardingFactory"
+    }
+}
+extension SchoolMealComponent: NeedleFoundation.Registration {
+    public func registerItems() {
+        keyPathToName[\SchoolMealDependency.fetchSchoolMealUseCase] = "fetchSchoolMealUseCase-any FetchSchoolMealUseCaseProtocol"
     }
 }
 extension OnboardingComponent: NeedleFoundation.Registration {
@@ -313,6 +340,7 @@ extension HomeComponent: NeedleFoundation.Registration {
         keyPathToName[\HomeDependency.getAdminSelfStudyInfoUseCase] = "getAdminSelfStudyInfoUseCase-any GetAdminSelfStudyInfoUseCaseProtocol"
         keyPathToName[\HomeDependency.allTabFactory] = "allTabFactory-any AllTabFactory"
         keyPathToName[\HomeDependency.planFactory] = "planFactory-any PlanFactory"
+        keyPathToName[\HomeDependency.schoolMealFactory] = "schoolMealFactory-any SchoolMealFactory"
         keyPathToName[\HomeDependency.acceptFactory] = "acceptFactory-any AcceptFactory"
     }
 }
@@ -344,6 +372,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->PlanComponent", factory84293b45082cab95c524f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent", factoryEmptyDependencyProvider)
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->SchoolMealComponent", factorya99b85c0783e43e9302df47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->OnboardingComponent", factory88dc13cc29c5719e2b01e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->InfoSettingComponent", factory15af88ecfb834319b78cf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->PasswordComponent", factory9f8860811946a346ca2ae3b0c44298fc1c149afb)

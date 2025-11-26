@@ -1,6 +1,11 @@
 generate:
-	tuist install
-	tuist generate
+	@echo "🔨 Running Needle..."
+	@needle generate Projects/App/Sources/Application/DI/NeedleGenerated.swift Projects
+	@echo "📦 Installing dependencies..."
+	@tuist install
+	@echo "🚀 Generating project..."
+	@tuist generate
+
 clean:
 	tuist clean
 	rm -rf .build
@@ -10,13 +15,21 @@ clean:
 cache_clean:
 	rm -rf ~/Library/Developer/Xcode/DerivedData/*
 
+needle:
+	needle generate Projects/App/Sources/Application/DI/NeedleGenerated.swift Projects
+
 regenerate:
-	rm -rf **/**/**/*.xcodeproj
-	rm -rf **/**/*.xcodeproj
-	rm -rf **/*.xcodeproj
-	rm -rf *.xcworkspace
-	tuist install
-	tuist generate
+	@echo "🧹 Cleaning..."
+	@rm -rf **/**/**/*.xcodeproj
+	@rm -rf **/**/*.xcodeproj
+	@rm -rf **/*.xcodeproj
+	@rm -rf *.xcworkspace
+	@echo "🔨 Running Needle..."
+	@needle generate Projects/App/Sources/Application/DI/NeedleGenerated.swift Projects
+	@echo "📦 Installing dependencies..."
+	@tuist install
+	@echo "🚀 Generating project..."
+	@tuist generate
 
 feature:
 	@read -p "Enter feature name: " feature_name; \

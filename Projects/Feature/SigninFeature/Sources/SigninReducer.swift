@@ -54,7 +54,7 @@ public struct SigninReducer: Reducer {
                         req: .init(
                             adminID: state.email,
                             password: state.password,
-                            deviceToken: ""
+                            deviceToken: nil
                         )
                     ).values {}
                 }

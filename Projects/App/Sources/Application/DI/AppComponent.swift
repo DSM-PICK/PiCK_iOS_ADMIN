@@ -11,10 +11,12 @@ import HomeFeature
 import HomeFeatureInterface
 import AllTabFeature
 import AllTabFeatureInterface
+import SchoolMealFeature
+import SchoolMealFeatureInterface
 import AcceptFeature
 import AcceptFeatureInterface
 
-public final class AppComponent: BootstrapComponent, HomeDependency, AllTabDependency, PlanDependency, AcceptDependency {
+public final class AppComponent: BootstrapComponent, HomeDependency, AllTabDependency, PlanDependency, SchoolMealDependency, AcceptDependency {
     private let _keychain: any Keychain
 
     init(keychain: any Keychain) {

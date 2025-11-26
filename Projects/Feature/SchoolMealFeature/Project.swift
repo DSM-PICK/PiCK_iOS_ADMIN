@@ -17,39 +17,37 @@ let settings: Settings = .settings(
 )
 
 let interfaceTarget = Target.target(
-    name: "HomeFeatureInterface",
+    name: "SchoolMealFeatureInterface",
     destinations: env.destination,
     product: .framework,
-    bundleId: "\(env.organizationName).HomeFeatureInterface",
+    bundleId: "\(env.organizationName).SchoolMealFeatureInterface",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
-    sources: ["Interface/HomeFeatureInterface.swift"],
+    sources: ["Interface/**"],
     dependencies: [
         .Features.baseFeature
     ]
 )
 
 let implementationTarget = Target.target(
-    name: "HomeFeature",
+    name: "SchoolMealFeature",
     destinations: env.destination,
     product: .staticFramework,
-    bundleId: "\(env.organizationName).HomeFeature",
+    bundleId: "\(env.organizationName).SchoolMealFeature",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Sources/**"],
     dependencies: [
-        .target(name: "HomeFeatureInterface"),
-        .Projects.homeDomainInterface,
-        .Features.planFeatureInterface,
-        .Features.allTabFeatureInterface,
-        .Features.schoolMealFeatureInterface,
+        .target(name: "SchoolMealFeatureInterface"),
+        .Projects.schoolMealDomainInterface,
+        .Features.homeFeature,
         .Shared.utility,
         .Shared.thirdPartyLib
     ]
 )
 
 let project = Project(
-    name: "HomeFeature",
+    name: "SchoolMealFeature",
     organizationName: env.organizationName,
     settings: settings,
     targets: [interfaceTarget, implementationTarget]

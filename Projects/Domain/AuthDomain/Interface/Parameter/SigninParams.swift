@@ -3,12 +3,12 @@ import Foundation
 public struct SigninRequestParams: Encodable {
     public let adminID: String
     public let password: String
-    public let deviceToken: String
+    public let deviceToken: String?
 
     public init(
         adminID: String,
         password: String,
-        deviceToken: String
+        deviceToken: String?
     ) {
         self.adminID = adminID
         self.password = password
