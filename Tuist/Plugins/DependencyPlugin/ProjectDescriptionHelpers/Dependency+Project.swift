@@ -62,6 +62,7 @@ public extension TargetDependency.Projects {
     static let schoolMealDomainInterface = TargetDependency.project(
         target: "SchoolMealDomainInterface",
         path: .relativeToRoot("Projects/Domain/SchoolMealDomain")
+    )
     static let acceptDomain = TargetDependency.project(
         target: "AcceptDomain",
         path: .relativeToRoot("Projects/Domain/AcceptDomain")
