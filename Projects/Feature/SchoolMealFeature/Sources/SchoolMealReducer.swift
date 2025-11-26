@@ -10,11 +10,11 @@ public struct SchoolMealReducer: Reducer {
         self.fetchSchoolMealsUseCase = fetchSchoolMealsUseCase
     }
 
-    public struct State {
-        var selectedDate: Date = Date()
-        var mealData: SchoolMealEntity?
-        var isLoading: Bool = false
-        var errorMessage: String?
+    public struct State: Equatable {
+        public var selectedDate: Date = Date()
+        public var mealData: SchoolMealEntity?
+        public var isLoading: Bool = false
+        public var errorMessage: String?
         
         public init() {}
     }
