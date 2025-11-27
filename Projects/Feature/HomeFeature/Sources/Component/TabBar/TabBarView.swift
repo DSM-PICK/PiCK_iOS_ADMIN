@@ -18,7 +18,7 @@ public struct TabBarView: View {
         store: StoreOf<HomeReducer>,
         allTabFactory: any AllTabFactory,
         planFactory: any PlanFactory,
-        schoolMealFactory: any SchoolMealFactory
+        schoolMealFactory: any SchoolMealFactory,
         acceptFactory: any AcceptFactory
     ) {
         self.store = store

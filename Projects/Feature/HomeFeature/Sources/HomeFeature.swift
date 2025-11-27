@@ -16,7 +16,7 @@ public struct HomeFeature: View {
         store: Store<HomeReducer.State, HomeReducer.Action>,
         allTabFactory: any AllTabFactory,
         planFactory: any PlanFactory,
-        schoolMealFactory: any SchoolMealFactory
+        schoolMealFactory: any SchoolMealFactory,
         acceptFactory: any AcceptFactory
     ) {
         self.store = store
@@ -31,7 +31,7 @@ public struct HomeFeature: View {
             store: store,
             allTabFactory: allTabFactory,
             planFactory: planFactory,
-            schoolMealFactory: schoolMealFactory
+            schoolMealFactory: schoolMealFactory,
             acceptFactory: acceptFactory
         )
     }

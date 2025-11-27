@@ -32,7 +32,7 @@ public final class HomeComponent: Component<HomeDependency>, HomeFactory {
                 ),
                 allTabFactory: self.dependency.allTabFactory,
                 planFactory: self.dependency.planFactory,
-                schoolMealFactory: self.dependency.schoolMealFactory
+                schoolMealFactory: self.dependency.schoolMealFactory,
                 acceptFactory: self.dependency.acceptFactory
             )
         )
