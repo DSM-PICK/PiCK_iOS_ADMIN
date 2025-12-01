@@ -108,7 +108,7 @@ public struct AcceptView: View {
                             ForEach(viewStore.studentItems) { item in
                                 switch item {
                                 case .application(let application):
-                                    AcceptStudentCell(
+                                    PiCKAcceptStudentCell(
                                         studentNumber: "\(application.grade)\(application.classNum)\(String(format: "%02d", application.num))",
                                         studentName: application.userName,
                                         startTime: application.start,
@@ -121,7 +121,7 @@ public struct AcceptView: View {
                                         }
                                     )
                                 case .classroomMove(let move):
-                                    ClassroomMoveCell(
+                                    PiCKClassroomMoveCell(
                                         studentNumber: "\(move.grade)\(move.classNum)\(String(format: "%02d", move.num))",
                                         studentName: move.userName,
                                         startPeriod: move.start,

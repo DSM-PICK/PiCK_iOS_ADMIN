@@ -269,9 +269,9 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["onboardingFactory-any OnboardingFactory"] = { [unowned self] in self.onboardingFactory as Any }
         localTable["homeFactory-any HomeFactory"] = { [unowned self] in self.homeFactory as Any }
         localTable["allTabFactory-any AllTabFactory"] = { [unowned self] in self.allTabFactory as Any }
+        localTable["acceptFactory-any AcceptFactory"] = { [unowned self] in self.acceptFactory as Any }
         localTable["fetchSchoolMealUseCase-any FetchSchoolMealUseCaseProtocol"] = { [unowned self] in self.fetchSchoolMealUseCase as Any }
         localTable["schoolMealFactory-any SchoolMealFactory"] = { [unowned self] in self.schoolMealFactory as Any }
-        localTable["acceptFactory-any AcceptFactory"] = { [unowned self] in self.acceptFactory as Any }
         localTable["userDefault-any UserDefault"] = { [unowned self] in self.userDefault as Any }
         localTable["authProvider-MoyaProvider<AuthAPI>"] = { [unowned self] in self.authProvider as Any }
         localTable["localAuthDataSource-any LocalAuthDataSource"] = { [unowned self] in self.localAuthDataSource as Any }
