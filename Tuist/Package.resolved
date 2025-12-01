@@ -1,5 +1,5 @@
 {
-  "originHash" : "f13994cc2968f7ab227e4114289028fd1bd531da4dea4b4aaa0728ebe2ae8f57",
+  "originHash" : "dd899424c313de9a9a661a503d52bf0fbe0fb444c56f213b0351eb24cbae543a",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -186,8 +186,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/leejh08/PiCK_iOS_DesignSystem.git",
       "state" : {
-        "revision" : "7bba249ce95712ea65525e104c59c3b11a77f68f",
-        "version" : "1.1.7"
+        "revision" : "9b7ee305f3981a200dfaf9ca704f65089adbb721",
+        "version" : "1.1.8"
       }
     },
     {
