@@ -77,6 +77,7 @@ public struct AcceptReducer: Reducer {
                 state.currentClassNum = classNum
                 state.currentType = type
                 state.selectedItemIds = []
+                state.studentItems = []
 
                 switch type {
                 case .outgoing:
@@ -100,6 +101,7 @@ public struct AcceptReducer: Reducer {
                 state.currentFloor = floor
                 state.currentType = .classroomMove
                 state.selectedItemIds = []
+                state.studentItems = []
 
                 return .run { send in
                     let result = await TaskResult {
