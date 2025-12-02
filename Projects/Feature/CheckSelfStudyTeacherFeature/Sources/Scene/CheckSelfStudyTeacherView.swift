@@ -18,41 +18,48 @@ public struct CheckSelfStudyTeacherView: View {
     public var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
             ZStack {
-                Color.Gray.gray50
+                Color.Background.background
                     .ignoresSafeArea()
 
-                VStack(spacing: 0) {
-                    VStack(alignment: .leading, spacing: 32) {
-                        titleView(selectedDate: viewStore.selectedDate)
-                            .padding(.top, 52)
-                            .padding(.horizontal, 24)
+                VStack(alignment: .leading, spacing: 0) {
+                    titleView(selectedDate: viewStore.selectedDate)
+                        .padding(.top, 32)
+                        .padding(.leading, 24)
 
-                        if viewStore.teachers.isEmpty {
-                            emptyView()
-                        } else {
-                            teacherListView(teachers: viewStore.teachers)
-                                .padding(.horizontal, 24)
+                    if viewStore.teachers.isEmpty {
+                        Spacer()
+                        HStack {
+                            Spacer()
+                            Text("등록된 자습 감독 선생님이 없습니다.")
+                                .pickText(type: .body1, textColor: .Normal.black)
+                            Spacer()
                         }
+                        Spacer()
+                    } else {
+                        teacherListView(teachers: viewStore.teachers)
+                            .padding(.leading, 24)
+                            .padding(.top, 32)
 
                         Spacer()
                     }
-
-                    VStack(spacing: 0) {
-                        Spacer()
-
-                        PiCKCalendarView(
-                            calendarType: .selfStudy,
-                            selectedDate: $selectedDate,
-                            currentPage: $currentPage,
-                            isWeekMode: $isWeekMode,
-                            dateSelected: { date in
-                                selectedDate = date
-                                viewStore.send(.dateSelected(date))
-                            }
-                        )
-                    }
-                    .ignoresSafeArea(edges: .bottom)
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+                VStack {
+                    Spacer()
+
+                    PiCKCalendarView(
+                        calendarType: .selfStudy,
+                        selectedDate: $selectedDate,
+                        currentPage: $currentPage,
+                        isWeekMode: $isWeekMode,
+                        dateSelected: { date in
+                            selectedDate = date
+                            viewStore.send(.dateSelected(date))
+                        }
+                    )
+                }
+                .ignoresSafeArea(edges: .bottom)
             }
             .navigationBarBackButtonHidden(true)
             .toolbar(.hidden, for: .tabBar)
@@ -90,27 +97,15 @@ public struct CheckSelfStudyTeacherView: View {
                 HStack(spacing: 0) {
                     Text("오늘의 자습 감독")
                         .pickText(type: .heading4, textColor: .Primary.primary500)
-                    Text(" 선생님입니다")
+                    Text(" 선생님입니다.")
                         .pickText(type: .heading4, textColor: .Normal.black)
                 }
             } else {
-                HStack(spacing: 0) {
-                    Text(dateString + "의")
-                        .pickText(type: .heading4, textColor: .Primary.primary500)
-                }
-                Text("자습 감독 선생님입니다")
+                Text(dateString + "의")
+                    .pickText(type: .heading4, textColor: .Primary.primary500)
+                Text("자습 감독 선생님입니다.")
                     .pickText(type: .heading4, textColor: .Normal.black)
             }
-        }
-    }
-
-    @ViewBuilder
-    private func emptyView() -> some View {
-        VStack {
-            Spacer()
-            Text("등록된 자습 감독 선생님이 없습니다.")
-                .pickText(type: .body1, textColor: .Normal.black)
-            Spacer()
         }
     }
 
