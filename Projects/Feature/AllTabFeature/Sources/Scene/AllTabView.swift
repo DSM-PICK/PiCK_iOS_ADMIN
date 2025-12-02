@@ -5,14 +5,20 @@ import AllTabDomainInterface
 import HomeFeature
 import Utility
 import CheckSelfStudyTeacherFeature
+import CheckSelfStudyTeacherDomainInterface
 
 public struct AllTabView: View {
     let store: StoreOf<AllTabReducer>
+    let fetchSelfStudyTeacherUseCase: any FetchSelfStudyTeacherUseCaseProtocol
     @EnvironmentObject var router: AppRouter
     @State private var navigationPath: [AppRoute] = []
 
-    public init(store: StoreOf<AllTabReducer>) {
+    public init(
+        store: StoreOf<AllTabReducer>,
+        fetchSelfStudyTeacherUseCase: any FetchSelfStudyTeacherUseCaseProtocol
+    ) {
         self.store = store
+        self.fetchSelfStudyTeacherUseCase = fetchSelfStudyTeacherUseCase
     }
 
     public var body: some View {
@@ -50,7 +56,9 @@ public struct AllTabView: View {
                             store: .init(
                                 initialState: CheckSelfStudyTeacherReducer.State(),
                                 reducer: {
-                                    CheckSelfStudyTeacherReducer()
+                                    CheckSelfStudyTeacherReducer(
+                                        fetchSelfStudyTeacherUseCase: fetchSelfStudyTeacherUseCase
+                                    )
                                 }
                             )
                         )

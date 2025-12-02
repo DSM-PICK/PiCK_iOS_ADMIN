@@ -1,9 +1,12 @@
 import NeedleFoundation
 import SwiftUI
 import CheckSelfStudyTeacherFeatureInterface
+import CheckSelfStudyTeacherDomainInterface
 import ComposableArchitecture
 
-public protocol CheckSelfStudyTeacherDependency: NeedleFoundation.Dependency {}
+public protocol CheckSelfStudyTeacherDependency: NeedleFoundation.Dependency {
+    var fetchSelfStudyTeacherUseCase: any FetchSelfStudyTeacherUseCaseProtocol { get }
+}
 
 public final class CheckSelfStudyTeacherComponent: Component<CheckSelfStudyTeacherDependency>, CheckSelfStudyTeacherFactory {
     public func makeView() -> AnyView {
@@ -12,7 +15,9 @@ public final class CheckSelfStudyTeacherComponent: Component<CheckSelfStudyTeach
                 store: .init(
                     initialState: CheckSelfStudyTeacherReducer.State(),
                     reducer: {
-                        CheckSelfStudyTeacherReducer()
+                        CheckSelfStudyTeacherReducer(
+                            fetchSelfStudyTeacherUseCase: dependency.fetchSelfStudyTeacherUseCase
+                        )
                     }
                 )
             )

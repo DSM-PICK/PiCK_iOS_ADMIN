@@ -2,6 +2,7 @@ import SwiftUI
 import PiCK_iOS_DesignSystem
 import ComposableArchitecture
 import BaseFeature
+import CheckSelfStudyTeacherDomainInterface
 
 public struct CheckSelfStudyTeacherView: View {
     @Environment(\.dismiss) var dismiss
@@ -21,19 +22,37 @@ public struct CheckSelfStudyTeacherView: View {
                     .ignoresSafeArea()
 
                 VStack(spacing: 0) {
-                    Spacer()
+                    VStack(alignment: .leading, spacing: 32) {
+                        titleView(selectedDate: viewStore.selectedDate)
+                            .padding(.top, 52)
+                            .padding(.horizontal, 24)
 
-                    PiCKCalendarView(
-                        calendarType: .selfStudy,
-                        selectedDate: $selectedDate,
-                        currentPage: $currentPage,
-                        isWeekMode: $isWeekMode,
-                        dateSelected: { date in
-                            print("Selected date: \(date)")
+                        if viewStore.teachers.isEmpty {
+                            emptyView()
+                        } else {
+                            teacherListView(teachers: viewStore.teachers)
+                                .padding(.horizontal, 24)
                         }
-                    )
+
+                        Spacer()
+                    }
+
+                    VStack(spacing: 0) {
+                        Spacer()
+
+                        PiCKCalendarView(
+                            calendarType: .selfStudy,
+                            selectedDate: $selectedDate,
+                            currentPage: $currentPage,
+                            isWeekMode: $isWeekMode,
+                            dateSelected: { date in
+                                selectedDate = date
+                                viewStore.send(.dateSelected(date))
+                            }
+                        )
+                    }
+                    .ignoresSafeArea(edges: .bottom)
                 }
-                .ignoresSafeArea(edges: .bottom)
             }
             .navigationBarBackButtonHidden(true)
             .toolbar(.hidden, for: .tabBar)
@@ -57,5 +76,69 @@ public struct CheckSelfStudyTeacherView: View {
                 viewStore.send(.onAppear)
             }
         }
+    }
+
+    @ViewBuilder
+    private func titleView(selectedDate: Date) -> some View {
+        let isToday = Calendar.current.isDateInToday(selectedDate)
+        let dateString = formatDateString(selectedDate)
+
+        VStack(alignment: .leading, spacing: 0) {
+            if isToday {
+                Text(dateString + ",")
+                    .pickText(type: .heading4, textColor: .Normal.black)
+                HStack(spacing: 0) {
+                    Text("오늘의 자습 감독")
+                        .pickText(type: .heading4, textColor: .Primary.primary500)
+                    Text(" 선생님입니다")
+                        .pickText(type: .heading4, textColor: .Normal.black)
+                }
+            } else {
+                HStack(spacing: 0) {
+                    Text(dateString + "의")
+                        .pickText(type: .heading4, textColor: .Primary.primary500)
+                }
+                Text("자습 감독 선생님입니다")
+                    .pickText(type: .heading4, textColor: .Normal.black)
+            }
+        }
+    }
+
+    @ViewBuilder
+    private func emptyView() -> some View {
+        VStack {
+            Spacer()
+            Text("등록된 자습 감독 선생님이 없습니다.")
+                .pickText(type: .body1, textColor: .Normal.black)
+            Spacer()
+        }
+    }
+
+    @ViewBuilder
+    private func teacherListView(teachers: [SelfStudyTeacherEntity]) -> some View {
+        HStack(spacing: 16) {
+            VStack(alignment: .leading, spacing: 32) {
+                ForEach(teachers) { teacher in
+                    Text("\(teacher.floor)층")
+                        .pickText(type: .body1, textColor: .Gray.gray800)
+                }
+            }
+
+            VStack(alignment: .leading, spacing: 32) {
+                ForEach(teachers) { teacher in
+                    Text("\(teacher.teacherName) 선생님")
+                        .pickText(type: .body1, textColor: .Normal.black)
+                }
+            }
+
+            Spacer()
+        }
+    }
+
+    private func formatDateString(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "M월 d일"
+        return formatter.string(from: date)
     }
 }

@@ -1,44 +1,67 @@
 import ComposableArchitecture
 import CheckSelfStudyTeacherDomainInterface
+import Foundation
 
 public struct CheckSelfStudyTeacherReducer: Reducer {
-    public init() {}
+    private let fetchSelfStudyTeacherUseCase: any FetchSelfStudyTeacherUseCaseProtocol
+
+    public init(
+        fetchSelfStudyTeacherUseCase: any FetchSelfStudyTeacherUseCaseProtocol
+    ) {
+        self.fetchSelfStudyTeacherUseCase = fetchSelfStudyTeacherUseCase
+    }
 
     public struct State: Equatable {
         public var isLoading: Bool = false
-        public var teachers: [String] = []
+        public var teachers: [SelfStudyTeacherEntity] = []
+        public var selectedDate: Date = Date()
 
         public init() {}
     }
 
     public enum Action {
         case onAppear
-        case fetchTeachers
-        case teachersResponse(Result<[String], Error>)
+        case dateSelected(Date)
+        case fetchSelfStudyTeacher(String)
+        case selfStudyTeacherResponse(Result<[SelfStudyTeacherEntity], Error>)
     }
 
     public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                return .send(.fetchTeachers)
+                let dateString = formatDate(state.selectedDate)
+                return .send(.fetchSelfStudyTeacher(dateString))
 
-            case .fetchTeachers:
+            case let .dateSelected(date):
+                state.selectedDate = date
+                let dateString = formatDate(date)
+                return .send(.fetchSelfStudyTeacher(dateString))
+
+            case let .fetchSelfStudyTeacher(date):
                 state.isLoading = true
                 return .run { send in
-                    try await Task.sleep(nanoseconds: 1_000_000_000)
-                    await send(.teachersResponse(.success(["김선생님", "이선생님", "박선생님"])))
+                    let result = await TaskResult {
+                        try await fetchSelfStudyTeacherUseCase.execute(date: date)
+                    }
+                    await send(.selfStudyTeacherResponse(Result(result)))
                 }
 
-            case let .teachersResponse(.success(teachers)):
+            case let .selfStudyTeacherResponse(.success(teachers)):
                 state.teachers = teachers
                 state.isLoading = false
                 return .none
 
-            case .teachersResponse(.failure):
+            case .selfStudyTeacherResponse(.failure):
                 state.isLoading = false
                 return .none
             }
         }
+    }
+
+    private func formatDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter.string(from: date)
     }
 }
