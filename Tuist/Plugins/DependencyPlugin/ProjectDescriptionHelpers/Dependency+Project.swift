@@ -142,6 +142,14 @@ public extension TargetDependency.Features {
         target: "AcceptFeatureInterface",
         path: .relativeToRoot("Projects/Feature/AcceptFeature")
     )
+    static let checkSelfStudyTeacherFeature = TargetDependency.project(
+        target: "CheckSelfStudyTeacherFeature",
+        path: .relativeToRoot("Projects/Feature/CheckSelfStudyTeacherFeature")
+    )
+    static let checkSelfStudyTeacherFeatureInterface = TargetDependency.project(
+        target: "CheckSelfStudyTeacherFeatureInterface",
+        path: .relativeToRoot("Projects/Feature/CheckSelfStudyTeacherFeature")
+    )
     // other Module
 }
 

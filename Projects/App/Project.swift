@@ -72,6 +72,8 @@ let appDependencies: [TargetDependency] = [
     .Features.schoolMealFeatureInterface,
     .Features.acceptFeature,
     .Features.acceptFeatureInterface,
+    .Features.checkSelfStudyTeacherFeature,
+    .Features.checkSelfStudyTeacherFeatureInterface,
     .Projects.baseDomainInterface,
     .Projects.authDomain,
     .Projects.authDomainInterface,
