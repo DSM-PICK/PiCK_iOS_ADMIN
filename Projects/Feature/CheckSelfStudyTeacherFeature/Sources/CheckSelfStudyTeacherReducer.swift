@@ -6,7 +6,7 @@ public struct CheckSelfStudyTeacherReducer: Reducer {
 
     public struct State: Equatable {
         public var isLoading: Bool = false
-        public var teachers: [String] = [] // TODO: Replace with actual teacher entity
+        public var teachers: [String] = []
 
         public init() {}
     }
@@ -25,7 +25,6 @@ public struct CheckSelfStudyTeacherReducer: Reducer {
 
             case .fetchTeachers:
                 state.isLoading = true
-                // TODO: Implement actual API call when domain is ready
                 return .run { send in
                     try await Task.sleep(nanoseconds: 1_000_000_000)
                     await send(.teachersResponse(.success(["김선생님", "이선생님", "박선생님"])))

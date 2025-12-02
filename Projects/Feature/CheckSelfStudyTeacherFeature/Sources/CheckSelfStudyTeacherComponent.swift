@@ -3,9 +3,7 @@ import SwiftUI
 import CheckSelfStudyTeacherFeatureInterface
 import ComposableArchitecture
 
-public protocol CheckSelfStudyTeacherDependency: NeedleFoundation.Dependency {
-    // Add dependencies here when domain is implemented
-}
+public protocol CheckSelfStudyTeacherDependency: NeedleFoundation.Dependency {}
 
 public final class CheckSelfStudyTeacherComponent: Component<CheckSelfStudyTeacherDependency>, CheckSelfStudyTeacherFactory {
     public func makeView() -> AnyView {
