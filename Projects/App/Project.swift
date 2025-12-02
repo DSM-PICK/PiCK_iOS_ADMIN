@@ -87,6 +87,7 @@ let appDependencies: [TargetDependency] = [
     .Projects.schoolMealDomainInterface,
     .Projects.acceptDomain,
     .Projects.acceptDomainInterface,
+    .Projects.checkSelfStudyTeacherDomain,
     .Projects.core,
     .Shared.thirdPartyLib,
     .Shared.utility

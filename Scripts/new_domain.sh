@@ -7,8 +7,12 @@ if [ -z "$DOMAIN_NAME" ]; then
   exit 1
 fi
 
+# Auto-append "Domain" suffix if not already present
+if [[ ! "$DOMAIN_NAME" =~ Domain$ ]]; then
+  DOMAIN_NAME="${DOMAIN_NAME}Domain"
+fi
+
 # Create directories
-mkdir -p "Projects/Domain/$DOMAIN_NAME/Interface"
 mkdir -p "Projects/Domain/$DOMAIN_NAME/Sources"
 
 # Create Project.swift
@@ -31,30 +35,16 @@ let settings: Settings = .settings(
     defaultSettings: .recommended
 )
 
-let interfaceTarget = Target.target(
-    name: "${DOMAIN_NAME}Interface",
-    destinations: env.destination,
-    product: .framework,
-    bundleId: "com.team.pick.${DOMAIN_NAME}Interface",
-    deploymentTargets: env.deploymentTargets,
-    infoPlist: .default,
-    sources: ["Interface/**"],
-    dependencies: [
-        .Projects.core,
-        .Shared.thirdPartyLib
-    ]
-)
-
-let implementationTarget = Target.target(
+let target = Target.target(
     name: "${DOMAIN_NAME}",
     destinations: env.destination,
     product: .framework,
-    bundleId: "com.team.pick.${DOMAIN_NAME}",
+    bundleId: "\\\(env.organizationName).${DOMAIN_NAME}",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Sources/**"],
     dependencies: [
-        .target(name: "${DOMAIN_NAME}Interface"),
+        .Projects.core,
         .Projects.baseDomain,
         .Shared.thirdPartyLib
     ]
@@ -62,25 +52,17 @@ let implementationTarget = Target.target(
 
 let project = Project(
     name: "${DOMAIN_NAME}",
-    organizationName: "com.team.pick",
+    organizationName: env.organizationName,
     settings: settings,
-    targets: [interfaceTarget, implementationTarget]
+    targets: [target]
 )
-EOF
-
-# Create Interface file
-cat <<EOF > "Projects/Domain/$DOMAIN_NAME/Interface/${DOMAIN_NAME}Interface.swift"
-import Foundation
-
-public protocol ${DOMAIN_NAME}Interface {}
 EOF
 
 # Create Source file
 cat <<EOF > "Projects/Domain/$DOMAIN_NAME/Sources/${DOMAIN_NAME}.swift"
 import Foundation
-import ${DOMAIN_NAME}Interface
 
-public struct ${DOMAIN_NAME}: ${DOMAIN_NAME}Interface {}
+public struct ${DOMAIN_NAME} {}
 EOF
 
 # Convert to lowerCamelCase
@@ -95,9 +77,8 @@ sed -i '' "/.Projects.acceptDomain,/a\\
         .Projects.${LOWER_CAMEL_CASE_NAME}" Projects/Domain/Project.swift
 
 # Add to App dependencies
-sed -i '' "/.Projects.acceptDomainInterface,/a\\
-    .Projects.${LOWER_CAMEL_CASE_NAME},\\
-    .Projects.${LOWER_CAMEL_CASE_NAME}Interface," Projects/App/Project.swift
+sed -i '' "/.Projects.checkSelfStudyTeacherInterface,/a\\
+    .Projects.${LOWER_CAMEL_CASE_NAME}," Projects/App/Project.swift
 
 echo "Domain '$DOMAIN_NAME' created successfully."
 echo "Run 'tuist generate' to include it in the project."

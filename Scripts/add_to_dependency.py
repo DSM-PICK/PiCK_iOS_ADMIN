@@ -11,7 +11,7 @@ def add_domain_dependency(domain_name, lower_camel_name):
     # Find the position to insert (before the closing brace of Projects extension)
     insert_index = -1
     for i in range(len(lines) - 1, -1, -1):
-        if 'acceptDomainInterface' in lines[i]:
+        if 'checkSelfStudyTeacherInterface' in lines[i]:
             # Find the next closing parenthesis
             for j in range(i, len(lines)):
                 if lines[j].strip() == ')':
@@ -23,14 +23,10 @@ def add_domain_dependency(domain_name, lower_camel_name):
         print("Error: Could not find insertion point")
         sys.exit(1)
 
-    # Create the new dependency lines
+    # Create the new dependency lines (no Interface for domains)
     new_lines = [
         f"    static let {lower_camel_name} = TargetDependency.project(\n",
         f"        target: \"{domain_name}\",\n",
-        f"        path: .relativeToRoot(\"Projects/Domain/{domain_name}\")\n",
-        f"    )\n",
-        f"    static let {lower_camel_name}Interface = TargetDependency.project(\n",
-        f"        target: \"{domain_name}Interface\",\n",
         f"        path: .relativeToRoot(\"Projects/Domain/{domain_name}\")\n",
         f"    )\n"
     ]
