@@ -39,6 +39,34 @@ public struct OutListView: View {
                     .padding(.horizontal, 24)
 
                 Spacer()
+
+                ScrollView {
+                    VStack(spacing: 16) {
+                        ForEach (0..<14, id: \.self) { _ in
+                            PiCKAcceptStudentCell(
+                                studentNumber: "2216",
+                                studentName: "하원",
+                                startTime: "8교시",
+                                endTime: "10교시",
+                                activityType: "외출 수락",
+                                reason: "집에 가고 싶어요",
+                                isSelected: false,
+                                onTap: {}
+                            )
+                        }
+                    }
+                }
+                .padding(.top, 20)
+                .padding(.horizontal, 24)
+
+                PiCKButton(
+                    buttonText: "복귀 시키기",
+                    isEnabled: false,
+                    height: 45,
+                    action: {}
+                )
+                .padding(.horizontal, 24)
+                .padding(.bottom, 44)
             }
         }
         .sheet(isPresented: $isApplyBottomSheetPresented) {
