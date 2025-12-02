@@ -1,5 +1,6 @@
-import Foundation
+import SwiftUI
+import ComposableArchitecture
 
-public protocol OutListInterface {
-    
+public protocol OutListFactory {
+    func makeOutListView() -> AnyView
 }

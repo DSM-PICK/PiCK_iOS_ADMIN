@@ -2,9 +2,11 @@ import SwiftUI
 import PiCK_iOS_DesignSystem
 
 public struct AllTabMenuList: View {
+    let onOutListTap: () -> Void
     let onLogoutTap: () -> Void
     
-    public init(onLogoutTap: @escaping () -> Void) {
+    public init(onLogoutTap: @escaping () -> Void, onOutListTap: @escaping () -> Void) {
+        self.onOutListTap = onOutListTap
         self.onLogoutTap = onLogoutTap
     }
     
@@ -12,7 +14,11 @@ public struct AllTabMenuList: View {
         MenuListView(
             sections: [
                 MenuSectionModel(title: "출결 확인", items: [
-                    MenuItemModel(icon: PiCKImage.location, title: "외출자 목록"),
+                    MenuItemModel(
+                        icon: PiCKImage.location,
+                        title: "외출자 목록",
+                        action: onOutListTap
+                    ),
                     MenuItemModel(icon: PiCKImage.beforeOuting, title: "자습시간 출결"),
                     MenuItemModel(icon: PiCKImage.book, title: "이전 외출기록")
                 ]),

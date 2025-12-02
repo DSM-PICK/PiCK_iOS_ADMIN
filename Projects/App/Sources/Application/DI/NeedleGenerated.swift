@@ -23,6 +23,9 @@ import Moya
 import NeedleFoundation
 import OnboardingFeature
 import OnboardingFeatureInterface
+import OutListDomainInterface
+import OutListFeature
+import OutListFeatureInterface
 import PlanDomain
 import PlanDomainInterface
 import PlanFeature
@@ -172,6 +175,17 @@ private class AllTabDependencyacdab75b3325eec9d649Provider: AllTabDependency {
 private func factoryfffd4c52463116b1a1a9f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return AllTabDependencyacdab75b3325eec9d649Provider(appComponent: parent1(component) as! AppComponent)
 }
+private class OutListDependencyac9793ee3f8a81768455Provider: OutListDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->OutListComponent
+private func factoryb7dc05e5bded91c750e2e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return OutListDependencyac9793ee3f8a81768455Provider()
+}
 private class SigninDependencyde06a9d0b22764487733Provider: SigninDependency {
     var signinUseCase: any SigninUseCase {
         return appComponent.signinUseCase
@@ -270,6 +284,7 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["homeFactory-any HomeFactory"] = { [unowned self] in self.homeFactory as Any }
         localTable["allTabFactory-any AllTabFactory"] = { [unowned self] in self.allTabFactory as Any }
         localTable["acceptFactory-any AcceptFactory"] = { [unowned self] in self.acceptFactory as Any }
+        localTable["outListFactory-any OutListFactory"] = { [unowned self] in self.outListFactory as Any }
         localTable["fetchSchoolMealUseCase-any FetchSchoolMealUseCaseProtocol"] = { [unowned self] in self.fetchSchoolMealUseCase as Any }
         localTable["schoolMealFactory-any SchoolMealFactory"] = { [unowned self] in self.schoolMealFactory as Any }
         localTable["userDefault-any UserDefault"] = { [unowned self] in self.userDefault as Any }
@@ -329,6 +344,11 @@ extension AllTabComponent: NeedleFoundation.Registration {
         keyPathToName[\AllTabDependency.authRepository] = "authRepository-any AuthRepository"
     }
 }
+extension OutListComponent: NeedleFoundation.Registration {
+    public func registerItems() {
+
+    }
+}
 extension SigninComponent: NeedleFoundation.Registration {
     public func registerItems() {
         keyPathToName[\SigninDependency.signinUseCase] = "signinUseCase-any SigninUseCase"
@@ -379,6 +399,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->VerifyEmailComponent", factoryeabc669822dd3244ed10f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->SecretKeyComponent", factorycc7ea4e12027ae637f9ff47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AllTabComponent", factoryfffd4c52463116b1a1a9f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->OutListComponent", factoryb7dc05e5bded91c750e2e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->SigninComponent", factory2882a056d84a613debccf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->HomeComponent", factory67229cdf0f755562b2b1f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AcceptComponent", factorye0727acbbfbe9e00fe23f47b58f8f304c97af4d5)

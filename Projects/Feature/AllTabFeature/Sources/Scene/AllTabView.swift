@@ -23,6 +23,8 @@ public struct AllTabView: View {
                         
                         AllTabMenuList(onLogoutTap: {
                             viewStore.send(.logoutButtonTapped)
+                        }, onOutListTap: {
+                            router.path.append(.outList)
                         })
                         .padding(.top, 32)
                     }
