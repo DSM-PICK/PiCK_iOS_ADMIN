@@ -26,24 +26,25 @@ public struct CheckSelfStudyTeacherView: View {
                         .padding(.top, 32)
                         .padding(.leading, 24)
 
-                    if viewStore.teachers.isEmpty {
-                        Spacer()
-                        HStack {
-                            Spacer()
-                            Text("등록된 자습 감독 선생님이 없습니다.")
-                                .pickText(type: .body1, textColor: .Normal.black)
-                            Spacer()
-                        }
-                        Spacer()
-                    } else {
+                    if !viewStore.teachers.isEmpty {
                         teacherListView(teachers: viewStore.teachers)
                             .padding(.leading, 24)
                             .padding(.top, 32)
+                    }
 
+                    Spacer()
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+                if viewStore.teachers.isEmpty {
+                    VStack {
+                        Spacer()
+                        Text("등록된 자습 감독 선생님이 없습니다.")
+                            .pickText(type: .body1, textColor: .Normal.black)
+                        Spacer()
                         Spacer()
                     }
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
 
                 VStack {
                     Spacer()
