@@ -39,3 +39,6 @@ domain:
 	@read -p "Enter domain name: " domain_name; \
 	sh Scripts/new_domain.sh $$domain_name
 
+delete:
+	@sh Scripts/delete_module.sh
+
