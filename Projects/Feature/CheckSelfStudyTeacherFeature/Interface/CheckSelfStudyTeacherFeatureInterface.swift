@@ -1,5 +1,5 @@
-import Foundation
+import SwiftUI
 
-public protocol CheckSelfStudyTeacherFeatureInterface {
-    
+public protocol CheckSelfStudyTeacherFactory {
+    func makeView() -> AnyView
 }

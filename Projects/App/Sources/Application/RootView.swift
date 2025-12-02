@@ -71,6 +71,8 @@ struct RootView: View {
                 .environmentObject(router)
         case .home:
             EmptyView()
+        case .checkSelfStudyTeacher:
+            EmptyView()
         }
     }
     
