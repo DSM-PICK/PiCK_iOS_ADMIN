@@ -88,6 +88,9 @@ let appDependencies: [TargetDependency] = [
     .Projects.acceptDomain,
     .Projects.acceptDomainInterface,
     .Projects.checkSelfStudyTeacherDomain,
+    .Projects.checkSelfStudyTeacherDomainInterface,
+    .Projects.teacherDomain,
+    .Projects.teacherDomainInterface,
     .Projects.core,
     .Shared.thirdPartyLib,
     .Shared.utility

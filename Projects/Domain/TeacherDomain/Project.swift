@@ -17,10 +17,10 @@ let settings: Settings = .settings(
 )
 
 let interfaceTarget = Target.target(
-    name: "CheckSelfStudyTeacherDomainInterface",
+    name: "TeacherDomainInterface",
     destinations: env.destination,
     product: .framework,
-    bundleId: "\(env.organizationName).CheckSelfStudyTeacherDomainInterface",
+    bundleId: "\(env.organizationName).TeacherDomainInterface",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Interface/**"],
@@ -31,22 +31,22 @@ let interfaceTarget = Target.target(
 )
 
 let implementationTarget = Target.target(
-    name: "CheckSelfStudyTeacherDomain",
+    name: "TeacherDomain",
     destinations: env.destination,
     product: .framework,
-    bundleId: "\(env.organizationName).CheckSelfStudyTeacherDomain",
+    bundleId: "\(env.organizationName).TeacherDomain",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Sources/**"],
     dependencies: [
-        .target(name: "CheckSelfStudyTeacherDomainInterface"),
+        .target(name: "TeacherDomainInterface"),
         .Projects.baseDomain,
         .Shared.thirdPartyLib
     ]
 )
 
 let project = Project(
-    name: "CheckSelfStudyTeacherDomain",
+    name: "TeacherDomain",
     organizationName: env.organizationName,
     settings: settings,
     targets: [interfaceTarget, implementationTarget]
