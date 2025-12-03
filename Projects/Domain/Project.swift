@@ -13,6 +13,7 @@ let project = Project.makeModule(
         .Projects.authDomain,
         .Projects.allTabDomain,
         .Projects.acceptDomain,
+        .Projects.bugReportDomain,
         .Projects.testDomain,
         .Projects.teacherDomain,
         .Projects.checkSelfStudyTeacher
