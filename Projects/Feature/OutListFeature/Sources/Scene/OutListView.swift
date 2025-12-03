@@ -4,8 +4,7 @@ import ComposableArchitecture
 import PiCK_iOS_DesignSystem
 
 public struct OutListView: View {
-    @State private var firstValue = "전체"
-    @State private var secondValue = "전체"
+    @State private var floorValue = "전체"
     @State private var isApplyBottomSheetPresented = false
     let store: StoreOf<OutListReducer>
 
@@ -24,7 +23,7 @@ public struct OutListView: View {
                     Spacer()
 
                     ClassroomFilterButton(
-                        selectedClassroom: "\(firstValue)-\(secondValue)",
+                        selectedClassroom: floorValue,
                         onTap: { isApplyBottomSheetPresented = true }
                     )
                     .padding(.trailing, 24)
@@ -70,38 +69,16 @@ public struct OutListView: View {
             }
         }
         .sheet(isPresented: $isApplyBottomSheetPresented) {
-            GeometryReader { geometry in
-                ZStack(alignment: .bottom) {
-                    Color.black.opacity(0.4)
-                        .ignoresSafeArea()
-                        .onTapGesture {
-                            isApplyBottomSheetPresented = false
-                        }
-                    
-                    DualPickerBottomSheet(
-                        isPresented: $isApplyBottomSheetPresented,
-                        firstValue: $firstValue,
-                        secondValue: $secondValue,
-                        title: "선택",
-                        firstLabel: "학년",
-                        secondLabel: "반",
-                        firstOptions: ["전체", "1", "2", "3"],
-                        secondOptions: ["전체", "1", "2", "3", "4"],
-                        onComplete: { first, second in
-                            if first == "전체" || second == "전체" {
-                                firstValue = "전체"
-                                secondValue = "전체"
-                            } else {
-                                firstValue = first
-                                secondValue = second
-                            }
-                        }
-                    )
-                    .frame(height: geometry.size.height * 0.5)
-                    .transition(.move(edge: .bottom))
+            PiCK_iOS_DesignSystem.SinglePickerBottomSheet(
+                isPresented: $isApplyBottomSheetPresented,
+                title: "층을 선택해주세요",
+                options: ["전체", "2층", "3층", "4층"],
+                onComplete: { option in
+                    floorValue = option
                 }
-                .ignoresSafeArea()
-            }
+            )
+            .presentationDetents([.height(350)])
+            .presentationDragIndicator(.hidden)
         }
         .navigationTitle("외출자 목록")
         .navigationBarTitleDisplayMode(.inline)
