@@ -166,6 +166,14 @@ public extension TargetDependency.Features {
         target: "CheckSelfStudyTeacherFeatureInterface",
         path: .relativeToRoot("Projects/Feature/CheckSelfStudyTeacherFeature")
     )
+    static let bugReportFeature = TargetDependency.project(
+        target: "BugReportFeature",
+        path: .relativeToRoot("Projects/Feature/BugReport")
+    )
+    static let bugReportFeatureInterface = TargetDependency.project(
+        target: "BugReportFeatureInterface",
+        path: .relativeToRoot("Projects/Feature/BugReport")
+    )
     // other Module
 }
 

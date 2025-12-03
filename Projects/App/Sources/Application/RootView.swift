@@ -72,7 +72,8 @@ struct RootView: View {
         case .home:
             EmptyView()
         case .checkSelfStudyTeacher:
-            EmptyView()
+            appComponent.checkSelfStudyTeacherFactory.makeView()
+                .environmentObject(router)
         }
     }
     
