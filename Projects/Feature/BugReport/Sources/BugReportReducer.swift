@@ -6,12 +6,14 @@ public struct BugReportReducer: Reducer {
 
     public struct State: Equatable {
         public var bugLocation: String = ""
+        public var bugDescription: String = ""
 
         public init() {}
     }
 
     public enum Action {
         case bugLocationChanged(String)
+        case bugDescriptionChanged(String)
     }
 
     public var body: some Reducer<State, Action> {
@@ -19,6 +21,9 @@ public struct BugReportReducer: Reducer {
             switch action {
             case let .bugLocationChanged(text):
                 state.bugLocation = text
+                return .none
+            case let .bugDescriptionChanged(text):
+                state.bugDescription = text
                 return .none
             }
         }

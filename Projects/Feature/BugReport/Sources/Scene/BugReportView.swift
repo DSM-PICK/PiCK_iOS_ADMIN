@@ -16,29 +16,56 @@ public struct BugReportView: View {
                 Color.Background.background
                     .ignoresSafeArea()
 
-                VStack(alignment: .leading, spacing: 0) {
-                    Text("어디서 버그가 발생했나요?")
-                        .pickText(type: .heading4, textColor: .Normal.black)
-                        .padding(.top, 32)
-                        .padding(.horizontal, 24)
+                ScrollView {
+                    VStack(alignment: .leading, spacing: 24) {
+                        PiCKTextField(
+                            text: viewStore.binding(
+                                get: \.bugLocation,
+                                send: { .bugLocationChanged($0) }
+                            ),
+                            placeholder: "예: 홈 화면, 로그인 화면 등",
+                            titleText: "어디서 버그가 발생했나요?"
+                        )
 
-                    TextField("", text: viewStore.binding(
-                        get: \.bugLocation,
-                        send: { .bugLocationChanged($0) }
-                    ))
-                    .padding()
-                    .background(Color.Background.background)
-                    .cornerRadius(8)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.Gray.gray300, lineWidth: 1)
-                    )
-                    .padding(.top, 16)
+                        PiCKTextField(
+                            text: viewStore.binding(
+                                get: \.bugDescription,
+                                send: { .bugDescriptionChanged($0) }
+                            ),
+                            placeholder: "버그에 대해 자세히 설명해주세요",
+                            titleText: "버그에 대해 설명해주세요"
+                        )
+
+                        VStack(alignment: .leading, spacing: 12) {
+                            Text("버그 사진을 첨부해주세요")
+                                .pickText(type: .label1, textColor: .Normal.black)
+
+                            Button(action: {
+                                // TODO: 이미지 선택 기능 구현
+                            }) {
+                                HStack {
+                                    Image(systemName: "photo")
+                                        .foregroundColor(.Gray.gray500)
+                                    Text("사진 선택")
+                                        .pickText(type: .caption2, textColor: .Gray.gray500)
+                                    Spacer()
+                                }
+                                .padding(.horizontal, 16)
+                                .frame(height: 40)
+                                .background(Color.Gray.gray50)
+                                .cornerRadius(4)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 4)
+                                        .stroke(Color.Gray.gray300, lineWidth: 1)
+                                )
+                            }
+                        }
+
+                        Spacer()
+                    }
                     .padding(.horizontal, 24)
-
-                    Spacer()
+                    .padding(.top, 32)
                 }
-                .frame(maxWidth: .infinity, alignment: .leading)
             }
             .navigationBarBackButtonHidden(true)
             .toolbar(.hidden, for: .tabBar)
