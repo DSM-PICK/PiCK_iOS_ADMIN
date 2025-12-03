@@ -17,8 +17,10 @@ import AcceptFeature
 import AcceptFeatureInterface
 import CheckSelfStudyTeacherFeature
 import CheckSelfStudyTeacherFeatureInterface
+import BugReportFeature
+import BugReportFeatureInterface
 
-public final class AppComponent: BootstrapComponent, HomeDependency, AllTabDependency, PlanDependency, SchoolMealDependency, AcceptDependency, CheckSelfStudyTeacherDependency {
+public final class AppComponent: BootstrapComponent, HomeDependency, AllTabDependency, PlanDependency, SchoolMealDependency, AcceptDependency, CheckSelfStudyTeacherDependency, BugReportDependency {
     private let _keychain: any Keychain
 
     init(keychain: any Keychain) {
@@ -73,5 +75,8 @@ public extension AppComponent {
     }
     var checkSelfStudyTeacherFactory: any CheckSelfStudyTeacherFactory {
         CheckSelfStudyTeacherComponent(parent: self)
+    }
+    var bugReportFactory: any BugReportFactory {
+        BugReportComponent(parent: self)
     }
 }
