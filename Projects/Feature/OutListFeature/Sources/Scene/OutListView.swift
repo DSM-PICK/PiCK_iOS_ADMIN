@@ -65,8 +65,8 @@ public struct OutListView: View {
                     height: 45,
                     action: {}
                 )
+                .padding(.vertical, 10)
                 .padding(.horizontal, 24)
-                .padding(.bottom, 44)
             }
         }
         .sheet(isPresented: $isApplyBottomSheetPresented) {
