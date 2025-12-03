@@ -17,6 +17,7 @@ struct SigninView: View {
                 headerSection
                 emailTextField(viewStore)
                 passwordTextField(viewStore)
+                forgotPasswordLinkSection
                 Spacer()
                 signupLinkSection
                 signinButton(viewStore)
@@ -74,7 +75,27 @@ struct SigninView: View {
         .padding(.horizontal, 24)
         .padding(.top, 44)
     }
-    
+
+    private var forgotPasswordLinkSection: some View {
+        HStack(spacing: 0) {
+            Text("비밀번호를 잊어버리셨나요? ")
+                .foregroundColor(Color.Gray.gray900)
+                .pickText(type: .body1)
+
+            Button {
+                // TODO: 비밀번호 변경 액션
+            } label: {
+                Text("비밀번호 변경")
+                    .foregroundColor(Color.Primary.primary500)
+                    .pickText(type: .body1)
+                    .underline()
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .trailing)
+        .padding(.trailing, 24)
+        .padding(.top, 12)
+    }
+
     private var signupLinkSection: some View {
         HStack(spacing: 0) {
             Text("PiCK 계정이 없으세요? ")
