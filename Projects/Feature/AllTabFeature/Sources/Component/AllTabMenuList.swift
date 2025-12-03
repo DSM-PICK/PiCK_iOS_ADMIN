@@ -3,11 +3,16 @@ import PiCK_iOS_DesignSystem
 
 public struct AllTabMenuList: View {
     let onLogoutTap: () -> Void
-    
-    public init(onLogoutTap: @escaping () -> Void) {
+    let onCheckTeacherTap: () -> Void
+
+    public init(
+        onLogoutTap: @escaping () -> Void,
+        onCheckTeacherTap: @escaping () -> Void
+    ) {
         self.onLogoutTap = onLogoutTap
+        self.onCheckTeacherTap = onCheckTeacherTap
     }
-    
+
     public var body: some View {
         MenuListView(
             sections: [
@@ -17,7 +22,11 @@ public struct AllTabMenuList: View {
                     MenuItemModel(icon: PiCKImage.book, title: "이전 외출기록")
                 ]),
                 MenuSectionModel(title: "도움말", items: [
-                    MenuItemModel(icon: PiCKImage.smile, title: "자습 감독 선생님 확인"),
+                    MenuItemModel(
+                        icon: PiCKImage.smile,
+                        title: "자습 감독 선생님 확인",
+                        action: onCheckTeacherTap
+                    ),
                     MenuItemModel(icon: PiCKImage.bug, title: "버그 제보")
                 ]),
                 MenuSectionModel(title: "계정", items: [

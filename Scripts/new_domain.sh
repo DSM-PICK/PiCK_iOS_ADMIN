@@ -7,9 +7,19 @@ if [ -z "$DOMAIN_NAME" ]; then
   exit 1
 fi
 
+# Auto-append "Domain" suffix if not already present
+if [[ ! "$DOMAIN_NAME" =~ Domain$ ]]; then
+  DOMAIN_NAME="${DOMAIN_NAME}Domain"
+fi
+
 # Create directories
 mkdir -p "Projects/Domain/$DOMAIN_NAME/Interface"
-mkdir -p "Projects/Domain/$DOMAIN_NAME/Sources"
+mkdir -p "Projects/Domain/$DOMAIN_NAME/Sources/API"
+mkdir -p "Projects/Domain/$DOMAIN_NAME/Sources/DataSource"
+mkdir -p "Projects/Domain/$DOMAIN_NAME/Sources/DTO"
+mkdir -p "Projects/Domain/$DOMAIN_NAME/Sources/Entity"
+mkdir -p "Projects/Domain/$DOMAIN_NAME/Sources/Repository"
+mkdir -p "Projects/Domain/$DOMAIN_NAME/Sources/UseCase"
 
 # Create Project.swift
 cat <<EOF > "Projects/Domain/$DOMAIN_NAME/Project.swift"
@@ -35,7 +45,7 @@ let interfaceTarget = Target.target(
     name: "${DOMAIN_NAME}Interface",
     destinations: env.destination,
     product: .framework,
-    bundleId: "com.team.pick.${DOMAIN_NAME}Interface",
+    bundleId: "\$(env.organizationName).${DOMAIN_NAME}Interface",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Interface/**"],
@@ -49,7 +59,7 @@ let implementationTarget = Target.target(
     name: "${DOMAIN_NAME}",
     destinations: env.destination,
     product: .framework,
-    bundleId: "com.team.pick.${DOMAIN_NAME}",
+    bundleId: "\$(env.organizationName).${DOMAIN_NAME}",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Sources/**"],
@@ -62,7 +72,7 @@ let implementationTarget = Target.target(
 
 let project = Project(
     name: "${DOMAIN_NAME}",
-    organizationName: "com.team.pick",
+    organizationName: env.organizationName,
     settings: settings,
     targets: [interfaceTarget, implementationTarget]
 )
@@ -75,13 +85,24 @@ import Foundation
 public protocol ${DOMAIN_NAME}Interface {}
 EOF
 
-# Create Source file
+# Create main Domain file in Sources
 cat <<EOF > "Projects/Domain/$DOMAIN_NAME/Sources/${DOMAIN_NAME}.swift"
 import Foundation
-import ${DOMAIN_NAME}Interface
 
-public struct ${DOMAIN_NAME}: ${DOMAIN_NAME}Interface {}
+@_exported import ${DOMAIN_NAME}Interface
+
+public struct ${DOMAIN_NAME} {
+    public init() {}
+}
 EOF
+
+# Create empty placeholder files in each directory
+touch "Projects/Domain/$DOMAIN_NAME/Sources/API/.gitkeep"
+touch "Projects/Domain/$DOMAIN_NAME/Sources/DataSource/.gitkeep"
+touch "Projects/Domain/$DOMAIN_NAME/Sources/DTO/.gitkeep"
+touch "Projects/Domain/$DOMAIN_NAME/Sources/Entity/.gitkeep"
+touch "Projects/Domain/$DOMAIN_NAME/Sources/Repository/.gitkeep"
+touch "Projects/Domain/$DOMAIN_NAME/Sources/UseCase/.gitkeep"
 
 # Convert to lowerCamelCase
 LOWER_CAMEL_CASE_NAME="$(tr '[:upper:]' '[:lower:]' <<< "${DOMAIN_NAME:0:1}")${DOMAIN_NAME:1}"
@@ -95,7 +116,7 @@ sed -i '' "/.Projects.acceptDomain,/a\\
         .Projects.${LOWER_CAMEL_CASE_NAME}" Projects/Domain/Project.swift
 
 # Add to App dependencies
-sed -i '' "/.Projects.acceptDomainInterface,/a\\
+sed -i '' "/.Projects.checkSelfStudyTeacherDomainInterface,/a\\
     .Projects.${LOWER_CAMEL_CASE_NAME},\\
     .Projects.${LOWER_CAMEL_CASE_NAME}Interface," Projects/App/Project.swift
 

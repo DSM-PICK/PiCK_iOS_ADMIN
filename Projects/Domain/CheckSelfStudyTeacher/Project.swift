@@ -17,38 +17,36 @@ let settings: Settings = .settings(
 )
 
 let interfaceTarget = Target.target(
-    name: "AllTabFeatureInterface",
+    name: "CheckSelfStudyTeacherDomainInterface",
     destinations: env.destination,
     product: .framework,
-    bundleId: "\(env.organizationName).AllTabFeatureInterface",
+    bundleId: "\(env.organizationName).CheckSelfStudyTeacherDomainInterface",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
-    sources: ["Interface/AllTabFeatureInterface.swift"],
+    sources: ["Interface/**"],
     dependencies: [
-        .Features.baseFeature
+        .Projects.core,
+        .Shared.thirdPartyLib
     ]
 )
 
 let implementationTarget = Target.target(
-    name: "AllTabFeature",
+    name: "CheckSelfStudyTeacherDomain",
     destinations: env.destination,
-    product: .staticFramework,
-    bundleId: "\(env.organizationName).AllTabFeature",
+    product: .framework,
+    bundleId: "\(env.organizationName).CheckSelfStudyTeacherDomain",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Sources/**"],
     dependencies: [
-        .target(name: "AllTabFeatureInterface"),
-        .Projects.allTabDomainInterface,
-        .Features.homeFeature,
-        .Features.checkSelfStudyTeacherFeature,
-        .Shared.utility,
+        .target(name: "CheckSelfStudyTeacherDomainInterface"),
+        .Projects.baseDomain,
         .Shared.thirdPartyLib
     ]
 )
 
 let project = Project(
-    name: "AllTabFeature",
+    name: "CheckSelfStudyTeacherDomain",
     organizationName: env.organizationName,
     settings: settings,
     targets: [interfaceTarget, implementationTarget]
