@@ -9,7 +9,7 @@ public class GetOutListUseCaseImpl: GetOutListUseCase {
         self.repository = repository
     }
 
-    public func execute(floor: Int) -> AnyPublisher<OutListResponseDTO, Error> {
+    public func execute(floor: Int) -> AnyPublisher<[OutListResponseDTO], Error> {
         repository.getOutList(floor: floor)
     }
 }

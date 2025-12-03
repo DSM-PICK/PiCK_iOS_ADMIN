@@ -11,7 +11,7 @@ public class OutListRepositoryImpl: OutListRepository {
         self.dataSource = dataSource
     }
 
-    public func getOutList(floor: Int) -> AnyPublisher<OutListResponseDTO, Error> {
+    public func getOutList(floor: Int) -> AnyPublisher<[OutListResponseDTO], Error> {
         dataSource.getOutList(floor: floor)
             .map { response in
                 return response
