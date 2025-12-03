@@ -1,5 +1,6 @@
 import Foundation
+import SwiftUI
 
-public protocol BugReportInterface {
-    
+public protocol BugReportFactory {
+    func makeView() -> AnyView
 }

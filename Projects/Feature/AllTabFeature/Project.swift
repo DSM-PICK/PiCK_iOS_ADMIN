@@ -42,6 +42,7 @@ let implementationTarget = Target.target(
         .Projects.allTabDomainInterface,
         .Features.homeFeature,
         .Features.checkSelfStudyTeacherFeature,
+        .Features.bugReportFeature,
         .Shared.utility,
         .Shared.thirdPartyLib
     ]

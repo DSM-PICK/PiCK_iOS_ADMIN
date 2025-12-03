@@ -6,6 +6,7 @@ import HomeFeature
 import Utility
 import CheckSelfStudyTeacherFeature
 import CheckSelfStudyTeacherDomainInterface
+import BugReportFeature
 
 public struct AllTabView: View {
     let store: StoreOf<AllTabReducer>
@@ -35,6 +36,9 @@ public struct AllTabView: View {
                             },
                             onCheckTeacherTap: {
                                 navigationPath.append(.checkSelfStudyTeacher)
+                            },
+                            onBugReportTap: {
+                                navigationPath.append(.bugReport)
                             }
                         )
                         .padding(.top, 32)
@@ -59,6 +63,15 @@ public struct AllTabView: View {
                                     CheckSelfStudyTeacherReducer(
                                         fetchSelfStudyTeacherUseCase: fetchSelfStudyTeacherUseCase
                                     )
+                                }
+                            )
+                        )
+                    case .bugReport:
+                        BugReportFeature(
+                            store: .init(
+                                initialState: BugReportReducer.State(),
+                                reducer: {
+                                    BugReportReducer()
                                 }
                             )
                         )

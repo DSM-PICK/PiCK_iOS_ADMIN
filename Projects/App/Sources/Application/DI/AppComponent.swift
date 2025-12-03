@@ -15,8 +15,10 @@ import SchoolMealFeature
 import SchoolMealFeatureInterface
 import AcceptFeature
 import AcceptFeatureInterface
+import CheckSelfStudyTeacherFeature
+import CheckSelfStudyTeacherFeatureInterface
 
-public final class AppComponent: BootstrapComponent, HomeDependency, AllTabDependency, PlanDependency, SchoolMealDependency, AcceptDependency {
+public final class AppComponent: BootstrapComponent, HomeDependency, AllTabDependency, PlanDependency, SchoolMealDependency, AcceptDependency, CheckSelfStudyTeacherDependency {
     private let _keychain: any Keychain
 
     init(keychain: any Keychain) {
@@ -68,5 +70,8 @@ public extension AppComponent {
     }
     var acceptFactory: any AcceptFactory {
         AcceptComponent(parent: self)
+    }
+    var checkSelfStudyTeacherFactory: any CheckSelfStudyTeacherFactory {
+        CheckSelfStudyTeacherComponent(parent: self)
     }
 }
