@@ -44,9 +44,24 @@ let implementationTarget = Target.target(
     ]
 )
 
+let testTarget = Target.target(
+    name: "AuthDomainTests",
+    destinations: env.destination,
+    product: .unitTests,
+    bundleId: "\(env.organizationName).AuthDomainTests",
+    deploymentTargets: env.deploymentTargets,
+    infoPlist: .default,
+    sources: ["Tests/**"],
+    dependencies: [
+        .target(name: "AuthDomain"),
+        .target(name: "AuthDomainInterface"),
+        .Projects.baseDomain
+    ]
+)
+
 let project = Project(
     name: "AuthDomain",
     organizationName: env.organizationName,
     settings: settings,
-    targets: [interfaceTarget, implementationTarget]
+    targets: [interfaceTarget, implementationTarget, testTarget]
 )
