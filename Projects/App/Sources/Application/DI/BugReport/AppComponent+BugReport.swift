@@ -15,13 +15,13 @@ public extension AppComponent {
         }
     }
 
-    var uploadBugImagesUseCase: UploadBugImagesUseCaseProtocol {
+    var uploadBugImagesUseCase: any UploadBugImagesUseCaseProtocol {
         shared {
             UploadBugImagesUseCase(repository: bugReportRepository)
         }
     }
 
-    var submitBugReportUseCase: SubmitBugReportUseCaseProtocol {
+    var submitBugReportUseCase: any SubmitBugReportUseCaseProtocol {
         shared {
             SubmitBugReportUseCase(repository: bugReportRepository)
         }

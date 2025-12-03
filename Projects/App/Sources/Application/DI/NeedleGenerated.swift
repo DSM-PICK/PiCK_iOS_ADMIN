@@ -11,8 +11,13 @@ import AllTabFeatureInterface
 import AuthDomain
 import AuthDomainInterface
 import BaseDomain
+import BugReportDomain
+import BugReportDomainInterface
+import BugReportFeature
+import BugReportFeatureInterface
 import CheckSelfStudyTeacherDomain
 import CheckSelfStudyTeacherDomainInterface
+import CheckSelfStudyTeacherFeature
 import CheckSelfStudyTeacherFeatureInterface
 import ComposableArchitecture
 import Core
@@ -106,6 +111,19 @@ private class OnboardingDependencyf77d0055983a00cf8835Provider: OnboardingDepend
 private func factory88dc13cc29c5719e2b01e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
     return OnboardingDependencyf77d0055983a00cf8835Provider()
 }
+private class CheckSelfStudyTeacherDependency18aa2dd6d35fe3494400Provider: CheckSelfStudyTeacherDependency {
+    var fetchSelfStudyTeacherUseCase: any FetchSelfStudyTeacherUseCaseProtocol {
+        return appComponent.fetchSelfStudyTeacherUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->CheckSelfStudyTeacherComponent
+private func factory8da635de41c15b5c5bd3f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return CheckSelfStudyTeacherDependency18aa2dd6d35fe3494400Provider(appComponent: parent1(component) as! AppComponent)
+}
 private class InfoSettingDependencyda5872b9bdd84990e780Provider: InfoSettingDependency {
     var signupUseCase: any SignupUseCase {
         return appComponent.signupUseCase
@@ -159,6 +177,22 @@ private class SecretKeyDependencyb3e8d2bd4c35431acda1Provider: SecretKeyDependen
 private func factorycc7ea4e12027ae637f9ff47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return SecretKeyDependencyb3e8d2bd4c35431acda1Provider(appComponent: parent1(component) as! AppComponent)
 }
+private class BugReportDependencyeea5818852f336c35729Provider: BugReportDependency {
+    var uploadBugImagesUseCase: any UploadBugImagesUseCaseProtocol {
+        return appComponent.uploadBugImagesUseCase
+    }
+    var submitBugReportUseCase: any SubmitBugReportUseCaseProtocol {
+        return appComponent.submitBugReportUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->BugReportComponent
+private func factoryafa28e93c96a785ed32af47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return BugReportDependencyeea5818852f336c35729Provider(appComponent: parent1(component) as! AppComponent)
+}
 private class AllTabDependencyacdab75b3325eec9d649Provider: AllTabDependency {
     var getMyNameUseCase: any GetMyNameUseCaseProtocol {
         return appComponent.getMyNameUseCase
@@ -168,6 +202,12 @@ private class AllTabDependencyacdab75b3325eec9d649Provider: AllTabDependency {
     }
     var fetchSelfStudyTeacherUseCase: any FetchSelfStudyTeacherUseCaseProtocol {
         return appComponent.fetchSelfStudyTeacherUseCase
+    }
+    var uploadBugImagesUseCase: any UploadBugImagesUseCaseProtocol {
+        return appComponent.uploadBugImagesUseCase
+    }
+    var submitBugReportUseCase: any SubmitBugReportUseCaseProtocol {
+        return appComponent.submitBugReportUseCase
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -263,6 +303,10 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["getClassroomMovesUseCase-any GetClassroomMovesUseCaseProtocol"] = { [unowned self] in self.getClassroomMovesUseCase as Any }
         localTable["updateApplicationStatusUseCase-any UpdateApplicationStatusUseCaseProtocol"] = { [unowned self] in self.updateApplicationStatusUseCase as Any }
         localTable["updateClassroomMoveStatusUseCase-any UpdateClassroomMoveStatusUseCaseProtocol"] = { [unowned self] in self.updateClassroomMoveStatusUseCase as Any }
+        localTable["bugReportDataSource-BugReportDataSource"] = { [unowned self] in self.bugReportDataSource as Any }
+        localTable["bugReportRepository-BugReportRepository"] = { [unowned self] in self.bugReportRepository as Any }
+        localTable["uploadBugImagesUseCase-any UploadBugImagesUseCaseProtocol"] = { [unowned self] in self.uploadBugImagesUseCase as Any }
+        localTable["submitBugReportUseCase-any SubmitBugReportUseCaseProtocol"] = { [unowned self] in self.submitBugReportUseCase as Any }
         localTable["fetchAcademicScheduleUseCase-any FetchAcademicScheduleUseCaseProtocol"] = { [unowned self] in self.fetchAcademicScheduleUseCase as Any }
         localTable["fetchMonthAcademicScheduleUseCase-any FetchMonthAcademicScheduleUseCaseProtocol"] = { [unowned self] in self.fetchMonthAcademicScheduleUseCase as Any }
         localTable["planFactory-any PlanFactory"] = { [unowned self] in self.planFactory as Any }
@@ -276,6 +320,8 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["homeFactory-any HomeFactory"] = { [unowned self] in self.homeFactory as Any }
         localTable["allTabFactory-any AllTabFactory"] = { [unowned self] in self.allTabFactory as Any }
         localTable["acceptFactory-any AcceptFactory"] = { [unowned self] in self.acceptFactory as Any }
+        localTable["checkSelfStudyTeacherFactory-any CheckSelfStudyTeacherFactory"] = { [unowned self] in self.checkSelfStudyTeacherFactory as Any }
+        localTable["bugReportFactory-any BugReportFactory"] = { [unowned self] in self.bugReportFactory as Any }
         localTable["fetchSelfStudyTeacherUseCase-any FetchSelfStudyTeacherUseCaseProtocol"] = { [unowned self] in self.fetchSelfStudyTeacherUseCase as Any }
         localTable["fetchSchoolMealUseCase-any FetchSchoolMealUseCaseProtocol"] = { [unowned self] in self.fetchSchoolMealUseCase as Any }
         localTable["schoolMealFactory-any SchoolMealFactory"] = { [unowned self] in self.schoolMealFactory as Any }
@@ -309,6 +355,11 @@ extension OnboardingComponent: NeedleFoundation.Registration {
 
     }
 }
+extension CheckSelfStudyTeacherComponent: NeedleFoundation.Registration {
+    public func registerItems() {
+        keyPathToName[\CheckSelfStudyTeacherDependency.fetchSelfStudyTeacherUseCase] = "fetchSelfStudyTeacherUseCase-any FetchSelfStudyTeacherUseCaseProtocol"
+    }
+}
 extension InfoSettingComponent: NeedleFoundation.Registration {
     public func registerItems() {
         keyPathToName[\InfoSettingDependency.signupUseCase] = "signupUseCase-any SignupUseCase"
@@ -330,11 +381,19 @@ extension SecretKeyComponent: NeedleFoundation.Registration {
         keyPathToName[\SecretKeyDependency.secretKeyUseCase] = "secretKeyUseCase-any SecretKeyUseCase"
     }
 }
+extension BugReportComponent: NeedleFoundation.Registration {
+    public func registerItems() {
+        keyPathToName[\BugReportDependency.uploadBugImagesUseCase] = "uploadBugImagesUseCase-any UploadBugImagesUseCaseProtocol"
+        keyPathToName[\BugReportDependency.submitBugReportUseCase] = "submitBugReportUseCase-any SubmitBugReportUseCaseProtocol"
+    }
+}
 extension AllTabComponent: NeedleFoundation.Registration {
     public func registerItems() {
         keyPathToName[\AllTabDependency.getMyNameUseCase] = "getMyNameUseCase-any GetMyNameUseCaseProtocol"
         keyPathToName[\AllTabDependency.authRepository] = "authRepository-any AuthRepository"
         keyPathToName[\AllTabDependency.fetchSelfStudyTeacherUseCase] = "fetchSelfStudyTeacherUseCase-any FetchSelfStudyTeacherUseCaseProtocol"
+        keyPathToName[\AllTabDependency.uploadBugImagesUseCase] = "uploadBugImagesUseCase-any UploadBugImagesUseCaseProtocol"
+        keyPathToName[\AllTabDependency.submitBugReportUseCase] = "submitBugReportUseCase-any SubmitBugReportUseCaseProtocol"
     }
 }
 extension SigninComponent: NeedleFoundation.Registration {
@@ -382,10 +441,12 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->SchoolMealComponent", factorya99b85c0783e43e9302df47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->OnboardingComponent", factory88dc13cc29c5719e2b01e3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->CheckSelfStudyTeacherComponent", factory8da635de41c15b5c5bd3f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->InfoSettingComponent", factory15af88ecfb834319b78cf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->PasswordComponent", factory9f8860811946a346ca2ae3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->VerifyEmailComponent", factoryeabc669822dd3244ed10f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->SecretKeyComponent", factorycc7ea4e12027ae637f9ff47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->BugReportComponent", factoryafa28e93c96a785ed32af47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AllTabComponent", factoryfffd4c52463116b1a1a9f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->SigninComponent", factory2882a056d84a613debccf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->HomeComponent", factory67229cdf0f755562b2b1f47b58f8f304c97af4d5)
