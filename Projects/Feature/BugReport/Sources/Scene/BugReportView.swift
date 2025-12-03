@@ -68,8 +68,10 @@ public struct BugReportView: View {
                                     Task {
                                         var images: [Data] = []
                                         for item in newItems {
-                                            if let data = try? await item.loadTransferable(type: Data.self) {
-                                                images.append(data)
+                                            if let data = try? await item.loadTransferable(type: Data.self),
+                                               let uiImage = UIImage(data: data),
+                                               let compressedData = uiImage.jpegData(compressionQuality: 0.1) {
+                                                images.append(compressedData)
                                             }
                                         }
                                         viewStore.send(.imagesSelected(images))

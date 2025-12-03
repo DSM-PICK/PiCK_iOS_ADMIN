@@ -2,6 +2,7 @@ import Foundation
 import BaseDomain
 import Core
 import Moya
+import Alamofire
 
 public class BugReportDataSourceImpl: BugReportDataSource {
     private let keychain: any Keychain
@@ -9,7 +10,17 @@ public class BugReportDataSourceImpl: BugReportDataSource {
 
     public init(keychain: any Keychain) {
         self.keychain = keychain
-        self.provider = MoyaProvider<BugReportAPI>(plugins: [MoyaLoggingPlugin()])
+
+        let configuration = URLSessionConfiguration.default
+        configuration.timeoutIntervalForRequest = 30
+        configuration.timeoutIntervalForResource = 60
+
+        let session = Session(configuration: configuration)
+
+        self.provider = MoyaProvider<BugReportAPI>(
+            session: session,
+            plugins: [MoyaLoggingPlugin()]
+        )
     }
 
     public func uploadImages(images: [Data]) async throws -> [String] {
