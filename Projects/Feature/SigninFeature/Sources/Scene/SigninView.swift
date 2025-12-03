@@ -18,6 +18,7 @@ struct SigninView: View {
                 emailTextField(viewStore)
                 passwordTextField(viewStore)
                 Spacer()
+                signupLinkSection
                 signinButton(viewStore)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -74,6 +75,25 @@ struct SigninView: View {
         .padding(.top, 44)
     }
     
+    private var signupLinkSection: some View {
+        HStack(spacing: 0) {
+            Text("PiCK 계정이 없으세요? ")
+                .foregroundColor(Color.Gray.gray900)
+                .pickText(type: .body1)
+
+            Button {
+                router.path.append(.secretKey)
+            } label: {
+                Text("회원가입")
+                    .foregroundColor(Color.Primary.primary500)
+                    .pickText(type: .body1)
+                    .underline()
+            }
+        }
+        .padding(.horizontal, 24)
+        .padding(.bottom, 12)
+    }
+
     private func signinButton(_ viewStore: ViewStoreOf<SigninReducer>) -> some View {
         PiCKButton(
             buttonText: "로그인하기",
