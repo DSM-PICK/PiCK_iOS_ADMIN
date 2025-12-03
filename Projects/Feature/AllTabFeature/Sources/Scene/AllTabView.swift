@@ -7,19 +7,26 @@ import Utility
 import CheckSelfStudyTeacherFeature
 import CheckSelfStudyTeacherDomainInterface
 import BugReportFeature
+import BugReportDomainInterface
 
 public struct AllTabView: View {
     let store: StoreOf<AllTabReducer>
     let fetchSelfStudyTeacherUseCase: any FetchSelfStudyTeacherUseCaseProtocol
+    let uploadBugImagesUseCase: any UploadBugImagesUseCaseProtocol
+    let submitBugReportUseCase: any SubmitBugReportUseCaseProtocol
     @EnvironmentObject var router: AppRouter
     @State private var navigationPath: [AppRoute] = []
 
     public init(
         store: StoreOf<AllTabReducer>,
-        fetchSelfStudyTeacherUseCase: any FetchSelfStudyTeacherUseCaseProtocol
+        fetchSelfStudyTeacherUseCase: any FetchSelfStudyTeacherUseCaseProtocol,
+        uploadBugImagesUseCase: any UploadBugImagesUseCaseProtocol,
+        submitBugReportUseCase: any SubmitBugReportUseCaseProtocol
     ) {
         self.store = store
         self.fetchSelfStudyTeacherUseCase = fetchSelfStudyTeacherUseCase
+        self.uploadBugImagesUseCase = uploadBugImagesUseCase
+        self.submitBugReportUseCase = submitBugReportUseCase
     }
 
     public var body: some View {
@@ -71,7 +78,10 @@ public struct AllTabView: View {
                             store: .init(
                                 initialState: BugReportReducer.State(),
                                 reducer: {
-                                    BugReportReducer()
+                                    BugReportReducer(
+                                        uploadBugImagesUseCase: uploadBugImagesUseCase,
+                                        submitBugReportUseCase: submitBugReportUseCase
+                                    )
                                 }
                             )
                         )
