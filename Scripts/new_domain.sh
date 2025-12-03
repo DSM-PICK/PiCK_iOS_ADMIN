@@ -12,6 +12,14 @@ if [[ ! "$DOMAIN_NAME" =~ Domain$ ]]; then
   DOMAIN_NAME="${DOMAIN_NAME}Domain"
 fi
 
+# Confirm with user
+echo "Creating domain: $DOMAIN_NAME"
+read -p "Is this correct? (y/n): " confirm
+if [ "$confirm" != "y" ] && [ "$confirm" != "Y" ]; then
+  echo "Cancelled."
+  exit 0
+fi
+
 # Create directories
 mkdir -p "Projects/Domain/$DOMAIN_NAME/Interface"
 mkdir -p "Projects/Domain/$DOMAIN_NAME/Sources/API"
@@ -111,9 +119,8 @@ LOWER_CAMEL_CASE_NAME="$(tr '[:upper:]' '[:lower:]' <<< "${DOMAIN_NAME:0:1}")${D
 python3 Scripts/add_to_dependency.py domain "$DOMAIN_NAME" "$LOWER_CAMEL_CASE_NAME"
 
 # Add to Domain/Project.swift
-sed -i '' "s/.Projects.acceptDomain/.Projects.acceptDomain,/" Projects/Domain/Project.swift
 sed -i '' "/.Projects.acceptDomain,/a\\
-        .Projects.${LOWER_CAMEL_CASE_NAME}" Projects/Domain/Project.swift
+        .Projects.${LOWER_CAMEL_CASE_NAME}," Projects/Domain/Project.swift
 
 # Add to App dependencies
 sed -i '' "/.Projects.checkSelfStudyTeacherDomainInterface,/a\\
