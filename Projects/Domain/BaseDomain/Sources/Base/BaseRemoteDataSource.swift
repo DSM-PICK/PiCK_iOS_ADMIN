@@ -42,10 +42,13 @@ open class BaseRemoteDataSource<API: PiCKAPI> {
 
     private func refreshTokenAndRetry(api: API, originalError: MoyaError) -> AnyPublisher<Response, Error> {
         refreshProvider.requestPublisher(.refreshToken)
-            .tryMap { response -> Response in
+            .tryMap { [weak self] response -> Response in
+                guard let self = self else { throw originalError }
                 let tokenData = try response.map(RefreshTokenResponseDTO.self)
                 JwtStore.shared.accessToken = tokenData.accessToken
                 JwtStore.shared.refreshToken = tokenData.refreshToken
+                self.keychain.save(type: .accessToken, value: tokenData.accessToken)
+                self.keychain.save(type: .refreshToken, value: tokenData.refreshToken)
                 return response
             }
             .flatMap { [weak self] _ -> AnyPublisher<Response, Error> in
@@ -57,8 +60,20 @@ open class BaseRemoteDataSource<API: PiCKAPI> {
                     .mapError { $0 as Error }
                     .eraseToAnyPublisher()
             }
-            .tryCatch { error -> AnyPublisher<Response, Error> in
-                throw api.errorMap?[401] ?? originalError
+            .catch { [weak self] error -> AnyPublisher<Response, Error> in
+                guard let self = self else {
+                    return Fail(error: originalError as Error).eraseToAnyPublisher()
+                }
+                JwtStore.shared.clearTokens()
+                self.keychain.delete(type: .accessToken)
+                self.keychain.delete(type: .refreshToken)
+
+                if let moyaError = error as? MoyaError,
+                   let code = moyaError.response?.statusCode,
+                   let mappedError = api.errorMap?[code] {
+                    return Fail(error: mappedError).eraseToAnyPublisher()
+                }
+                return Fail(error: error).eraseToAnyPublisher()
             }
             .eraseToAnyPublisher()
     }
