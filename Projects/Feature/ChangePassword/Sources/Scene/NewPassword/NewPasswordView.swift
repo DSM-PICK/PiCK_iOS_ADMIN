@@ -31,7 +31,9 @@ public struct NewPasswordView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .onChange(of: viewStore.isChangeSuccessful) { isSuccessful in
                 if isSuccessful {
-                    router.path = [.signin]
+                    if router.path.count >= 2 {
+                        router.path.removeLast(2)
+                    }
                 }
             }
             .navigationBarBackButtonHidden(true)
