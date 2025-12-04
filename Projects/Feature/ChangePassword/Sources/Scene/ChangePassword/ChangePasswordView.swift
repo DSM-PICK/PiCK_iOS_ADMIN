@@ -34,8 +34,19 @@ public struct ChangePasswordView: View {
                     router.path.append(.newPassword(accountId: accountId, code: viewStore.code))
                 }
             }
-            .navigationBarBackButtonHidden(false)
+            .navigationBarBackButtonHidden(true)
+            .navigationBarTitleDisplayMode(.inline)
             .navigationTitle("비밀번호 변경")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        router.pop()
+                    }) {
+                        Image(systemName: "chevron.left")
+                            .foregroundColor(.black)
+                    }
+                }
+            }
         }
     }
 
@@ -51,7 +62,7 @@ public struct ChangePasswordView: View {
             Text("DSM 이메일로 인증 해주세요.")
                 .pickText(type: .body1, textColor: .Gray.gray600)
         }
-        .padding(.top, 80)
+        .padding(.top, 58)
         .padding(.leading, 24)
     }
 
