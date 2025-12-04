@@ -37,4 +37,24 @@ public final class OutListDataSourceImpl: OutListDataSource {
             }
         }
     }
+
+    public func returnStudents(ids: [String]) async throws {
+        try await withCheckedThrowingContinuation { continuation in
+            provider.request(.returnStudents(ids: ids)) { result in
+                switch result {
+                case .success:
+                    continuation.resume(returning: ())
+                case .failure(let error):
+                    if let moyaError = error as? MoyaError,
+                       let code = moyaError.response?.statusCode,
+                       let errorMap = OutListAPI.returnStudents(ids: ids).errorMap,
+                       let mappedError = errorMap[code] {
+                        continuation.resume(throwing: mappedError)
+                    } else {
+                        continuation.resume(throwing: error)
+                    }
+                }
+            }
+        }
+    }
 }

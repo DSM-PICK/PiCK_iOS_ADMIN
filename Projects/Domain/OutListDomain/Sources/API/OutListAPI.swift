@@ -4,6 +4,7 @@ import Moya
 
 public enum OutListAPI {
     case getOutList(floor: Int)
+    case returnStudents(ids: [String])
 }
 
 extension OutListAPI: PiCKAPI {
@@ -18,6 +19,8 @@ extension OutListAPI: PiCKAPI {
         switch self {
         case .getOutList:
             return "/floor"
+        case .returnStudents:
+            return "/return"
         }
     }
 
@@ -25,6 +28,8 @@ extension OutListAPI: PiCKAPI {
         switch self {
         case .getOutList:
             return .get
+        case .returnStudents:
+            return .patch
         }
     }
 
@@ -37,12 +42,14 @@ extension OutListAPI: PiCKAPI {
                     "status": "OK"
                 ], encoding: URLEncoding.queryString
             )
+        case let .returnStudents(ids):
+            return .requestJSONEncodable(ids)
         }
     }
 
     public var pickHeader: BaseDomain.TokenType {
         switch self {
-        case .getOutList:
+        default:
             return .accessToken
         }
     }

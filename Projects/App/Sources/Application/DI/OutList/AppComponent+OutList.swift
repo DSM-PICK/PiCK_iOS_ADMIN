@@ -14,6 +14,12 @@ public extension AppComponent {
         }
     }
 
+    var returnStudentsUseCase: any ReturnStudentsUseCase {
+        shared {
+            ReturnStudentsUseCaseImpl(repository: outListRepository)
+        }
+    }
+
     private var outListRepository: any OutListRepository {
         shared {
             OutListRepositoryImpl(dataSource: outListDataSource)
