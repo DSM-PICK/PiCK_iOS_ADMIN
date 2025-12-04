@@ -1,5 +1,5 @@
 import ChangePasswordDomainInterface
-import Combine
+import Foundation
 
 public final class ChangePasswordRepositoryImpl: ChangePasswordRepository {
     private let remoteChangePasswordDataSource: any RemoteChangePasswordDataSource
@@ -8,7 +8,7 @@ public final class ChangePasswordRepositoryImpl: ChangePasswordRepository {
         self.remoteChangePasswordDataSource = remoteChangePasswordDataSource
     }
 
-    public func changePassword(req: PasswordChangeRequestParams) -> AnyPublisher<Void, Error> {
-        remoteChangePasswordDataSource.changePassword(req: req)
+    public func changePassword(req: PasswordChangeRequestParams) async throws {
+        try await remoteChangePasswordDataSource.changePassword(req: req)
     }
 }

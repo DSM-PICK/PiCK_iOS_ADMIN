@@ -1,5 +1,5 @@
-import Combine
+import Foundation
 
 public protocol RemoteChangePasswordDataSource {
-    func changePassword(req: PasswordChangeRequestParams) -> AnyPublisher<Void, Error>
+    func changePassword(req: PasswordChangeRequestParams) async throws
 }

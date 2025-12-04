@@ -1,5 +1,5 @@
-import Combine
+import Foundation
 
 public protocol PasswordChangeUseCase {
-    func execute(req: PasswordChangeRequestParams) -> AnyPublisher<Void, Error>
+    func execute(req: PasswordChangeRequestParams) async throws
 }

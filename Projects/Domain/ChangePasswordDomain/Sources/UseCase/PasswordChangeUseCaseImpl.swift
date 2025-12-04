@@ -1,5 +1,5 @@
 import ChangePasswordDomainInterface
-import Combine
+import Foundation
 
 public final class PasswordChangeUseCaseImpl: PasswordChangeUseCase {
     private let changePasswordRepository: any ChangePasswordRepository
@@ -8,7 +8,7 @@ public final class PasswordChangeUseCaseImpl: PasswordChangeUseCase {
         self.changePasswordRepository = changePasswordRepository
     }
 
-    public func execute(req: PasswordChangeRequestParams) -> AnyPublisher<Void, Error> {
-        changePasswordRepository.changePassword(req: req)
+    public func execute(req: PasswordChangeRequestParams) async throws {
+        try await changePasswordRepository.changePassword(req: req)
     }
 }
