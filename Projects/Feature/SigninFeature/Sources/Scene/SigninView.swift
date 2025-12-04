@@ -81,7 +81,7 @@ struct SigninView: View {
             prefixText: "비밀번호를 잊어버리셨나요? ",
             buttonText: "비밀번호 변경",
             action: {
-                // TODO: 비밀번호 변경 액션
+                router.path.append(.changePassword)
             }
         )
         .frame(maxWidth: .infinity, alignment: .trailing)

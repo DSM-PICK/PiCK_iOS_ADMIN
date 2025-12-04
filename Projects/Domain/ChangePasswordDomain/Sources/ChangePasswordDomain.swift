@@ -2,6 +2,6 @@ import Foundation
 
 @_exported import ChangePasswordDomainInterface
 
-public struct ChangePasswordDomain {
+public final class ChangePasswordDomain {
     public init() {}
 }

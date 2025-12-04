@@ -5,6 +5,7 @@ import OnboardingFeatureInterface
 import SigninFeature
 import SigninFeatureInterface
 import HomeFeatureInterface
+import ChangePasswordFeatureInterface
 import BaseDomain
 import Utility
 
@@ -73,6 +74,12 @@ struct RootView: View {
             EmptyView()
         case .checkSelfStudyTeacher:
             EmptyView()
+        case .changePassword:
+            appComponent.changePasswordFactory.makeView()
+                .environmentObject(router)
+        case let .newPassword(accountId, code):
+            appComponent.newPasswordFactory.makeView(accountId: accountId, code: code)
+                .environmentObject(router)
         }
     }
     
