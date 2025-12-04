@@ -4,7 +4,9 @@ import OutListFeatureInterface
 import ComposableArchitecture
 import OutListDomainInterface
 
-public protocol OutListDependency: NeedleFoundation.Dependency { }
+public protocol OutListDependency: NeedleFoundation.Dependency {
+    var getOutListUseCase: any GetOutListUseCase { get }
+}
 
 public final class OutListComponent: Component<OutListDependency>, OutListFactory {
     public func makeOutListView() -> AnyView {
@@ -13,7 +15,9 @@ public final class OutListComponent: Component<OutListDependency>, OutListFactor
                 store: .init(
                     initialState: OutListReducer.State(),
                     reducer: {
-                        OutListReducer()
+                        OutListReducer(
+                            getOutListUseCase: self.dependency.getOutListUseCase
+                        )
                     }
                 )
             )

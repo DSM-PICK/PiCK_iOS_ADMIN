@@ -1,13 +1,98 @@
 import ComposableArchitecture
-import OutListDomainInterface
 import Foundation
+import OutListDomainInterface
 
 public struct OutListReducer: Reducer {
+    private let getOutListUseCase: any GetOutListUseCase
 
-    public init() {}
+    public init(getOutListUseCase: any GetOutListUseCase) {
+        self.getOutListUseCase = getOutListUseCase
+    }
 
-    public struct State: Equatable {}
-    public enum Action {}
+    public struct State: Equatable {
+        public var studentItems: [OutListEntity] = []
+        public var currentFloor: Int = 5
+        public var isLoading: Bool = false
+        public var selectedStudents: Set<String> = []
+        public var errorMessage: String? = nil
 
-    public func reduce(into state: inout State, action: Action) -> ComposableArchitecture.Effect<Action> {}
+        public init() {}
+    }
+
+    public enum Action {
+        case onAppear
+        case floorChanged(Int)
+        case outListResponse(TaskResult<[OutListEntity]>)
+        case studentTapped(String)
+        case returnStudents
+        case returnStudentsResponse(TaskResult<Void>)
+        case clearError
+    }
+
+    public var body: some Reducer<State, Action> {
+        Reduce { state, action in
+            switch action {
+            case .onAppear:
+                state.isLoading = true
+                let floor = state.currentFloor
+                return loadOutList(floor: floor)
+
+            case let .floorChanged(floor):
+                state.currentFloor = floor
+                state.isLoading = true
+                state.selectedStudents.removeAll()
+                return loadOutList(floor: floor)
+
+            case .outListResponse(.success(let students)):
+                state.isLoading = false
+                state.studentItems = students
+                return .none
+
+            case let .outListResponse(.failure(error)):
+                state.isLoading = false
+                state.errorMessage = error.localizedDescription
+                return .none
+
+            case let .studentTapped(id):
+                if state.selectedStudents.contains(id) {
+                    state.selectedStudents.remove(id)
+                } else {
+                    state.selectedStudents.insert(id)
+                }
+                return .none
+
+            case .returnStudents:
+                let selectedIds = state.selectedStudents
+                return .run { send in
+                    await send(.returnStudentsResponse(
+                        await TaskResult {
+                            // TODO: 복귀 로직 작성
+                        }
+                    ))
+                }
+
+            case .returnStudentsResponse(.success):
+                state.selectedStudents.removeAll()
+                return .none
+
+            case let .returnStudentsResponse(.failure(error)):
+                state.errorMessage = error.localizedDescription
+                return .none
+
+            case .clearError:
+                state.errorMessage = nil
+                return .none
+            }
+        }
+    }
+
+    private func loadOutList(floor: Int) -> Effect<Action> {
+        .run { send in
+            await send(.outListResponse(
+                await TaskResult {
+                    try await getOutListUseCase.execute(floor: floor)
+                }
+            ))
+        }
+    }
 }
