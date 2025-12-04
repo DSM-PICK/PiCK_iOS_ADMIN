@@ -4,35 +4,32 @@ public struct OutListEntity: Equatable, Identifiable {
     public let id: String
     public let userId: String
     public let userName: String
-    public let classroomName: String
-    public let move: String
+    public let start: String
+    public let end: String
     public let grade: Int
     public let classNum: Int
     public let num: Int
-    public let start: Int
-    public let end: Int
-
+    public let reason: String
+    
     public init(
         id: String,
         userId: String,
         userName: String,
-        classroomName: String,
-        move: String,
+        start: String,
+        end: String,
         grade: Int,
         classNum: Int,
         num: Int,
-        start: Int,
-        end: Int
+        reason: String
     ) {
         self.id = id
         self.userId = userId
         self.userName = userName
-        self.classroomName = classroomName
-        self.move = move
+        self.start = start
+        self.end = end
         self.grade = grade
         self.classNum = classNum
         self.num = num
-        self.start = start
-        self.end = end
+        self.reason = reason
     }
 }

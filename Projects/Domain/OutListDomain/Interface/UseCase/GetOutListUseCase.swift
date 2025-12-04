@@ -1,5 +1,5 @@
-import Combine
+import Foundation
 
 public protocol GetOutListUseCase {
-    func execute(floor: Int) -> AnyPublisher<[OutListResponseDTO], Error>
+    func execute(floor: Int) async throws -> [OutListEntity]
 }

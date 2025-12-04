@@ -1,6 +1,5 @@
 import Foundation
 import OutListDomainInterface
-import Combine
 
 public class GetOutListUseCaseImpl: GetOutListUseCase {
     private let repository: OutListRepository
@@ -9,7 +8,7 @@ public class GetOutListUseCaseImpl: GetOutListUseCase {
         self.repository = repository
     }
 
-    public func execute(floor: Int) -> AnyPublisher<[OutListResponseDTO], Error> {
-        repository.getOutList(floor: floor)
+    public func execute(floor: Int) async throws -> [OutListEntity] {
+        try await repository.getOutList(floor: floor)
     }
 }

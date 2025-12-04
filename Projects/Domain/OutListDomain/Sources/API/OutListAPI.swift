@@ -13,28 +13,28 @@ extension OutListAPI: PiCKAPI {
     public var domain: BaseDomain.PiCKDomain {
         return .application
     }
-    
+
     public var urlPath: String {
         switch self {
         case .getOutList:
             return "/floor"
         }
     }
-    
+
     public var method: Moya.Method {
         switch self {
         case .getOutList:
             return .get
         }
     }
-    
+
     public var task: Moya.Task {
         switch self {
         case let .getOutList(floor):
             return .requestParameters(
                 parameters: [
                     "floor": floor,
-                    "state": "OK"
+                    "status": "OK"
                 ], encoding: URLEncoding.queryString
             )
         }

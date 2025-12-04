@@ -45,3 +45,19 @@ public struct OutListResponseDTO: Decodable {
         self.reason = reason
     }
 }
+
+extension OutListResponseDTO {
+    public func toEntity() -> OutListEntity {
+        .init(
+            id: id,
+            userId: userId,
+            userName: userName,
+            start: start,
+            end: end,
+            grade: grade,
+            classNum: classNum,
+            num: num,
+            reason: reason
+        )
+    }
+}
