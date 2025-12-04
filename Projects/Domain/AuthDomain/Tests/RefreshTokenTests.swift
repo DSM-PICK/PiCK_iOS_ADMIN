@@ -78,7 +78,7 @@ final class RefreshTokenTests: XCTestCase {
         let testToken = "test-access-token"
         jwtStore.accessToken = testToken
         let headers = jwtStore.toHeader(.accessToken)
-        XCTAssertEqual(headers["Authorization"], "Bearer \(testToken)")
+        XCTAssertEqual(headers["Authorization"], "\(JwtStore.tokenPrefix)\(testToken)")
         XCTAssertEqual(headers["content-type"], "application/json")
     }
 
@@ -91,7 +91,7 @@ final class RefreshTokenTests: XCTestCase {
     }
 
     func testJwtStore_RemovesBearerPrefix_WhenSaving() throws {
-        let tokenWithPrefix = "Bearer test-token-789"
+        let tokenWithPrefix = "\(JwtStore.tokenPrefix)test-token-789"
         jwtStore.accessToken = tokenWithPrefix
         XCTAssertEqual(jwtStore.accessToken, "test-token-789")
     }
