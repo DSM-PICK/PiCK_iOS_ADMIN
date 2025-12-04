@@ -5,7 +5,7 @@ import OnboardingFeatureInterface
 import SigninFeature
 import SigninFeatureInterface
 import HomeFeatureInterface
-import ChangePasswordFeatureInterface
+import ChangePasswordFeature
 import BaseDomain
 import Utility
 

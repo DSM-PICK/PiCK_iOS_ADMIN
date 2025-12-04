@@ -1,8 +1,6 @@
 import SwiftUI
 import ComposableArchitecture
 
-@_exported import ChangePasswordFeatureInterface
-
 public struct ChangePasswordFeature: View {
     let store: StoreOf<ChangePasswordReducer>
 

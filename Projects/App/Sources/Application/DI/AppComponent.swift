@@ -16,7 +16,6 @@ import SchoolMealFeatureInterface
 import AcceptFeature
 import AcceptFeatureInterface
 import ChangePasswordFeature
-import ChangePasswordFeatureInterface
 
 public final class AppComponent: BootstrapComponent, HomeDependency, AllTabDependency, PlanDependency, SchoolMealDependency, AcceptDependency, ChangePasswordDependency, NewPasswordDependency {
     private let _keychain: any Keychain
