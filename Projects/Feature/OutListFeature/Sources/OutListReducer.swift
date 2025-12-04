@@ -4,9 +4,14 @@ import OutListDomainInterface
 
 public struct OutListReducer: Reducer {
     private let getOutListUseCase: any GetOutListUseCase
+    private let returnStudentsUseCase: any ReturnStudentsUseCase
 
-    public init(getOutListUseCase: any GetOutListUseCase) {
+    public init(
+        getOutListUseCase: any GetOutListUseCase,
+        returnStudentsUseCase: any ReturnStudentsUseCase
+    ) {
         self.getOutListUseCase = getOutListUseCase
+        self.returnStudentsUseCase = returnStudentsUseCase
     }
 
     public struct State: Equatable {
@@ -62,18 +67,20 @@ public struct OutListReducer: Reducer {
                 return .none
 
             case .returnStudents:
-                let selectedIds = state.selectedStudents
+                let ids = Array(state.selectedStudents)
                 return .run { send in
                     await send(.returnStudentsResponse(
                         await TaskResult {
-                            // TODO: 복귀 로직 작성
+                            try await returnStudentsUseCase.execute(ids: ids)
                         }
                     ))
                 }
 
             case .returnStudentsResponse(.success):
                 state.selectedStudents.removeAll()
-                return .none
+                state.isLoading = true
+                let floor = state.currentFloor
+                return loadOutList(floor: floor)
 
             case let .returnStudentsResponse(.failure(error)):
                 state.errorMessage = error.localizedDescription

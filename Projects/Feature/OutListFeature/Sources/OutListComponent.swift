@@ -6,6 +6,7 @@ import OutListDomainInterface
 
 public protocol OutListDependency: NeedleFoundation.Dependency {
     var getOutListUseCase: any GetOutListUseCase { get }
+    var returnStudentsUseCase: any ReturnStudentsUseCase { get }
 }
 
 public final class OutListComponent: Component<OutListDependency>, OutListFactory {
@@ -16,7 +17,8 @@ public final class OutListComponent: Component<OutListDependency>, OutListFactor
                     initialState: OutListReducer.State(),
                     reducer: {
                         OutListReducer(
-                            getOutListUseCase: self.dependency.getOutListUseCase
+                            getOutListUseCase: self.dependency.getOutListUseCase,
+                            returnStudentsUseCase: self.dependency.returnStudentsUseCase
                         )
                     }
                 )
