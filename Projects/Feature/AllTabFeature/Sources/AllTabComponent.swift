@@ -4,13 +4,19 @@ import AllTabFeatureInterface
 import ComposableArchitecture
 import AllTabDomainInterface
 import AuthDomainInterface
+import CheckSelfStudyTeacherDomainInterface
 
 public protocol AllTabDependency: NeedleFoundation.Dependency {
     var getMyNameUseCase: any GetMyNameUseCaseProtocol { get }
     var authRepository: any AuthRepository { get }
+    var fetchSelfStudyTeacherUseCase: any FetchSelfStudyTeacherUseCaseProtocol { get }
 }
 
 public final class AllTabComponent: Component<AllTabDependency>, AllTabFactory {
+    public var fetchSelfStudyTeacherUseCase: any FetchSelfStudyTeacherUseCaseProtocol {
+        dependency.fetchSelfStudyTeacherUseCase
+    }
+
     public func makeView() -> AnyView {
         AnyView(
             AllTabFeature(
@@ -22,7 +28,8 @@ public final class AllTabComponent: Component<AllTabDependency>, AllTabFactory {
                             authRepository: self.dependency.authRepository
                         )
                     }
-                )
+                ),
+                fetchSelfStudyTeacherUseCase: fetchSelfStudyTeacherUseCase
             )
         )
     }

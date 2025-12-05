@@ -17,7 +17,9 @@ struct SigninView: View {
                 headerSection
                 emailTextField(viewStore)
                 passwordTextField(viewStore)
+                forgotPasswordLinkSection
                 Spacer()
+                signupLinkSection
                 signinButton(viewStore)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
@@ -73,7 +75,32 @@ struct SigninView: View {
         .padding(.horizontal, 24)
         .padding(.top, 44)
     }
-    
+
+    private var forgotPasswordLinkSection: some View {
+        UnderLineButton(
+            prefixText: "비밀번호를 잊어버리셨나요? ",
+            buttonText: "비밀번호 변경",
+            action: {
+                // TODO: 비밀번호 변경 액션
+            }
+        )
+        .frame(maxWidth: .infinity, alignment: .trailing)
+        .padding(.trailing, 24)
+        .padding(.top, 12)
+    }
+
+    private var signupLinkSection: some View {
+        UnderLineButton(
+            prefixText: "PiCK 계정이 없으세요? ",
+            buttonText: "회원가입",
+            action: {
+                router.path.append(.secretKey)
+            }
+        )
+        .padding(.horizontal, 24)
+        .padding(.bottom, 12)
+    }
+
     private func signinButton(_ viewStore: ViewStoreOf<SigninReducer>) -> some View {
         PiCKButton(
             buttonText: "로그인하기",

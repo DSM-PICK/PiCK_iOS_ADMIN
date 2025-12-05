@@ -14,5 +14,9 @@ let project = Project.makeModule(
         .Projects.allTabDomain,
         .Projects.acceptDomain,
         .Projects.outListDomain
+        .Projects.acceptDomain,,,
+        .Projects.testDomain
+        .Projects.teacherDomain
+        .Projects.checkSelfStudyTeacher
     ]
 )

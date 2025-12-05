@@ -74,6 +74,8 @@ struct RootView: View {
         case.outList:
             appComponent.outListFactory.makeOutListView()
                 .environmentObject(router)
+        case .checkSelfStudyTeacher:
+            EmptyView()
         }
     }
     

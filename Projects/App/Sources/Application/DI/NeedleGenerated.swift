@@ -11,6 +11,9 @@ import AllTabFeatureInterface
 import AuthDomain
 import AuthDomainInterface
 import BaseDomain
+import CheckSelfStudyTeacherDomain
+import CheckSelfStudyTeacherDomainInterface
+import CheckSelfStudyTeacherFeatureInterface
 import ComposableArchitecture
 import Core
 import Foundation
@@ -167,6 +170,9 @@ private class AllTabDependencyacdab75b3325eec9d649Provider: AllTabDependency {
     var authRepository: any AuthRepository {
         return appComponent.authRepository
     }
+    var fetchSelfStudyTeacherUseCase: any FetchSelfStudyTeacherUseCaseProtocol {
+        return appComponent.fetchSelfStudyTeacherUseCase
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -293,6 +299,7 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["outListFactory-any OutListFactory"] = { [unowned self] in self.outListFactory as Any }
         localTable["getOutListUseCase-any GetOutListUseCase"] = { [unowned self] in self.getOutListUseCase as Any }
         localTable["returnStudentsUseCase-any ReturnStudentsUseCase"] = { [unowned self] in self.returnStudentsUseCase as Any }
+        localTable["fetchSelfStudyTeacherUseCase-any FetchSelfStudyTeacherUseCaseProtocol"] = { [unowned self] in self.fetchSelfStudyTeacherUseCase as Any }
         localTable["fetchSchoolMealUseCase-any FetchSchoolMealUseCaseProtocol"] = { [unowned self] in self.fetchSchoolMealUseCase as Any }
         localTable["schoolMealFactory-any SchoolMealFactory"] = { [unowned self] in self.schoolMealFactory as Any }
         localTable["userDefault-any UserDefault"] = { [unowned self] in self.userDefault as Any }
@@ -350,6 +357,7 @@ extension AllTabComponent: NeedleFoundation.Registration {
     public func registerItems() {
         keyPathToName[\AllTabDependency.getMyNameUseCase] = "getMyNameUseCase-any GetMyNameUseCaseProtocol"
         keyPathToName[\AllTabDependency.authRepository] = "authRepository-any AuthRepository"
+        keyPathToName[\AllTabDependency.fetchSelfStudyTeacherUseCase] = "fetchSelfStudyTeacherUseCase-any FetchSelfStudyTeacherUseCaseProtocol"
     }
 }
 extension OutListComponent: NeedleFoundation.Registration {

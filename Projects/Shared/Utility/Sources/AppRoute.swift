@@ -1,4 +1,3 @@
-
 import Foundation
 
 public enum AppRoute: Hashable {
@@ -10,4 +9,5 @@ public enum AppRoute: Hashable {
     case infoSetting(secretKey: String, accountId: String, code: String, password: String)
     case home
     case outList
+    case checkSelfStudyTeacher
 }
