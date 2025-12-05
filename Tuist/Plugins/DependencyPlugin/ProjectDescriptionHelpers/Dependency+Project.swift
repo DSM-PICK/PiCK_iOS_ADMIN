@@ -94,6 +94,7 @@ public extension TargetDependency.Projects {
     static let bugReportDomainInterface = TargetDependency.project(
         target: "BugReportDomainInterface",
         path: .relativeToRoot("Projects/Domain/BugReportDomain")
+    )
     static let changePasswordDomain = TargetDependency.project(
         target: "ChangePasswordDomain",
         path: .relativeToRoot("Projects/Domain/ChangePasswordDomain")
@@ -204,6 +205,7 @@ public extension TargetDependency.Features {
     static let bugReportFeatureInterface = TargetDependency.project(
         target: "BugReportFeatureInterface",
         path: .relativeToRoot("Projects/Feature/BugReport")
+    )
     static let changePasswordFeature = TargetDependency.project(
         target: "ChangePasswordFeature",
         path: .relativeToRoot("Projects/Feature/ChangePassword")

@@ -375,14 +375,11 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["acceptFactory-any AcceptFactory"] = { [unowned self] in self.acceptFactory as Any }
         localTable["checkSelfStudyTeacherFactory-any CheckSelfStudyTeacherFactory"] = { [unowned self] in self.checkSelfStudyTeacherFactory as Any }
         localTable["bugReportFactory-any BugReportFactory"] = { [unowned self] in self.bugReportFactory as Any }
-        localTable["changePasswordFactory-any ChangePasswordFactory"] = { [unowned self] in self.changePasswordFactory as Any }
-        localTable["newPasswordFactory-any NewPasswordFactory"] = { [unowned self] in self.newPasswordFactory as Any }
         localTable["fetchSelfStudyTeacherUseCase-any FetchSelfStudyTeacherUseCaseProtocol"] = { [unowned self] in self.fetchSelfStudyTeacherUseCase as Any }
         localTable["changePasswordProvider-MoyaProvider<ChangePasswordAPI>"] = { [unowned self] in self.changePasswordProvider as Any }
         localTable["remoteChangePasswordDataSource-any RemoteChangePasswordDataSource"] = { [unowned self] in self.remoteChangePasswordDataSource as Any }
         localTable["changePasswordRepository-any ChangePasswordRepository"] = { [unowned self] in self.changePasswordRepository as Any }
         localTable["passwordChangeUseCase-any PasswordChangeUseCase"] = { [unowned self] in self.passwordChangeUseCase as Any }
-        localTable["outListFactory-any OutListFactory"] = { [unowned self] in self.outListFactory as Any }
         localTable["getOutListUseCase-any GetOutListUseCase"] = { [unowned self] in self.getOutListUseCase as Any }
         localTable["returnStudentsUseCase-any ReturnStudentsUseCase"] = { [unowned self] in self.returnStudentsUseCase as Any }
         localTable["fetchSchoolMealUseCase-any FetchSchoolMealUseCaseProtocol"] = { [unowned self] in self.fetchSchoolMealUseCase as Any }
