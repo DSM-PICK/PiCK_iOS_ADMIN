@@ -8,10 +8,12 @@ public struct AllTabMenuList: View {
     let onBugReportTap: () -> Void
 
     public init(
+        onOutListTap: @escaping () -> Void,
         onLogoutTap: @escaping () -> Void,
         onCheckTeacherTap: @escaping () -> Void,
         onBugReportTap: @escaping () -> Void
     ) {
+        self.onOutListTap = onOutListTap
         self.onLogoutTap = onLogoutTap
         self.onCheckTeacherTap = onCheckTeacherTap
         self.onBugReportTap = onBugReportTap

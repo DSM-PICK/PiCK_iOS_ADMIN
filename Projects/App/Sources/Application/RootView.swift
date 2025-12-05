@@ -73,14 +73,14 @@ struct RootView: View {
         case .home:
             EmptyView()
         case .outList:
-            appComponent.outListFactory.makeOutListView()
+            appComponent.outListFactory.makeView()
                 .environmentObject(router)
         case .checkSelfStudyTeacher:
             appComponent.checkSelfStudyTeacherFactory.makeView()
                 .environmentObject(router)
         case .bugReport:
             appComponent.bugReportFactory.makeView()
-            EmptyView()
+                .environmentObject(router)
         case .changePassword:
             appComponent.changePasswordFactory.makeView()
                 .environmentObject(router)

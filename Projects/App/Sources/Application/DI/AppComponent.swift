@@ -82,6 +82,7 @@ public extension AppComponent {
     }
     var bugReportFactory: any BugReportFactory {
         BugReportComponent(parent: self)
+    }
     var changePasswordFactory: any ChangePasswordFactory {
         ChangePasswordComponent(parent: self)
     }

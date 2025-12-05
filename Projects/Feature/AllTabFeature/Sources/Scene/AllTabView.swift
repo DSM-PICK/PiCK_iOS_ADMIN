@@ -38,13 +38,20 @@ public struct AllTabView: View {
                             .padding(.top, 24)
                         
 
-                        AllTabMenuList(onLogoutTap: {
-                            viewStore.send(.logoutButtonTapped)
-                        }, onOutListTap: {
-                            router.path.append(.outList)
-                        }, onCheckTeacherTap: {
-                            navigationPath.append(.checkSelfStudyTeacher)
-                        })
+                        AllTabMenuList(
+                            onOutListTap: {
+                                router.path.append(.outList)
+                            },
+                            onLogoutTap: {
+                                viewStore.send(.logoutButtonTapped)
+                            },
+                            onCheckTeacherTap: {
+                                navigationPath.append(.checkSelfStudyTeacher)
+                            },
+                            onBugReportTap: {
+                                navigationPath.append(.bugReport)
+                            }
+                        )
                         .padding(.top, 32)
                     }
                 }

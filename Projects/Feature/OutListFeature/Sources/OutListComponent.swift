@@ -10,7 +10,7 @@ public protocol OutListDependency: NeedleFoundation.Dependency {
 }
 
 public final class OutListComponent: Component<OutListDependency>, OutListFactory {
-    public func makeOutListView() -> AnyView {
+    public func makeView() -> AnyView {
         AnyView(
             OutListView(
                 store: .init(
