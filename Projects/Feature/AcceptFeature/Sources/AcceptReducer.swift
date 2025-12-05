@@ -22,11 +22,6 @@ public struct AcceptReducer: Reducer {
         self.updateClassroomMoveStatusUseCase = updateClassroomMoveStatusUseCase
     }
 
-    public enum ApplicationType: Equatable {
-        case outgoing
-        case classroomMove
-    }
-
     public enum StudentItem: Equatable, Identifiable {
         case application(ApplicationEntity)
         case classroomMove(ClassroomMoveEntity)

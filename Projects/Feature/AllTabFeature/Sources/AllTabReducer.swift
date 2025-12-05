@@ -49,7 +49,7 @@ public struct AllTabReducer: Reducer {
                 authRepository.logout()
                 state.shouldLogout = true
                 return .none
-                
+
             case .logoutButtonTapped:
                 authRepository.logout()
                 state.shouldLogout = true

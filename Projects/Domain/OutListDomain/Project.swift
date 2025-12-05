@@ -17,36 +17,37 @@ let settings: Settings = .settings(
 )
 
 let interfaceTarget = Target.target(
-    name: "CheckSelfStudyTeacherFeatureInterface",
+    name: "OutListDomainInterface",
     destinations: env.destination,
     product: .framework,
-    bundleId: "\(env.organizationName).CheckSelfStudyTeacherFeatureInterface",
+    bundleId: "com.team.pick.OutListDomainInterface",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Interface/**"],
     dependencies: [
-        .Features.baseFeature
+        .Projects.core,
+        .Shared.thirdPartyLib
     ]
 )
 
 let implementationTarget = Target.target(
-    name: "CheckSelfStudyTeacherFeature",
+    name: "OutListDomain",
     destinations: env.destination,
-    product: .staticFramework,
-    bundleId: "\(env.organizationName).CheckSelfStudyTeacherFeature",
+    product: .framework,
+    bundleId: "com.team.pick.OutListDomain",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Sources/**"],
     dependencies: [
-        .target(name: "CheckSelfStudyTeacherFeatureInterface"),
-        .SPM.NeedleFoundation,
-        .SPM.ComposableArchitecture
+        .target(name: "OutListDomainInterface"),
+        .Projects.baseDomain,
+        .Shared.thirdPartyLib
     ]
 )
 
 let project = Project(
-    name: "CheckSelfStudyTeacherFeature",
-    organizationName: env.organizationName,
+    name: "OutListDomain",
+    organizationName: "com.team.pick",
     settings: settings,
     targets: [interfaceTarget, implementationTarget]
 )

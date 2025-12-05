@@ -17,10 +17,10 @@ let settings: Settings = .settings(
 )
 
 let interfaceTarget = Target.target(
-    name: "CheckSelfStudyTeacherFeatureInterface",
+    name: "OutListFeatureInterface",
     destinations: env.destination,
     product: .framework,
-    bundleId: "\(env.organizationName).CheckSelfStudyTeacherFeatureInterface",
+    bundleId: "\(env.organizationName).OutListFeatureInterface",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Interface/**"],
@@ -30,22 +30,22 @@ let interfaceTarget = Target.target(
 )
 
 let implementationTarget = Target.target(
-    name: "CheckSelfStudyTeacherFeature",
+    name: "OutListFeature",
     destinations: env.destination,
     product: .staticFramework,
-    bundleId: "\(env.organizationName).CheckSelfStudyTeacherFeature",
+    bundleId: "\(env.organizationName).OutListFeature",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Sources/**"],
     dependencies: [
-        .target(name: "CheckSelfStudyTeacherFeatureInterface"),
+        .target(name: "OutListFeatureInterface"),
         .SPM.NeedleFoundation,
         .SPM.ComposableArchitecture
     ]
 )
 
 let project = Project(
-    name: "CheckSelfStudyTeacherFeature",
+    name: "OutListFeature",
     organizationName: env.organizationName,
     settings: settings,
     targets: [interfaceTarget, implementationTarget]

@@ -28,15 +28,14 @@ public struct AllTabView: View {
                     VStack(spacing: 0) {
                         TeacherInfoView(teacherName: viewStore.myName?.name)
                             .padding(.top, 24)
-                        
-                        AllTabMenuList(
-                            onLogoutTap: {
-                                viewStore.send(.logoutButtonTapped)
-                            },
-                            onCheckTeacherTap: {
-                                navigationPath.append(.checkSelfStudyTeacher)
-                            }
-                        )
+
+                        AllTabMenuList(onLogoutTap: {
+                            viewStore.send(.logoutButtonTapped)
+                        }, onOutListTap: {
+                            router.path.append(.outList)
+                        }, onCheckTeacherTap: {
+                            navigationPath.append(.checkSelfStudyTeacher)
+                        })
                         .padding(.top, 32)
                     }
                 }

@@ -8,6 +8,7 @@ public enum AppRoute: Hashable {
     case password(secretKey: String, accountId: String, code: String)
     case infoSetting(secretKey: String, accountId: String, code: String, password: String)
     case home
+    case outList
     case checkSelfStudyTeacher
     case changePassword
     case newPassword(accountId: String, code: String)
