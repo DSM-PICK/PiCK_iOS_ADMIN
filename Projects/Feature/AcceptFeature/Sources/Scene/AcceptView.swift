@@ -4,10 +4,17 @@ import ComposableArchitecture
 import AcceptDomainInterface
 import BaseFeature
 
+public enum ApplicationType: String, Equatable, Hashable {
+    case outgoing = "외출 수락"
+    case classroomMove = "교실 이동"
+
+    var title: String { rawValue }
+}
+
 public struct AcceptView: View {
     @Environment(\.dismiss) var dismiss
     @State private var isApplyBottomSheetPresented = false
-    @State private var selectedOption: PiCK_iOS_DesignSystem.ApplyBottomSheet.SelectionOption = .outgoing
+    @State private var selectedOption: ApplicationType = .outgoing
     @State private var selectedFloor: Int = 1
     @State private var showApprovePopup = false
     @State private var showRejectPopup = false
@@ -154,14 +161,20 @@ public struct AcceptView: View {
                     }
                 }
                 .sheet(isPresented: $isApplyBottomSheetPresented) {
-                    PiCK_iOS_DesignSystem.ApplyBottomSheet(isPresented: $isApplyBottomSheetPresented) { option in
-                        selectedOption = option
-                        if option == .outgoing {
-                            viewStore.send(.fetchApplications(type: .outgoing, grade: 5, classNum: 5))
-                        } else {
-                            viewStore.send(.fetchApplicationsByFloor(floor: selectedFloor))
+                    PiCK_iOS_DesignSystem.SinglePickerBottomSheet(
+                        isPresented: $isApplyBottomSheetPresented,
+                        title: "수락 항목을 선택해주세요",
+                        options: ["외출 수락", "교실 이동"],
+                        onComplete: { option in
+                            if option == "외출 수락" {
+                                selectedOption = .outgoing
+                                viewStore.send(.fetchApplications(type: .outgoing, grade: 5, classNum: 5))
+                            } else {
+                                selectedOption = .classroomMove
+                                viewStore.send(.fetchApplicationsByFloor(floor: selectedFloor))
+                            }
                         }
-                    }
+                    )
                     .presentationDetents([.height(350)])
                     .presentationDragIndicator(.hidden)
                 }
@@ -241,3 +254,4 @@ public struct AcceptView: View {
         }
     }
 }
+

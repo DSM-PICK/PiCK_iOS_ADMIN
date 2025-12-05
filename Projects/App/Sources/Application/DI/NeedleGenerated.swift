@@ -15,6 +15,10 @@ import BugReportDomain
 import BugReportDomainInterface
 import BugReportFeature
 import BugReportFeatureInterface
+import ChangePasswordDomain
+import ChangePasswordDomainInterface
+import ChangePasswordFeature
+import ChangePasswordFeatureInterface
 import CheckSelfStudyTeacherDomain
 import CheckSelfStudyTeacherDomainInterface
 import CheckSelfStudyTeacherFeature
@@ -31,6 +35,10 @@ import Moya
 import NeedleFoundation
 import OnboardingFeature
 import OnboardingFeatureInterface
+import OutListDomain
+import OutListDomainInterface
+import OutListFeature
+import OutListFeatureInterface
 import PlanDomain
 import PlanDomainInterface
 import PlanFeature
@@ -218,6 +226,22 @@ private class AllTabDependencyacdab75b3325eec9d649Provider: AllTabDependency {
 private func factoryfffd4c52463116b1a1a9f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return AllTabDependencyacdab75b3325eec9d649Provider(appComponent: parent1(component) as! AppComponent)
 }
+private class OutListDependencyac9793ee3f8a81768455Provider: OutListDependency {
+    var getOutListUseCase: any GetOutListUseCase {
+        return appComponent.getOutListUseCase
+    }
+    var returnStudentsUseCase: any ReturnStudentsUseCase {
+        return appComponent.returnStudentsUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->OutListComponent
+private func factoryb7dc05e5bded91c750e2f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return OutListDependencyac9793ee3f8a81768455Provider(appComponent: parent1(component) as! AppComponent)
+}
 private class SigninDependencyde06a9d0b22764487733Provider: SigninDependency {
     var signinUseCase: any SigninUseCase {
         return appComponent.signinUseCase
@@ -258,6 +282,35 @@ private class HomeDependency443c4e1871277bd8432aProvider: HomeDependency {
 /// ^->AppComponent->HomeComponent
 private func factory67229cdf0f755562b2b1f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return HomeDependency443c4e1871277bd8432aProvider(appComponent: parent1(component) as! AppComponent)
+}
+private class ChangePasswordDependency04ab7ced24136c4fb27eProvider: ChangePasswordDependency {
+    var emailSendUseCase: any EmailSendUseCase {
+        return appComponent.emailSendUseCase
+    }
+    var codeCheckUseCase: any CodeCheckUseCase {
+        return appComponent.codeCheckUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->ChangePasswordComponent
+private func factoryab7c4d87dab53e0a51b9f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return ChangePasswordDependency04ab7ced24136c4fb27eProvider(appComponent: parent1(component) as! AppComponent)
+}
+private class NewPasswordDependency3320cbf6e40b8cd8a8eaProvider: NewPasswordDependency {
+    var passwordChangeUseCase: any PasswordChangeUseCase {
+        return appComponent.passwordChangeUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->NewPasswordComponent
+private func factory52985a6d5ec65d75bd97f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return NewPasswordDependency3320cbf6e40b8cd8a8eaProvider(appComponent: parent1(component) as! AppComponent)
 }
 private class AcceptDependency380d0282470c8b91ca89Provider: AcceptDependency {
     var getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol {
@@ -322,7 +375,16 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["acceptFactory-any AcceptFactory"] = { [unowned self] in self.acceptFactory as Any }
         localTable["checkSelfStudyTeacherFactory-any CheckSelfStudyTeacherFactory"] = { [unowned self] in self.checkSelfStudyTeacherFactory as Any }
         localTable["bugReportFactory-any BugReportFactory"] = { [unowned self] in self.bugReportFactory as Any }
+        localTable["changePasswordFactory-any ChangePasswordFactory"] = { [unowned self] in self.changePasswordFactory as Any }
+        localTable["newPasswordFactory-any NewPasswordFactory"] = { [unowned self] in self.newPasswordFactory as Any }
         localTable["fetchSelfStudyTeacherUseCase-any FetchSelfStudyTeacherUseCaseProtocol"] = { [unowned self] in self.fetchSelfStudyTeacherUseCase as Any }
+        localTable["changePasswordProvider-MoyaProvider<ChangePasswordAPI>"] = { [unowned self] in self.changePasswordProvider as Any }
+        localTable["remoteChangePasswordDataSource-any RemoteChangePasswordDataSource"] = { [unowned self] in self.remoteChangePasswordDataSource as Any }
+        localTable["changePasswordRepository-any ChangePasswordRepository"] = { [unowned self] in self.changePasswordRepository as Any }
+        localTable["passwordChangeUseCase-any PasswordChangeUseCase"] = { [unowned self] in self.passwordChangeUseCase as Any }
+        localTable["outListFactory-any OutListFactory"] = { [unowned self] in self.outListFactory as Any }
+        localTable["getOutListUseCase-any GetOutListUseCase"] = { [unowned self] in self.getOutListUseCase as Any }
+        localTable["returnStudentsUseCase-any ReturnStudentsUseCase"] = { [unowned self] in self.returnStudentsUseCase as Any }
         localTable["fetchSchoolMealUseCase-any FetchSchoolMealUseCaseProtocol"] = { [unowned self] in self.fetchSchoolMealUseCase as Any }
         localTable["schoolMealFactory-any SchoolMealFactory"] = { [unowned self] in self.schoolMealFactory as Any }
         localTable["userDefault-any UserDefault"] = { [unowned self] in self.userDefault as Any }
@@ -396,6 +458,12 @@ extension AllTabComponent: NeedleFoundation.Registration {
         keyPathToName[\AllTabDependency.submitBugReportUseCase] = "submitBugReportUseCase-any SubmitBugReportUseCaseProtocol"
     }
 }
+extension OutListComponent: NeedleFoundation.Registration {
+    public func registerItems() {
+        keyPathToName[\OutListDependency.getOutListUseCase] = "getOutListUseCase-any GetOutListUseCase"
+        keyPathToName[\OutListDependency.returnStudentsUseCase] = "returnStudentsUseCase-any ReturnStudentsUseCase"
+    }
+}
 extension SigninComponent: NeedleFoundation.Registration {
     public func registerItems() {
         keyPathToName[\SigninDependency.signinUseCase] = "signinUseCase-any SigninUseCase"
@@ -409,6 +477,17 @@ extension HomeComponent: NeedleFoundation.Registration {
         keyPathToName[\HomeDependency.planFactory] = "planFactory-any PlanFactory"
         keyPathToName[\HomeDependency.schoolMealFactory] = "schoolMealFactory-any SchoolMealFactory"
         keyPathToName[\HomeDependency.acceptFactory] = "acceptFactory-any AcceptFactory"
+    }
+}
+extension ChangePasswordComponent: NeedleFoundation.Registration {
+    public func registerItems() {
+        keyPathToName[\ChangePasswordDependency.emailSendUseCase] = "emailSendUseCase-any EmailSendUseCase"
+        keyPathToName[\ChangePasswordDependency.codeCheckUseCase] = "codeCheckUseCase-any CodeCheckUseCase"
+    }
+}
+extension NewPasswordComponent: NeedleFoundation.Registration {
+    public func registerItems() {
+        keyPathToName[\NewPasswordDependency.passwordChangeUseCase] = "passwordChangeUseCase-any PasswordChangeUseCase"
     }
 }
 extension AcceptComponent: NeedleFoundation.Registration {
@@ -448,8 +527,11 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->SecretKeyComponent", factorycc7ea4e12027ae637f9ff47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->BugReportComponent", factoryafa28e93c96a785ed32af47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AllTabComponent", factoryfffd4c52463116b1a1a9f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->OutListComponent", factoryb7dc05e5bded91c750e2f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->SigninComponent", factory2882a056d84a613debccf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->HomeComponent", factory67229cdf0f755562b2b1f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->ChangePasswordComponent", factoryab7c4d87dab53e0a51b9f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->NewPasswordComponent", factory52985a6d5ec65d75bd97f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AcceptComponent", factorye0727acbbfbe9e00fe23f47b58f8f304c97af4d5)
 }
 #endif

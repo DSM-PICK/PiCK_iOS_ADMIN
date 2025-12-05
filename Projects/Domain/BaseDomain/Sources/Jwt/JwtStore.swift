@@ -3,9 +3,9 @@ import Core
 
 public final class JwtStore {
     public static let shared = JwtStore()
-    
+    public static let tokenPrefix = "Bearer "
+
     private let keyChain: Keychain
-    private let tokenPrefix = "Bearer "
 
     public init(keychain: Keychain = KeychainImpl()) {
         self.keyChain = keychain
@@ -33,11 +33,11 @@ public final class JwtStore {
 
     public func toHeader(_ type: KeychainType) -> [String: String] {
         var headers = ["content-type": "application/json"]
-        
+
         switch type {
         case .accessToken:
             if let token = accessToken {
-                headers["Authorization"] = "\(tokenPrefix)\(token)"
+                headers["Authorization"] = "\(Self.tokenPrefix)\(token)"
             }
         case .refreshToken:
             if let token = refreshToken {
@@ -46,7 +46,7 @@ public final class JwtStore {
         default:
             break
         }
-        
+
         return headers
     }
 
@@ -65,8 +65,8 @@ public final class JwtStore {
             keyChain.delete(type: type)
             return
         }
-        
-        let cleanToken = token.replacingOccurrences(of: tokenPrefix, with: "")
+
+        let cleanToken = token.replacingOccurrences(of: Self.tokenPrefix, with: "")
         keyChain.save(type: type, value: cleanToken)
     }
 }
