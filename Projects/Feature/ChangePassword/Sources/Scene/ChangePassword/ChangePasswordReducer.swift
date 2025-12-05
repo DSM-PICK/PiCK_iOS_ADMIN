@@ -18,6 +18,7 @@ public struct ChangePasswordReducer: Reducer {
         public var code = ""
         public var isVerificationSent = false
         public var errorMessage: String?
+        public var successMessage: String?
         public var accountId: String?
         public init() {}
     }
@@ -29,6 +30,7 @@ public struct ChangePasswordReducer: Reducer {
         case nextButtonTapped
         case emailSendResponse(TaskResult<Void>)
         case codeCheckResponse(TaskResult<Bool>)
+        case clearSuccessMessage
     }
 
     public var body: some Reducer<State, Action> {
@@ -61,10 +63,12 @@ public struct ChangePasswordReducer: Reducer {
             case .emailSendResponse(.success):
                 state.isVerificationSent = true
                 state.errorMessage = nil
+                state.successMessage = "이메일로 코드가 전송되었어요!"
                 return .none
 
             case .emailSendResponse(.failure(let error)):
                 state.errorMessage = error.localizedDescription
+                state.successMessage = nil
                 return .none
 
             case .codeCheckResponse(.success(let isValid)):
@@ -78,6 +82,10 @@ public struct ChangePasswordReducer: Reducer {
 
             case .codeCheckResponse(.failure(let error)):
                 state.errorMessage = error.localizedDescription
+                return .none
+
+            case .clearSuccessMessage:
+                state.successMessage = nil
                 return .none
             }
         }

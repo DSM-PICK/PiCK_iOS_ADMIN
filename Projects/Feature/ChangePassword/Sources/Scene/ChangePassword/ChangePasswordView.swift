@@ -47,6 +47,30 @@ public struct ChangePasswordView: View {
                     }
                 }
             }
+            .overlay(alignment: .top) {
+                if let successMessage = viewStore.successMessage {
+                    VStack {
+                        HStack(spacing: 8) {
+                            Image(systemName: "checkmark.circle.fill")
+                                .foregroundColor(.white)
+                            Text(successMessage)
+                                .pickText(type: .body1, textColor: .Normal.white)
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 12)
+                        .background(Color.Primary.primary500)
+                        .cornerRadius(8)
+                        .padding(.top, 60)
+                    }
+                    .transition(.move(edge: .top).combined(with: .opacity))
+                    .onAppear {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                            viewStore.send(.clearSuccessMessage)
+                        }
+                    }
+                }
+            }
+            .animation(.spring(), value: viewStore.successMessage)
         }
     }
 
