@@ -2,7 +2,7 @@ import SwiftUI
 import PiCK_iOS_DesignSystem
 
 struct AcceptFilterButton: View {
-    let selectedOption: PiCK_iOS_DesignSystem.ApplyBottomSheet.SelectionOption
+    let selectedOption: ApplicationType
     let onTap: () -> Void
 
     var body: some View {
@@ -10,7 +10,7 @@ struct AcceptFilterButton: View {
             onTap()
         } label: {
             HStack(spacing: 4) {
-                Text(selectedOption.rawValue)
+                Text(selectedOption.title)
                     .pickText(type: .subTitle1, textColor: .Normal.black)
 
                 Image(systemName: "chevron.down")
