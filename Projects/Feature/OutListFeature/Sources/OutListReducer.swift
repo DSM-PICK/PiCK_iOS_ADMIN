@@ -84,10 +84,11 @@ public struct OutListReducer: Reducer {
                 }
 
             case .returnStudentsResponse(.success):
+                state.selectedStudents.removeAll()
                 state.showAlert = true
                 state.alertSuccessType = .success
                 state.alertMessage = "복귀가 완료되었습니다!"
-                return .none
+                return loadOutList(floor: state.currentFloor)
 
             case let .returnStudentsResponse(.failure(error)):
                 state.showAlert = true
