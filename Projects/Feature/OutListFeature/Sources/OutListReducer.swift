@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import PiCK_iOS_DesignSystem
 import Foundation
 import OutListDomainInterface
 
@@ -21,6 +22,9 @@ public struct OutListReducer: Reducer {
         public var selectedStudents: Set<String> = []
         public var errorMessage: String? = nil
         public var hasAppeared = false
+        public var showAlert = false
+        public var alertSuccessType: SuccessType = .success
+        public var alertMessage: String = ""
 
         public init() {}
     }
@@ -33,6 +37,7 @@ public struct OutListReducer: Reducer {
         case returnStudents
         case returnStudentsResponse(TaskResult<Void>)
         case clearError
+        case dismissAlert
     }
 
     public var body: some Reducer<State, Action> {
@@ -79,17 +84,23 @@ public struct OutListReducer: Reducer {
                 }
 
             case .returnStudentsResponse(.success):
-                state.selectedStudents.removeAll()
-                state.isLoading = true
-                let floor = state.currentFloor
-                return loadOutList(floor: floor)
+                state.showAlert = true
+                state.alertSuccessType = .success
+                state.alertMessage = "복귀가 완료되었습니다!"
+                return .none
 
             case let .returnStudentsResponse(.failure(error)):
-                state.errorMessage = error.localizedDescription
+                state.showAlert = true
+                state.alertSuccessType = .fail
+                state.alertMessage = error.localizedDescription
                 return .none
 
             case .clearError:
                 state.errorMessage = nil
+                return .none
+
+            case .dismissAlert:
+                state.showAlert = false
                 return .none
             }
         }

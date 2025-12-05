@@ -13,107 +13,119 @@ public struct OutListView: View {
 
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            VStack(spacing: 0) {
-                HStack {
-                    let titleText = (Text(verbatim: todayString) + Text(" 외출자"))
-                        .pickText(type: .heading4, textColor: .Normal.black)
-                        .padding(.leading, 24)
-                    
-                    titleText
+            ZStack {
+                VStack(spacing: 0) {
+                    HStack {
+                        let titleText = (Text(verbatim: todayString) + Text(" 외출자"))
+                            .pickText(type: .heading4, textColor: .Normal.black)
+                            .padding(.leading, 24)
+                        
+                        titleText
 
-                    Spacer()
+                        Spacer()
 
-                    ClassroomFilterButton(
-                        selectedClassroom: floorDisplayText(viewStore.currentFloor),
-                        onTap: { isApplyBottomSheetPresented = true }
-                    )
-                    .padding(.trailing, 24)
-                }
-                .padding(.top, 24)
+                        ClassroomFilterButton(
+                            selectedClassroom: floorDisplayText(viewStore.currentFloor),
+                            onTap: { isApplyBottomSheetPresented = true }
+                        )
+                        .padding(.trailing, 24)
+                    }
+                    .padding(.top, 24)
 
-                Rectangle()
-                    .fill(Color.Gray.gray200)
-                    .frame(height: 0.5)
-                    .cornerRadius(0.5)
-                    .padding(.top, 16)
-                    .padding(.horizontal, 24)
+                    Rectangle()
+                        .fill(Color.Gray.gray200)
+                        .frame(height: 0.5)
+                        .cornerRadius(0.5)
+                        .padding(.top, 16)
+                        .padding(.horizontal, 24)
 
-                Group {
-                    if viewStore.isLoading {
-                        VStack {
-                            Spacer()
-                            ProgressView()
-                            Spacer()
-                        }
-                    } else if viewStore.studentItems.isEmpty {
-                        VStack {
-                            Spacer()
-                            VStack(spacing: 12) {
-                                PiCKImage.blackLogo
-                                    .resizable()
-                                    .frame(width: 88, height: 91)
-
-                                Text("아직 외출을 신청한 학생이 없어요")
-                                    .pickText(type: .subTitle2, textColor: .Gray.gray500)
+                    Group {
+                        if viewStore.isLoading {
+                            VStack {
+                                Spacer()
+                                ProgressView()
+                                Spacer()
                             }
-                            Spacer()
-                        }
-                    } else {
-                        let items = viewStore.studentItems
+                        } else if viewStore.studentItems.isEmpty {
+                            VStack {
+                                Spacer()
+                                VStack(spacing: 12) {
+                                    PiCKImage.blackLogo
+                                        .resizable()
+                                        .frame(width: 88, height: 91)
 
-                        ScrollView {
-                            VStack(spacing: 16) {
-                                ForEach(items, id: \.id) { student in
-                                    let studentNumber = "\(student.grade)\(student.classNum)\(String(format: "%02d", student.num))"
-                                    let isSelected = viewStore.selectedStudents.contains(student.id)
-
-                                    PiCKAcceptStudentCell(
-                                        studentNumber: studentNumber,
-                                        studentName: student.userName,
-                                        startTime: student.start,
-                                        endTime: student.end,
-                                        activityType: "외출 수락",
-                                        reason: student.reason,
-                                        isSelected: isSelected,
-                                        onTap: { viewStore.send(.studentTapped(student.id)) }
-                                    )
+                                    Text("아직 외출을 신청한 학생이 없어요")
+                                        .pickText(type: .subTitle2, textColor: .Gray.gray500)
                                 }
+                                Spacer()
                             }
-                            .padding(.top, 20)
-                            .padding(.horizontal, 24)
+                        } else {
+                            let items = viewStore.studentItems
+
+                            ScrollView {
+                                VStack(spacing: 16) {
+                                    ForEach(items, id: \.id) { student in
+                                        let studentNumber = "\(student.grade)\(student.classNum)\(String(format: "%02d", student.num))"
+                                        let isSelected = viewStore.selectedStudents.contains(student.id)
+
+                                        PiCKAcceptStudentCell(
+                                            studentNumber: studentNumber,
+                                            studentName: student.userName,
+                                            startTime: student.start,
+                                            endTime: student.end,
+                                            activityType: "외출 수락",
+                                            reason: student.reason,
+                                            isSelected: isSelected,
+                                            onTap: { viewStore.send(.studentTapped(student.id)) }
+                                        )
+                                    }
+                                }
+                                .padding(.top, 20)
+                                .padding(.horizontal, 24)
+                            }
                         }
                     }
-                }
 
-                PiCKButton(
-                    buttonText: "복귀 시키기",
-                    isEnabled: !viewStore.selectedStudents.isEmpty,
-                    height: 45,
-                    action: {
-                        viewStore.send(.returnStudents)
+                    PiCKButton(
+                        buttonText: "복귀 시키기",
+                        isEnabled: !viewStore.selectedStudents.isEmpty,
+                        height: 45,
+                        action: {
+                            viewStore.send(.returnStudents)
+                        }
+                    )
+                    .padding(.vertical, 10)
+                    .padding(.horizontal, 24)
+                }
+                .onAppear {
+                    viewStore.send(.onAppear)
+                }
+                .sheet(isPresented: $isApplyBottomSheetPresented) {
+                    PiCK_iOS_DesignSystem.SinglePickerBottomSheet(
+                        isPresented: $isApplyBottomSheetPresented,
+                        title: "층을 선택해주세요",
+                        options: ["전체", "2층", "3층", "4층"],
+                        onComplete: { option in
+                            let floor = floorFromDisplayText(option)
+                            viewStore.send(.floorChanged(floor))
+                        }
+                    )
+                    .presentationDetents([.height(350)])
+                    .presentationDragIndicator(.hidden)
+                }
+                .navigationTitle("외출자 목록")
+                .navigationBarTitleDisplayMode(.inline)
+
+                if viewStore.showAlert {
+                    PiCKDisappearAlert(
+                        successType: viewStore.alertSuccessType,
+                        message: viewStore.alertMessage
+                    )
+                    .onDisappear {
+                        viewStore.send(.dismissAlert)
                     }
-                )
-                .padding(.vertical, 10)
-                .padding(.horizontal, 24)
+                }
             }
-            .onAppear {
-                viewStore.send(.onAppear)
-            }
-            .sheet(isPresented: $isApplyBottomSheetPresented) {
-                PiCK_iOS_DesignSystem.SinglePickerBottomSheet(
-                    isPresented: $isApplyBottomSheetPresented,
-                    title: "층을 선택해주세요",
-                    options: ["전체", "2층", "3층", "4층"],
-                    onComplete: { option in
-                        let floor = floorFromDisplayText(option)
-                        viewStore.send(.floorChanged(floor))
-                    }
-                )
-                .presentationDetents([.height(350)])
-                .presentationDragIndicator(.hidden)
-            }
-            .navigationTitle("외출자 목록")
-            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }
