@@ -7,6 +7,14 @@ if [ -z "$FEATURE_NAME" ]; then
   exit 1
 fi
 
+# Confirm with user
+echo "Creating feature: $FEATURE_NAME"
+read -p "Is this correct? (y/n): " confirm
+if [ "$confirm" != "y" ] && [ "$confirm" != "Y" ]; then
+  echo "Cancelled."
+  exit 0
+fi
+
 # Create directories
 mkdir -p "Projects/Feature/$FEATURE_NAME/Interface"
 mkdir -p "Projects/Feature/$FEATURE_NAME/Sources"

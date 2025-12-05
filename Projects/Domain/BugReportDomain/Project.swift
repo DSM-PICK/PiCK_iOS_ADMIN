@@ -17,39 +17,36 @@ let settings: Settings = .settings(
 )
 
 let interfaceTarget = Target.target(
-    name: "AllTabFeatureInterface",
+    name: "BugReportDomainInterface",
     destinations: env.destination,
     product: .framework,
-    bundleId: "\(env.organizationName).AllTabFeatureInterface",
+    bundleId: "$(env.organizationName).BugReportDomainInterface",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
-    sources: ["Interface/AllTabFeatureInterface.swift"],
+    sources: ["Interface/**"],
     dependencies: [
-        .Features.baseFeature
+        .Projects.core,
+        .Shared.thirdPartyLib
     ]
 )
 
 let implementationTarget = Target.target(
-    name: "AllTabFeature",
+    name: "BugReportDomain",
     destinations: env.destination,
-    product: .staticFramework,
-    bundleId: "\(env.organizationName).AllTabFeature",
+    product: .framework,
+    bundleId: "$(env.organizationName).BugReportDomain",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Sources/**"],
     dependencies: [
-        .target(name: "AllTabFeatureInterface"),
-        .Projects.allTabDomainInterface,
-        .Features.homeFeature,
-        .Features.checkSelfStudyTeacherFeature,
-        .Features.bugReportFeature,
-        .Shared.utility,
+        .target(name: "BugReportDomainInterface"),
+        .Projects.baseDomain,
         .Shared.thirdPartyLib
     ]
 )
 
 let project = Project(
-    name: "AllTabFeature",
+    name: "BugReportDomain",
     organizationName: env.organizationName,
     settings: settings,
     targets: [interfaceTarget, implementationTarget]

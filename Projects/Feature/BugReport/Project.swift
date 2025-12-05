@@ -17,39 +17,35 @@ let settings: Settings = .settings(
 )
 
 let interfaceTarget = Target.target(
-    name: "AllTabFeatureInterface",
+    name: "BugReportFeatureInterface",
     destinations: env.destination,
     product: .framework,
-    bundleId: "\(env.organizationName).AllTabFeatureInterface",
+    bundleId: "$(env.organizationName).BugReportFeatureInterface",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
-    sources: ["Interface/AllTabFeatureInterface.swift"],
+    sources: ["Interface/**"],
     dependencies: [
         .Features.baseFeature
     ]
 )
 
 let implementationTarget = Target.target(
-    name: "AllTabFeature",
+    name: "BugReportFeature",
     destinations: env.destination,
     product: .staticFramework,
-    bundleId: "\(env.organizationName).AllTabFeature",
+    bundleId: "$(env.organizationName).BugReportFeature",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Sources/**"],
     dependencies: [
-        .target(name: "AllTabFeatureInterface"),
-        .Projects.allTabDomainInterface,
-        .Features.homeFeature,
-        .Features.checkSelfStudyTeacherFeature,
-        .Features.bugReportFeature,
-        .Shared.utility,
-        .Shared.thirdPartyLib
+        .target(name: "BugReportFeatureInterface"),
+        .SPM.NeedleFoundation,
+        .SPM.ComposableArchitecture
     ]
 )
 
 let project = Project(
-    name: "AllTabFeature",
+    name: "BugReportFeature",
     organizationName: env.organizationName,
     settings: settings,
     targets: [interfaceTarget, implementationTarget]

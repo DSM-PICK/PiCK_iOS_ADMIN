@@ -12,10 +12,10 @@ let project = Project.makeModule(
         .Projects.baseDomain,
         .Projects.authDomain,
         .Projects.allTabDomain,
+        .Projects.bugReportDomain,
         .Projects.changePasswordDomain,
         .Projects.acceptDomain,
-        .Projects.outListDomain
-        .Projects.acceptDomain,
+        .Projects.outListDomain,
         .Projects.testDomain,
         .Projects.teacherDomain,
         .Projects.checkSelfStudyTeacher

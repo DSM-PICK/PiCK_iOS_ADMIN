@@ -15,11 +15,15 @@ import SchoolMealFeature
 import SchoolMealFeatureInterface
 import AcceptFeature
 import AcceptFeatureInterface
+import CheckSelfStudyTeacherFeature
+import CheckSelfStudyTeacherFeatureInterface
+import BugReportFeature
+import BugReportFeatureInterface
 import ChangePasswordFeature
 import OutListFeature
 import OutListFeatureInterface
 
-public final class AppComponent: BootstrapComponent, HomeDependency, AllTabDependency, PlanDependency, SchoolMealDependency, AcceptDependency, ChangePasswordDependency, NewPasswordDependency {
+public final class AppComponent: BootstrapComponent, HomeDependency, AllTabDependency, PlanDependency, SchoolMealDependency, AcceptDependency, CheckSelfStudyTeacherDependency, BugReportDependency, ChangePasswordDependency, NewPasswordDependency {
 
     private let _keychain: any Keychain
 
@@ -73,6 +77,11 @@ public extension AppComponent {
     var acceptFactory: any AcceptFactory {
         AcceptComponent(parent: self)
     }
+    var checkSelfStudyTeacherFactory: any CheckSelfStudyTeacherFactory {
+        CheckSelfStudyTeacherComponent(parent: self)
+    }
+    var bugReportFactory: any BugReportFactory {
+        BugReportComponent(parent: self)
     var changePasswordFactory: any ChangePasswordFactory {
         ChangePasswordComponent(parent: self)
     }
