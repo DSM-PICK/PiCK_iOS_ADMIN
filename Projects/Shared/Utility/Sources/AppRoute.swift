@@ -10,4 +10,6 @@ public enum AppRoute: Hashable {
     case home
     case outList
     case checkSelfStudyTeacher
+    case changePassword
+    case newPassword(accountId: String, code: String)
 }

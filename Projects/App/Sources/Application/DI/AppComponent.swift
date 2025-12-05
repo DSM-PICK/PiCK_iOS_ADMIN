@@ -15,10 +15,12 @@ import SchoolMealFeature
 import SchoolMealFeatureInterface
 import AcceptFeature
 import AcceptFeatureInterface
+import ChangePasswordFeature
 import OutListFeature
 import OutListFeatureInterface
 
-public final class AppComponent: BootstrapComponent, HomeDependency, AllTabDependency, PlanDependency, SchoolMealDependency, AcceptDependency, OutListDependency {
+public final class AppComponent: BootstrapComponent, HomeDependency, AllTabDependency, PlanDependency, SchoolMealDependency, AcceptDependency, ChangePasswordDependency, NewPasswordDependency {
+
     private let _keychain: any Keychain
 
     init(keychain: any Keychain) {
@@ -70,6 +72,12 @@ public extension AppComponent {
     }
     var acceptFactory: any AcceptFactory {
         AcceptComponent(parent: self)
+    }
+    var changePasswordFactory: any ChangePasswordFactory {
+        ChangePasswordComponent(parent: self)
+    }
+    var newPasswordFactory: any NewPasswordFactory {
+        NewPasswordComponent(parent: self)
     }
     var outListFactory: any OutListFactory {
         OutListComponent(parent: self)

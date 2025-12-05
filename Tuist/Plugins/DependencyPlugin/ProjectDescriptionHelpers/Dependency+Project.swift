@@ -87,6 +87,14 @@ public extension TargetDependency.Projects {
         target: "CheckSelfStudyTeacherDomainInterface",
         path: .relativeToRoot("Projects/Domain/CheckSelfStudyTeacher")
     )
+    static let changePasswordDomain = TargetDependency.project(
+        target: "ChangePasswordDomain",
+        path: .relativeToRoot("Projects/Domain/ChangePasswordDomain")
+    )
+    static let changePasswordDomainInterface = TargetDependency.project(
+        target: "ChangePasswordDomainInterface",
+        path: .relativeToRoot("Projects/Domain/ChangePasswordDomain")
+    )
     static let teacherDomain = TargetDependency.project(
         target: "TeacherDomain",
         path: .relativeToRoot("Projects/Domain/TeacherDomain")
@@ -181,6 +189,14 @@ public extension TargetDependency.Features {
     static let checkSelfStudyTeacherFeatureInterface = TargetDependency.project(
         target: "CheckSelfStudyTeacherFeatureInterface",
         path: .relativeToRoot("Projects/Feature/CheckSelfStudyTeacherFeature")
+    )
+    static let changePasswordFeature = TargetDependency.project(
+        target: "ChangePasswordFeature",
+        path: .relativeToRoot("Projects/Feature/ChangePassword")
+    )
+    static let changePasswordFeatureInterface = TargetDependency.project(
+        target: "ChangePasswordFeatureInterface",
+        path: .relativeToRoot("Projects/Feature/ChangePassword")
     )
     // other Module
 }
