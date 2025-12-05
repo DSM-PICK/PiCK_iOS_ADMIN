@@ -20,6 +20,7 @@ public struct OutListReducer: Reducer {
         public var isLoading: Bool = false
         public var selectedStudents: Set<String> = []
         public var errorMessage: String? = nil
+        public var hasAppeared = false
 
         public init() {}
     }
@@ -38,9 +39,10 @@ public struct OutListReducer: Reducer {
         Reduce { state, action in
             switch action {
             case .onAppear:
+                if state.hasAppeared { return .none }
+                state.hasAppeared = true
                 state.isLoading = true
-                let floor = state.currentFloor
-                return loadOutList(floor: floor)
+                return loadOutList(floor: state.currentFloor)
 
             case let .floorChanged(floor):
                 state.currentFloor = floor
