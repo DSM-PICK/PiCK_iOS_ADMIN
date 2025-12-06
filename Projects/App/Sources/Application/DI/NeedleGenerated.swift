@@ -233,6 +233,9 @@ private class OutListDependencyac9793ee3f8a81768455Provider: OutListDependency {
     var returnStudentsUseCase: any ReturnStudentsUseCase {
         return appComponent.returnStudentsUseCase
     }
+    var getEarlyReturnUseCase: any GetEarlyReturnUseCase {
+        return appComponent.getEarlyReturnUseCase
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -385,6 +388,7 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["passwordChangeUseCase-any PasswordChangeUseCase"] = { [unowned self] in self.passwordChangeUseCase as Any }
         localTable["getOutListUseCase-any GetOutListUseCase"] = { [unowned self] in self.getOutListUseCase as Any }
         localTable["returnStudentsUseCase-any ReturnStudentsUseCase"] = { [unowned self] in self.returnStudentsUseCase as Any }
+        localTable["getEarlyReturnUseCase-any GetEarlyReturnUseCase"] = { [unowned self] in self.getEarlyReturnUseCase as Any }
         localTable["fetchSchoolMealUseCase-any FetchSchoolMealUseCaseProtocol"] = { [unowned self] in self.fetchSchoolMealUseCase as Any }
         localTable["schoolMealFactory-any SchoolMealFactory"] = { [unowned self] in self.schoolMealFactory as Any }
         localTable["userDefault-any UserDefault"] = { [unowned self] in self.userDefault as Any }
@@ -462,6 +466,7 @@ extension OutListComponent: NeedleFoundation.Registration {
     public func registerItems() {
         keyPathToName[\OutListDependency.getOutListUseCase] = "getOutListUseCase-any GetOutListUseCase"
         keyPathToName[\OutListDependency.returnStudentsUseCase] = "returnStudentsUseCase-any ReturnStudentsUseCase"
+        keyPathToName[\OutListDependency.getEarlyReturnUseCase] = "getEarlyReturnUseCase-any GetEarlyReturnUseCase"
     }
 }
 extension SigninComponent: NeedleFoundation.Registration {

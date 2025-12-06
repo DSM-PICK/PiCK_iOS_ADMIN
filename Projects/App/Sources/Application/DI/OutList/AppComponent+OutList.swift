@@ -20,6 +20,12 @@ public extension AppComponent {
         }
     }
 
+    var getEarlyReturnUseCase: any GetEarlyReturnUseCase {
+        shared {
+            GetEarlyReturnUseCaseImpl(repository: outListRepository)
+        }
+    }
+
     private var outListRepository: any OutListRepository {
         shared {
             OutListRepositoryImpl(dataSource: outListDataSource)

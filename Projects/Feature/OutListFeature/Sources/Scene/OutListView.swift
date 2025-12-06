@@ -84,7 +84,7 @@ public struct OutListView: View {
                                 ProgressView()
                                 Spacer()
                             }
-                        } else if viewStore.studentItems.isEmpty {
+                        } else if viewStore.currentType == .outing && viewStore.studentItems.isEmpty {
                             VStack {
                                 Spacer()
                                 VStack(spacing: 12) {
@@ -97,25 +97,55 @@ public struct OutListView: View {
                                 }
                                 Spacer()
                             }
-                        } else {
-                            let items = viewStore.studentItems
+                        } else if viewStore.currentType == .earlyReturn && viewStore.earlyReturnItems.isEmpty {
+                            VStack {
+                                Spacer()
+                                VStack(spacing: 12) {
+                                    PiCKImage.blackLogo
+                                        .resizable()
+                                        .frame(width: 88, height: 91)
 
+                                    Text("아직 조기귀가를 신청한 학생이 없어요")
+                                        .pickText(type: .subTitle2, textColor: .Gray.gray500)
+                                }
+                                Spacer()
+                            }
+                        } else {
                             ScrollView {
                                 VStack(spacing: 16) {
-                                    ForEach(items, id: \.id) { student in
-                                        let studentNumber = "\(student.grade)\(student.classNum)\(String(format: "%02d", student.num))"
-                                        let isSelected = viewStore.selectedStudents.contains(student.id)
+                                    if viewStore.currentType == .outing {
+                                        let items = viewStore.studentItems
+                                        ForEach(items, id: \.id) { student in
+                                            let studentNumber = "\(student.grade)\(student.classNum)\(String(format: "%02d", student.num))"
+                                            let isSelected = viewStore.selectedStudents.contains(student.id)
 
-                                        PiCKAcceptStudentCell(
-                                            studentNumber: studentNumber,
-                                            studentName: student.userName,
-                                            startTime: student.start,
-                                            endTime: student.end,
-                                            activityType: "외출 수락",
-                                            reason: student.reason,
-                                            isSelected: isSelected,
-                                            onTap: { viewStore.send(.studentTapped(student.id)) }
-                                        )
+                                            PiCKAcceptStudentCell(
+                                                studentNumber: studentNumber,
+                                                studentName: student.userName,
+                                                startTime: student.start,
+                                                endTime: student.end,
+                                                activityType: "외출",
+                                                reason: student.reason,
+                                                isSelected: isSelected,
+                                                onTap: { viewStore.send(.studentTapped(student.id)) }
+                                            )
+                                        }
+                                    } else {
+                                        let items = viewStore.earlyReturnItems
+                                        ForEach(items, id: \.userId) { student in
+                                            let studentNumber = "\(student.grade)\(student.classNum)\(String(format: "%02d", student.num))"
+                                            
+                                            PiCKAcceptStudentCell(
+                                                studentNumber: studentNumber,
+                                                studentName: student.userName,
+                                                startTime: student.start,
+                                                endTime: student.end,
+                                                activityType: "조기귀가",
+                                                reason: student.reason,
+                                                isSelected: false,
+                                                onTap: { }
+                                            )
+                                        }
                                     }
                                 }
                                 .padding(.top, 20)
@@ -124,16 +154,18 @@ public struct OutListView: View {
                         }
                     }
 
-                    PiCKButton(
-                        buttonText: "복귀 시키기",
-                        isEnabled: !viewStore.selectedStudents.isEmpty,
-                        height: 45,
-                        action: {
-                            viewStore.send(.returnStudents)
-                        }
-                    )
-                    .padding(.vertical, 10)
-                    .padding(.horizontal, 24)
+                    if viewStore.currentType == .outing {
+                        PiCKButton(
+                            buttonText: "복귀 시키기",
+                            isEnabled: !viewStore.selectedStudents.isEmpty,
+                            height: 45,
+                            action: {
+                                viewStore.send(.returnStudents)
+                            }
+                        )
+                        .padding(.vertical, 10)
+                        .padding(.horizontal, 24)
+                    }
                 }
                 .onAppear {
                     viewStore.send(.onAppear)
