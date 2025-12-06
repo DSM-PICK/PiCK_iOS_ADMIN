@@ -15,22 +15,22 @@ public struct OutListView: View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ZStack {
                 VStack(spacing: 0) {
-                    HStack {
-                        let titleText = (Text(verbatim: todayString) + Text(" 외출자"))
-                            .pickText(type: .heading4, textColor: .Normal.black)
-                            .padding(.leading, 24)
-                        
-                        titleText
+                        HStack {
+                            (Text(verbatim: todayString) + Text(" 외출자"))
+                                .pickText(type: .heading4, textColor: .Normal.black)
+                                .padding(.leading, 24)
 
-                        Spacer()
+                            Spacer()
 
-                        ClassroomFilterButton(
-                            selectedClassroom: floorDisplayText(viewStore.currentFloor),
-                            onTap: { isApplyBottomSheetPresented = true }
-                        )
-                        .padding(.trailing, 24)
-                    }
-                    .padding(.top, 24)
+                            if viewStore.currentType == .outing {
+                                ClassroomFilterButton(
+                                    selectedClassroom: floorDisplayText(viewStore.currentFloor),
+                                    onTap: { isApplyBottomSheetPresented = true }
+                                )
+                                .padding(.trailing, 24)
+                            }
+                        }
+                        .padding(.top, 24)
 
                     Rectangle()
                         .fill(Color.Gray.gray200)
