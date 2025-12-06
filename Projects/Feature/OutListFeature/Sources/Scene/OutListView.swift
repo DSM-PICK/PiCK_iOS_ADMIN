@@ -132,14 +132,14 @@ public struct OutListView: View {
                                         }
                                     } else {
                                         let items = viewStore.earlyReturnItems
-                                        ForEach(items, id: \.userId) { student in
+                                        ForEach(items, id: \.id) { student in
                                             let studentNumber = "\(student.grade)\(student.classNum)\(String(format: "%02d", student.num))"
                                             
                                             PiCKAcceptStudentCell(
                                                 studentNumber: studentNumber,
                                                 studentName: student.userName,
                                                 startTime: student.start,
-                                                endTime: student.end,
+                                                endTime: "",
                                                 activityType: "조기귀가",
                                                 reason: student.reason,
                                                 isSelected: false,
