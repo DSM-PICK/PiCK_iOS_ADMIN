@@ -29,8 +29,8 @@ public class BugReportDataSourceImpl: BugReportDataSource {
                 switch result {
                 case .success(let response):
                     do {
-                        let data = try response.map(ImageUploadResponseDTO.self)
-                        continuation.resume(returning: data.fileNames)
+                        let fileNames = try response.map([String].self)
+                        continuation.resume(returning: fileNames)
                     } catch {
                         continuation.resume(throwing: error)
                     }
