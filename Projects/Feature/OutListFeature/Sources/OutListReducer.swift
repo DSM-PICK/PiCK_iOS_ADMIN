@@ -18,6 +18,7 @@ public struct OutListReducer: Reducer {
     public struct State: Equatable {
         public var studentItems: [OutListEntity] = []
         public var currentFloor: Int = 5
+        public var currentType: OutListType = .outing
         public var isLoading: Bool = false
         public var selectedStudents: Set<String> = []
         public var errorMessage: String? = nil
@@ -32,6 +33,7 @@ public struct OutListReducer: Reducer {
     public enum Action {
         case onAppear
         case floorChanged(Int)
+        case fetchByType(type: OutListType)
         case outListResponse(TaskResult<[OutListEntity]>)
         case studentTapped(String)
         case returnStudents
@@ -54,6 +56,12 @@ public struct OutListReducer: Reducer {
                 state.isLoading = true
                 state.selectedStudents.removeAll()
                 return loadOutList(floor: floor)
+
+            case let .fetchByType(type):
+                state.currentType = type
+                state.isLoading = true
+                state.selectedStudents.removeAll()
+                return loadOutList(floor: state.currentFloor)
 
             case .outListResponse(.success(let students)):
                 state.isLoading = false
@@ -106,7 +114,9 @@ public struct OutListReducer: Reducer {
             }
         }
     }
+}
 
+extension OutListReducer {
     private func loadOutList(floor: Int) -> Effect<Action> {
         .run { send in
             await send(.outListResponse(
@@ -115,5 +125,10 @@ public struct OutListReducer: Reducer {
                 }
             ))
         }
+    }
+
+    public enum OutListType: Equatable {
+        case outing
+        case earlyReturn
     }
 }

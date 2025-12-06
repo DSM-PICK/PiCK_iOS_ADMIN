@@ -39,6 +39,44 @@ public struct OutListView: View {
                         .padding(.top, 16)
                         .padding(.horizontal, 24)
 
+                    HStack(spacing: 8) {
+                        Button {
+                            viewStore.send(.fetchByType(type: .outing))
+                        } label: {
+                            Text("외출")
+                                .pickText(
+                                    type: .body1,
+                                    textColor: viewStore.currentType == .outing ? .Primary.primary500 : .Gray.gray600
+                                )
+                                .frame(maxWidth: .infinity, minHeight: 40, maxHeight: 40)
+                                .background(
+                                    viewStore.currentType == .outing
+                                    ? Color.Primary.primary50
+                                    : Color.clear
+                                )
+                                .cornerRadius(8)
+                        }
+
+                        Button {
+                            viewStore.send(.fetchByType(type: .earlyReturn))
+                        } label: {
+                            Text("조기귀가")
+                                .pickText(
+                                    type: .body1,
+                                    textColor: viewStore.currentType == .earlyReturn ? .Primary.primary500 : .Gray.gray600
+                                )
+                                .frame(maxWidth: .infinity, minHeight: 40, maxHeight: 40)
+                                .background(
+                                    viewStore.currentType == .earlyReturn
+                                    ? Color.Primary.primary50
+                                    : Color.clear
+                                )
+                                .cornerRadius(8)
+                        }
+                    }
+                    .padding(.horizontal, 24)
+                    .padding(.top, 16)
+
                     Group {
                         if viewStore.isLoading {
                             VStack {
