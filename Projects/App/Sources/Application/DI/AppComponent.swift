@@ -22,8 +22,10 @@ import BugReportFeatureInterface
 import ChangePasswordFeature
 import OutListFeature
 import OutListFeatureInterface
+import ClassroomMoveListFeature
+import ClassroomMoveListFeatureInterface
 
-public final class AppComponent: BootstrapComponent, HomeDependency, AllTabDependency, PlanDependency, SchoolMealDependency, AcceptDependency, CheckSelfStudyTeacherDependency, BugReportDependency, ChangePasswordDependency, NewPasswordDependency {
+public final class AppComponent: BootstrapComponent, HomeDependency, AllTabDependency, PlanDependency, SchoolMealDependency, AcceptDependency, CheckSelfStudyTeacherDependency, BugReportDependency, ChangePasswordDependency, NewPasswordDependency, ClassroomMoveListDependency {
 
     private let _keychain: any Keychain
 
@@ -91,5 +93,8 @@ public extension AppComponent {
     }
     var outListFactory: any OutListFactory {
         OutListComponent(parent: self)
+    }
+    var classroomMoveListFactory: any ClassroomMoveListFactory {
+        ClassroomMoveListComponent(parent: self)
     }
 }

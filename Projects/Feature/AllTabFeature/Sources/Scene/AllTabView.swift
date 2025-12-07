@@ -42,6 +42,9 @@ public struct AllTabView: View {
                             onOutListTap: {
                                 router.path.append(.outList)
                             },
+                            onClassroomMoveListTap: {
+                                router.path.append(.classroomMoveList)
+                            },
                             onLogoutTap: {
                                 viewStore.send(.logoutButtonTapped)
                             },
