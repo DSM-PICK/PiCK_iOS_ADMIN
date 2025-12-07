@@ -6,6 +6,7 @@ import Utility
 public struct ChangePasswordView: View {
     let store: StoreOf<ChangePasswordReducer>
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var router: AppRouter
 
     public init(store: StoreOf<ChangePasswordReducer>) {
         self.store = store
@@ -29,6 +30,12 @@ public struct ChangePasswordView: View {
                 nextButton(viewStore)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
+            .onChange(of: viewStore.accountId) { accountId in
+                if let accountId = accountId, !viewStore.code.isEmpty {
+                    print("DEBUG: ChangePasswordView - Navigating with accountId: \(accountId), code: \(viewStore.code)")
+                    router.path.append(.newPassword(accountId: accountId, code: viewStore.code))
+                }
+            }
             .navigationBarBackButtonHidden(true)
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle("비밀번호 변경")

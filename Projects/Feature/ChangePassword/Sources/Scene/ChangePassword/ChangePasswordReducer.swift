@@ -72,9 +72,11 @@ public struct ChangePasswordReducer: Reducer {
                 return .none
 
             case .codeCheckResponse(.success(let isValid)):
+                print("DEBUG: codeCheckResponse - isValid: \(isValid), email: \(state.email), code: \(state.code)")
                 if isValid {
                     state.accountId = state.email
                     state.errorMessage = nil
+                    print("DEBUG: accountId set to: \(state.accountId ?? "nil")")
                 } else {
                     state.errorMessage = "인증코드가 올바르지 않습니다"
                 }
