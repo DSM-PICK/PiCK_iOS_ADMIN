@@ -8,12 +8,16 @@ import CheckSelfStudyTeacherFeature
 import CheckSelfStudyTeacherDomainInterface
 import BugReportFeature
 import BugReportDomainInterface
+import ChangePasswordFeature
+import AuthDomainInterface
 
 public struct AllTabView: View {
     let store: StoreOf<AllTabReducer>
     let fetchSelfStudyTeacherUseCase: any FetchSelfStudyTeacherUseCaseProtocol
     let uploadBugImagesUseCase: any UploadBugImagesUseCaseProtocol
     let submitBugReportUseCase: any SubmitBugReportUseCaseProtocol
+    let emailSendUseCase: any EmailSendUseCase
+    let codeCheckUseCase: any CodeCheckUseCase
     @EnvironmentObject var router: AppRouter
     @State private var navigationPath: [AppRoute] = []
 
@@ -21,12 +25,16 @@ public struct AllTabView: View {
         store: StoreOf<AllTabReducer>,
         fetchSelfStudyTeacherUseCase: any FetchSelfStudyTeacherUseCaseProtocol,
         uploadBugImagesUseCase: any UploadBugImagesUseCaseProtocol,
-        submitBugReportUseCase: any SubmitBugReportUseCaseProtocol
+        submitBugReportUseCase: any SubmitBugReportUseCaseProtocol,
+        emailSendUseCase: any EmailSendUseCase,
+        codeCheckUseCase: any CodeCheckUseCase
     ) {
         self.store = store
         self.fetchSelfStudyTeacherUseCase = fetchSelfStudyTeacherUseCase
         self.uploadBugImagesUseCase = uploadBugImagesUseCase
         self.submitBugReportUseCase = submitBugReportUseCase
+        self.emailSendUseCase = emailSendUseCase
+        self.codeCheckUseCase = codeCheckUseCase
     }
 
     public var body: some View {
@@ -50,6 +58,9 @@ public struct AllTabView: View {
                             },
                             onBugReportTap: {
                                 navigationPath.append(.bugReport)
+                            },
+                            onChangePasswordTap: {
+                                navigationPath.append(.changePassword)
                             }
                         )
                         .padding(.top, 32)
@@ -85,6 +96,18 @@ public struct AllTabView: View {
                                     BugReportReducer(
                                         uploadBugImagesUseCase: uploadBugImagesUseCase,
                                         submitBugReportUseCase: submitBugReportUseCase
+                                    )
+                                }
+                            )
+                        )
+                    case .changePassword:
+                        ChangePasswordFeature(
+                            store: .init(
+                                initialState: ChangePasswordReducer.State(),
+                                reducer: {
+                                    ChangePasswordReducer(
+                                        emailSendUseCase: emailSendUseCase,
+                                        codeCheckUseCase: codeCheckUseCase
                                     )
                                 }
                             )
