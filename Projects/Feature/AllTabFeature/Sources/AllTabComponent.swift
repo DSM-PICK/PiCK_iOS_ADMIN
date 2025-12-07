@@ -6,6 +6,7 @@ import AllTabDomainInterface
 import AuthDomainInterface
 import CheckSelfStudyTeacherDomainInterface
 import BugReportDomainInterface
+import ChangePasswordDomainInterface
 
 public protocol AllTabDependency: NeedleFoundation.Dependency {
     var getMyNameUseCase: any GetMyNameUseCaseProtocol { get }
@@ -15,6 +16,7 @@ public protocol AllTabDependency: NeedleFoundation.Dependency {
     var submitBugReportUseCase: any SubmitBugReportUseCaseProtocol { get }
     var emailSendUseCase: any EmailSendUseCase { get }
     var codeCheckUseCase: any CodeCheckUseCase { get }
+    var passwordChangeUseCase: any PasswordChangeUseCase { get }
 }
 
 public final class AllTabComponent: Component<AllTabDependency>, AllTabFactory {
@@ -38,6 +40,10 @@ public final class AllTabComponent: Component<AllTabDependency>, AllTabFactory {
         dependency.codeCheckUseCase
     }
 
+    public var passwordChangeUseCase: any PasswordChangeUseCase {
+        dependency.passwordChangeUseCase
+    }
+
     public func makeView() -> AnyView {
         AnyView(
             AllTabFeature(
@@ -54,7 +60,8 @@ public final class AllTabComponent: Component<AllTabDependency>, AllTabFactory {
                 uploadBugImagesUseCase: uploadBugImagesUseCase,
                 submitBugReportUseCase: submitBugReportUseCase,
                 emailSendUseCase: emailSendUseCase,
-                codeCheckUseCase: codeCheckUseCase
+                codeCheckUseCase: codeCheckUseCase,
+                passwordChangeUseCase: passwordChangeUseCase
             )
         )
     }

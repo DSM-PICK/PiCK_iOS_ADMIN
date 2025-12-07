@@ -5,7 +5,7 @@ import Utility
 
 public struct ChangePasswordView: View {
     let store: StoreOf<ChangePasswordReducer>
-    @EnvironmentObject var router: AppRouter
+    @Environment(\.dismiss) var dismiss
 
     public init(store: StoreOf<ChangePasswordReducer>) {
         self.store = store
@@ -29,18 +29,14 @@ public struct ChangePasswordView: View {
                 nextButton(viewStore)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .onChange(of: viewStore.accountId) { accountId in
-                if let accountId = accountId, !viewStore.code.isEmpty {
-                    router.path.append(.newPassword(accountId: accountId, code: viewStore.code))
-                }
-            }
             .navigationBarBackButtonHidden(true)
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle("비밀번호 변경")
+            .toolbar(.hidden, for: .tabBar)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
-                        router.pop()
+                        dismiss()
                     }) {
                         Image(systemName: "chevron.left")
                             .foregroundColor(.black)

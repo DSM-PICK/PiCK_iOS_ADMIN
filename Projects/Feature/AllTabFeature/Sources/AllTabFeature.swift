@@ -3,6 +3,7 @@ import ComposableArchitecture
 import CheckSelfStudyTeacherDomainInterface
 import BugReportDomainInterface
 import AuthDomainInterface
+import ChangePasswordDomainInterface
 
 public struct AllTabFeature: View {
     let store: Store<AllTabReducer.State, AllTabReducer.Action>
@@ -11,6 +12,7 @@ public struct AllTabFeature: View {
     let submitBugReportUseCase: any SubmitBugReportUseCaseProtocol
     let emailSendUseCase: any EmailSendUseCase
     let codeCheckUseCase: any CodeCheckUseCase
+    let passwordChangeUseCase: any PasswordChangeUseCase
 
     public init(
         store: Store<AllTabReducer.State, AllTabReducer.Action>,
@@ -18,7 +20,8 @@ public struct AllTabFeature: View {
         uploadBugImagesUseCase: any UploadBugImagesUseCaseProtocol,
         submitBugReportUseCase: any SubmitBugReportUseCaseProtocol,
         emailSendUseCase: any EmailSendUseCase,
-        codeCheckUseCase: any CodeCheckUseCase
+        codeCheckUseCase: any CodeCheckUseCase,
+        passwordChangeUseCase: any PasswordChangeUseCase
     ) {
         self.store = store
         self.fetchSelfStudyTeacherUseCase = fetchSelfStudyTeacherUseCase
@@ -26,6 +29,7 @@ public struct AllTabFeature: View {
         self.submitBugReportUseCase = submitBugReportUseCase
         self.emailSendUseCase = emailSendUseCase
         self.codeCheckUseCase = codeCheckUseCase
+        self.passwordChangeUseCase = passwordChangeUseCase
     }
 
     public var body: some View {
@@ -35,7 +39,8 @@ public struct AllTabFeature: View {
             uploadBugImagesUseCase: uploadBugImagesUseCase,
             submitBugReportUseCase: submitBugReportUseCase,
             emailSendUseCase: emailSendUseCase,
-            codeCheckUseCase: codeCheckUseCase
+            codeCheckUseCase: codeCheckUseCase,
+            passwordChangeUseCase: passwordChangeUseCase
         )
     }
 }

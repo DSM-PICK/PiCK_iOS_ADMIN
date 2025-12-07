@@ -223,6 +223,9 @@ private class AllTabDependencyacdab75b3325eec9d649Provider: AllTabDependency {
     var codeCheckUseCase: any CodeCheckUseCase {
         return appComponent.codeCheckUseCase
     }
+    var passwordChangeUseCase: any PasswordChangeUseCase {
+        return appComponent.passwordChangeUseCase
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -464,6 +467,7 @@ extension AllTabComponent: NeedleFoundation.Registration {
         keyPathToName[\AllTabDependency.submitBugReportUseCase] = "submitBugReportUseCase-any SubmitBugReportUseCaseProtocol"
         keyPathToName[\AllTabDependency.emailSendUseCase] = "emailSendUseCase-any EmailSendUseCase"
         keyPathToName[\AllTabDependency.codeCheckUseCase] = "codeCheckUseCase-any CodeCheckUseCase"
+        keyPathToName[\AllTabDependency.passwordChangeUseCase] = "passwordChangeUseCase-any PasswordChangeUseCase"
     }
 }
 extension OutListComponent: NeedleFoundation.Registration {

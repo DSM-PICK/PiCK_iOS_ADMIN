@@ -5,10 +5,15 @@ import Utility
 
 public struct NewPasswordView: View {
     let store: StoreOf<NewPasswordReducer>
-    @EnvironmentObject var router: AppRouter
+    let onSuccess: () -> Void
+    @Environment(\.dismiss) var dismiss
 
-    public init(store: StoreOf<NewPasswordReducer>) {
+    public init(
+        store: StoreOf<NewPasswordReducer>,
+        onSuccess: @escaping () -> Void = {}
+    ) {
         self.store = store
+        self.onSuccess = onSuccess
     }
 
     public var body: some View {
@@ -31,18 +36,17 @@ public struct NewPasswordView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .onChange(of: viewStore.isChangeSuccessful) { isSuccessful in
                 if isSuccessful {
-                    if router.path.count >= 2 {
-                        router.path.removeLast(2)
-                    }
+                    onSuccess()
                 }
             }
             .navigationBarBackButtonHidden(true)
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle("비밀번호 변경")
+            .toolbar(.hidden, for: .tabBar)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
-                        router.pop()
+                        dismiss()
                     }) {
                         Image(systemName: "chevron.left")
                             .foregroundColor(.black)
