@@ -1,6 +1,6 @@
 import Foundation
 
-public struct EarlyReturnEntity: Equatable {
+public struct EarlyReturnEntity: Equatable, Identifiable {
     public let id: String
     public let userName: String
     public let start: String
