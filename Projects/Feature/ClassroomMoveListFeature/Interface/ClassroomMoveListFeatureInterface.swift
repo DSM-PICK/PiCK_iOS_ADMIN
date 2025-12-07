@@ -1,5 +1,6 @@
-import Foundation
+import SwiftUI
+import ComposableArchitecture
 
-public protocol ClassroomMoveListFeatureInterface {
-    
+public protocol ClassroomMoveListFactory {
+    func makeView() -> AnyView
 }
