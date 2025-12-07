@@ -32,7 +32,6 @@ public struct ChangePasswordView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .onChange(of: viewStore.accountId) { accountId in
                 if let accountId = accountId, !viewStore.code.isEmpty {
-                    print("DEBUG: ChangePasswordView - Navigating with accountId: \(accountId), code: \(viewStore.code)")
                     router.path.append(.newPassword(accountId: accountId, code: viewStore.code))
                 }
             }

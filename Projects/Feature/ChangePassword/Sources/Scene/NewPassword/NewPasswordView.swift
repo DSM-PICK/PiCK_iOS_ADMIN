@@ -7,6 +7,8 @@ public struct NewPasswordView: View {
     let store: StoreOf<NewPasswordReducer>
     let onSuccess: () -> Void
     @Environment(\.dismiss) var dismiss
+    @EnvironmentObject var router: AppRouter
+    @State private var showSuccessAlert = false
 
     public init(
         store: StoreOf<NewPasswordReducer>,
@@ -36,7 +38,7 @@ public struct NewPasswordView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .onChange(of: viewStore.isChangeSuccessful) { isSuccessful in
                 if isSuccessful {
-                    onSuccess()
+                    showSuccessAlert = true
                 }
             }
             .navigationBarBackButtonHidden(true)
@@ -52,6 +54,18 @@ public struct NewPasswordView: View {
                             .foregroundColor(.black)
                     }
                 }
+            }
+            .alert("비밀번호 변경 완료", isPresented: $showSuccessAlert) {
+                Button("확인", role: .cancel) {
+                    if let changePasswordIndex = router.path.firstIndex(where: { route in
+                        if case .changePassword = route { return true }
+                        return false
+                    }) {
+                        router.path.removeSubrange(changePasswordIndex...)
+                    }
+                }
+            } message: {
+                Text("비밀번호가 성공적으로 변경되었습니다.")
             }
         }
     }
