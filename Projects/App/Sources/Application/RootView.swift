@@ -87,6 +87,9 @@ struct RootView: View {
         case let .newPassword(accountId, code):
             appComponent.newPasswordFactory.makeView(accountId: accountId, code: code)
                 .environmentObject(router)
+        case .selfStudyCheck:
+            appComponent.selfStudyCheckFactory.makeView()
+                .environmentObject(router)
         }
     }
     

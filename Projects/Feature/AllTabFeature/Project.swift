@@ -43,6 +43,7 @@ let implementationTarget = Target.target(
         .Features.homeFeature,
         .Features.checkSelfStudyTeacherFeature,
         .Features.bugReportFeature,
+        .Features.selfStudyCheckFeature,
         .Shared.utility,
         .Shared.thirdPartyLib
     ]

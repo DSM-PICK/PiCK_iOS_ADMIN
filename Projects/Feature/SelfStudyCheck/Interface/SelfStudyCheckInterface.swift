@@ -1,5 +1,6 @@
 import Foundation
+import SwiftUI
 
-public protocol SelfStudyCheckInterface {
-    
+public protocol SelfStudyCheckFactory {
+    func makeView() -> AnyView
 }

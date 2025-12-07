@@ -7,19 +7,22 @@ public struct AllTabMenuList: View {
     let onCheckTeacherTap: () -> Void
     let onBugReportTap: () -> Void
     let onChangePasswordTap: () -> Void
+    let onSelfStudyCheckTap: () -> Void
 
     public init(
         onOutListTap: @escaping () -> Void,
         onLogoutTap: @escaping () -> Void,
         onCheckTeacherTap: @escaping () -> Void,
         onBugReportTap: @escaping () -> Void,
-        onChangePasswordTap: @escaping () -> Void
+        onChangePasswordTap: @escaping () -> Void,
+        onSelfStudyCheckTap: @escaping () -> Void
     ) {
         self.onOutListTap = onOutListTap
         self.onLogoutTap = onLogoutTap
         self.onCheckTeacherTap = onCheckTeacherTap
         self.onBugReportTap = onBugReportTap
         self.onChangePasswordTap = onChangePasswordTap
+        self.onSelfStudyCheckTap = onSelfStudyCheckTap
     }
 
     public var body: some View {
@@ -31,7 +34,11 @@ public struct AllTabMenuList: View {
                         title: "외출자 목록",
                         action: onOutListTap
                     ),
-                    MenuItemModel(icon: PiCKImage.beforeOuting, title: "자습시간 출결"),
+                    MenuItemModel(
+                        icon: PiCKImage.beforeOuting,
+                        title: "자습시간 출결",
+                        action: onSelfStudyCheckTap
+                    ),
                     MenuItemModel(icon: PiCKImage.book, title: "이전 외출기록")
                 ]),
                 MenuSectionModel(title: "도움말", items: [

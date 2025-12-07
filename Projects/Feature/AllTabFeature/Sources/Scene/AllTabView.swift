@@ -11,6 +11,7 @@ import BugReportDomainInterface
 import ChangePasswordFeature
 import AuthDomainInterface
 import ChangePasswordDomainInterface
+import SelfStudyCheckFeature
 
 public struct AllTabView: View {
     let store: StoreOf<AllTabReducer>
@@ -66,6 +67,9 @@ public struct AllTabView: View {
                             },
                             onChangePasswordTap: {
                                 navigationPath.append(.changePassword)
+                            },
+                            onSelfStudyCheckTap: {
+                                navigationPath.append(.selfStudyCheck)
                             }
                         )
                         .padding(.top, 32)
@@ -133,6 +137,15 @@ public struct AllTabView: View {
                                 navigationPath.removeAll()
                                 showPasswordChangeSuccess = true
                             }
+                        )
+                    case .selfStudyCheck:
+                        SelfStudyCheckFeature(
+                            store: .init(
+                                initialState: SelfStudyCheckReducer.State(),
+                                reducer: {
+                                    SelfStudyCheckReducer()
+                                }
+                            )
                         )
                     default:
                         EmptyView()
