@@ -17,10 +17,10 @@ let settings: Settings = .settings(
 )
 
 let interfaceTarget = Target.target(
-    name: "ClassroomMoveListFeatureFeatureInterface",
+    name: "ClassroomMoveListFeatureInterface",
     destinations: env.destination,
     product: .framework,
-    bundleId: "$(env.organizationName).ClassroomMoveListFeatureFeatureInterface",
+    bundleId: "$(env.organizationName).ClassroomMoveListFeatureInterface",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Interface/**"],
@@ -30,22 +30,22 @@ let interfaceTarget = Target.target(
 )
 
 let implementationTarget = Target.target(
-    name: "ClassroomMoveListFeatureFeature",
+    name: "ClassroomMoveListFeature",
     destinations: env.destination,
     product: .staticFramework,
-    bundleId: "$(env.organizationName).ClassroomMoveListFeatureFeature",
+    bundleId: "$(env.organizationName).ClassroomMoveListFeature",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Sources/**"],
     dependencies: [
-        .target(name: "ClassroomMoveListFeatureFeatureInterface"),
+        .target(name: "ClassroomMoveListFeatureInterface"),
         .SPM.NeedleFoundation,
         .SPM.ComposableArchitecture
     ]
 )
 
 let project = Project(
-    name: "ClassroomMoveListFeatureFeature",
+    name: "ClassroomMoveListFeature",
     organizationName: env.organizationName,
     settings: settings,
     targets: [interfaceTarget, implementationTarget]

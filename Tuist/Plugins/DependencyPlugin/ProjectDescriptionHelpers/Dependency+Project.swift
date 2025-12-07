@@ -222,12 +222,12 @@ public extension TargetDependency.Features {
         target: "ChangePasswordFeatureInterface",
         path: .relativeToRoot("Projects/Feature/ChangePassword")
     )
-    static let classroomMoveListFeatureFeature = TargetDependency.project(
-        target: "ClassroomMoveListFeatureFeature",
+    static let classroomMoveListFeature = TargetDependency.project(
+        target: "ClassroomMoveListFeature",
         path: .relativeToRoot("Projects/Feature/ClassroomMoveListFeature")
     )
-    static let classroomMoveListFeatureFeatureInterface = TargetDependency.project(
-        target: "ClassroomMoveListFeatureFeatureInterface",
+    static let classroomMoveListFeatureInterface = TargetDependency.project(
+        target: "ClassroomMoveListFeatureInterface",
         path: .relativeToRoot("Projects/Feature/ClassroomMoveListFeature")
     )
     // other Module
