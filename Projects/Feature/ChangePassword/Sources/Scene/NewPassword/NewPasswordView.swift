@@ -9,6 +9,7 @@ public struct NewPasswordView: View {
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var router: AppRouter
     @State private var showSuccessAlert = false
+    @State private var dismissCount = 0
 
     public init(
         store: StoreOf<NewPasswordReducer>,
@@ -57,11 +58,18 @@ public struct NewPasswordView: View {
             }
             .alert("비밀번호 변경 완료", isPresented: $showSuccessAlert) {
                 Button("확인", role: .cancel) {
+                    // router.path에 changePassword가 있으면 로그인 뷰에서 온 것
                     if let changePasswordIndex = router.path.firstIndex(where: { route in
                         if case .changePassword = route { return true }
                         return false
                     }) {
                         router.path.removeSubrange(changePasswordIndex...)
+                    } else {
+                        // 전체 탭에서 온 경우 - dismiss를 두 번 호출
+                        dismiss()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            dismiss()
+                        }
                     }
                 }
             } message: {
