@@ -6,18 +6,23 @@ import OutListDomainInterface
 public struct OutListReducer: Reducer {
     private let getOutListUseCase: any GetOutListUseCase
     private let returnStudentsUseCase: any ReturnStudentsUseCase
+    private let getEarlyReturnUseCase: any GetEarlyReturnUseCase
 
     public init(
         getOutListUseCase: any GetOutListUseCase,
-        returnStudentsUseCase: any ReturnStudentsUseCase
+        returnStudentsUseCase: any ReturnStudentsUseCase,
+        getEarlyReturnUseCase: any GetEarlyReturnUseCase
     ) {
         self.getOutListUseCase = getOutListUseCase
         self.returnStudentsUseCase = returnStudentsUseCase
+        self.getEarlyReturnUseCase = getEarlyReturnUseCase
     }
 
     public struct State: Equatable {
         public var studentItems: [OutListEntity] = []
+        public var earlyReturnItems: [EarlyReturnEntity] = []
         public var currentFloor: Int = 5
+        public var currentType: OutListType = .outing
         public var isLoading: Bool = false
         public var selectedStudents: Set<String> = []
         public var errorMessage: String? = nil
@@ -32,7 +37,9 @@ public struct OutListReducer: Reducer {
     public enum Action {
         case onAppear
         case floorChanged(Int)
+        case fetchByType(type: OutListType)
         case outListResponse(TaskResult<[OutListEntity]>)
+        case earlyReturnResponse(TaskResult<[EarlyReturnEntity]>)
         case studentTapped(String)
         case returnStudents
         case returnStudentsResponse(TaskResult<Void>)
@@ -55,12 +62,32 @@ public struct OutListReducer: Reducer {
                 state.selectedStudents.removeAll()
                 return loadOutList(floor: floor)
 
+            case let .fetchByType(type):
+                state.currentType = type
+                state.isLoading = true
+                state.selectedStudents.removeAll()
+                if state.currentType == .outing {
+                    return loadOutList(floor: state.currentFloor)
+                } else {
+                    return loadEarlyReturn()
+                }
+
             case .outListResponse(.success(let students)):
                 state.isLoading = false
                 state.studentItems = students
                 return .none
 
             case let .outListResponse(.failure(error)):
+                state.isLoading = false
+                state.errorMessage = error.localizedDescription
+                return .none
+
+            case let .earlyReturnResponse(.success(students)):
+                state.isLoading = false
+                state.earlyReturnItems = students
+                return .none
+
+            case let .earlyReturnResponse(.failure(error)):
                 state.isLoading = false
                 state.errorMessage = error.localizedDescription
                 return .none
@@ -106,7 +133,9 @@ public struct OutListReducer: Reducer {
             }
         }
     }
+}
 
+extension OutListReducer {
     private func loadOutList(floor: Int) -> Effect<Action> {
         .run { send in
             await send(.outListResponse(
@@ -115,5 +144,20 @@ public struct OutListReducer: Reducer {
                 }
             ))
         }
+    }
+
+    private func loadEarlyReturn() -> Effect<Action> {
+        .run { send in
+            await send(.earlyReturnResponse(
+                await TaskResult {
+                    try await getEarlyReturnUseCase.execute()
+                }
+            ))
+        }
+    }
+
+    public enum OutListType: Equatable {
+        case outing
+        case earlyReturn
     }
 }

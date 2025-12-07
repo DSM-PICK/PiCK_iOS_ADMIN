@@ -5,6 +5,7 @@ import Moya
 public enum OutListAPI {
     case getOutList(floor: Int)
     case returnStudents(ids: [String])
+    case earlyReturnList
 }
 
 extension OutListAPI: PiCKAPI {
@@ -12,7 +13,12 @@ extension OutListAPI: PiCKAPI {
     public typealias ErrorType = PiCKError
     
     public var domain: BaseDomain.PiCKDomain {
-        return .application
+        switch self {
+        case .earlyReturnList:
+            return .earlyReturn
+        default:
+            return .application
+        }
     }
 
     public var urlPath: String {
@@ -21,12 +27,14 @@ extension OutListAPI: PiCKAPI {
             return "/floor"
         case .returnStudents:
             return "/return"
+        case .earlyReturnList:
+            return "/ok"
         }
     }
 
     public var method: Moya.Method {
         switch self {
-        case .getOutList:
+        case .getOutList, .earlyReturnList:
             return .get
         case .returnStudents:
             return .patch
@@ -44,6 +52,8 @@ extension OutListAPI: PiCKAPI {
             )
         case let .returnStudents(ids):
             return .requestJSONEncodable(ids)
+        case .earlyReturnList:
+            return .requestPlain
         }
     }
 

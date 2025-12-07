@@ -15,22 +15,22 @@ public struct OutListView: View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
             ZStack {
                 VStack(spacing: 0) {
-                    HStack {
-                        let titleText = (Text(verbatim: todayString) + Text(" 외출자"))
-                            .pickText(type: .heading4, textColor: .Normal.black)
-                            .padding(.leading, 24)
-                        
-                        titleText
+                        HStack {
+                            (Text(verbatim: todayString) + Text(" 외출자"))
+                                .pickText(type: .heading4, textColor: .Normal.black)
+                                .padding(.leading, 24)
 
-                        Spacer()
+                            Spacer()
 
-                        ClassroomFilterButton(
-                            selectedClassroom: floorDisplayText(viewStore.currentFloor),
-                            onTap: { isApplyBottomSheetPresented = true }
-                        )
-                        .padding(.trailing, 24)
-                    }
-                    .padding(.top, 24)
+                            if viewStore.currentType == .outing {
+                                ClassroomFilterButton(
+                                    selectedClassroom: floorDisplayText(viewStore.currentFloor),
+                                    onTap: { isApplyBottomSheetPresented = true }
+                                )
+                                .padding(.trailing, 24)
+                            }
+                        }
+                        .padding(.top, 24)
 
                     Rectangle()
                         .fill(Color.Gray.gray200)
@@ -39,6 +39,44 @@ public struct OutListView: View {
                         .padding(.top, 16)
                         .padding(.horizontal, 24)
 
+                    HStack(spacing: 8) {
+                        Button {
+                            viewStore.send(.fetchByType(type: .outing))
+                        } label: {
+                            Text("외출")
+                                .pickText(
+                                    type: .body1,
+                                    textColor: viewStore.currentType == .outing ? .Primary.primary500 : .Gray.gray600
+                                )
+                                .frame(maxWidth: .infinity, minHeight: 40, maxHeight: 40)
+                                .background(
+                                    viewStore.currentType == .outing
+                                    ? Color.Primary.primary50
+                                    : Color.clear
+                                )
+                                .cornerRadius(8)
+                        }
+
+                        Button {
+                            viewStore.send(.fetchByType(type: .earlyReturn))
+                        } label: {
+                            Text("조기귀가")
+                                .pickText(
+                                    type: .body1,
+                                    textColor: viewStore.currentType == .earlyReturn ? .Primary.primary500 : .Gray.gray600
+                                )
+                                .frame(maxWidth: .infinity, minHeight: 40, maxHeight: 40)
+                                .background(
+                                    viewStore.currentType == .earlyReturn
+                                    ? Color.Primary.primary50
+                                    : Color.clear
+                                )
+                                .cornerRadius(8)
+                        }
+                    }
+                    .padding(.horizontal, 24)
+                    .padding(.top, 16)
+
                     Group {
                         if viewStore.isLoading {
                             VStack {
@@ -46,7 +84,7 @@ public struct OutListView: View {
                                 ProgressView()
                                 Spacer()
                             }
-                        } else if viewStore.studentItems.isEmpty {
+                        } else if viewStore.currentType == .outing && viewStore.studentItems.isEmpty {
                             VStack {
                                 Spacer()
                                 VStack(spacing: 12) {
@@ -59,25 +97,55 @@ public struct OutListView: View {
                                 }
                                 Spacer()
                             }
-                        } else {
-                            let items = viewStore.studentItems
+                        } else if viewStore.currentType == .earlyReturn && viewStore.earlyReturnItems.isEmpty {
+                            VStack {
+                                Spacer()
+                                VStack(spacing: 12) {
+                                    PiCKImage.blackLogo
+                                        .resizable()
+                                        .frame(width: 88, height: 91)
 
+                                    Text("아직 조기귀가를 신청한 학생이 없어요")
+                                        .pickText(type: .subTitle2, textColor: .Gray.gray500)
+                                }
+                                Spacer()
+                            }
+                        } else {
                             ScrollView {
                                 VStack(spacing: 16) {
-                                    ForEach(items, id: \.id) { student in
-                                        let studentNumber = "\(student.grade)\(student.classNum)\(String(format: "%02d", student.num))"
-                                        let isSelected = viewStore.selectedStudents.contains(student.id)
+                                    if viewStore.currentType == .outing {
+                                        let items = viewStore.studentItems
+                                        ForEach(items, id: \.id) { student in
+                                            let studentNumber = "\(student.grade)\(student.classNum)\(String(format: "%02d", student.num))"
+                                            let isSelected = viewStore.selectedStudents.contains(student.id)
 
-                                        PiCKAcceptStudentCell(
-                                            studentNumber: studentNumber,
-                                            studentName: student.userName,
-                                            startTime: student.start,
-                                            endTime: student.end,
-                                            activityType: "외출 수락",
-                                            reason: student.reason,
-                                            isSelected: isSelected,
-                                            onTap: { viewStore.send(.studentTapped(student.id)) }
-                                        )
+                                            PiCKAcceptStudentCell(
+                                                studentNumber: studentNumber,
+                                                studentName: student.userName,
+                                                startTime: student.start,
+                                                endTime: student.end,
+                                                activityType: "외출",
+                                                reason: student.reason,
+                                                isSelected: isSelected,
+                                                onTap: { viewStore.send(.studentTapped(student.id)) }
+                                            )
+                                        }
+                                    } else {
+                                        let items = viewStore.earlyReturnItems
+                                        ForEach(items, id: \.id) { student in
+                                            let studentNumber = "\(student.grade)\(student.classNum)\(String(format: "%02d", student.num))"
+                                            
+                                            PiCKAcceptStudentCell(
+                                                studentNumber: studentNumber,
+                                                studentName: student.userName,
+                                                startTime: student.start,
+                                                endTime: "",
+                                                activityType: "조기귀가",
+                                                reason: student.reason,
+                                                isSelected: false,
+                                                onTap: { }
+                                            )
+                                        }
                                     }
                                 }
                                 .padding(.top, 20)
@@ -86,16 +154,18 @@ public struct OutListView: View {
                         }
                     }
 
-                    PiCKButton(
-                        buttonText: "복귀 시키기",
-                        isEnabled: !viewStore.selectedStudents.isEmpty,
-                        height: 45,
-                        action: {
-                            viewStore.send(.returnStudents)
-                        }
-                    )
-                    .padding(.vertical, 10)
-                    .padding(.horizontal, 24)
+                    if viewStore.currentType == .outing {
+                        PiCKButton(
+                            buttonText: "복귀 시키기",
+                            isEnabled: !viewStore.selectedStudents.isEmpty,
+                            height: 45,
+                            action: {
+                                viewStore.send(.returnStudents)
+                            }
+                        )
+                        .padding(.vertical, 10)
+                        .padding(.horizontal, 24)
+                    }
                 }
                 .onAppear {
                     viewStore.send(.onAppear)
