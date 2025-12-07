@@ -114,42 +114,65 @@ public struct BugReportView: View {
             Text("버그 사진을 첨부해주세요")
                 .pickText(type: .label1, textColor: .Normal.black)
 
-            photosPickerButton
-                .onChange(of: selectedItems) { newItems in
-                    handleImageSelection(newItems: newItems, viewStore: viewStore)
-                }
+            if viewStore.selectedImages.isEmpty {
+                photosPickerButton(hasImages: false)
+                    .onChange(of: selectedItems) { newItems in
+                        handleImageSelection(newItems: newItems, viewStore: viewStore)
+                    }
+            } else {
+                HStack(spacing: 0) {
+                    photosPickerButton(hasImages: true)
+                        .onChange(of: selectedItems) { newItems in
+                            handleImageSelection(newItems: newItems, viewStore: viewStore)
+                        }
 
-            if !viewStore.selectedImages.isEmpty {
-                selectedImagesScrollView(viewStore: viewStore)
+                    selectedImagesScrollView(viewStore: viewStore)
+                        .padding(.leading, 24)
+
+                    Spacer()
+                }
             }
         }
     }
 
-    private var photosPickerButton: some View {
+    private func photosPickerButton(hasImages: Bool) -> some View {
         PhotosPicker(
             selection: $selectedItems,
             maxSelectionCount: 3,
             matching: .images
         ) {
-            VStack(spacing: 8) {
+            if hasImages {
                 PiCKImage.image
                     .resizable()
                     .frame(width: 28, height: 28)
+                    .frame(width: 100, height: 100)
+                    .background(Color.Gray.gray50)
+                    .cornerRadius(4)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 4)
+                            .stroke(Color.Gray.gray600, style: StrokeStyle(lineWidth: 1, dash: [5]))
+                    )
+            } else {
+                VStack(spacing: 8) {
+                    PiCKImage.image
+                        .resizable()
+                        .frame(width: 28, height: 28)
 
-                Text("사진을 첨부해주세요.")
-                    .pickText(type: .caption2, textColor: .Gray.gray500)
+                    Text("사진을 첨부해주세요.")
+                        .pickText(type: .caption2, textColor: .Gray.gray500)
 
-                Spacer()
+                    Spacer()
+                }
+                .padding(.top, 22)
+                .frame(height: 100)
+                .frame(maxWidth: .infinity)
+                .background(Color.Gray.gray50)
+                .cornerRadius(4)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 4)
+                        .stroke(Color.Gray.gray600, style: StrokeStyle(lineWidth: 1, dash: [5]))
+                )
             }
-            .padding(.top, 22)
-            .frame(maxWidth: .infinity)
-            .frame(height: 100)
-            .background(Color.Gray.gray50)
-            .cornerRadius(4)
-            .overlay(
-                RoundedRectangle(cornerRadius: 4)
-                    .stroke(Color.Gray.gray600, style: StrokeStyle(lineWidth: 1, dash: [5]))
-            )
         }
     }
 
