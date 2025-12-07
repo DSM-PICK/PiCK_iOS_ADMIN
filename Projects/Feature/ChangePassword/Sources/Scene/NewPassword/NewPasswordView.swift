@@ -5,10 +5,18 @@ import Utility
 
 public struct NewPasswordView: View {
     let store: StoreOf<NewPasswordReducer>
+    let onSuccess: () -> Void
+    @Environment(\.dismiss) var dismiss
     @EnvironmentObject var router: AppRouter
+    @State private var showSuccessAlert = false
+    @State private var dismissCount = 0
 
-    public init(store: StoreOf<NewPasswordReducer>) {
+    public init(
+        store: StoreOf<NewPasswordReducer>,
+        onSuccess: @escaping () -> Void = {}
+    ) {
         self.store = store
+        self.onSuccess = onSuccess
     }
 
     public var body: some View {
@@ -31,23 +39,41 @@ public struct NewPasswordView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .onChange(of: viewStore.isChangeSuccessful) { isSuccessful in
                 if isSuccessful {
-                    if router.path.count >= 2 {
-                        router.path.removeLast(2)
-                    }
+                    showSuccessAlert = true
                 }
             }
             .navigationBarBackButtonHidden(true)
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle("비밀번호 변경")
+            .toolbar(.hidden, for: .tabBar)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
-                        router.pop()
+                        dismiss()
                     }) {
                         Image(systemName: "chevron.left")
                             .foregroundColor(.black)
                     }
                 }
+            }
+            .alert("비밀번호 변경 완료", isPresented: $showSuccessAlert) {
+                Button("확인", role: .cancel) {
+                    // router.path에 changePassword가 있으면 로그인 뷰에서 온 것
+                    if let changePasswordIndex = router.path.firstIndex(where: { route in
+                        if case .changePassword = route { return true }
+                        return false
+                    }) {
+                        router.path.removeSubrange(changePasswordIndex...)
+                    } else {
+                        // 전체 탭에서 온 경우 - dismiss를 두 번 호출
+                        dismiss()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                            dismiss()
+                        }
+                    }
+                }
+            } message: {
+                Text("비밀번호가 성공적으로 변경되었습니다.")
             }
         }
     }

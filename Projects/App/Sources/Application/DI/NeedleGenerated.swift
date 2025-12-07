@@ -217,6 +217,15 @@ private class AllTabDependencyacdab75b3325eec9d649Provider: AllTabDependency {
     var submitBugReportUseCase: any SubmitBugReportUseCaseProtocol {
         return appComponent.submitBugReportUseCase
     }
+    var emailSendUseCase: any EmailSendUseCase {
+        return appComponent.emailSendUseCase
+    }
+    var codeCheckUseCase: any CodeCheckUseCase {
+        return appComponent.codeCheckUseCase
+    }
+    var passwordChangeUseCase: any PasswordChangeUseCase {
+        return appComponent.passwordChangeUseCase
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -460,6 +469,9 @@ extension AllTabComponent: NeedleFoundation.Registration {
         keyPathToName[\AllTabDependency.fetchSelfStudyTeacherUseCase] = "fetchSelfStudyTeacherUseCase-any FetchSelfStudyTeacherUseCaseProtocol"
         keyPathToName[\AllTabDependency.uploadBugImagesUseCase] = "uploadBugImagesUseCase-any UploadBugImagesUseCaseProtocol"
         keyPathToName[\AllTabDependency.submitBugReportUseCase] = "submitBugReportUseCase-any SubmitBugReportUseCaseProtocol"
+        keyPathToName[\AllTabDependency.emailSendUseCase] = "emailSendUseCase-any EmailSendUseCase"
+        keyPathToName[\AllTabDependency.codeCheckUseCase] = "codeCheckUseCase-any CodeCheckUseCase"
+        keyPathToName[\AllTabDependency.passwordChangeUseCase] = "passwordChangeUseCase-any PasswordChangeUseCase"
     }
 }
 extension OutListComponent: NeedleFoundation.Registration {

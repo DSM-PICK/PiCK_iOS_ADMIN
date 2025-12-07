@@ -24,7 +24,7 @@ extension ChangePasswordAPI: PiCKAPI {
     public var method: Moya.Method {
         switch self {
         case .changePassword:
-            return .put
+            return .post
         }
     }
 

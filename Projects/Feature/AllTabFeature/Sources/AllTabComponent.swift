@@ -6,6 +6,7 @@ import AllTabDomainInterface
 import AuthDomainInterface
 import CheckSelfStudyTeacherDomainInterface
 import BugReportDomainInterface
+import ChangePasswordDomainInterface
 
 public protocol AllTabDependency: NeedleFoundation.Dependency {
     var getMyNameUseCase: any GetMyNameUseCaseProtocol { get }
@@ -13,6 +14,9 @@ public protocol AllTabDependency: NeedleFoundation.Dependency {
     var fetchSelfStudyTeacherUseCase: any FetchSelfStudyTeacherUseCaseProtocol { get }
     var uploadBugImagesUseCase: any UploadBugImagesUseCaseProtocol { get }
     var submitBugReportUseCase: any SubmitBugReportUseCaseProtocol { get }
+    var emailSendUseCase: any EmailSendUseCase { get }
+    var codeCheckUseCase: any CodeCheckUseCase { get }
+    var passwordChangeUseCase: any PasswordChangeUseCase { get }
 }
 
 public final class AllTabComponent: Component<AllTabDependency>, AllTabFactory {
@@ -26,6 +30,18 @@ public final class AllTabComponent: Component<AllTabDependency>, AllTabFactory {
 
     public var submitBugReportUseCase: any SubmitBugReportUseCaseProtocol {
         dependency.submitBugReportUseCase
+    }
+
+    public var emailSendUseCase: any EmailSendUseCase {
+        dependency.emailSendUseCase
+    }
+
+    public var codeCheckUseCase: any CodeCheckUseCase {
+        dependency.codeCheckUseCase
+    }
+
+    public var passwordChangeUseCase: any PasswordChangeUseCase {
+        dependency.passwordChangeUseCase
     }
 
     public func makeView() -> AnyView {
@@ -42,7 +58,10 @@ public final class AllTabComponent: Component<AllTabDependency>, AllTabFactory {
                 ),
                 fetchSelfStudyTeacherUseCase: fetchSelfStudyTeacherUseCase,
                 uploadBugImagesUseCase: uploadBugImagesUseCase,
-                submitBugReportUseCase: submitBugReportUseCase
+                submitBugReportUseCase: submitBugReportUseCase,
+                emailSendUseCase: emailSendUseCase,
+                codeCheckUseCase: codeCheckUseCase,
+                passwordChangeUseCase: passwordChangeUseCase
             )
         )
     }

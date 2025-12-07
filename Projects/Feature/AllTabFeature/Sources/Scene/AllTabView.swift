@@ -8,25 +8,38 @@ import CheckSelfStudyTeacherFeature
 import CheckSelfStudyTeacherDomainInterface
 import BugReportFeature
 import BugReportDomainInterface
+import ChangePasswordFeature
+import AuthDomainInterface
+import ChangePasswordDomainInterface
 
 public struct AllTabView: View {
     let store: StoreOf<AllTabReducer>
     let fetchSelfStudyTeacherUseCase: any FetchSelfStudyTeacherUseCaseProtocol
     let uploadBugImagesUseCase: any UploadBugImagesUseCaseProtocol
     let submitBugReportUseCase: any SubmitBugReportUseCaseProtocol
+    let emailSendUseCase: any EmailSendUseCase
+    let codeCheckUseCase: any CodeCheckUseCase
+    let passwordChangeUseCase: any PasswordChangeUseCase
     @EnvironmentObject var router: AppRouter
     @State private var navigationPath: [AppRoute] = []
+    @State private var showPasswordChangeSuccess = false
 
     public init(
         store: StoreOf<AllTabReducer>,
         fetchSelfStudyTeacherUseCase: any FetchSelfStudyTeacherUseCaseProtocol,
         uploadBugImagesUseCase: any UploadBugImagesUseCaseProtocol,
-        submitBugReportUseCase: any SubmitBugReportUseCaseProtocol
+        submitBugReportUseCase: any SubmitBugReportUseCaseProtocol,
+        emailSendUseCase: any EmailSendUseCase,
+        codeCheckUseCase: any CodeCheckUseCase,
+        passwordChangeUseCase: any PasswordChangeUseCase
     ) {
         self.store = store
         self.fetchSelfStudyTeacherUseCase = fetchSelfStudyTeacherUseCase
         self.uploadBugImagesUseCase = uploadBugImagesUseCase
         self.submitBugReportUseCase = submitBugReportUseCase
+        self.emailSendUseCase = emailSendUseCase
+        self.codeCheckUseCase = codeCheckUseCase
+        self.passwordChangeUseCase = passwordChangeUseCase
     }
 
     public var body: some View {
@@ -50,6 +63,9 @@ public struct AllTabView: View {
                             },
                             onBugReportTap: {
                                 navigationPath.append(.bugReport)
+                            },
+                            onChangePasswordTap: {
+                                navigationPath.append(.changePassword)
                             }
                         )
                         .padding(.top, 32)
@@ -89,9 +105,43 @@ public struct AllTabView: View {
                                 }
                             )
                         )
+                    case .changePassword:
+                        ChangePasswordFeature(
+                            store: .init(
+                                initialState: ChangePasswordReducer.State(),
+                                reducer: {
+                                    ChangePasswordReducer(
+                                        emailSendUseCase: emailSendUseCase,
+                                        codeCheckUseCase: codeCheckUseCase
+                                    )
+                                }
+                            )
+                        )
+                    case .newPassword(let accountId, let code):
+                        NewPasswordFeature(
+                            store: .init(
+                                initialState: NewPasswordReducer.State(),
+                                reducer: {
+                                    NewPasswordReducer(
+                                        passwordChangeUseCase: passwordChangeUseCase,
+                                        accountId: accountId,
+                                        code: code
+                                    )
+                                }
+                            ),
+                            onSuccess: {
+                                navigationPath.removeAll()
+                                showPasswordChangeSuccess = true
+                            }
+                        )
                     default:
                         EmptyView()
                     }
+                }
+                .alert("비밀번호 변경 완료", isPresented: $showPasswordChangeSuccess) {
+                    Button("확인", role: .cancel) { }
+                } message: {
+                    Text("비밀번호가 성공적으로 변경되었습니다.")
                 }
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {

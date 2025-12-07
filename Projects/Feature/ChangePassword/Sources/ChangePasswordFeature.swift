@@ -15,12 +15,17 @@ public struct ChangePasswordFeature: View {
 
 public struct NewPasswordFeature: View {
     let store: StoreOf<NewPasswordReducer>
+    let onSuccess: () -> Void
 
-    public init(store: StoreOf<NewPasswordReducer>) {
+    public init(
+        store: StoreOf<NewPasswordReducer>,
+        onSuccess: @escaping () -> Void = {}
+    ) {
         self.store = store
+        self.onSuccess = onSuccess
     }
 
     public var body: some View {
-        NewPasswordView(store: store)
+        NewPasswordView(store: store, onSuccess: onSuccess)
     }
 }

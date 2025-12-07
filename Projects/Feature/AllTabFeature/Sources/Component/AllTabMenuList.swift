@@ -6,17 +6,20 @@ public struct AllTabMenuList: View {
     let onLogoutTap: () -> Void
     let onCheckTeacherTap: () -> Void
     let onBugReportTap: () -> Void
+    let onChangePasswordTap: () -> Void
 
     public init(
         onOutListTap: @escaping () -> Void,
         onLogoutTap: @escaping () -> Void,
         onCheckTeacherTap: @escaping () -> Void,
-        onBugReportTap: @escaping () -> Void
+        onBugReportTap: @escaping () -> Void,
+        onChangePasswordTap: @escaping () -> Void
     ) {
         self.onOutListTap = onOutListTap
         self.onLogoutTap = onLogoutTap
         self.onCheckTeacherTap = onCheckTeacherTap
         self.onBugReportTap = onBugReportTap
+        self.onChangePasswordTap = onChangePasswordTap
     }
 
     public var body: some View {
@@ -44,7 +47,11 @@ public struct AllTabMenuList: View {
                     )
                 ]),
                 MenuSectionModel(title: "계정", items: [
-                    MenuItemModel(icon: PiCKImage.changePassword, title: "비밀번호 변경"),
+                    MenuItemModel(
+                        icon: PiCKImage.changePassword,
+                        title: "비밀번호 변경",
+                        action: onChangePasswordTap
+                    ),
                     MenuItemModel(
                         icon: PiCKImage.logout,
                         title: "로그아웃",
