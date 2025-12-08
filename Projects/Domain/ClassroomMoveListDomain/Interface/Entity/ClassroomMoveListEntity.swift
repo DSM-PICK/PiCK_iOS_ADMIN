@@ -1,6 +1,7 @@
 import Foundation
 
-public struct ClassroomMoveListEntity: Equatable {
+public struct ClassroomMoveListEntity: Equatable, Identifiable {
+    public var id: String { userId }
     public let userId: String
     public let userName: String
     public let classroomName: String

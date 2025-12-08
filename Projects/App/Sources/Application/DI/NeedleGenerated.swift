@@ -23,6 +23,7 @@ import CheckSelfStudyTeacherDomain
 import CheckSelfStudyTeacherDomainInterface
 import CheckSelfStudyTeacherFeature
 import CheckSelfStudyTeacherFeatureInterface
+import ClassroomMoveListDomain
 import ClassroomMoveListDomainInterface
 import ClassroomMoveListFeature
 import ClassroomMoveListFeatureInterface
@@ -230,15 +231,17 @@ private func factoryfffd4c52463116b1a1a9f47b58f8f304c97af4d5(_ component: Needle
     return AllTabDependencyacdab75b3325eec9d649Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class ClassroomMoveListDependency9b20abf9a4004a155e91Provider: ClassroomMoveListDependency {
-
-
-    init() {
-
+    var getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase {
+        return appComponent.getClassroomMoveByFloorUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
     }
 }
 /// ^->AppComponent->ClassroomMoveListComponent
-private func factory51294ab2a490f607e616e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return ClassroomMoveListDependency9b20abf9a4004a155e91Provider()
+private func factory51294ab2a490f607e616f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return ClassroomMoveListDependency9b20abf9a4004a155e91Provider(appComponent: parent1(component) as! AppComponent)
 }
 private class OutListDependencyac9793ee3f8a81768455Provider: OutListDependency {
     var getOutListUseCase: any GetOutListUseCase {
@@ -377,6 +380,7 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["bugReportRepository-BugReportRepository"] = { [unowned self] in self.bugReportRepository as Any }
         localTable["uploadBugImagesUseCase-any UploadBugImagesUseCaseProtocol"] = { [unowned self] in self.uploadBugImagesUseCase as Any }
         localTable["submitBugReportUseCase-any SubmitBugReportUseCaseProtocol"] = { [unowned self] in self.submitBugReportUseCase as Any }
+        localTable["getClassroomMoveByFloorUseCase-any GetClassroomMoveByFloorUseCase"] = { [unowned self] in self.getClassroomMoveByFloorUseCase as Any }
         localTable["fetchAcademicScheduleUseCase-any FetchAcademicScheduleUseCaseProtocol"] = { [unowned self] in self.fetchAcademicScheduleUseCase as Any }
         localTable["fetchMonthAcademicScheduleUseCase-any FetchMonthAcademicScheduleUseCaseProtocol"] = { [unowned self] in self.fetchMonthAcademicScheduleUseCase as Any }
         localTable["planFactory-any PlanFactory"] = { [unowned self] in self.planFactory as Any }
@@ -479,7 +483,7 @@ extension AllTabComponent: NeedleFoundation.Registration {
 }
 extension ClassroomMoveListComponent: NeedleFoundation.Registration {
     public func registerItems() {
-
+        keyPathToName[\ClassroomMoveListDependency.getClassroomMoveByFloorUseCase] = "getClassroomMoveByFloorUseCase-any GetClassroomMoveByFloorUseCase"
     }
 }
 extension OutListComponent: NeedleFoundation.Registration {
@@ -552,7 +556,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->SecretKeyComponent", factorycc7ea4e12027ae637f9ff47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->BugReportComponent", factoryafa28e93c96a785ed32af47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AllTabComponent", factoryfffd4c52463116b1a1a9f47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->ClassroomMoveListComponent", factory51294ab2a490f607e616e3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->ClassroomMoveListComponent", factory51294ab2a490f607e616f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->OutListComponent", factoryb7dc05e5bded91c750e2f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->SigninComponent", factory2882a056d84a613debccf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->HomeComponent", factory67229cdf0f755562b2b1f47b58f8f304c97af4d5)

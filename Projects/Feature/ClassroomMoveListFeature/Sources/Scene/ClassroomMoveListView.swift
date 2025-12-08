@@ -47,7 +47,7 @@ public struct ClassroomMoveListView: View {
                                 ForEach([2, 3, 4], id: \.self) { floor in
                                     Button {
                                         selectedFloor = floor
-                                        viewStore.send(.fetchFloor(floor: floor))
+                                        viewStore.send(.fetchFloor(floor))
                                     } label: {
                                         Text("\(floor)층")
                                             .pickText(
@@ -79,7 +79,40 @@ public struct ClassroomMoveListView: View {
                         .padding(.top, 16)
                     }
 
-                    Spacer()
+                    ScrollView {
+                        if viewStore.studentItems.isEmpty {
+                            VStack(spacing: 12) {
+                                PiCKImage.blackLogo
+                                    .resizable()
+                                    .frame(width: 88, height: 91)
+
+                                Text("아직 교실 이동을 한 학생이 없어요")
+                                    .pickText(type: .subTitle2, textColor: .Gray.gray500)
+                            }
+                            .frame(maxWidth: .infinity, minHeight: UIScreen.main.bounds.height - 400)
+                        } else {
+                            VStack(spacing: 16) {
+                                ForEach(viewStore.studentItems, id: \.id) { item in
+                                        PiCKClassroomMoveCell(
+                                            studentNumber: "\(item.grade)\(item.classNum)\(String(format: "%02d", item.num))",
+                                            studentName: item.userName,
+                                            startPeriod: item.start,
+                                            endPeriod: item.end,
+                                            currentClassroom: "\(item.grade)학년 \(item.classNum)반",
+                                            moveToClassroom: item.classroomName,
+                                            isSelected: false,
+                                            onTap: {}
+                                        )
+                                    }
+                            }
+                            .padding(.top, 20)
+                            .padding(.horizontal, 24)
+                        }
+
+                        Spacer()
+                    }
+                }.onAppear {
+                    viewStore.send(.onAppear)
                 }
                 .sheet(isPresented: $isCurrentTypeBottomSheetPresented) {
                     PiCK_iOS_DesignSystem.SinglePickerBottomSheet(
