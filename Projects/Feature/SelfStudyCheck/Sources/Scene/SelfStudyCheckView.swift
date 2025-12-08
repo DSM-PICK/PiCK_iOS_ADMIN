@@ -148,14 +148,15 @@ public struct SelfStudyCheckView: View {
                                             .cornerRadius(8)
                                     }
                                 }
-                                .frame(width: 342, height: 53)
-                                .padding(.horizontal, 16)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 53)
+                                .padding(.horizontal, 24)
                                 .background(Color.Gray.gray50)
                                 .cornerRadius(12)
                             }
                         }
                         .padding(.top, 20)
-                        .padding(.horizontal, 20)
+                        .padding(.horizontal, 24)
                     }
                 }
 
