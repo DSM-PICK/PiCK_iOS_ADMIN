@@ -15,18 +15,28 @@ public struct SelfStudyCheckView: View {
         WithViewStore(store, observe: { $0 }) { viewStore in
             VStack(alignment: .leading, spacing: 0) {
                 HStack(spacing: 0) {
-                    HStack(spacing: 16) {
-                        Text("자습 시간 출결")
-                            .pickText(type: .subTitle2, textColor: .Gray.gray800)
-
-                        Text(Date().koreanMonthDayString)
-                            .pickText(type: .body2, textColor: .Gray.gray700)
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "chevron.left")
+                            .foregroundColor(.Gray.gray800)
+                            .font(.system(size: 20))
                     }
                     .padding(.leading, 24)
 
                     Spacer()
                 }
-                .padding(.top, 24)
+                .padding(.top, 16)
+
+                HStack(spacing: 16) {
+                    Text(Date().koreanMonthDayString)
+                        .pickText(type: .subTitle2, textColor: .Gray.gray800)
+
+                    Text("출결")
+                        .pickText(type: .body2, textColor: .Gray.gray700)
+                }
+                .padding(.leading, 24)
+                .padding(.top, 20)
 
                 Rectangle()
                     .fill(Color.Gray.gray200)
@@ -60,33 +70,8 @@ public struct SelfStudyCheckView: View {
                 }
                 .padding(.top, 16)
 
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 8) {
-                        ForEach(1...3, id: \.self) { floor in
-                            Button {
-                                viewStore.send(.selectFloor(floor))
-                            } label: {
-                                Text("\(floor)층")
-                                    .pickText(
-                                        type: .body1,
-                                        textColor: viewStore.selectedFloor == floor ? .Primary.primary500 : .Gray.gray600
-                                    )
-                                    .frame(width: 114, height: 32)
-                                    .background(
-                                        viewStore.selectedFloor == floor
-                                        ? Color.Primary.primary50
-                                        : Color.clear
-                                    )
-                                    .cornerRadius(8)
-                            }
-                        }
-                    }
-                    .padding(.horizontal, 24)
-                }
-                .padding(.top, 16)
-
                 HStack(spacing: 0) {
-                    Text("\(viewStore.selectedPeriod.title) \(viewStore.selectedFloor)층 학생 출결")
+                    Text("\(viewStore.selectedPeriod.title) 학생 출결")
                         .pickText(type: .body2, textColor: .Gray.gray600)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
@@ -142,12 +127,8 @@ public struct SelfStudyCheckView: View {
                 viewStore.send(.fetchStudents)
             }
             .navigationBarBackButtonHidden(true)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    PiCKNavigationBar()
-                        .padding(.leading, 8)
-                }
-            }
+            .toolbar(.hidden, for: .navigationBar)
+            .toolbar(.hidden, for: .tabBar)
         }
     }
 }

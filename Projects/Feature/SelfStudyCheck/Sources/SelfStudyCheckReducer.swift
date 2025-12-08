@@ -35,7 +35,6 @@ public struct SelfStudyCheckReducer: Reducer {
     public struct State: Equatable {
         public var studentItems: [StudentItem] = []
         public var selectedPeriod: Period = .eighth
-        public var selectedFloor: Int = 1
         public var isLoading: Bool = false
 
         public init() {}
@@ -43,7 +42,6 @@ public struct SelfStudyCheckReducer: Reducer {
 
     public enum Action {
         case selectPeriod(Period)
-        case selectFloor(Int)
         case fetchStudents
         case studentsResponse([StudentItem])
     }
@@ -53,11 +51,6 @@ public struct SelfStudyCheckReducer: Reducer {
             switch action {
             case let .selectPeriod(period):
                 state.selectedPeriod = period
-                state.selectedFloor = 1
-                return .send(.fetchStudents)
-
-            case let .selectFloor(floor):
-                state.selectedFloor = floor
                 return .send(.fetchStudents)
 
             case .fetchStudents:
