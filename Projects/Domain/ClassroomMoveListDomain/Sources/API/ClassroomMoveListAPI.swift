@@ -4,6 +4,7 @@ import Moya
 
 public enum ClassroomMoveListAPI {
     case getClassroomMoveByFloor(floor: Int)
+    case getClasssroomMoveByClassroom(grade: Int, classNum: Int)
 }
 
 extension ClassroomMoveListAPI: PiCKAPI {
@@ -17,6 +18,8 @@ extension ClassroomMoveListAPI: PiCKAPI {
         switch self {
         case .getClassroomMoveByFloor:
             return "/floor"
+        case .getClasssroomMoveByClassroom:
+            return "/grade"
         }
     }
 
@@ -31,6 +34,14 @@ extension ClassroomMoveListAPI: PiCKAPI {
                 parameters: [
                     "floor": floor,
                     "status": "OK"
+                ],
+                encoding: URLEncoding.queryString
+            )
+        case let .getClasssroomMoveByClassroom(grade, classNum):
+            return .requestParameters(
+                parameters: [
+                    "grade": grade,
+                    "class_num": classNum
                 ],
                 encoding: URLEncoding.queryString
             )

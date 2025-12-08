@@ -40,7 +40,12 @@ public struct ClassroomMoveListReducer: Reducer {
                 return loadClassroomMoveListByFloor(floor: state.selectedFloor)
             case let .currentTypeChanged(current):
                 state.currentType = current
-                return .none
+                state.studentItems = []
+                if current == .floor {
+                    return loadClassroomMoveListByFloor(floor: state.selectedFloor)
+                } else {
+                    return .none
+                }
             case let .fetchFloor(floor):
                 state.isLoading = true
                 state.errorMessage = nil
