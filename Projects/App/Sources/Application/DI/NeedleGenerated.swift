@@ -47,6 +47,8 @@ import SchoolMealDomain
 import SchoolMealDomainInterface
 import SchoolMealFeature
 import SchoolMealFeatureInterface
+import SelfStudyCheckFeature
+import SelfStudyCheckFeatureInterface
 import SigninFeature
 import SigninFeatureInterface
 import SignupFeature
@@ -324,6 +326,17 @@ private class NewPasswordDependency3320cbf6e40b8cd8a8eaProvider: NewPasswordDepe
 private func factory52985a6d5ec65d75bd97f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return NewPasswordDependency3320cbf6e40b8cd8a8eaProvider(appComponent: parent1(component) as! AppComponent)
 }
+private class SelfStudyCheckDependency541bf16d168d450a004dProvider: SelfStudyCheckDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->SelfStudyCheckComponent
+private func factory68e543969404535bb08fe3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return SelfStudyCheckDependency541bf16d168d450a004dProvider()
+}
 private class AcceptDependency380d0282470c8b91ca89Provider: AcceptDependency {
     var getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol {
         return appComponent.getAllApplicationsUseCase
@@ -390,6 +403,7 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["changePasswordFactory-any ChangePasswordFactory"] = { [unowned self] in self.changePasswordFactory as Any }
         localTable["newPasswordFactory-any NewPasswordFactory"] = { [unowned self] in self.newPasswordFactory as Any }
         localTable["outListFactory-any OutListFactory"] = { [unowned self] in self.outListFactory as Any }
+        localTable["selfStudyCheckFactory-any SelfStudyCheckFactory"] = { [unowned self] in self.selfStudyCheckFactory as Any }
         localTable["fetchSelfStudyTeacherUseCase-any FetchSelfStudyTeacherUseCaseProtocol"] = { [unowned self] in self.fetchSelfStudyTeacherUseCase as Any }
         localTable["changePasswordProvider-MoyaProvider<ChangePasswordAPI>"] = { [unowned self] in self.changePasswordProvider as Any }
         localTable["remoteChangePasswordDataSource-any RemoteChangePasswordDataSource"] = { [unowned self] in self.remoteChangePasswordDataSource as Any }
@@ -507,6 +521,11 @@ extension NewPasswordComponent: NeedleFoundation.Registration {
         keyPathToName[\NewPasswordDependency.passwordChangeUseCase] = "passwordChangeUseCase-any PasswordChangeUseCase"
     }
 }
+extension SelfStudyCheckComponent: NeedleFoundation.Registration {
+    public func registerItems() {
+
+    }
+}
 extension AcceptComponent: NeedleFoundation.Registration {
     public func registerItems() {
         keyPathToName[\AcceptDependency.getAllApplicationsUseCase] = "getAllApplicationsUseCase-any GetAllApplicationsUseCaseProtocol"
@@ -549,6 +568,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->HomeComponent", factory67229cdf0f755562b2b1f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ChangePasswordComponent", factoryab7c4d87dab53e0a51b9f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->NewPasswordComponent", factory52985a6d5ec65d75bd97f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->SelfStudyCheckComponent", factory68e543969404535bb08fe3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->AcceptComponent", factorye0727acbbfbe9e00fe23f47b58f8f304c97af4d5)
 }
 #endif
