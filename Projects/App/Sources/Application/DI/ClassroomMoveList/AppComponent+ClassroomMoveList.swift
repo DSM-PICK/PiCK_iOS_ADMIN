@@ -14,6 +14,12 @@ public extension AppComponent {
         }
     }
 
+    var getClassroomMoveByClassroomUseCase: any GetClassroomMoveByClassroomUseCase {
+        shared {
+            GetClassroomMoveByClassroomImpl(repository: classroomMoveListRepository)
+        }
+    }
+
     private var classroomMoveListRepository: any ClassroomMoveListRepository {
         shared {
             ClassroomMoveListRepositoryImpl(dataSource: classroomMoveListDataSource)

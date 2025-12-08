@@ -138,7 +138,7 @@ public struct ClassroomMoveListView: View {
                         firstOptions: ["전체", "1", "2", "3"],
                         secondOptions: ["전체", "1", "2", "3", "4"],
                         onComplete: { grade, classNum in
-                            viewStore.send(.fetchClassroom(grade: grade, classNum: classNum))
+                            viewStore.send(.fetchClassroom(grade: classroomFromDisplayText(grade), classNum: classroomFromDisplayText(classNum)))
                         }
                     )
                     .presentationDetents([.height(350)])
@@ -164,6 +164,16 @@ extension ClassroomMoveListView {
         case "층으로": return .floor
         case "교실로": return .classroom
         default: return .floor
+        }
+    }
+
+    private func classroomFromDisplayText(_ text: String) -> Int {
+        switch text {
+        case "1": return 1
+        case "2": return 2
+        case "3": return 3
+        case "4": return 4
+        default: return 5
         }
     }
 }

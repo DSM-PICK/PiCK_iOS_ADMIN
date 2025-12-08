@@ -6,6 +6,7 @@ import ClassroomMoveListDomainInterface
 
 public protocol ClassroomMoveListDependency: NeedleFoundation.Dependency {
     var getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase { get }
+    var getClassroomMoveByClassroomUseCase: any GetClassroomMoveByClassroomUseCase { get }
 }
 
 public final class ClassroomMoveListComponent: Component<ClassroomMoveListDependency>, ClassroomMoveListFactory {
@@ -16,7 +17,8 @@ public final class ClassroomMoveListComponent: Component<ClassroomMoveListDepend
                     initialState: ClassroomMoveListReducer.State(),
                     reducer: {
                         ClassroomMoveListReducer(
-                            getClassroomMoveByFloorUseCase: self.dependency.getClassroomMoveByFloorUseCase
+                            getClassroomMoveByFloorUseCase: self.dependency.getClassroomMoveByFloorUseCase,
+                            getClassroomMoveByClassroomUseCase: self.dependency.getClassroomMoveByClassroomUseCase
                         )
                     }
                 )

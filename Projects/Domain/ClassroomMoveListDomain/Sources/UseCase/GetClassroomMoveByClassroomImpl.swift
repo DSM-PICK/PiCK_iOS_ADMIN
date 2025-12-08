@@ -1,7 +1,7 @@
 import Foundation
 import ClassroomMoveListDomainInterface
 
-public class GetClassroomMoveByClassroomImpl: GetClassroomMoveByClassroom {
+public class GetClassroomMoveByClassroomImpl: GetClassroomMoveByClassroomUseCase {
     private let repository: ClassroomMoveListRepository
 
     public init(repository: ClassroomMoveListRepository) {

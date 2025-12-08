@@ -234,6 +234,9 @@ private class ClassroomMoveListDependency9b20abf9a4004a155e91Provider: Classroom
     var getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase {
         return appComponent.getClassroomMoveByFloorUseCase
     }
+    var getClassroomMoveByClassroomUseCase: any GetClassroomMoveByClassroomUseCase {
+        return appComponent.getClassroomMoveByClassroomUseCase
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -381,6 +384,7 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["uploadBugImagesUseCase-any UploadBugImagesUseCaseProtocol"] = { [unowned self] in self.uploadBugImagesUseCase as Any }
         localTable["submitBugReportUseCase-any SubmitBugReportUseCaseProtocol"] = { [unowned self] in self.submitBugReportUseCase as Any }
         localTable["getClassroomMoveByFloorUseCase-any GetClassroomMoveByFloorUseCase"] = { [unowned self] in self.getClassroomMoveByFloorUseCase as Any }
+        localTable["getClassroomMoveByClassroomUseCase-any GetClassroomMoveByClassroomUseCase"] = { [unowned self] in self.getClassroomMoveByClassroomUseCase as Any }
         localTable["fetchAcademicScheduleUseCase-any FetchAcademicScheduleUseCaseProtocol"] = { [unowned self] in self.fetchAcademicScheduleUseCase as Any }
         localTable["fetchMonthAcademicScheduleUseCase-any FetchMonthAcademicScheduleUseCaseProtocol"] = { [unowned self] in self.fetchMonthAcademicScheduleUseCase as Any }
         localTable["planFactory-any PlanFactory"] = { [unowned self] in self.planFactory as Any }
@@ -484,6 +488,7 @@ extension AllTabComponent: NeedleFoundation.Registration {
 extension ClassroomMoveListComponent: NeedleFoundation.Registration {
     public func registerItems() {
         keyPathToName[\ClassroomMoveListDependency.getClassroomMoveByFloorUseCase] = "getClassroomMoveByFloorUseCase-any GetClassroomMoveByFloorUseCase"
+        keyPathToName[\ClassroomMoveListDependency.getClassroomMoveByClassroomUseCase] = "getClassroomMoveByClassroomUseCase-any GetClassroomMoveByClassroomUseCase"
     }
 }
 extension OutListComponent: NeedleFoundation.Registration {

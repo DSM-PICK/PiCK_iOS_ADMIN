@@ -5,11 +5,14 @@ import PiCK_iOS_DesignSystem
 
 public struct ClassroomMoveListReducer: Reducer {
     private let getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase
+    private let getClassroomMoveByClassroomUseCase: any GetClassroomMoveByClassroomUseCase
 
     public init(
-        getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase
+        getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase,
+        getClassroomMoveByClassroomUseCase: any GetClassroomMoveByClassroomUseCase
     ) {
         self.getClassroomMoveByFloorUseCase = getClassroomMoveByFloorUseCase
+        self.getClassroomMoveByClassroomUseCase = getClassroomMoveByClassroomUseCase
     }
 
     public struct State: Equatable {
@@ -17,8 +20,8 @@ public struct ClassroomMoveListReducer: Reducer {
         public var isLoading: Bool = false
 
         public var selectedFloor: Int = 2
-        public var selectedGrade: String = ""
-        public var selectedClassNum: String = ""
+        public var selectedGrade: Int = 5
+        public var selectedClassNum: Int = 5
 
         public var studentItems: [ClassroomMoveListEntity] = []
         public var errorMessage: String? = nil
@@ -29,7 +32,7 @@ public struct ClassroomMoveListReducer: Reducer {
         case onAppear
         case currentTypeChanged(ClassroomMoveListReducer.ClassroomMoveListType)
         case fetchFloor(Int)
-        case fetchClassroom(grade: String, classNum: String)
+        case fetchClassroom(grade: Int, classNum: Int)
         case fetchFloorResponse(TaskResult<[ClassroomMoveListEntity]>)
     }
     public var body: some Reducer<State, Action> {
@@ -44,7 +47,7 @@ public struct ClassroomMoveListReducer: Reducer {
                 if current == .floor {
                     return loadClassroomMoveListByFloor(floor: state.selectedFloor)
                 } else {
-                    return .none
+                    return loadClassroomMoveListByClassroom(grade: state.selectedGrade, classNum: state.selectedClassNum)
                 }
             case let .fetchFloor(floor):
                 state.isLoading = true
@@ -52,7 +55,11 @@ public struct ClassroomMoveListReducer: Reducer {
                 state.selectedFloor = floor
                 return loadClassroomMoveListByFloor(floor: floor)
             case let .fetchClassroom(grade, classNum):
-                return .none
+                state.isLoading = true
+                state.errorMessage = nil
+                state.selectedGrade = grade
+                state.selectedClassNum = classNum
+                return loadClassroomMoveListByClassroom(grade: state.selectedGrade, classNum: state.selectedClassNum)
             case let .fetchFloorResponse(.success(students)):
                 state.isLoading = false
                 state.studentItems = students
@@ -79,6 +86,16 @@ extension ClassroomMoveListReducer {
         }
     }
 
+    private func loadClassroomMoveListByClassroom(grade: Int, classNum: Int) -> Effect<Action> {
+        .run { send in
+            await send(.fetchFloorResponse(
+                await TaskResult {
+                    try await getClassroomMoveByClassroomUseCase.execute(grade: grade, classNum: classNum)
+                }
+            ))
+        }
+    }
+
     public enum ClassroomMoveListType: Equatable {
         case floor
         case classroom
@@ -90,4 +107,6 @@ extension ClassroomMoveListReducer {
             }
         }
     }
+
+    
 }
