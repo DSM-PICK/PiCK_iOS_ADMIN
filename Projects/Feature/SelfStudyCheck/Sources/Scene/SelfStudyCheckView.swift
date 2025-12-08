@@ -142,7 +142,10 @@ public struct SelfStudyCheckView: View {
                                         isStatusBottomSheetPresented = true
                                     } label: {
                                         Text(item.status)
-                                            .pickText(type: .body2, textColor: statusColor(item.status))
+                                            .pickText(type: .body3, textColor: .Normal.white)
+                                            .frame(width: 55, height: 29)
+                                            .background(statusColor(item.status))
+                                            .cornerRadius(8)
                                     }
                                 }
                                 .frame(width: 342, height: 53)
