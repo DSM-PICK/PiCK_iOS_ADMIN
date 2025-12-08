@@ -47,6 +47,8 @@ import SchoolMealDomain
 import SchoolMealDomainInterface
 import SchoolMealFeature
 import SchoolMealFeatureInterface
+import SelfStudyCheckDomain
+import SelfStudyCheckDomainInterface
 import SelfStudyCheckFeature
 import SelfStudyCheckFeatureInterface
 import SigninFeature
@@ -228,6 +230,9 @@ private class AllTabDependencyacdab75b3325eec9d649Provider: AllTabDependency {
     var passwordChangeUseCase: any PasswordChangeUseCase {
         return appComponent.passwordChangeUseCase
     }
+    var selfStudyCheckRepository: any SelfStudyCheckRepository {
+        return appComponent.selfStudyCheckRepository
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -327,15 +332,17 @@ private func factory52985a6d5ec65d75bd97f47b58f8f304c97af4d5(_ component: Needle
     return NewPasswordDependency3320cbf6e40b8cd8a8eaProvider(appComponent: parent1(component) as! AppComponent)
 }
 private class SelfStudyCheckDependency541bf16d168d450a004dProvider: SelfStudyCheckDependency {
-
-
-    init() {
-
+    var selfStudyCheckRepository: any SelfStudyCheckRepository {
+        return appComponent.selfStudyCheckRepository
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
     }
 }
 /// ^->AppComponent->SelfStudyCheckComponent
-private func factory68e543969404535bb08fe3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return SelfStudyCheckDependency541bf16d168d450a004dProvider()
+private func factory68e543969404535bb08ff47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return SelfStudyCheckDependency541bf16d168d450a004dProvider(appComponent: parent1(component) as! AppComponent)
 }
 private class AcceptDependency380d0282470c8b91ca89Provider: AcceptDependency {
     var getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol {
@@ -412,6 +419,7 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["getOutListUseCase-any GetOutListUseCase"] = { [unowned self] in self.getOutListUseCase as Any }
         localTable["returnStudentsUseCase-any ReturnStudentsUseCase"] = { [unowned self] in self.returnStudentsUseCase as Any }
         localTable["getEarlyReturnUseCase-any GetEarlyReturnUseCase"] = { [unowned self] in self.getEarlyReturnUseCase as Any }
+        localTable["selfStudyCheckRepository-any SelfStudyCheckRepository"] = { [unowned self] in self.selfStudyCheckRepository as Any }
         localTable["fetchSchoolMealUseCase-any FetchSchoolMealUseCaseProtocol"] = { [unowned self] in self.fetchSchoolMealUseCase as Any }
         localTable["schoolMealFactory-any SchoolMealFactory"] = { [unowned self] in self.schoolMealFactory as Any }
         localTable["userDefault-any UserDefault"] = { [unowned self] in self.userDefault as Any }
@@ -486,6 +494,7 @@ extension AllTabComponent: NeedleFoundation.Registration {
         keyPathToName[\AllTabDependency.emailSendUseCase] = "emailSendUseCase-any EmailSendUseCase"
         keyPathToName[\AllTabDependency.codeCheckUseCase] = "codeCheckUseCase-any CodeCheckUseCase"
         keyPathToName[\AllTabDependency.passwordChangeUseCase] = "passwordChangeUseCase-any PasswordChangeUseCase"
+        keyPathToName[\AllTabDependency.selfStudyCheckRepository] = "selfStudyCheckRepository-any SelfStudyCheckRepository"
     }
 }
 extension OutListComponent: NeedleFoundation.Registration {
@@ -523,7 +532,7 @@ extension NewPasswordComponent: NeedleFoundation.Registration {
 }
 extension SelfStudyCheckComponent: NeedleFoundation.Registration {
     public func registerItems() {
-
+        keyPathToName[\SelfStudyCheckDependency.selfStudyCheckRepository] = "selfStudyCheckRepository-any SelfStudyCheckRepository"
     }
 }
 extension AcceptComponent: NeedleFoundation.Registration {
@@ -568,7 +577,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->HomeComponent", factory67229cdf0f755562b2b1f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ChangePasswordComponent", factoryab7c4d87dab53e0a51b9f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->NewPasswordComponent", factory52985a6d5ec65d75bd97f47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->SelfStudyCheckComponent", factory68e543969404535bb08fe3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->SelfStudyCheckComponent", factory68e543969404535bb08ff47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AcceptComponent", factorye0727acbbfbe9e00fe23f47b58f8f304c97af4d5)
 }
 #endif

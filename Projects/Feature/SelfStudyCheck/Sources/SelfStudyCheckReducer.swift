@@ -1,8 +1,12 @@
 import ComposableArchitecture
+import SelfStudyCheckDomainInterface
 
 public struct SelfStudyCheckReducer: Reducer {
+    private let getStudentAttendanceUseCase: any GetStudentAttendanceUseCase
 
-    public init() {}
+    public init(getStudentAttendanceUseCase: any GetStudentAttendanceUseCase) {
+        self.getStudentAttendanceUseCase = getStudentAttendanceUseCase
+    }
 
     public enum Period: Int, CaseIterable, Equatable {
         case eighth = 8
@@ -46,8 +50,31 @@ public struct SelfStudyCheckReducer: Reducer {
         case selectPeriod(Period)
         case selectGradeAndClass(grade: Int, classNum: Int)
         case fetchStudents
-        case studentsResponse([StudentItem])
+        case studentsResponse(TaskResult<[StudentItem]>)
         case updateStudentStatus(id: String, status: String)
+    }
+
+    private func mapStatusToKorean(_ status: String) -> String {
+        switch status.uppercased() {
+        case "ATTENDANCE":
+            return "출석"
+        case "OUTING":
+            return "외출"
+        case "MOVEMENT":
+            return "이동"
+        case "FIELD_TRIP":
+            return "현체"
+        case "HOME":
+            return "귀가"
+        case "EMPLOYMENT":
+            return "취업중"
+        case "TRUANCY":
+            return "무단"
+        case "ABSENCE":
+            return "결과"
+        default:
+            return status
+        }
     }
 
     public var body: some Reducer<State, Action> {
@@ -64,22 +91,34 @@ public struct SelfStudyCheckReducer: Reducer {
 
             case .fetchStudents:
                 state.isLoading = true
-                return .run { send in
-                    let mockStudents: [StudentItem] = [
-                        StudentItem(id: "1", grade: 1, classNum: 1, num: 1, userName: "강해민", status: "출석"),
-                        StudentItem(id: "2", grade: 1, classNum: 1, num: 2, userName: "김철수", status: "외출"),
-                        StudentItem(id: "3", grade: 1, classNum: 1, num: 3, userName: "이영희", status: "출석"),
-                        StudentItem(id: "4", grade: 1, classNum: 1, num: 4, userName: "박민수", status: "출석"),
-                        StudentItem(id: "5", grade: 1, classNum: 1, num: 5, userName: "정수진", status: "외출"),
-                        StudentItem(id: "6", grade: 1, classNum: 1, num: 6, userName: "최동욱", status: "출석"),
-                        StudentItem(id: "7", grade: 1, classNum: 1, num: 7, userName: "한지민", status: "출석"),
-                        StudentItem(id: "8", grade: 1, classNum: 1, num: 8, userName: "송유진", status: "외출")
-                    ]
-                    await send(.studentsResponse(mockStudents))
+                return .run { [grade = state.selectedGrade, classNum = state.selectedClass, period = state.selectedPeriod] send in
+                    await send(.studentsResponse(
+                        await TaskResult {
+                            let entities = try await getStudentAttendanceUseCase.execute(
+                                grade: grade,
+                                classNum: classNum,
+                                period: period.rawValue
+                            )
+                            return entities.map { entity in
+                                StudentItem(
+                                    id: entity.id,
+                                    grade: entity.grade,
+                                    classNum: entity.classNum,
+                                    num: entity.num,
+                                    userName: entity.userName,
+                                    status: mapStatusToKorean(entity.status)
+                                )
+                            }
+                        }
+                    ))
                 }
 
-            case let .studentsResponse(students):
+            case let .studentsResponse(.success(students)):
                 state.studentItems = students
+                state.isLoading = false
+                return .none
+
+            case .studentsResponse(.failure):
                 state.isLoading = false
                 return .none
 

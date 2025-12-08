@@ -1,9 +1,11 @@
 import NeedleFoundation
 import SwiftUI
 import SelfStudyCheckFeatureInterface
+import SelfStudyCheckDomainInterface
 import ComposableArchitecture
 
 public protocol SelfStudyCheckDependency: NeedleFoundation.Dependency {
+    var getStudentAttendanceUseCase: any GetStudentAttendanceUseCase { get }
 }
 
 public final class SelfStudyCheckComponent: Component<SelfStudyCheckDependency>, SelfStudyCheckFactory {
@@ -14,7 +16,7 @@ public final class SelfStudyCheckComponent: Component<SelfStudyCheckDependency>,
                     store: .init(
                         initialState: SelfStudyCheckReducer.State(),
                         reducer: {
-                            SelfStudyCheckReducer()
+                            SelfStudyCheckReducer(getStudentAttendanceUseCase: self.dependency.getStudentAttendanceUseCase)
                         }
                     )
                 )

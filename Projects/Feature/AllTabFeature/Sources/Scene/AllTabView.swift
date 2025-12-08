@@ -12,6 +12,7 @@ import ChangePasswordFeature
 import AuthDomainInterface
 import ChangePasswordDomainInterface
 import SelfStudyCheckFeature
+import SelfStudyCheckDomainInterface
 
 public struct AllTabView: View {
     let store: StoreOf<AllTabReducer>
@@ -21,6 +22,7 @@ public struct AllTabView: View {
     let emailSendUseCase: any EmailSendUseCase
     let codeCheckUseCase: any CodeCheckUseCase
     let passwordChangeUseCase: any PasswordChangeUseCase
+    let getStudentAttendanceUseCase: any GetStudentAttendanceUseCase
     @EnvironmentObject var router: AppRouter
     @State private var navigationPath: [AppRoute] = []
     @State private var showPasswordChangeSuccess = false
@@ -32,7 +34,8 @@ public struct AllTabView: View {
         submitBugReportUseCase: any SubmitBugReportUseCaseProtocol,
         emailSendUseCase: any EmailSendUseCase,
         codeCheckUseCase: any CodeCheckUseCase,
-        passwordChangeUseCase: any PasswordChangeUseCase
+        passwordChangeUseCase: any PasswordChangeUseCase,
+        getStudentAttendanceUseCase: any GetStudentAttendanceUseCase
     ) {
         self.store = store
         self.fetchSelfStudyTeacherUseCase = fetchSelfStudyTeacherUseCase
@@ -41,6 +44,7 @@ public struct AllTabView: View {
         self.emailSendUseCase = emailSendUseCase
         self.codeCheckUseCase = codeCheckUseCase
         self.passwordChangeUseCase = passwordChangeUseCase
+        self.getStudentAttendanceUseCase = getStudentAttendanceUseCase
     }
 
     public var body: some View {
@@ -143,7 +147,7 @@ public struct AllTabView: View {
                             store: .init(
                                 initialState: SelfStudyCheckReducer.State(),
                                 reducer: {
-                                    SelfStudyCheckReducer()
+                                    SelfStudyCheckReducer(getStudentAttendanceUseCase: getStudentAttendanceUseCase)
                                 }
                             )
                         )
