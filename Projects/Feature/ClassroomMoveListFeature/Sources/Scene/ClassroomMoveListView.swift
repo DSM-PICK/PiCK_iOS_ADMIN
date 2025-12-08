@@ -138,7 +138,20 @@ public struct ClassroomMoveListView: View {
                         firstOptions: ["전체", "1", "2", "3"],
                         secondOptions: ["전체", "1", "2", "3", "4"],
                         onComplete: { grade, classNum in
-                            viewStore.send(.fetchClassroom(grade: classroomFromDisplayText(grade), classNum: classroomFromDisplayText(classNum)))
+                            let isAllSelected = (grade == "전체") || (classNum == "전체")
+
+                            let finalGrade = isAllSelected ? "전체" : grade
+                            let finalClassNum = isAllSelected ? "전체" : classNum
+
+                            gradeValue = finalGrade
+                            classNumValue = finalClassNum
+
+                            viewStore.send(
+                                .fetchClassroom(
+                                    grade: classroomFromDisplayText(finalGrade),
+                                    classNum: classroomFromDisplayText(finalClassNum)
+                                )
+                            )
                         }
                     )
                     .presentationDetents([.height(350)])
@@ -173,7 +186,7 @@ extension ClassroomMoveListView {
         case "2": return 2
         case "3": return 3
         case "4": return 4
-        default: return 5
+        default: return 5 // 전체
         }
     }
 }

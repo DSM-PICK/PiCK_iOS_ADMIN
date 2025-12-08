@@ -20,8 +20,8 @@ public struct ClassroomMoveListReducer: Reducer {
         public var isLoading: Bool = false
 
         public var selectedFloor: Int = 2
-        public var selectedGrade: Int = 5
-        public var selectedClassNum: Int = 5
+        public var selectedGrade: Int = 5 // 전체
+        public var selectedClassNum: Int = 5 // 전체
 
         public var studentItems: [ClassroomMoveListEntity] = []
         public var errorMessage: String? = nil
@@ -44,10 +44,10 @@ public struct ClassroomMoveListReducer: Reducer {
             case let .currentTypeChanged(current):
                 state.currentType = current
                 state.studentItems = []
-                if current == .floor {
+                if current == .floor { // 반별로 조회는 전체 조회 X -> floor = 5로 대체
                     return loadClassroomMoveListByFloor(floor: state.selectedFloor)
                 } else {
-                    return loadClassroomMoveListByClassroom(grade: state.selectedGrade, classNum: state.selectedClassNum)
+                    return loadClassroomMoveListByFloor(floor: 5)
                 }
             case let .fetchFloor(floor):
                 state.isLoading = true
@@ -59,7 +59,11 @@ public struct ClassroomMoveListReducer: Reducer {
                 state.errorMessage = nil
                 state.selectedGrade = grade
                 state.selectedClassNum = classNum
-                return loadClassroomMoveListByClassroom(grade: state.selectedGrade, classNum: state.selectedClassNum)
+                if state.selectedGrade == 5 { // 반별로 조회는 전체 조회 X -> floor = 5로 대체
+                    return loadClassroomMoveListByFloor(floor: 5)
+                } else {
+                    return loadClassroomMoveListByClassroom(grade: state.selectedGrade, classNum: state.selectedClassNum)
+                }
             case let .fetchFloorResponse(.success(students)):
                 state.isLoading = false
                 state.studentItems = students
