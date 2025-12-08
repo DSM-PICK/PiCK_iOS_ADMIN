@@ -117,7 +117,7 @@ public struct ClassroomMoveListView: View {
                 .sheet(isPresented: $isCurrentTypeBottomSheetPresented) {
                     PiCK_iOS_DesignSystem.SinglePickerBottomSheet(
                         isPresented: $isCurrentTypeBottomSheetPresented,
-                        title: "필터을 선택해주세요",
+                        title: "필터를 선택해주세요",
                         options: ["층으로", "교실로"],
                         onComplete: { option in
                             let current = typeFromString(option)

@@ -40,7 +40,7 @@ public final class ClassroomMoveListDataSourceImpl: ClassroomMoveListDataSource 
 
     public func getClassroomMoveByClassroom(grade: Int, classNum: Int) async throws -> [ClassroomMoveListResponseDTO] {
         try await withCheckedThrowingContinuation { continuation in
-            provider.request(.getClasssroomMoveByClassroom(grade: grade, classNum: classNum)) { result in
+            provider.request(.getClassroomMoveByClassroom(grade: grade, classNum: classNum)) { result in
                 switch result {
                 case .success(let response):
                     do {
@@ -52,7 +52,7 @@ public final class ClassroomMoveListDataSourceImpl: ClassroomMoveListDataSource 
                 case .failure(let error):
                     if let moyaError = error as? MoyaError,
                        let code = moyaError.response?.statusCode,
-                       let errorMap = ClassroomMoveListAPI.getClasssroomMoveByClassroom(grade: grade, classNum: classNum).errorMap,
+                       let errorMap = ClassroomMoveListAPI.getClassroomMoveByClassroom(grade: grade, classNum: classNum).errorMap,
                        let mappedError = errorMap[code] {
                         continuation.resume(throwing: mappedError)
                     } else {
