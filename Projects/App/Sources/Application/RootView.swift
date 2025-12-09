@@ -90,6 +90,9 @@ struct RootView: View {
         case .classroomMoveList:
             appComponent.classroomMoveListFactory.makeView()
                 .environmentObject(router)
+        case .outingHistory:
+            appComponent.outingHistoryFactory.makeView()
+                .environmentObject(router)
         }
     }
     

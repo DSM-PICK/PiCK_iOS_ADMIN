@@ -1,5 +1,6 @@
-import Foundation
+import SwiftUI
+import ComposableArchitecture
 
-public protocol OutingHistoryInterface {
-    
+public protocol OutingHistoryFactory {
+    func makeView() -> AnyView
 }

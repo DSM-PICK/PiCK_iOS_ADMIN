@@ -14,4 +14,5 @@ public enum AppRoute: Hashable {
     case changePassword
     case newPassword(accountId: String, code: String)
     case classroomMoveList
+    case outingHistory
 }
