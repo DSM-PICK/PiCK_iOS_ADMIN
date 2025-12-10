@@ -39,6 +39,7 @@ let implementationTarget = Target.target(
     sources: ["Sources/**"],
     dependencies: [
         .target(name: "SelfStudyCheckFeatureInterface"),
+        .Features.acceptFeature,
         .SPM.NeedleFoundation,
         .SPM.ComposableArchitecture
     ]

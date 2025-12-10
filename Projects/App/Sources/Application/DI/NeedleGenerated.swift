@@ -230,8 +230,8 @@ private class AllTabDependencyacdab75b3325eec9d649Provider: AllTabDependency {
     var passwordChangeUseCase: any PasswordChangeUseCase {
         return appComponent.passwordChangeUseCase
     }
-    var selfStudyCheckRepository: any SelfStudyCheckRepository {
-        return appComponent.selfStudyCheckRepository
+    var getStudentAttendanceUseCase: any GetStudentAttendanceUseCase {
+        return appComponent.getStudentAttendanceUseCase
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -332,8 +332,8 @@ private func factory52985a6d5ec65d75bd97f47b58f8f304c97af4d5(_ component: Needle
     return NewPasswordDependency3320cbf6e40b8cd8a8eaProvider(appComponent: parent1(component) as! AppComponent)
 }
 private class SelfStudyCheckDependency541bf16d168d450a004dProvider: SelfStudyCheckDependency {
-    var selfStudyCheckRepository: any SelfStudyCheckRepository {
-        return appComponent.selfStudyCheckRepository
+    var getStudentAttendanceUseCase: any GetStudentAttendanceUseCase {
+        return appComponent.getStudentAttendanceUseCase
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -419,7 +419,7 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["getOutListUseCase-any GetOutListUseCase"] = { [unowned self] in self.getOutListUseCase as Any }
         localTable["returnStudentsUseCase-any ReturnStudentsUseCase"] = { [unowned self] in self.returnStudentsUseCase as Any }
         localTable["getEarlyReturnUseCase-any GetEarlyReturnUseCase"] = { [unowned self] in self.getEarlyReturnUseCase as Any }
-        localTable["selfStudyCheckRepository-any SelfStudyCheckRepository"] = { [unowned self] in self.selfStudyCheckRepository as Any }
+        localTable["getStudentAttendanceUseCase-any GetStudentAttendanceUseCase"] = { [unowned self] in self.getStudentAttendanceUseCase as Any }
         localTable["fetchSchoolMealUseCase-any FetchSchoolMealUseCaseProtocol"] = { [unowned self] in self.fetchSchoolMealUseCase as Any }
         localTable["schoolMealFactory-any SchoolMealFactory"] = { [unowned self] in self.schoolMealFactory as Any }
         localTable["userDefault-any UserDefault"] = { [unowned self] in self.userDefault as Any }
@@ -494,7 +494,7 @@ extension AllTabComponent: NeedleFoundation.Registration {
         keyPathToName[\AllTabDependency.emailSendUseCase] = "emailSendUseCase-any EmailSendUseCase"
         keyPathToName[\AllTabDependency.codeCheckUseCase] = "codeCheckUseCase-any CodeCheckUseCase"
         keyPathToName[\AllTabDependency.passwordChangeUseCase] = "passwordChangeUseCase-any PasswordChangeUseCase"
-        keyPathToName[\AllTabDependency.selfStudyCheckRepository] = "selfStudyCheckRepository-any SelfStudyCheckRepository"
+        keyPathToName[\AllTabDependency.getStudentAttendanceUseCase] = "getStudentAttendanceUseCase-any GetStudentAttendanceUseCase"
     }
 }
 extension OutListComponent: NeedleFoundation.Registration {
@@ -532,7 +532,7 @@ extension NewPasswordComponent: NeedleFoundation.Registration {
 }
 extension SelfStudyCheckComponent: NeedleFoundation.Registration {
     public func registerItems() {
-        keyPathToName[\SelfStudyCheckDependency.selfStudyCheckRepository] = "selfStudyCheckRepository-any SelfStudyCheckRepository"
+        keyPathToName[\SelfStudyCheckDependency.getStudentAttendanceUseCase] = "getStudentAttendanceUseCase-any GetStudentAttendanceUseCase"
     }
 }
 extension AcceptComponent: NeedleFoundation.Registration {
