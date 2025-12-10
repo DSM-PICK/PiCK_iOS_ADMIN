@@ -20,7 +20,7 @@ public struct OutingHistoryView: View {
                             .padding(.leading, 16)
 
                         TextField(
-                            "학생 이름으로 검색",
+                            "이름 또는 학번으로 검색",
                             text: viewStore.binding(
                                 get: \.searchText,
                                 send: OutingHistoryReducer.Action.searchTextChanged
