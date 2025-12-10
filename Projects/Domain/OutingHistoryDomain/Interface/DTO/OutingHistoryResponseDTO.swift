@@ -6,8 +6,8 @@ public struct OutingHistoryResponseDTO: Decodable {
     public let grade: Int
     public let classNum: Int
     public let num: Int
-    public let applicationCnt: String
-    public let earlyReturnCnt: String
+    public let applicationCnt: Int
+    public let earlyReturnCnt: Int
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -25,8 +25,8 @@ public struct OutingHistoryResponseDTO: Decodable {
         grade: Int,
         classNum: Int,
         num: Int,
-        applicationCnt: String,
-        earlyReturnCnt: String
+        applicationCnt: Int,
+        earlyReturnCnt: Int
     ) {
         self.id = id
         self.userName = userName

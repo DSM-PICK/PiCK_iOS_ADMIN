@@ -1,13 +1,13 @@
 import Foundation
 
-public struct OutingHistoryEntity: Decodable {
+public struct OutingHistoryEntity: Equatable, Identifiable {
     public let id: String
     public let userName: String
     public let grade: Int
     public let classNum: Int
     public let num: Int
-    public let applicationCnt: String
-    public let earlyReturnCnt: String
+    public let applicationCnt: Int
+    public let earlyReturnCnt: Int
 
     public init(
         id: String,
@@ -15,8 +15,8 @@ public struct OutingHistoryEntity: Decodable {
         grade: Int,
         classNum: Int,
         num: Int,
-        applicationCnt: String,
-        earlyReturnCnt: String
+        applicationCnt: Int,
+        earlyReturnCnt: Int
     ) {
         self.id = id
         self.userName = userName
