@@ -48,6 +48,21 @@ public struct OutingHistoryView: View {
                 .navigationTitle("이전 외출 기록")
                 .navigationBarTitleDisplayMode(.inline)
             }
+            .contentShape(Rectangle())
+            .onTapGesture {
+                self.endTextEdting()
+            }
         }
+    }
+}
+
+extension OutingHistoryView {
+    func endTextEdting() {
+        UIApplication.shared.sendAction(
+            #selector(UIResponder.resignFirstResponder),
+            to: nil,
+            from: nil,
+            for: nil
+        )
     }
 }
