@@ -15,6 +15,7 @@ public struct OutingHistoryReducer: Reducer {
     public struct State: Equatable {
         public var studentItems: [OutingHistoryEntity] = []
         public var searchText: String = ""
+        public var isLoading: Bool = false
 
         public init() {}
     }
@@ -29,11 +30,15 @@ public struct OutingHistoryReducer: Reducer {
         Reduce { state, action in
             switch action {
             case .onAppear:
+                state.isLoading = true
                 return loadOutingHistory()
             case let .outingHistoryResponse(.success(students)):
+                state.isLoading = false
                 state.studentItems = students
                 return .none
-            case let .outingHistoryResponse(.failure(error)):
+            case .outingHistoryResponse(.failure(_)):
+                // 에러 처리 필요
+                state.isLoading = false
                 return .none
             case let .searchTextChanged(searchText):
                 state.searchText = searchText

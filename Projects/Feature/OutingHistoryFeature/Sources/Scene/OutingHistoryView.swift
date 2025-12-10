@@ -35,10 +35,33 @@ public struct OutingHistoryView: View {
                     .padding(.bottom, 20)
                     .padding(.horizontal, 24)
 
-                    ScrollView {
-                        VStack {
-                            ForEach(viewStore.filteredStudentItems, id: \.id) { data in
-                                OutingHistoryCell(data: data)
+                    Group {
+                        if viewStore.isLoading {
+                            VStack {
+                                Spacer()
+                                ProgressView()
+                                Spacer()
+                            }
+                        } else if viewStore.filteredStudentItems.isEmpty {
+                            VStack {
+                                Spacer()
+                                VStack(spacing: 12) {
+                                    PiCKImage.blackLogo
+                                        .resizable()
+                                        .frame(width: 88, height: 91)
+
+                                    Text("일치하는 학생이 없어요")
+                                        .pickText(type: .subTitle2, textColor: .Gray.gray500)
+                                }
+                                Spacer()
+                            }
+                        } else {
+                            ScrollView {
+                                VStack {
+                                    ForEach(viewStore.filteredStudentItems, id: \.id) { data in
+                                        OutingHistoryCell(data: data)
+                                    }
+                                }
                             }
                         }
                     }
