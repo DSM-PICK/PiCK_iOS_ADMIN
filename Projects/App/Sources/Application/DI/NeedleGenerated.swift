@@ -43,6 +43,10 @@ import OutListDomain
 import OutListDomainInterface
 import OutListFeature
 import OutListFeatureInterface
+import OutingHistoryDomain
+import OutingHistoryDomainInterface
+import OutingHistoryFeature
+import OutingHistoryFeatureInterface
 import PlanDomain
 import PlanDomainInterface
 import PlanFeature
@@ -344,6 +348,19 @@ private class NewPasswordDependency3320cbf6e40b8cd8a8eaProvider: NewPasswordDepe
 private func factory52985a6d5ec65d75bd97f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return NewPasswordDependency3320cbf6e40b8cd8a8eaProvider(appComponent: parent1(component) as! AppComponent)
 }
+private class OutingHistoryDependency16ef661933b8edfd35d5Provider: OutingHistoryDependency {
+    var getOutingHistoryUseCase: GetOutingHistoryUseCase {
+        return appComponent.getOutingHistoryUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->OutingHistoryComponent
+private func factory2d7d5b0952348896c27cf47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return OutingHistoryDependency16ef661933b8edfd35d5Provider(appComponent: parent1(component) as! AppComponent)
+}
 private class AcceptDependency380d0282470c8b91ca89Provider: AcceptDependency {
     var getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol {
         return appComponent.getAllApplicationsUseCase
@@ -383,6 +400,7 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["keychain-any Keychain"] = { [unowned self] in self.keychain as Any }
         localTable["getSelfStudyDirectorUseCase-any GetSelfStudyDirectorUseCaseProtocol"] = { [unowned self] in self.getSelfStudyDirectorUseCase as Any }
         localTable["getAdminSelfStudyInfoUseCase-any GetAdminSelfStudyInfoUseCaseProtocol"] = { [unowned self] in self.getAdminSelfStudyInfoUseCase as Any }
+        localTable["getOutingHistoryUseCase-GetOutingHistoryUseCase"] = { [unowned self] in self.getOutingHistoryUseCase as Any }
         localTable["getAllApplicationsUseCase-any GetAllApplicationsUseCaseProtocol"] = { [unowned self] in self.getAllApplicationsUseCase as Any }
         localTable["getApplicationsByFloorUseCase-any GetApplicationsByFloorUseCaseProtocol"] = { [unowned self] in self.getApplicationsByFloorUseCase as Any }
         localTable["getClassroomMovesUseCase-any GetClassroomMovesUseCaseProtocol"] = { [unowned self] in self.getClassroomMovesUseCase as Any }
@@ -413,6 +431,7 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["newPasswordFactory-any NewPasswordFactory"] = { [unowned self] in self.newPasswordFactory as Any }
         localTable["outListFactory-any OutListFactory"] = { [unowned self] in self.outListFactory as Any }
         localTable["classroomMoveListFactory-any ClassroomMoveListFactory"] = { [unowned self] in self.classroomMoveListFactory as Any }
+        localTable["outingHistoryFactory-any OutingHistoryFactory"] = { [unowned self] in self.outingHistoryFactory as Any }
         localTable["fetchSelfStudyTeacherUseCase-any FetchSelfStudyTeacherUseCaseProtocol"] = { [unowned self] in self.fetchSelfStudyTeacherUseCase as Any }
         localTable["changePasswordProvider-MoyaProvider<ChangePasswordAPI>"] = { [unowned self] in self.changePasswordProvider as Any }
         localTable["remoteChangePasswordDataSource-any RemoteChangePasswordDataSource"] = { [unowned self] in self.remoteChangePasswordDataSource as Any }
@@ -536,6 +555,11 @@ extension NewPasswordComponent: NeedleFoundation.Registration {
         keyPathToName[\NewPasswordDependency.passwordChangeUseCase] = "passwordChangeUseCase-any PasswordChangeUseCase"
     }
 }
+extension OutingHistoryComponent: NeedleFoundation.Registration {
+    public func registerItems() {
+        keyPathToName[\OutingHistoryDependency.getOutingHistoryUseCase] = "getOutingHistoryUseCase-GetOutingHistoryUseCase"
+    }
+}
 extension AcceptComponent: NeedleFoundation.Registration {
     public func registerItems() {
         keyPathToName[\AcceptDependency.getAllApplicationsUseCase] = "getAllApplicationsUseCase-any GetAllApplicationsUseCaseProtocol"
@@ -579,6 +603,7 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->HomeComponent", factory67229cdf0f755562b2b1f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ChangePasswordComponent", factoryab7c4d87dab53e0a51b9f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->NewPasswordComponent", factory52985a6d5ec65d75bd97f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->OutingHistoryComponent", factory2d7d5b0952348896c27cf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AcceptComponent", factorye0727acbbfbe9e00fe23f47b58f8f304c97af4d5)
 }
 #endif

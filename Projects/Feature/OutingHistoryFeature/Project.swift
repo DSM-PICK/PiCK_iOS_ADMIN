@@ -17,36 +17,35 @@ let settings: Settings = .settings(
 )
 
 let interfaceTarget = Target.target(
-    name: "BugReportDomainInterface",
+    name: "OutingHistoryFeatureInterface",
     destinations: env.destination,
     product: .framework,
-    bundleId: "\(env.organizationName).BugReportDomainInterface",
+    bundleId: "\(env.organizationName).OutingHistoryFeatureInterface",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Interface/**"],
     dependencies: [
-        .Projects.core,
-        .Shared.thirdPartyLib
+        .Features.baseFeature
     ]
 )
 
 let implementationTarget = Target.target(
-    name: "BugReportDomain",
+    name: "OutingHistoryFeature",
     destinations: env.destination,
-    product: .framework,
-    bundleId: "\(env.organizationName).BugReportDomain",
+    product: .staticFramework,
+    bundleId: "\(env.organizationName).OutingHistoryFeature",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Sources/**"],
     dependencies: [
-        .target(name: "BugReportDomainInterface"),
-        .Projects.baseDomain,
-        .Shared.thirdPartyLib
+        .target(name: "OutingHistoryFeatureInterface"),
+        .SPM.NeedleFoundation,
+        .SPM.ComposableArchitecture
     ]
 )
 
 let project = Project(
-    name: "BugReportDomain",
+    name: "OutingHistoryFeature",
     organizationName: env.organizationName,
     settings: settings,
     targets: [interfaceTarget, implementationTarget]

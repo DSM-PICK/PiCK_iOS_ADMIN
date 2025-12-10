@@ -69,6 +69,9 @@ public struct AllTabView: View {
                             },
                             onChangePasswordTap: {
                                 navigationPath.append(.changePassword)
+                            },
+                            onOutingHistoryTap: {
+                                router.path.append(.outingHistory)
                             }
                         )
                         .padding(.top, 32)

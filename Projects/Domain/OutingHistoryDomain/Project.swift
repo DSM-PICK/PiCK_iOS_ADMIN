@@ -17,10 +17,10 @@ let settings: Settings = .settings(
 )
 
 let interfaceTarget = Target.target(
-    name: "BugReportDomainInterface",
+    name: "OutingHistoryDomainInterface",
     destinations: env.destination,
     product: .framework,
-    bundleId: "\(env.organizationName).BugReportDomainInterface",
+    bundleId: "\(env.organizationName).OutingHistoryDomainInterface",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Interface/**"],
@@ -31,22 +31,22 @@ let interfaceTarget = Target.target(
 )
 
 let implementationTarget = Target.target(
-    name: "BugReportDomain",
+    name: "OutingHistoryDomain",
     destinations: env.destination,
     product: .framework,
-    bundleId: "\(env.organizationName).BugReportDomain",
+    bundleId: "\(env.organizationName).OutingHistoryDomain",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Sources/**"],
     dependencies: [
-        .target(name: "BugReportDomainInterface"),
+        .target(name: "OutingHistoryDomainInterface"),
         .Projects.baseDomain,
         .Shared.thirdPartyLib
     ]
 )
 
 let project = Project(
-    name: "BugReportDomain",
+    name: "OutingHistoryDomain",
     organizationName: env.organizationName,
     settings: settings,
     targets: [interfaceTarget, implementationTarget]
