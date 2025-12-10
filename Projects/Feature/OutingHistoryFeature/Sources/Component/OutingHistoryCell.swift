@@ -6,7 +6,7 @@ struct OutingHistoryCell: View {
     let data: OutingHistoryEntity
     
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 12) {
             Text("\(data.grade)\(data.classNum)\(String(format: "%02d", data.num)) \(data.userName)")
                 .pickText(type: .subTitle1, textColor: .Normal.black)
 
@@ -39,6 +39,6 @@ struct OutingHistoryCell: View {
         .background(Color.Gray.gray50)
         .cornerRadius(8)
         .padding(.horizontal, 24)
-        .padding(.bottom, 16)
+        .padding(.bottom, 12)
     }
 }
