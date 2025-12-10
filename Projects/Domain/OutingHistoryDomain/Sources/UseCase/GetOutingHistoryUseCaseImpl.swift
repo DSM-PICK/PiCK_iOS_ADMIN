@@ -1,5 +1,5 @@
 import Foundation
-import OutListDomainInterface
+import OutingHistoryDomainInterface
 
 public class GetOutingHistoryUseCaseImpl: GetOutingHistoryUseCase {
     private let repository: OutingHistoryRepository

@@ -73,14 +73,14 @@ public struct OutingHistoryView: View {
             }
             .contentShape(Rectangle())
             .onTapGesture {
-                self.endTextEdting()
+                self.endTextEditing()
             }
         }
     }
 }
 
 extension OutingHistoryView {
-    func endTextEdting() {
+    func endTextEditing() {
         UIApplication.shared.sendAction(
             #selector(UIResponder.resignFirstResponder),
             to: nil,
