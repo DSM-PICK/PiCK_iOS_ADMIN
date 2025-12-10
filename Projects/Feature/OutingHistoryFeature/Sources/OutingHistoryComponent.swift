@@ -4,7 +4,9 @@ import OutingHistoryFeatureInterface
 import ComposableArchitecture
 import OutingHistoryDomainInterface
 
-public protocol OutingHistoryDependency: NeedleFoundation.Dependency {}
+public protocol OutingHistoryDependency: NeedleFoundation.Dependency {
+    var getOutingHistoryUseCase: GetOutingHistoryUseCase { get }
+}
 
 public final class OutingHistoryComponent: Component<OutingHistoryDependency>, OutingHistoryFactory {
     public func makeView() -> AnyView {
@@ -13,7 +15,9 @@ public final class OutingHistoryComponent: Component<OutingHistoryDependency>, O
                 store: .init(
                     initialState: OutingHistoryReducer.State(),
                     reducer: {
-                        OutingHistoryReducer()
+                        OutingHistoryReducer(
+                            getOutingHistoryUseCase: self.dependency.getOutingHistoryUseCase
+                        )
                     }
                 )
             )
