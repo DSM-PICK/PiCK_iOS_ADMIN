@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 import SelfStudyCheckDomainInterface
 
 public class SelfStudyCheckRepositoryImpl: SelfStudyCheckRepository {
@@ -8,7 +9,9 @@ public class SelfStudyCheckRepositoryImpl: SelfStudyCheckRepository {
         self.dataSource = dataSource
     }
 
-    public func getStudentAttendance(grade: Int, classNum: Int, period: Int) async throws -> [StudentAttendanceEntity] {
-        try await dataSource.getStudentAttendance(grade: grade, classNum: classNum, period: period).map { $0.toEntity() }
+    public func getStudentAttendance(grade: Int, classNum: Int, period: Int) -> AnyPublisher<[StudentAttendanceEntity], Error> {
+        dataSource.getStudentAttendance(grade: grade, classNum: classNum, period: period)
+            .map { $0.map { $0.toEntity() } }
+            .eraseToAnyPublisher()
     }
 }

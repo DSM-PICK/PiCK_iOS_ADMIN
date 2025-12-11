@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 import SelfStudyCheckDomainInterface
 
 public class GetStudentAttendanceUseCaseImpl: GetStudentAttendanceUseCase {
@@ -8,7 +9,7 @@ public class GetStudentAttendanceUseCaseImpl: GetStudentAttendanceUseCase {
         self.repository = repository
     }
 
-    public func execute(grade: Int, classNum: Int, period: Int) async throws -> [StudentAttendanceEntity] {
-        try await repository.getStudentAttendance(grade: grade, classNum: classNum, period: period)
+    public func execute(grade: Int, classNum: Int, period: Int) -> AnyPublisher<[StudentAttendanceEntity], Error> {
+        repository.getStudentAttendance(grade: grade, classNum: classNum, period: period)
     }
 }
