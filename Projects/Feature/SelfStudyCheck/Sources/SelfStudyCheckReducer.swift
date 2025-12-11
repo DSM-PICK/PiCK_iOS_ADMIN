@@ -1,5 +1,6 @@
 import ComposableArchitecture
 import SelfStudyCheckDomainInterface
+import Combine
 
 public struct SelfStudyCheckReducer: Reducer {
     private let getStudentAttendanceUseCase: any GetStudentAttendanceUseCase
@@ -91,26 +92,26 @@ public struct SelfStudyCheckReducer: Reducer {
 
             case .fetchStudents:
                 state.isLoading = true
-                return .run { [grade = state.selectedGrade, classNum = state.selectedClass, period = state.selectedPeriod] send in
-                    await send(.studentsResponse(
-                        await TaskResult {
-                            let entities = try await getStudentAttendanceUseCase.execute(
-                                grade: grade,
-                                classNum: classNum,
-                                period: period.rawValue
+                return .publisher {
+                    getStudentAttendanceUseCase.execute(
+                        grade: state.selectedGrade,
+                        classNum: state.selectedClass,
+                        period: state.selectedPeriod.rawValue
+                    )
+                    .map { entities -> [StudentItem] in
+                        entities.map { entity in
+                            StudentItem(
+                                id: entity.id,
+                                grade: entity.grade,
+                                classNum: entity.classNum,
+                                num: entity.num,
+                                userName: entity.userName,
+                                status: mapStatusToKorean(entity.status)
                             )
-                            return entities.map { entity in
-                                StudentItem(
-                                    id: entity.id,
-                                    grade: entity.grade,
-                                    classNum: entity.classNum,
-                                    num: entity.num,
-                                    userName: entity.userName,
-                                    status: mapStatusToKorean(entity.status)
-                                )
-                            }
                         }
-                    ))
+                    }
+                    .map { Action.studentsResponse(.success($0)) }
+                    .catch { Just(Action.studentsResponse(.failure($0))) }
                 }
 
             case let .studentsResponse(.success(students)):
