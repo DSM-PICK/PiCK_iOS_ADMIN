@@ -9,6 +9,8 @@ public struct SelfStudyCheckView: View {
     @State private var isClassBottomSheetPresented = false
     @State private var isStatusBottomSheetPresented = false
     @State private var selectedStudentId: String?
+    @State private var tempSelectedGrade = "1"
+    @State private var tempSelectedClass = "1"
 
     public init(store: StoreOf<SelfStudyCheckReducer>) {
         self.store = store
@@ -62,6 +64,8 @@ public struct SelfStudyCheckView: View {
                         Spacer()
 
                         Button {
+                            tempSelectedGrade = "\(viewStore.selectedGrade)"
+                            tempSelectedClass = "\(viewStore.selectedClass)"
                             isClassBottomSheetPresented = true
                         } label: {
                             HStack(spacing: 8) {
@@ -169,17 +173,22 @@ public struct SelfStudyCheckView: View {
                 .toolbar(.hidden, for: .navigationBar)
                 .toolbar(.hidden, for: .tabBar)
                 .sheet(isPresented: $isClassBottomSheetPresented) {
-                    PiCK_iOS_DesignSystem.SinglePickerBottomSheet(
+                    PiCK_iOS_DesignSystem.DualPickerBottomSheet(
                         isPresented: $isClassBottomSheetPresented,
+                        firstValue: $tempSelectedGrade,
+                        secondValue: $tempSelectedClass,
                         title: "학년/반을 선택해주세요",
-                        options: generateClassOptions(),
-                        onComplete: { option in
-                            if let (grade, classNum) = parseClassOption(option) {
-                                viewStore.send(.selectGradeAndClass(grade: grade, classNum: classNum))
+                        firstLabel: "학년",
+                        secondLabel: "반",
+                        firstOptions: ["1", "2", "3"],
+                        secondOptions: ["1", "2", "3", "4"],
+                        onComplete: { grade, classNum in
+                            if let gradeInt = Int(grade), let classInt = Int(classNum) {
+                                viewStore.send(.selectGradeAndClass(grade: gradeInt, classNum: classInt))
                             }
                         }
                     )
-                    .presentationDetents([.height(400)])
+                    .presentationDetents([.height(350)])
                     .presentationDragIndicator(.hidden)
                 }
                 .sheet(isPresented: $isStatusBottomSheetPresented) {
@@ -198,27 +207,5 @@ public struct SelfStudyCheckView: View {
                 }
             }
         }
-    }
-
-    private func generateClassOptions() -> [String] {
-        var options: [String] = []
-        for grade in 1...3 {
-            for classNum in 1...4 {
-                options.append("\(grade)학년 \(classNum)반")
-            }
-        }
-        return options
-    }
-
-    private func parseClassOption(_ option: String) -> (Int, Int)? {
-        let components = option.components(separatedBy: " ")
-        guard components.count == 2,
-              let gradeStr = components[0].first,
-              let grade = Int(String(gradeStr)),
-              let classStr = components[1].first,
-              let classNum = Int(String(classStr)) else {
-            return nil
-        }
-        return (grade, classNum)
     }
 }
