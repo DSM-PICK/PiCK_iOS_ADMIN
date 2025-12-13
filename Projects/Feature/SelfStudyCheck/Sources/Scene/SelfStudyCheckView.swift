@@ -164,7 +164,14 @@ public struct SelfStudyCheckView: View {
                     }
                 }
 
-                    Spacer()
+                PiCKButton(
+                    buttonText: "상태 저장하기",
+                    isEnabled: true,
+                    action: {
+                    }
+                )
+                .padding(.horizontal, 24)
+                .padding(.bottom, 24)
                 }
                 .onAppear {
                     viewStore.send(.fetchStudents)
