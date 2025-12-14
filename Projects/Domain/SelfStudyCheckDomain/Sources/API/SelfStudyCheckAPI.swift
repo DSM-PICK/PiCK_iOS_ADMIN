@@ -44,14 +44,9 @@ extension SelfStudyCheckAPI: PiCKAPI {
                 ], encoding: URLEncoding.queryString
             )
         case let .modifyAttendance(period, attendances):
-            return .requestCompositeParameters(
-                bodyParameters: ["attendance": attendances.map { attendance in
-                    [
-                        "user_id": attendance.userId,
-                        "status": attendance.status.rawValue
-                    ]
-                }],
-                bodyEncoding: JSONEncoding.default,
+            let data = try? JSONEncoder().encode(attendances)
+            return .requestCompositeData(
+                bodyData: data ?? Data(),
                 urlParameters: ["period": period]
             )
         }
