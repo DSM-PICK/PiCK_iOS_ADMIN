@@ -6,6 +6,7 @@ import ComposableArchitecture
 
 public protocol SelfStudyCheckDependency: NeedleFoundation.Dependency {
     var getStudentAttendanceUseCase: any GetStudentAttendanceUseCase { get }
+    var saveAttendanceUseCase: any SaveAttendanceUseCase { get }
 }
 
 public final class SelfStudyCheckComponent: Component<SelfStudyCheckDependency>, SelfStudyCheckFactory {
@@ -16,7 +17,10 @@ public final class SelfStudyCheckComponent: Component<SelfStudyCheckDependency>,
                     store: .init(
                         initialState: SelfStudyCheckReducer.State(),
                         reducer: {
-                            SelfStudyCheckReducer(getStudentAttendanceUseCase: self.dependency.getStudentAttendanceUseCase)
+                            SelfStudyCheckReducer(
+                                getStudentAttendanceUseCase: self.dependency.getStudentAttendanceUseCase,
+                                saveAttendanceUseCase: self.dependency.saveAttendanceUseCase
+                            )
                         }
                     )
                 )

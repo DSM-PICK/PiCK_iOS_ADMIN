@@ -4,9 +4,14 @@ import Combine
 
 public struct SelfStudyCheckReducer: Reducer {
     private let getStudentAttendanceUseCase: any GetStudentAttendanceUseCase
+    private let saveAttendanceUseCase: any SaveAttendanceUseCase
 
-    public init(getStudentAttendanceUseCase: any GetStudentAttendanceUseCase) {
+    public init(
+        getStudentAttendanceUseCase: any GetStudentAttendanceUseCase,
+        saveAttendanceUseCase: any SaveAttendanceUseCase
+    ) {
         self.getStudentAttendanceUseCase = getStudentAttendanceUseCase
+        self.saveAttendanceUseCase = saveAttendanceUseCase
     }
 
     public enum Period: Int, CaseIterable, Equatable {
@@ -43,6 +48,7 @@ public struct SelfStudyCheckReducer: Reducer {
         public var selectedGrade: Int = 1
         public var selectedClass: Int = 1
         public var isLoading: Bool = false
+        public var isSaving: Bool = false
 
         public init() {}
     }
@@ -53,6 +59,8 @@ public struct SelfStudyCheckReducer: Reducer {
         case fetchStudents
         case studentsResponse(TaskResult<[StudentItem]>)
         case updateStudentStatus(id: String, status: String)
+        case saveAttendance
+        case saveAttendanceResponse(TaskResult<Void>)
     }
 
     private func mapStatusToKorean(_ status: String) -> String {
@@ -134,6 +142,28 @@ public struct SelfStudyCheckReducer: Reducer {
                         status: status
                     )
                 }
+                return .none
+
+            case .saveAttendance:
+                state.isSaving = true
+                let attendances = state.studentItems.compactMap { item -> AttendanceUpdateRequestDTO? in
+                    guard let status = AttendanceStatus.fromKorean(item.status) else {
+                        return nil
+                    }
+                    return AttendanceUpdateRequestDTO(userId: item.id, status: status)
+                }
+                return .publisher {
+                    saveAttendanceUseCase.execute(period: state.selectedPeriod.rawValue, attendances: attendances)
+                        .map { Action.saveAttendanceResponse(.success(())) }
+                        .catch { Just(Action.saveAttendanceResponse(.failure($0))) }
+                }
+
+            case .saveAttendanceResponse(.success):
+                state.isSaving = false
+                return .none
+
+            case .saveAttendanceResponse(.failure):
+                state.isSaving = false
                 return .none
             }
         }

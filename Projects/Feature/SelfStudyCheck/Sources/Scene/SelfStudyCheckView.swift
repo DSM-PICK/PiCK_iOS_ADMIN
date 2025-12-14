@@ -166,8 +166,9 @@ public struct SelfStudyCheckView: View {
 
                 PiCKButton(
                     buttonText: "상태 저장하기",
-                    isEnabled: true,
+                    isEnabled: !viewStore.isSaving,
                     action: {
+                        viewStore.send(.saveAttendance)
                     }
                 )
                 .padding(.horizontal, 24)
@@ -202,7 +203,7 @@ public struct SelfStudyCheckView: View {
                     PiCK_iOS_DesignSystem.SinglePickerBottomSheet(
                         isPresented: $isStatusBottomSheetPresented,
                         title: "출결 상태를 선택해주세요",
-                        options: ["출석", "이동", "현체", "외출", "귀가", "무단", "결과", "취업중"],
+                        options: ["출석", "이동", "귀가", "외출", "현체", "취업중"],
                         onComplete: { status in
                             if let studentId = selectedStudentId {
                                 viewStore.send(.updateStudentStatus(id: studentId, status: status))
