@@ -15,6 +15,7 @@ public struct AllTabFeature: View {
     let codeCheckUseCase: any CodeCheckUseCase
     let passwordChangeUseCase: any PasswordChangeUseCase
     let getStudentAttendanceUseCase: any GetStudentAttendanceUseCase
+    let saveAttendanceUseCase: any SaveAttendanceUseCase
 
     public init(
         store: Store<AllTabReducer.State, AllTabReducer.Action>,
@@ -24,7 +25,8 @@ public struct AllTabFeature: View {
         emailSendUseCase: any EmailSendUseCase,
         codeCheckUseCase: any CodeCheckUseCase,
         passwordChangeUseCase: any PasswordChangeUseCase,
-        getStudentAttendanceUseCase: any GetStudentAttendanceUseCase
+        getStudentAttendanceUseCase: any GetStudentAttendanceUseCase,
+        saveAttendanceUseCase: any SaveAttendanceUseCase
     ) {
         self.store = store
         self.fetchSelfStudyTeacherUseCase = fetchSelfStudyTeacherUseCase
@@ -34,6 +36,7 @@ public struct AllTabFeature: View {
         self.codeCheckUseCase = codeCheckUseCase
         self.passwordChangeUseCase = passwordChangeUseCase
         self.getStudentAttendanceUseCase = getStudentAttendanceUseCase
+        self.saveAttendanceUseCase = saveAttendanceUseCase
     }
 
     public var body: some View {
@@ -45,7 +48,8 @@ public struct AllTabFeature: View {
             emailSendUseCase: emailSendUseCase,
             codeCheckUseCase: codeCheckUseCase,
             passwordChangeUseCase: passwordChangeUseCase,
-            getStudentAttendanceUseCase: getStudentAttendanceUseCase
+            getStudentAttendanceUseCase: getStudentAttendanceUseCase,
+            saveAttendanceUseCase: saveAttendanceUseCase
         )
     }
 }

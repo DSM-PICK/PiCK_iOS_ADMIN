@@ -14,4 +14,8 @@ public class SelfStudyCheckRepositoryImpl: SelfStudyCheckRepository {
             .map { $0.map { $0.toEntity() } }
             .eraseToAnyPublisher()
     }
+
+    public func modifyAttendance(period: Int, attendances: [AttendanceUpdateRequestDTO]) -> AnyPublisher<Void, Error> {
+        dataSource.modifyAttendance(period: period, attendances: attendances)
+    }
 }

@@ -19,6 +19,7 @@ public protocol AllTabDependency: NeedleFoundation.Dependency {
     var codeCheckUseCase: any CodeCheckUseCase { get }
     var passwordChangeUseCase: any PasswordChangeUseCase { get }
     var getStudentAttendanceUseCase: any GetStudentAttendanceUseCase { get }
+    var saveAttendanceUseCase: any SaveAttendanceUseCase { get }
 }
 
 public final class AllTabComponent: Component<AllTabDependency>, AllTabFactory {
@@ -64,7 +65,8 @@ public final class AllTabComponent: Component<AllTabDependency>, AllTabFactory {
                 emailSendUseCase: emailSendUseCase,
                 codeCheckUseCase: codeCheckUseCase,
                 passwordChangeUseCase: passwordChangeUseCase,
-                getStudentAttendanceUseCase: self.dependency.getStudentAttendanceUseCase
+                getStudentAttendanceUseCase: self.dependency.getStudentAttendanceUseCase,
+                saveAttendanceUseCase: self.dependency.saveAttendanceUseCase
             )
         )
     }

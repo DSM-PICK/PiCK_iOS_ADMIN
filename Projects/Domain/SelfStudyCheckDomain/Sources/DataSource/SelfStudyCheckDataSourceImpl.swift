@@ -30,4 +30,19 @@ public final class SelfStudyCheckDataSourceImpl: SelfStudyCheckDataSource {
             }
             .eraseToAnyPublisher()
     }
+
+    public func modifyAttendance(period: Int, attendances: [AttendanceUpdateRequestDTO]) -> AnyPublisher<Void, Error> {
+        provider.requestPublisher(.modifyAttendance(period: period, attendances: attendances))
+            .map { _ in () }
+            .mapError { error -> Error in
+                if let moyaError = error as? MoyaError,
+                   let code = moyaError.response?.statusCode,
+                   let errorMap = SelfStudyCheckAPI.modifyAttendance(period: period, attendances: attendances).errorMap,
+                   let mappedError = errorMap[code] {
+                    return mappedError
+                }
+                return error
+            }
+            .eraseToAnyPublisher()
+    }
 }

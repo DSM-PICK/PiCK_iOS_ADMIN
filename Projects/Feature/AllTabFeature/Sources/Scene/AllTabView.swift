@@ -23,6 +23,7 @@ public struct AllTabView: View {
     let codeCheckUseCase: any CodeCheckUseCase
     let passwordChangeUseCase: any PasswordChangeUseCase
     let getStudentAttendanceUseCase: any GetStudentAttendanceUseCase
+    let saveAttendanceUseCase: any SaveAttendanceUseCase
     @EnvironmentObject var router: AppRouter
     @State private var navigationPath: [AppRoute] = []
     @State private var showPasswordChangeSuccess = false
@@ -35,7 +36,8 @@ public struct AllTabView: View {
         emailSendUseCase: any EmailSendUseCase,
         codeCheckUseCase: any CodeCheckUseCase,
         passwordChangeUseCase: any PasswordChangeUseCase,
-        getStudentAttendanceUseCase: any GetStudentAttendanceUseCase
+        getStudentAttendanceUseCase: any GetStudentAttendanceUseCase,
+        saveAttendanceUseCase: any SaveAttendanceUseCase
     ) {
         self.store = store
         self.fetchSelfStudyTeacherUseCase = fetchSelfStudyTeacherUseCase
@@ -45,6 +47,7 @@ public struct AllTabView: View {
         self.codeCheckUseCase = codeCheckUseCase
         self.passwordChangeUseCase = passwordChangeUseCase
         self.getStudentAttendanceUseCase = getStudentAttendanceUseCase
+        self.saveAttendanceUseCase = saveAttendanceUseCase
     }
 
     public var body: some View {
@@ -147,7 +150,10 @@ public struct AllTabView: View {
                             store: .init(
                                 initialState: SelfStudyCheckReducer.State(),
                                 reducer: {
-                                    SelfStudyCheckReducer(getStudentAttendanceUseCase: getStudentAttendanceUseCase)
+                                    SelfStudyCheckReducer(
+                                        getStudentAttendanceUseCase: getStudentAttendanceUseCase,
+                                        saveAttendanceUseCase: saveAttendanceUseCase
+                                    )
                                 }
                             )
                         )

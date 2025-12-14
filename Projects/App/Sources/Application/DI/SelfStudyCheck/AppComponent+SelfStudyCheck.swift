@@ -13,6 +13,12 @@ public extension AppComponent {
         }
     }
 
+    var saveAttendanceUseCase: any SaveAttendanceUseCase {
+        shared {
+            SaveAttendanceUseCaseImpl(repository: selfStudyCheckRepository)
+        }
+    }
+
     private var selfStudyCheckRepository: any SelfStudyCheckRepository {
         shared {
             SelfStudyCheckRepositoryImpl(dataSource: selfStudyCheckDataSource)
