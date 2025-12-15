@@ -63,6 +63,9 @@ public struct AllTabView: View {
                             onOutListTap: {
                                 router.path.append(.outList)
                             },
+                            onClassroomMoveListTap: {
+                                router.path.append(.classroomMoveList)
+                            },
                             onLogoutTap: {
                                 viewStore.send(.logoutButtonTapped)
                             },
@@ -77,6 +80,9 @@ public struct AllTabView: View {
                             },
                             onSelfStudyCheckTap: {
                                 navigationPath.append(.selfStudyCheck)
+                            },
+                            onOutingHistoryTap: {
+                                router.path.append(.outingHistory)
                             }
                         )
                         .padding(.top, 32)

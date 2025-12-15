@@ -94,6 +94,21 @@ public extension TargetDependency.Projects {
     static let selfStudyCheckDomainInterface = TargetDependency.project(
         target: "SelfStudyCheckDomainInterface",
         path: .relativeToRoot("Projects/Domain/SelfStudyCheckDomain")
+    static let outingHistoryDomain = TargetDependency.project(
+        target: "OutingHistoryDomain",
+        path: .relativeToRoot("Projects/Domain/OutingHistoryDomain")
+    )
+    static let outingHistoryDomainInterface = TargetDependency.project(
+        target: "OutingHistoryDomainInterface",
+        path: .relativeToRoot("Projects/Domain/OutingHistoryDomain")
+    )
+    static let classroomMoveListDomain = TargetDependency.project(
+        target: "ClassroomMoveListDomain",
+        path: .relativeToRoot("Projects/Domain/ClassroomMoveListDomain")
+    )
+    static let classroomMoveListDomainInterface = TargetDependency.project(
+        target: "ClassroomMoveListDomainInterface",
+        path: .relativeToRoot("Projects/Domain/ClassroomMoveListDomain")
     )
     static let bugReportDomain = TargetDependency.project(
         target: "BugReportDomain",
@@ -229,6 +244,21 @@ public extension TargetDependency.Features {
     static let selfStudyCheckFeatureInterface = TargetDependency.project(
         target: "SelfStudyCheckFeatureInterface",
         path: .relativeToRoot("Projects/Feature/SelfStudyCheck")
+    static let classroomMoveListFeature = TargetDependency.project(
+        target: "ClassroomMoveListFeature",
+        path: .relativeToRoot("Projects/Feature/ClassroomMoveListFeature")
+    )
+    static let classroomMoveListFeatureInterface = TargetDependency.project(
+        target: "ClassroomMoveListFeatureInterface",
+        path: .relativeToRoot("Projects/Feature/ClassroomMoveListFeature")
+    )
+    static let outingHistoryFeature = TargetDependency.project(
+        target: "OutingHistoryFeature",
+        path: .relativeToRoot("Projects/Feature/OutingHistoryFeature")
+    )
+    static let outingHistoryFeatureInterface = TargetDependency.project(
+        target: "OutingHistoryFeatureInterface",
+        path: .relativeToRoot("Projects/Feature/OutingHistoryFeature")
     )
     // other Module
 }

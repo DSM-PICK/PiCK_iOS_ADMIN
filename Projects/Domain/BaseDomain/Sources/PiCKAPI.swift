@@ -52,6 +52,7 @@ public enum PiCKDomain: String {
     case notification
     case mail
     case attendance
+    case story
 
     var asURLString: String {
         "/\(self.rawValue)"
