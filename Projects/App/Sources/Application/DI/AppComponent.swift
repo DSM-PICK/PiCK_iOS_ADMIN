@@ -24,8 +24,12 @@ import OutListFeature
 import OutListFeatureInterface
 import SelfStudyCheckFeature
 import SelfStudyCheckFeatureInterface
+import ClassroomMoveListFeature
+import ClassroomMoveListFeatureInterface
+import OutingHistoryFeature
+import OutingHistoryFeatureInterface
 
-public final class AppComponent: BootstrapComponent, HomeDependency, AllTabDependency, PlanDependency, SchoolMealDependency, AcceptDependency, CheckSelfStudyTeacherDependency, BugReportDependency, ChangePasswordDependency, NewPasswordDependency, SelfStudyCheckDependency {
+public final class AppComponent: BootstrapComponent, HomeDependency, AllTabDependency, PlanDependency, SchoolMealDependency, AcceptDependency, CheckSelfStudyTeacherDependency, BugReportDependency, ChangePasswordDependency, NewPasswordDependency, ClassroomMoveListDependency, OutingHistoryDependency, SelfStudyCheckDependency {
 
     private let _keychain: any Keychain
 
@@ -96,5 +100,11 @@ public extension AppComponent {
     }
     var selfStudyCheckFactory: any SelfStudyCheckFactory {
         SelfStudyCheckComponent(parent: self)
+    }
+    var classroomMoveListFactory: any ClassroomMoveListFactory {
+        ClassroomMoveListComponent(parent: self)
+    }
+    var outingHistoryFactory: any OutingHistoryFactory {
+        OutingHistoryComponent(parent: self)
     }
 }

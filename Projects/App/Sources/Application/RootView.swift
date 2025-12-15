@@ -89,6 +89,11 @@ struct RootView: View {
                 .environmentObject(router)
         case .selfStudyCheck:
             appComponent.selfStudyCheckFactory.makeView()
+        case .classroomMoveList:
+            appComponent.classroomMoveListFactory.makeView()
+                .environmentObject(router)
+        case .outingHistory:
+            appComponent.outingHistoryFactory.makeView()
                 .environmentObject(router)
         }
     }
