@@ -45,7 +45,7 @@ public struct AllTabMenuList: View {
                         title: "자습시간 출결",
                         action: onSelfStudyCheckTap
                     ),
-                    MenuItemModel(icon: PiCKImage.book, title: "이전 외출기록")
+                    MenuItemModel(
                         icon: PiCKImage.classRoomMove, // admin classroomMove 아이콘 추가 필요
                         title: "교실 이동 현황",
                         action: onClassroomMoveListTap

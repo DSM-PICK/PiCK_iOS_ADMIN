@@ -358,12 +358,6 @@ private class NewPasswordDependency3320cbf6e40b8cd8a8eaProvider: NewPasswordDepe
 private func factory52985a6d5ec65d75bd97f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return NewPasswordDependency3320cbf6e40b8cd8a8eaProvider(appComponent: parent1(component) as! AppComponent)
 }
-private class SelfStudyCheckDependency541bf16d168d450a004dProvider: SelfStudyCheckDependency {
-    var getStudentAttendanceUseCase: any GetStudentAttendanceUseCase {
-        return appComponent.getStudentAttendanceUseCase
-    }
-    var saveAttendanceUseCase: any SaveAttendanceUseCase {
-        return appComponent.saveAttendanceUseCase
 private class OutingHistoryDependency16ef661933b8edfd35d5Provider: OutingHistoryDependency {
     var getOutingHistoryUseCase: GetOutingHistoryUseCase {
         return appComponent.getOutingHistoryUseCase
@@ -373,12 +367,25 @@ private class OutingHistoryDependency16ef661933b8edfd35d5Provider: OutingHistory
         self.appComponent = appComponent
     }
 }
-/// ^->AppComponent->SelfStudyCheckComponent
-private func factory68e543969404535bb08ff47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return SelfStudyCheckDependency541bf16d168d450a004dProvider(appComponent: parent1(component) as! AppComponent)
 /// ^->AppComponent->OutingHistoryComponent
 private func factory2d7d5b0952348896c27cf47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return OutingHistoryDependency16ef661933b8edfd35d5Provider(appComponent: parent1(component) as! AppComponent)
+}
+private class SelfStudyCheckDependency541bf16d168d450a004dProvider: SelfStudyCheckDependency {
+    var getStudentAttendanceUseCase: any GetStudentAttendanceUseCase {
+        return appComponent.getStudentAttendanceUseCase
+    }
+    var saveAttendanceUseCase: any SaveAttendanceUseCase {
+        return appComponent.saveAttendanceUseCase
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->SelfStudyCheckComponent
+private func factory68e543969404535bb08ff47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return SelfStudyCheckDependency541bf16d168d450a004dProvider(appComponent: parent1(component) as! AppComponent)
 }
 private class AcceptDependency380d0282470c8b91ca89Provider: AcceptDependency {
     var getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol {
@@ -579,15 +586,15 @@ extension NewPasswordComponent: NeedleFoundation.Registration {
         keyPathToName[\NewPasswordDependency.passwordChangeUseCase] = "passwordChangeUseCase-any PasswordChangeUseCase"
     }
 }
+extension OutingHistoryComponent: NeedleFoundation.Registration {
+    public func registerItems() {
+        keyPathToName[\OutingHistoryDependency.getOutingHistoryUseCase] = "getOutingHistoryUseCase-GetOutingHistoryUseCase"
+    }
+}
 extension SelfStudyCheckComponent: NeedleFoundation.Registration {
     public func registerItems() {
         keyPathToName[\SelfStudyCheckDependency.getStudentAttendanceUseCase] = "getStudentAttendanceUseCase-any GetStudentAttendanceUseCase"
         keyPathToName[\SelfStudyCheckDependency.saveAttendanceUseCase] = "saveAttendanceUseCase-any SaveAttendanceUseCase"
-    }
-}
-extension OutingHistoryComponent: NeedleFoundation.Registration {
-    public func registerItems() {
-        keyPathToName[\OutingHistoryDependency.getOutingHistoryUseCase] = "getOutingHistoryUseCase-GetOutingHistoryUseCase"
     }
 }
 extension AcceptComponent: NeedleFoundation.Registration {
@@ -633,8 +640,8 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->HomeComponent", factory67229cdf0f755562b2b1f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->ChangePasswordComponent", factoryab7c4d87dab53e0a51b9f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->NewPasswordComponent", factory52985a6d5ec65d75bd97f47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->SelfStudyCheckComponent", factory68e543969404535bb08ff47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->OutingHistoryComponent", factory2d7d5b0952348896c27cf47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->SelfStudyCheckComponent", factory68e543969404535bb08ff47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AcceptComponent", factorye0727acbbfbe9e00fe23f47b58f8f304c97af4d5)
 }
 #endif
