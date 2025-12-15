@@ -186,7 +186,7 @@ public struct SelfStudyCheckView: View {
 
                 PiCKButton(
                     buttonText: "상태 저장하기",
-                    isEnabled: !viewStore.isSaving,
+                    isEnabled: viewStore.isChanged && !viewStore.isSaving,
                     action: {
                         viewStore.send(.saveAttendance)
                     }

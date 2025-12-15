@@ -44,11 +44,16 @@ public struct SelfStudyCheckReducer: Reducer {
 
     public struct State: Equatable {
         public var studentItems: [StudentItem] = []
+        public var initialStudentItems: [StudentItem] = []
         public var selectedPeriod: Period = .eighth
         public var selectedGrade: Int = 1
         public var selectedClass: Int = 1
         public var isLoading: Bool = false
         public var isSaving: Bool = false
+
+        public var isChanged: Bool {
+            studentItems != initialStudentItems
+        }
 
         public init() {}
     }
@@ -124,6 +129,7 @@ public struct SelfStudyCheckReducer: Reducer {
 
             case let .studentsResponse(.success(students)):
                 state.studentItems = students
+                state.initialStudentItems = students
                 state.isLoading = false
                 return .none
 
@@ -160,6 +166,7 @@ public struct SelfStudyCheckReducer: Reducer {
 
             case .saveAttendanceResponse(.success):
                 state.isSaving = false
+                state.initialStudentItems = state.studentItems
                 return .none
 
             case .saveAttendanceResponse(.failure):
