@@ -32,7 +32,7 @@ let targetSettings: Settings = .settings(
         ),
         .debug(
             name: ConfigurationName.configuration("STAGE"),
-            xcconfig: .relativeToXCConfig(type: ProjectDeployDarget.stage, name: "\(env.targetName)")
+            xcconfig: .relativeToXCConfig(type: ProjectDeployTarget.stage, name: "\(env.targetName)")
         ),
         .release(
             name: ConfigurationName.configuration("PROD"),

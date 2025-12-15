@@ -69,7 +69,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
         
         print(userInfo)
         
-        return [[.banner, .list, .sound]]
+        return [.banner, .list, .sound]
     }
     
     func userNotificationCenter(
