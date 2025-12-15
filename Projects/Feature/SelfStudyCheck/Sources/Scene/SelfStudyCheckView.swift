@@ -19,7 +19,7 @@ public struct SelfStudyCheckView: View {
     private func statusColor(_ status: String) -> Color {
         switch status {
         case "출석":
-            return .Primary.primary500
+            return .Primary.primary300
         case "현체":
             return .Gray.gray300
         case "이동":
@@ -35,6 +35,16 @@ public struct SelfStudyCheckView: View {
         default:
             return .Gray.gray600
         }
+    }
+
+    private func indicatorOffset(for period: SelfStudyCheckReducer.Period) -> CGFloat {
+        let allCases = SelfStudyCheckReducer.Period.allCases
+        guard let selectedIndex = allCases.firstIndex(of: period) else { return 0 }
+        let buttonWidth: CGFloat = 114
+        let spacing: CGFloat = 8
+        let horizontalPadding: CGFloat = 24
+
+        return horizontalPadding + CGFloat(selectedIndex) * (buttonWidth + spacing)
     }
 
     public var body: some View {
@@ -95,30 +105,34 @@ public struct SelfStudyCheckView: View {
                         .padding(.top, 20)
                         .padding(.horizontal, 24)
 
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 8) {
-                        ForEach(SelfStudyCheckReducer.Period.allCases, id: \.self) { period in
-                            Button {
-                                viewStore.send(.selectPeriod(period))
-                            } label: {
-                                Text(period.title)
-                                    .pickText(
-                                        type: .body1,
-                                        textColor: viewStore.selectedPeriod == period ? .Primary.primary500 : .Gray.gray600
-                                    )
-                                    .frame(width: 114, height: 32)
-                                    .background(
-                                        viewStore.selectedPeriod == period
-                                        ? Color.Primary.primary50
-                                        : Color.clear
-                                    )
-                                    .cornerRadius(8)
+                    VStack(alignment: .leading, spacing: 0) {
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 8) {
+                                ForEach(SelfStudyCheckReducer.Period.allCases, id: \.self) { period in
+                                    Button {
+                                        viewStore.send(.selectPeriod(period), animation: .spring())
+                                    } label: {
+                                        Text(period.title)
+                                            .pickText(
+                                                type: .body1,
+                                                textColor: viewStore.selectedPeriod == period ? .Primary.primary500 : .Gray.gray600
+                                            )
+                                            .frame(width: 114, height: 32)
+                                            .background(Color.clear)
+                                            .cornerRadius(8)
+                                    }
+                                }
                             }
+                            .padding(.horizontal, 24)
                         }
+
+                        Rectangle()
+                            .fill(Color.Primary.primary500)
+                            .frame(width: 114, height: 1)
+                            .offset(x: indicatorOffset(for: viewStore.selectedPeriod))
+                            .animation(.spring(), value: viewStore.selectedPeriod)
                     }
-                    .padding(.horizontal, 24)
-                }
-                .padding(.top, 16)
+                    .padding(.top, 16)
 
                 ScrollView {
                     if viewStore.studentItems.isEmpty {
