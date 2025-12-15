@@ -4,6 +4,7 @@ import CheckSelfStudyTeacherDomainInterface
 import BugReportDomainInterface
 import AuthDomainInterface
 import ChangePasswordDomainInterface
+import SelfStudyCheckDomainInterface
 
 public struct AllTabFeature: View {
     let store: Store<AllTabReducer.State, AllTabReducer.Action>
@@ -13,6 +14,8 @@ public struct AllTabFeature: View {
     let emailSendUseCase: any EmailSendUseCase
     let codeCheckUseCase: any CodeCheckUseCase
     let passwordChangeUseCase: any PasswordChangeUseCase
+    let getStudentAttendanceUseCase: any GetStudentAttendanceUseCase
+    let saveAttendanceUseCase: any SaveAttendanceUseCase
 
     public init(
         store: Store<AllTabReducer.State, AllTabReducer.Action>,
@@ -21,7 +24,9 @@ public struct AllTabFeature: View {
         submitBugReportUseCase: any SubmitBugReportUseCaseProtocol,
         emailSendUseCase: any EmailSendUseCase,
         codeCheckUseCase: any CodeCheckUseCase,
-        passwordChangeUseCase: any PasswordChangeUseCase
+        passwordChangeUseCase: any PasswordChangeUseCase,
+        getStudentAttendanceUseCase: any GetStudentAttendanceUseCase,
+        saveAttendanceUseCase: any SaveAttendanceUseCase
     ) {
         self.store = store
         self.fetchSelfStudyTeacherUseCase = fetchSelfStudyTeacherUseCase
@@ -30,6 +35,8 @@ public struct AllTabFeature: View {
         self.emailSendUseCase = emailSendUseCase
         self.codeCheckUseCase = codeCheckUseCase
         self.passwordChangeUseCase = passwordChangeUseCase
+        self.getStudentAttendanceUseCase = getStudentAttendanceUseCase
+        self.saveAttendanceUseCase = saveAttendanceUseCase
     }
 
     public var body: some View {
@@ -40,7 +47,9 @@ public struct AllTabFeature: View {
             submitBugReportUseCase: submitBugReportUseCase,
             emailSendUseCase: emailSendUseCase,
             codeCheckUseCase: codeCheckUseCase,
-            passwordChangeUseCase: passwordChangeUseCase
+            passwordChangeUseCase: passwordChangeUseCase,
+            getStudentAttendanceUseCase: getStudentAttendanceUseCase,
+            saveAttendanceUseCase: saveAttendanceUseCase
         )
     }
 }

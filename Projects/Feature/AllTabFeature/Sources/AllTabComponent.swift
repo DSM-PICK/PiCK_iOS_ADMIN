@@ -7,6 +7,7 @@ import AuthDomainInterface
 import CheckSelfStudyTeacherDomainInterface
 import BugReportDomainInterface
 import ChangePasswordDomainInterface
+import SelfStudyCheckDomainInterface
 
 public protocol AllTabDependency: NeedleFoundation.Dependency {
     var getMyNameUseCase: any GetMyNameUseCaseProtocol { get }
@@ -17,6 +18,8 @@ public protocol AllTabDependency: NeedleFoundation.Dependency {
     var emailSendUseCase: any EmailSendUseCase { get }
     var codeCheckUseCase: any CodeCheckUseCase { get }
     var passwordChangeUseCase: any PasswordChangeUseCase { get }
+    var getStudentAttendanceUseCase: any GetStudentAttendanceUseCase { get }
+    var saveAttendanceUseCase: any SaveAttendanceUseCase { get }
 }
 
 public final class AllTabComponent: Component<AllTabDependency>, AllTabFactory {
@@ -61,7 +64,9 @@ public final class AllTabComponent: Component<AllTabDependency>, AllTabFactory {
                 submitBugReportUseCase: submitBugReportUseCase,
                 emailSendUseCase: emailSendUseCase,
                 codeCheckUseCase: codeCheckUseCase,
-                passwordChangeUseCase: passwordChangeUseCase
+                passwordChangeUseCase: passwordChangeUseCase,
+                getStudentAttendanceUseCase: self.dependency.getStudentAttendanceUseCase,
+                saveAttendanceUseCase: self.dependency.saveAttendanceUseCase
             )
         )
     }

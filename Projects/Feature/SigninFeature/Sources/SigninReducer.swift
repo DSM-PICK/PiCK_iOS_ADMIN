@@ -12,6 +12,7 @@ public struct SigninReducer: Reducer {
         public var email = ""
         public var password = ""
         public var isSigninSuccessful = false
+        public var isLoading = false
         public init() {}
     }
 
@@ -34,13 +35,16 @@ public struct SigninReducer: Reducer {
                 return .none
 
             case .signinButtonTapped:
+                state.isLoading = true
                 return performSignin(with: state)
-                
+
             case .signinResponse(.success):
+                state.isLoading = false
                 state.isSigninSuccessful = true
                 return .none
-                
+
             case .signinResponse(.failure):
+                state.isLoading = false
                 return .none
             }
         }

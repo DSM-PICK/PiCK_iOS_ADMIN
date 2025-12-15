@@ -102,12 +102,31 @@ struct SigninView: View {
     }
 
     private func signinButton(_ viewStore: ViewStoreOf<SigninReducer>) -> some View {
-        PiCKButton(
-            buttonText: "로그인하기",
-            isEnabled: !viewStore.email.isEmpty && !viewStore.password.isEmpty,
-            action: { viewStore.send(.signinButtonTapped) }
-        )
+        Button {
+            viewStore.send(.signinButtonTapped)
+        } label: {
+            ZStack {
+                Text("로그인하기")
+                    .pickText(type: .button1, textColor: .Normal.white)
+                    .opacity(viewStore.isLoading ? 0 : 1)
+
+                if viewStore.isLoading {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 47)
+            .background(buttonBackgroundColor(viewStore))
+            .cornerRadius(8)
+        }
+        .disabled(!viewStore.email.isEmpty && !viewStore.password.isEmpty && !viewStore.isLoading ? false : true)
         .padding(.horizontal, 24)
         .padding(.bottom, 28)
+    }
+
+    private func buttonBackgroundColor(_ viewStore: ViewStoreOf<SigninReducer>) -> Color {
+        let isFormValid = !viewStore.email.isEmpty && !viewStore.password.isEmpty
+        return (isFormValid && !viewStore.isLoading) ? .Primary.primary500 : .Primary.primary100
     }
 }

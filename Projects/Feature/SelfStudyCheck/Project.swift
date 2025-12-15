@@ -17,10 +17,10 @@ let settings: Settings = .settings(
 )
 
 let interfaceTarget = Target.target(
-    name: "AcceptFeatureInterface",
+    name: "SelfStudyCheckFeatureInterface",
     destinations: env.destination,
-    product: .staticLibrary,
-    bundleId: "\(env.organizationName).AcceptFeatureInterface",
+    product: .framework,
+    bundleId: "$(env.organizationName).SelfStudyCheckFeatureInterface",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Interface/**"],
@@ -30,24 +30,23 @@ let interfaceTarget = Target.target(
 )
 
 let implementationTarget = Target.target(
-    name: "AcceptFeature",
+    name: "SelfStudyCheckFeature",
     destinations: env.destination,
     product: .staticFramework,
-    bundleId: "\(env.organizationName).AcceptFeature",
+    bundleId: "$(env.organizationName).SelfStudyCheckFeature",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Sources/**"],
     dependencies: [
-        .target(name: "AcceptFeatureInterface"),
-        .Projects.acceptDomainInterface,
-        .Features.homeFeature,
-        .Shared.utility,
-        .Shared.thirdPartyLib
+        .target(name: "SelfStudyCheckFeatureInterface"),
+        .Features.acceptFeature,
+        .SPM.NeedleFoundation,
+        .SPM.ComposableArchitecture
     ]
 )
 
 let project = Project(
-    name: "AcceptFeature",
+    name: "SelfStudyCheckFeature",
     organizationName: env.organizationName,
     settings: settings,
     targets: [interfaceTarget, implementationTarget]

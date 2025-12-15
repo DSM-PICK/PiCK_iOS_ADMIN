@@ -17,37 +17,36 @@ let settings: Settings = .settings(
 )
 
 let interfaceTarget = Target.target(
-    name: "AcceptFeatureInterface",
+    name: "SelfStudyCheckDomainInterface",
     destinations: env.destination,
-    product: .staticLibrary,
-    bundleId: "\(env.organizationName).AcceptFeatureInterface",
+    product: .framework,
+    bundleId: "\(env.organizationName).SelfStudyCheckDomainInterface",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Interface/**"],
     dependencies: [
-        .Features.baseFeature
+        .Projects.core,
+        .Shared.thirdPartyLib
     ]
 )
 
 let implementationTarget = Target.target(
-    name: "AcceptFeature",
+    name: "SelfStudyCheckDomain",
     destinations: env.destination,
-    product: .staticFramework,
-    bundleId: "\(env.organizationName).AcceptFeature",
+    product: .framework,
+    bundleId: "\(env.organizationName).SelfStudyCheckDomain",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Sources/**"],
     dependencies: [
-        .target(name: "AcceptFeatureInterface"),
-        .Projects.acceptDomainInterface,
-        .Features.homeFeature,
-        .Shared.utility,
+        .target(name: "SelfStudyCheckDomainInterface"),
+        .Projects.baseDomain,
         .Shared.thirdPartyLib
     ]
 )
 
 let project = Project(
-    name: "AcceptFeature",
+    name: "SelfStudyCheckDomain",
     organizationName: env.organizationName,
     settings: settings,
     targets: [interfaceTarget, implementationTarget]
