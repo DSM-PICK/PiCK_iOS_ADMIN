@@ -24,7 +24,7 @@ let projectSettings: Settings = .settings(
 )
 
 let targetSettings: Settings = .settings(
-    base: [:],
+    base: ["OTHER_LDFLAGS": "-ObjC"],
     configurations: [
         .debug(
             name: ConfigurationName.configuration("DEV"),
@@ -55,6 +55,7 @@ let needleScript: TargetScript = .pre(
 )
 
 let appDependencies: [TargetDependency] = [
+    .external(name: "FirebaseMessaging"),
     .Features.baseFeature,
     .Features.signinFeature,
     .Features.signinFeatureInterface,
