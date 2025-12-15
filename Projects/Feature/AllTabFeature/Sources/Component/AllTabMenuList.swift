@@ -50,7 +50,6 @@ public struct AllTabMenuList: View {
                         title: "교실 이동 현황",
                         action: onClassroomMoveListTap
                     ),
-                    MenuItemModel(icon: PiCKImage.beforeOuting, title: "자습시간 출결"),
                     MenuItemModel(
                         icon: PiCKImage.book,
                         title: "이전 외출기록",

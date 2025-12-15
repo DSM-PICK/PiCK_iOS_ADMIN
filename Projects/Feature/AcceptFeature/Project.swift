@@ -19,7 +19,7 @@ let settings: Settings = .settings(
 let interfaceTarget = Target.target(
     name: "AcceptFeatureInterface",
     destinations: env.destination,
-    product: .framework,
+    product: .staticLibrary,
     bundleId: "\(env.organizationName).AcceptFeatureInterface",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
