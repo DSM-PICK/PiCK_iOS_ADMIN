@@ -230,7 +230,7 @@ public struct SelfStudyCheckView: View {
                             }
                         }
                     )
-                    .presentationDetents([.height(450)])
+                    .presentationDetents([.height(400)])
                     .presentationDragIndicator(.hidden)
                 }
             }
