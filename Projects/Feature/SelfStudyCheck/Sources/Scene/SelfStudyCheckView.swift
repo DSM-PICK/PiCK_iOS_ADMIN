@@ -20,10 +20,14 @@ public struct SelfStudyCheckView: View {
         switch status {
         case "출석":
             return .Primary.primary500
-        case "외출", "무단":
-            return .Error.error
-        case "이동", "현체":
+        case "현체":
+            return .Gray.gray300
+        case "이동":
+            return .Gray.gray800
+        case "외출":
             return .Primary.primary500
+        case "무단":
+            return .Error.error
         case "귀가", "결과":
             return .Gray.gray600
         case "취업중":
@@ -132,7 +136,7 @@ public struct SelfStudyCheckView: View {
                             ForEach(viewStore.studentItems) { item in
                                 HStack(spacing: 0) {
                                     Text("\(item.grade)\(item.classNum)\(String(format: "%02d", item.num))")
-                                        .pickText(type: .body1, textColor: .Gray.gray800)
+                                        .pickText(type: .body1, textColor: .Normal.black)
 
                                     Text(" ")
 
@@ -163,6 +167,8 @@ public struct SelfStudyCheckView: View {
                         .padding(.horizontal, 24)
                     }
                 }
+                .padding(.top, 20)
+                .padding(.bottom, 60)
 
                 PiCKButton(
                     buttonText: "상태 저장하기",
