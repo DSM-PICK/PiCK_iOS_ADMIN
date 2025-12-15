@@ -22,6 +22,8 @@ public enum AttendanceStatus: String, Encodable {
     case goOut = "GO_OUT"
     case picnic = "PICNIC"
     case employment = "EMPLOYMENT"
+    case truancy = "TRUANCY"
+    case absence = "ABSENCE"
 
     public var korean: String {
         switch self {
@@ -37,6 +39,10 @@ public enum AttendanceStatus: String, Encodable {
             return "현체"
         case .employment:
             return "취업중"
+        case .truancy:
+            return "무단"
+        case .absence:
+            return "결과"
         }
     }
 
@@ -54,6 +60,10 @@ public enum AttendanceStatus: String, Encodable {
             return .picnic
         case "취업중":
             return .employment
+        case "무단":
+            return .truancy
+        case "결과":
+            return .absence
         default:
             return nil
         }

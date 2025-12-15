@@ -44,11 +44,19 @@ extension SelfStudyCheckAPI: PiCKAPI {
                 ], encoding: URLEncoding.queryString
             )
         case let .modifyAttendance(period, attendances):
-            let data = try? JSONEncoder().encode(attendances)
-            return .requestCompositeData(
-                bodyData: data ?? Data(),
-                urlParameters: ["period": period]
-            )
+            do {
+                let data = try JSONEncoder().encode(attendances)
+                return .requestCompositeData(
+                    bodyData: data,
+                    urlParameters: ["period": period]
+                )
+            } catch {
+                #if DEBUG
+                fatalError("Failed to encode attendances: \(error)")
+                #else
+                return .requestPlain
+                #endif
+            }
         }
     }
 
