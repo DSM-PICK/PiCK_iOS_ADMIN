@@ -583,6 +583,8 @@ extension SelfStudyCheckComponent: NeedleFoundation.Registration {
     public func registerItems() {
         keyPathToName[\SelfStudyCheckDependency.getStudentAttendanceUseCase] = "getStudentAttendanceUseCase-any GetStudentAttendanceUseCase"
         keyPathToName[\SelfStudyCheckDependency.saveAttendanceUseCase] = "saveAttendanceUseCase-any SaveAttendanceUseCase"
+    }
+}
 extension OutingHistoryComponent: NeedleFoundation.Registration {
     public func registerItems() {
         keyPathToName[\OutingHistoryDependency.getOutingHistoryUseCase] = "getOutingHistoryUseCase-GetOutingHistoryUseCase"

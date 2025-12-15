@@ -18,7 +18,7 @@ public struct AllTabMenuList: View {
         onCheckTeacherTap: @escaping () -> Void,
         onBugReportTap: @escaping () -> Void,
         onChangePasswordTap: @escaping () -> Void,
-        onSelfStudyCheckTap: @escaping () -> Void
+        onSelfStudyCheckTap: @escaping () -> Void,
         onOutingHistoryTap: @escaping () -> Void
     ) {
         self.onOutListTap = onOutListTap
