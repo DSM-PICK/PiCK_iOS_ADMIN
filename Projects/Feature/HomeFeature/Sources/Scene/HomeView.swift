@@ -24,9 +24,7 @@ public struct HomeView: View {
                     AllSelfStudyView(selfStudyDirector: viewStore.selfStudyDirector)
                         .frame(maxWidth: .infinity)
                 }
-                .padding(.horizontal, 24)
-                .padding(.top, 24)
-                .padding(.bottom, 24)
+                .padding(24)
             }
             .navigationBarBackButtonHidden(true)
             .toolbar {

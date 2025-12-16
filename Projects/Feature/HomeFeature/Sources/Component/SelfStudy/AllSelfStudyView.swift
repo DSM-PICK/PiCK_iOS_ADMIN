@@ -75,7 +75,7 @@ struct FloorTeacherRow: View {
                 .pickText(type: .label2, textColor: Color.Primary.primary500)
             
             Text("\(teacherName) 선생님")
-                .pickText(type: .subTitle3, textColor: Color.Normal.black)
+                .pickText(type: .subTitle2, textColor: Color.Normal.black)
         }
     }
 }
