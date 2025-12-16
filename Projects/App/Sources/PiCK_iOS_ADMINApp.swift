@@ -95,12 +95,16 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 }
 
 extension AppDelegate: MessagingDelegate {
-    
+
     func messaging(
         _ messaging: Messaging,
         didReceiveRegistrationToken fcmToken: String?
     ) {
         print("FCM registration token: \(String(describing: fcmToken))")
+
+        if let fcmToken = fcmToken {
+            UserDefaultStorage.shared.set(to: fcmToken, forKey: .deviceToken)
+        }
     }
 
 }
