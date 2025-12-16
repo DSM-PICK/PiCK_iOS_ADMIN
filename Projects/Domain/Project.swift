@@ -15,6 +15,7 @@ let project = Project.makeModule(
         .Projects.bugReportDomain,
         .Projects.changePasswordDomain,
         .Projects.acceptDomain,
+        .Projects.withDrawDomain,
         .Projects.selfStudyCheckDomain,
         .Projects.outingHistoryDomain,
         .Projects.classroomMoveListDomain,

@@ -87,6 +87,14 @@ public extension TargetDependency.Projects {
         target: "CheckSelfStudyTeacherDomainInterface",
         path: .relativeToRoot("Projects/Domain/CheckSelfStudyTeacher")
     )
+    static let withDrawDomain = TargetDependency.project(
+        target: "WithDrawDomain",
+        path: .relativeToRoot("Projects/Domain/WithDrawDomain")
+    )
+    static let withDrawDomainInterface = TargetDependency.project(
+        target: "WithDrawDomainInterface",
+        path: .relativeToRoot("Projects/Domain/WithDrawDomain")
+    )
     static let selfStudyCheckDomain = TargetDependency.project(
         target: "SelfStudyCheckDomain",
         path: .relativeToRoot("Projects/Domain/SelfStudyCheckDomain")
@@ -261,6 +269,14 @@ public extension TargetDependency.Features {
     static let outingHistoryFeatureInterface = TargetDependency.project(
         target: "OutingHistoryFeatureInterface",
         path: .relativeToRoot("Projects/Feature/OutingHistoryFeature")
+    )
+    static let withDrawFeature = TargetDependency.project(
+        target: "WithDrawFeature",
+        path: .relativeToRoot("Projects/Feature/WithDraw")
+    )
+    static let withDrawFeatureInterface = TargetDependency.project(
+        target: "WithDrawFeatureInterface",
+        path: .relativeToRoot("Projects/Feature/WithDraw")
     )
     // other Module
 }
