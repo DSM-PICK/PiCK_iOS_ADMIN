@@ -42,6 +42,7 @@ public struct AllTabView: View {
     @EnvironmentObject var router: AppRouter
     @State private var navigationPath: [AppRoute] = []
     @State private var showPasswordChangeSuccess = false
+    @State private var showLogoutConfirm = false
 
     public init(
         store: StoreOf<AllTabReducer>,
@@ -94,7 +95,7 @@ public struct AllTabView: View {
                                 navigationPath.append(.classroomMoveList)
                             },
                             onLogoutTap: {
-                                viewStore.send(.logoutButtonTapped)
+                                showLogoutConfirm = true
                             },
                             onCheckTeacherTap: {
                                 navigationPath.append(.checkSelfStudyTeacher)
@@ -121,9 +122,24 @@ public struct AllTabView: View {
                 }
                 .onChange(of: viewStore.shouldLogout) { shouldLogout in
                     if shouldLogout {
-                        router.path.removeAll()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                router.path.removeAll()
+                            }
+                        }
                     }
                 }
+                .confirmPopUp(
+                    title: "로그아웃",
+                    explain: "정말 로그아웃 하시겠습니까?",
+                    type: .reject,
+                    isPresented: $showLogoutConfirm,
+                    onAction: { action in
+                        if action == .accept {
+                            viewStore.send(.logoutButtonTapped)
+                        }
+                    }
+                )
                 .navigationDestination(for: AppRoute.self) { route in
                     switch route {
                     case .checkSelfStudyTeacher:
