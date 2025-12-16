@@ -1,5 +1,14 @@
-import Foundation
+import SwiftUI
+import ComposableArchitecture
 
-public class WithDraw {
-    
+public struct WithDrawFeature: View {
+    let store: StoreOf<WithDrawReducer>
+
+    public init(store: StoreOf<WithDrawReducer>) {
+        self.store = store
+    }
+
+    public var body: some View {
+        WithDrawView(store: store)
+    }
 }

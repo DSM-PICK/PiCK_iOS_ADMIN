@@ -13,6 +13,7 @@ import AuthDomainInterface
 import ChangePasswordDomainInterface
 import SelfStudyCheckFeature
 import SelfStudyCheckDomainInterface
+import WithDrawFeature
 
 public struct AllTabView: View {
     let store: StoreOf<AllTabReducer>
@@ -83,6 +84,9 @@ public struct AllTabView: View {
                             },
                             onOutingHistoryTap: {
                                 router.path.append(.outingHistory)
+                            },
+                            onWithDrawTap: {
+                                navigationPath.append(.withDraw)
                             }
                         )
                         .padding(.top, 32)
@@ -160,6 +164,15 @@ public struct AllTabView: View {
                                         getStudentAttendanceUseCase: getStudentAttendanceUseCase,
                                         saveAttendanceUseCase: saveAttendanceUseCase
                                     )
+                                }
+                            )
+                        )
+                    case .withDraw:
+                        WithDrawFeature(
+                            store: .init(
+                                initialState: WithDrawReducer.State(),
+                                reducer: {
+                                    WithDrawReducer()
                                 }
                             )
                         )

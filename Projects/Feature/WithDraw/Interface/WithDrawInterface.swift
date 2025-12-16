@@ -1,5 +1,6 @@
 import Foundation
+import SwiftUI
 
-public protocol WithDrawInterface {
-    
+public protocol WithDrawFactory {
+    func makeView() -> AnyView
 }

@@ -95,6 +95,9 @@ struct RootView: View {
         case .outingHistory:
             appComponent.outingHistoryFactory.makeView()
                 .environmentObject(router)
+        case .withDraw:
+            appComponent.withDrawFactory.makeView()
+                .environmentObject(router)
         }
     }
     
