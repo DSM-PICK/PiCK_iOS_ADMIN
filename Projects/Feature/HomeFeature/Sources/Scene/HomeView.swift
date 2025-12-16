@@ -20,14 +20,7 @@ public struct HomeView: View {
                     )
                     .frame(maxWidth: .infinity)
                     .frame(height: 72)
-                    
-                    TodayTimeTableView(schedules: [
-                        Schedule(period: 2, subject: "2학년 2반"),
-                        Schedule(period: 3, subject: "2학년 2반"),
-                        Schedule(period: 5, subject: "2학년 2반"),
-                        Schedule(period: 6, subject: "2학년 2반")
-                    ])
-                    
+
                     AllSelfStudyView(selfStudyDirector: viewStore.selfStudyDirector)
                         .frame(maxWidth: .infinity)
                 }

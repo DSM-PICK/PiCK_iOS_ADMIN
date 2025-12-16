@@ -13,7 +13,7 @@ public struct SelfStudyView: View {
     public var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text(Date().toKoreanDateString())
-                .pickText(type: .body3)
+                .pickText(type: .body2)
                 .padding(.top, 14)
                 .padding(.leading, 20)
             
@@ -21,12 +21,12 @@ public struct SelfStudyView: View {
             
             if let message = adminMessage {
                 Text(message)
-                    .pickText(type: .body2, textColor: Color.Normal.black)
+                    .pickText(type: .body1, textColor: Color.Normal.black)
                     .padding(.bottom, 14)
                     .padding(.leading, 20)
             } else {
                 Text("자습감독 정보를 불러오는 중입니다")
-                    .pickText(type: .body2, textColor: Color.Normal.black)
+                    .pickText(type: .body1, textColor: Color.Normal.black)
                     .padding(.bottom, 14)
                     .padding(.leading, 20)
             }
