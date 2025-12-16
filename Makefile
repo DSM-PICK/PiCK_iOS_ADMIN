@@ -1,4 +1,9 @@
 generate:
+	@if [ ! -d "Projects/App/Resources/Firebase" ]; then \
+		echo "❌ Error: Firebase folder not found at Projects/App/Resources/Firebase"; \
+		echo "⚠️  This is a required security file. Please add the Firebase folder before generating."; \
+		exit 1; \
+	fi
 	@echo "🔨 Running Needle..."
 	@needle generate Projects/App/Sources/Application/DI/NeedleGenerated.swift Projects
 	@echo "📦 Installing dependencies..."
@@ -19,6 +24,11 @@ needle:
 	needle generate Projects/App/Sources/Application/DI/NeedleGenerated.swift Projects
 
 regenerate:
+	@if [ ! -d "Projects/App/Resources/Firebase" ]; then \
+		echo "❌ Error: Firebase folder not found at Projects/App/Resources/Firebase"; \
+		echo "⚠️  This is a required security file. Please add the Firebase folder before generating."; \
+		exit 1; \
+	fi
 	@echo "🧹 Cleaning..."
 	@rm -rf **/**/**/*.xcodeproj
 	@rm -rf **/**/*.xcodeproj

@@ -41,6 +41,19 @@ let targetSettings: Settings = .settings(
     ]
 )
 
+let firebaseCheckScript: TargetScript = .pre(
+    script: """
+    FIREBASE_PATH="${SRCROOT}/../../Projects/App/Resources/Firebase"
+    if [ ! -d "$FIREBASE_PATH" ]; then
+      echo "error: ❌ Firebase folder not found at Projects/App/Resources/Firebase"
+      echo "error: ⚠️  This is a required security file. Please add the Firebase folder before generating."
+      exit 1
+    fi
+    """,
+    name: "Check Firebase Folder",
+    basedOnDependencyAnalysis: false
+)
+
 let needleScript: TargetScript = .pre(
     script: """
     if which needle >/dev/null; then
@@ -131,7 +144,7 @@ let appTarget: Target = .target(
     sources: ["Sources/**"],
     resources: ["Resources/**"],
     entitlements: .file(path: "Support/\(env.targetName).entitlements"),
-    scripts: [needleScript],
+    scripts: [firebaseCheckScript, needleScript],
     dependencies: appDependencies,
     settings: targetSettings
 )
