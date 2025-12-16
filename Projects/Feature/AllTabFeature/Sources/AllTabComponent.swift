@@ -8,6 +8,9 @@ import CheckSelfStudyTeacherDomainInterface
 import BugReportDomainInterface
 import ChangePasswordDomainInterface
 import SelfStudyCheckDomainInterface
+import OutListDomainInterface
+import ClassroomMoveListDomainInterface
+import OutingHistoryDomainInterface
 
 public protocol AllTabDependency: NeedleFoundation.Dependency {
     var getMyNameUseCase: any GetMyNameUseCaseProtocol { get }
@@ -20,6 +23,12 @@ public protocol AllTabDependency: NeedleFoundation.Dependency {
     var passwordChangeUseCase: any PasswordChangeUseCase { get }
     var getStudentAttendanceUseCase: any GetStudentAttendanceUseCase { get }
     var saveAttendanceUseCase: any SaveAttendanceUseCase { get }
+    var getOutListUseCase: any GetOutListUseCase { get }
+    var returnStudentsUseCase: any ReturnStudentsUseCase { get }
+    var getEarlyReturnUseCase: any GetEarlyReturnUseCase { get }
+    var getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase { get }
+    var getClassroomMoveByClassroomUseCase: any GetClassroomMoveByClassroomUseCase { get }
+    var getOutingHistoryUseCase: GetOutingHistoryUseCase { get }
 }
 
 public final class AllTabComponent: Component<AllTabDependency>, AllTabFactory {
@@ -66,7 +75,13 @@ public final class AllTabComponent: Component<AllTabDependency>, AllTabFactory {
                 codeCheckUseCase: codeCheckUseCase,
                 passwordChangeUseCase: passwordChangeUseCase,
                 getStudentAttendanceUseCase: self.dependency.getStudentAttendanceUseCase,
-                saveAttendanceUseCase: self.dependency.saveAttendanceUseCase
+                saveAttendanceUseCase: self.dependency.saveAttendanceUseCase,
+                getOutListUseCase: self.dependency.getOutListUseCase,
+                returnStudentsUseCase: self.dependency.returnStudentsUseCase,
+                getEarlyReturnUseCase: self.dependency.getEarlyReturnUseCase,
+                getClassroomMoveByFloorUseCase: self.dependency.getClassroomMoveByFloorUseCase,
+                getClassroomMoveByClassroomUseCase: self.dependency.getClassroomMoveByClassroomUseCase,
+                getOutingHistoryUseCase: self.dependency.getOutingHistoryUseCase
             )
         )
     }

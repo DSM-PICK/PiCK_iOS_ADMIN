@@ -1,18 +1,27 @@
 import SwiftUI
-import PiCK_iOS_DesignSystem
 import ComposableArchitecture
-import AllTabDomainInterface
-import HomeFeature
+import PiCK_iOS_DesignSystem
 import Utility
-import CheckSelfStudyTeacherFeature
-import CheckSelfStudyTeacherDomainInterface
-import BugReportFeature
-import BugReportDomainInterface
-import ChangePasswordFeature
+import AllTabDomainInterface
 import AuthDomainInterface
+import BugReportDomainInterface
 import ChangePasswordDomainInterface
-import SelfStudyCheckFeature
+import CheckSelfStudyTeacherDomainInterface
+import ClassroomMoveListDomainInterface
+import ClassroomMoveListFeatureInterface
+import OutListDomainInterface
+import OutListFeatureInterface
+import OutingHistoryDomainInterface
+import OutingHistoryFeatureInterface
 import SelfStudyCheckDomainInterface
+import HomeFeature
+import BugReportFeature
+import ChangePasswordFeature
+import CheckSelfStudyTeacherFeature
+import ClassroomMoveListFeature
+import OutListFeature
+import OutingHistoryFeature
+import SelfStudyCheckFeature
 
 public struct AllTabView: View {
     let store: StoreOf<AllTabReducer>
@@ -24,6 +33,12 @@ public struct AllTabView: View {
     let passwordChangeUseCase: any PasswordChangeUseCase
     let getStudentAttendanceUseCase: any GetStudentAttendanceUseCase
     let saveAttendanceUseCase: any SaveAttendanceUseCase
+    let getOutListUseCase: any GetOutListUseCase
+    let returnStudentsUseCase: any ReturnStudentsUseCase
+    let getEarlyReturnUseCase: any GetEarlyReturnUseCase
+    let getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase
+    let getClassroomMoveByClassroomUseCase: any GetClassroomMoveByClassroomUseCase
+    let getOutingHistoryUseCase: GetOutingHistoryUseCase
     @EnvironmentObject var router: AppRouter
     @State private var navigationPath: [AppRoute] = []
     @State private var showPasswordChangeSuccess = false
@@ -37,7 +52,13 @@ public struct AllTabView: View {
         codeCheckUseCase: any CodeCheckUseCase,
         passwordChangeUseCase: any PasswordChangeUseCase,
         getStudentAttendanceUseCase: any GetStudentAttendanceUseCase,
-        saveAttendanceUseCase: any SaveAttendanceUseCase
+        saveAttendanceUseCase: any SaveAttendanceUseCase,
+        getOutListUseCase: any GetOutListUseCase,
+        returnStudentsUseCase: any ReturnStudentsUseCase,
+        getEarlyReturnUseCase: any GetEarlyReturnUseCase,
+        getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase,
+        getClassroomMoveByClassroomUseCase: any GetClassroomMoveByClassroomUseCase,
+        getOutingHistoryUseCase: GetOutingHistoryUseCase
     ) {
         self.store = store
         self.fetchSelfStudyTeacherUseCase = fetchSelfStudyTeacherUseCase
@@ -48,6 +69,12 @@ public struct AllTabView: View {
         self.passwordChangeUseCase = passwordChangeUseCase
         self.getStudentAttendanceUseCase = getStudentAttendanceUseCase
         self.saveAttendanceUseCase = saveAttendanceUseCase
+        self.getOutListUseCase = getOutListUseCase
+        self.returnStudentsUseCase = returnStudentsUseCase
+        self.getEarlyReturnUseCase = getEarlyReturnUseCase
+        self.getClassroomMoveByFloorUseCase = getClassroomMoveByFloorUseCase
+        self.getClassroomMoveByClassroomUseCase = getClassroomMoveByClassroomUseCase
+        self.getOutingHistoryUseCase = getOutingHistoryUseCase
     }
 
     public var body: some View {
@@ -61,10 +88,10 @@ public struct AllTabView: View {
 
                         AllTabMenuList(
                             onOutListTap: {
-                                router.path.append(.outList)
+                                navigationPath.append(.outList)
                             },
                             onClassroomMoveListTap: {
-                                router.path.append(.classroomMoveList)
+                                navigationPath.append(.classroomMoveList)
                             },
                             onLogoutTap: {
                                 viewStore.send(.logoutButtonTapped)
@@ -82,7 +109,7 @@ public struct AllTabView: View {
                                 navigationPath.append(.selfStudyCheck)
                             },
                             onOutingHistoryTap: {
-                                router.path.append(.outingHistory)
+                                navigationPath.append(.outingHistory)
                             }
                         )
                         .padding(.top, 32)
@@ -159,6 +186,42 @@ public struct AllTabView: View {
                                     SelfStudyCheckReducer(
                                         getStudentAttendanceUseCase: getStudentAttendanceUseCase,
                                         saveAttendanceUseCase: saveAttendanceUseCase
+                                    )
+                                }
+                            )
+                        )
+                    case .outList:
+                        OutListView(
+                            store: .init(
+                                initialState: OutListReducer.State(),
+                                reducer: {
+                                    OutListReducer(
+                                        getOutListUseCase: getOutListUseCase,
+                                        returnStudentsUseCase: returnStudentsUseCase,
+                                        getEarlyReturnUseCase: getEarlyReturnUseCase
+                                    )
+                                }
+                            )
+                        )
+                    case .classroomMoveList:
+                        ClassroomMoveListView(
+                            store: .init(
+                                initialState: ClassroomMoveListReducer.State(),
+                                reducer: {
+                                    ClassroomMoveListReducer(
+                                        getClassroomMoveByFloorUseCase: getClassroomMoveByFloorUseCase,
+                                        getClassroomMoveByClassroomUseCase: getClassroomMoveByClassroomUseCase
+                                    )
+                                }
+                            )
+                        )
+                    case .outingHistory:
+                        OutingHistoryView(
+                            store: .init(
+                                initialState: OutingHistoryReducer.State(),
+                                reducer: {
+                                    OutingHistoryReducer(
+                                        getOutingHistoryUseCase: getOutingHistoryUseCase
                                     )
                                 }
                             )
