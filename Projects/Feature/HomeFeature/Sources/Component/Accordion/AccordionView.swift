@@ -40,7 +40,6 @@ struct AccordionView<Content: View>: View {
                 VStack(spacing: 0) {
                     content
                 }
-                .padding(.horizontal)
                 .padding(.bottom)
                 .transition(.asymmetric(
                     insertion: .opacity.combined(with: .move(edge: .top)),
