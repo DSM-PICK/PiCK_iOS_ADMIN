@@ -40,13 +40,29 @@ struct RootView: View {
     }
     
     private var navigationStackView: some View {
-        NavigationStack(path: $router.path) {
-            appComponent.onboardingFactory.makeView()
-                .environmentObject(router)
-                .navigationDestination(for: AppRoute.self) { route in
-                    routeDestination(for: route)
+        ZStack {
+            if router.path.isEmpty {
+                appComponent.onboardingFactory.makeView()
+                    .environmentObject(router)
+                    .transition(.opacity.combined(with: .scale(scale: 0.95)))
+                    .zIndex(0)
+            }
+
+            if !router.path.isEmpty {
+                NavigationStack(path: $router.path) {
+                    Color.clear
+                        .navigationDestination(for: AppRoute.self) { route in
+                            routeDestination(for: route)
+                        }
                 }
+                .transition(.asymmetric(
+                    insertion: AnyTransition.offset(x: 0, y: 20).combined(with: .opacity),
+                    removal: .opacity.combined(with: .scale(scale: 1.05))
+                ))
+                .zIndex(1)
+            }
         }
+        .animation(.spring(response: 0.35, dampingFraction: 0.85), value: router.path.count)
     }
     
     @ViewBuilder
