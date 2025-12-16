@@ -90,5 +90,9 @@ public struct TabBarView: View {
                 }
         }
         .tint(Color.Primary.primary500)
+        .onChange(of: selectedTab) { _ in
+            let haptic = UIImpactFeedbackGenerator(style: .light)
+            haptic.impactOccurred()
+        }
     }
 }
