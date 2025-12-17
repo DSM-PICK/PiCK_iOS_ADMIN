@@ -103,7 +103,9 @@ extension AppDelegate: MessagingDelegate {
         print("FCM registration token: \(String(describing: fcmToken))")
 
         if let fcmToken = fcmToken {
-            UserDefaultStorage.shared.set(to: fcmToken, forKey: .deviceToken)
+            DispatchQueue.main.async {
+                UserDefaultStorage.shared.set(to: fcmToken, forKey: .deviceToken)
+            }
         }
     }
 
