@@ -1,5 +1,6 @@
 import SwiftUI
 import PiCK_iOS_DesignSystem
+import AcceptDomainInterface
 
 struct AcceptCell: View {
     let studentNumber: String
@@ -50,19 +51,5 @@ struct AcceptCell: View {
         .padding(.vertical, 12)
         .background(Color.Gray.gray50)
         .cornerRadius(12)
-    }
-}
-
-public enum OutgoingType {
-    case outgoing
-    case earlyLeave
-
-    var title: String {
-        switch self {
-        case .outgoing:
-            return "외출"
-        case .earlyLeave:
-            return "조기귀가"
-        }
     }
 }
