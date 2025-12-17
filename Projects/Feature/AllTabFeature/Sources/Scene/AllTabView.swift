@@ -137,7 +137,11 @@ public struct AllTabView: View {
                 }
                 .onChange(of: viewStore.shouldResign) { shouldResign in
                     if shouldResign {
-                        router.path.removeAll()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                router.path.removeAll()
+                            }
+                        }
                     }
                 }
                 .confirmPopUp(
