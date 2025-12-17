@@ -30,6 +30,9 @@ public struct HomeReducer: Reducer {
         public var selfStudyDirector: [SelfStudyDirectorEntity] = []
         public var adminSelfStudyTeacher: String?
         public var classroom: String = "0-0"
+        public var isHomeroomTeacher: Bool = false
+        public var outList: [ApplicationEntity] = []
+
         public init() {}
     }
 
@@ -40,6 +43,11 @@ public struct HomeReducer: Reducer {
         case adminSelfStudyInfoResponse(Result<String, Error>)
         case fetchMyName
         case myNameResponse(TaskResult<MyNameEntity>)
+        case loadOutList(grade: Int, classNum: Int)
+        case outListResponse(TaskResult<[ApplicationEntity]>)
+        case acceptApplication(id: String)
+        case rejectApplication(id: String)
+        case updateStatusResponse(TaskResult<Void>)
     }
 
     public var body: some Reducer<State, Action> {
@@ -58,18 +66,18 @@ public struct HomeReducer: Reducer {
 
             case .selfStudyDirectorResponse(.failure):
                 return .none
-                
+
             case .fetchAdminSelfStudyInfo:
                 return .publisher {
                     getAdminSelfStudyInfoUseCase.execute()
                         .map { Action.adminSelfStudyInfoResponse(.success($0)) }
                         .catch { Just(Action.adminSelfStudyInfoResponse(.failure($0))) }
                 }
-                
+
             case let .adminSelfStudyInfoResponse(.success(teacher)):
                 state.adminSelfStudyTeacher = teacher
                 return .none
-                
+
             case .adminSelfStudyInfoResponse(.failure):
                 return .none
 
@@ -81,12 +89,87 @@ public struct HomeReducer: Reducer {
                 }
 
             case let .myNameResponse(.success(myName)):
-                    state.classroom = "\(myName.grade)-\(myName.classNum)"
-                return .none
+                let grade = myName.grade
+                let classNum = myName.classNum
+
+                state.classroom = "\(grade)-\(classNum)"
+
+                if grade != 0 && classNum != 0 {
+                    state.isHomeroomTeacher = true
+                    return loadOutList(grade: grade, classNum: classNum)
+                } else {
+                    state.isHomeroomTeacher = false
+                    return .none
+                }
 
             case let .myNameResponse(.failure(error)):
                 return .none
+
+            case let .outListResponse(.success(list)):
+                state.outList = list
+                return .none
+
+            case .outListResponse(.failure):
+                return .none
+
+            case let .loadOutList(grade, classNum):
+                return loadOutList(grade: grade, classNum: classNum)
+                
+            case let .acceptApplication(id):
+                return .run { send in
+                    await send(
+                        .updateStatusResponse(
+                            await TaskResult {
+                                try await updateApplicationStatusUseCase.execute(
+                                    status: "OK",
+                                    idList: [id]
+                                )
+                            }
+                        )
+                    )
+                }
+                
+            case let .rejectApplication(id):
+                return .run { send in
+                    await send(
+                        .updateStatusResponse(
+                            await TaskResult {
+                                try await updateApplicationStatusUseCase.execute(
+                                    status: "NO",
+                                    idList: [id]
+                                )
+                            }
+                        )
+                    )
+                }
+                
+            case .updateStatusResponse(.success):
+                let components = state.classroom.split(separator: "-").compactMap { Int($0) }
+                if components.count == 2 {
+                    return loadOutList(grade: components[0], classNum: components[1])
+                }
+                return .none
+                
+            case .updateStatusResponse(.failure):
+                return .none
             }
+        }
+    }
+}
+
+extension HomeReducer {
+    private func loadOutList(grade: Int, classNum: Int) -> Effect<Action> {
+        .run { send in
+            await send(
+                .outListResponse(
+                    await TaskResult {
+                        try await getAllApplicationsUseCase.execute(
+                            grade: grade,
+                            classNum: classNum
+                        )
+                    }
+                )
+            )
         }
     }
 }

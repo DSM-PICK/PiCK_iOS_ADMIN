@@ -2,6 +2,7 @@ import SwiftUI
 import PiCK_iOS_DesignSystem
 import ComposableArchitecture
 import HomeDomainInterface
+import AcceptDomainInterface
 import Utility
 
 public struct HomeView: View {
@@ -21,19 +22,36 @@ public struct HomeView: View {
                     .frame(maxWidth: .infinity)
                     .frame(height: 72)
 
-                    if ((viewStore.classroom) != "0-0") {
-                        AccordionView(badge: viewStore.classroom, title: "외출 수락", content: {
-                            VStack {
-                                AcceptCell(
-                                    studentNumber: "3333",
-                                    name: "하원하원",
-                                    type: .earlyLeave,
-                                    onAccept: {},
-                                    onReject: {}
-                                )
+                    if viewStore.isHomeroomTeacher {
+                        AccordionView(
+                            badge: viewStore.classroom,
+                            title: "외출 수락",
+                            content: {
+                                VStack(spacing: 8) {
+                                    if viewStore.outList.isEmpty {
+                                        Text("외출 신청이 없습니다")
+                                            .pickText(type: .body1, textColor: .Gray.gray600)
+                                            .frame(maxWidth: .infinity)
+                                            .padding(.vertical, 24)
+                                    } else {
+                                        ForEach(viewStore.outList) { item in
+                                            AcceptCell(
+                                                studentNumber: item.studentNumber,
+                                                name: item.userName,
+                                                type: item.outgoingType,
+                                                onAccept: {
+                                                    viewStore.send(.acceptApplication(id: item.id))
+                                                },
+                                                onReject: {
+                                                    viewStore.send(.rejectApplication(id: item.id))
+                                                }
+                                            )
+                                        }
+                                    }
+                                }
+                                .padding(.vertical, 12)
                             }
-                            .padding(.vertical, 12)
-                        })
+                        )
                     }
 
                     AllSelfStudyView(selfStudyDirector: viewStore.selfStudyDirector)
