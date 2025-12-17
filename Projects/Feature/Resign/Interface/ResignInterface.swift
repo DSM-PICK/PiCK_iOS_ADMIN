@@ -1,6 +1,6 @@
 import Foundation
 import SwiftUI
 
-public protocol WithDrawFactory {
+public protocol ResignFactory {
     func makeView() -> AnyView
 }

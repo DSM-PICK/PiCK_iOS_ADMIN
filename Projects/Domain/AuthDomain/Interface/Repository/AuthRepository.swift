@@ -6,5 +6,5 @@ public protocol AuthRepository {
     func secretKey(req: SecretKeyRequestParams) -> AnyPublisher<Bool, Error>
     func signup(req: SignupRequestParams) -> AnyPublisher<Void, Error>
     func logout()
-    func withdraw() -> AnyPublisher<Void, Error>
+    func resign() -> AnyPublisher<Void, Error>
 }

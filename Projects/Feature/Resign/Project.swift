@@ -17,10 +17,10 @@ let settings: Settings = .settings(
 )
 
 let interfaceTarget = Target.target(
-    name: "WithDrawFeatureInterface",
+    name: "ResignFeatureInterface",
     destinations: env.destination,
     product: .framework,
-    bundleId: "$(env.organizationName).WithDrawFeatureInterface",
+    bundleId: "\(env.organizationName).ResignFeatureInterface",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Interface/**"],
@@ -30,22 +30,22 @@ let interfaceTarget = Target.target(
 )
 
 let implementationTarget = Target.target(
-    name: "WithDrawFeature",
+    name: "ResignFeature",
     destinations: env.destination,
     product: .staticFramework,
-    bundleId: "$(env.organizationName).WithDrawFeature",
+    bundleId: "\(env.organizationName).ResignFeature",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Sources/**"],
     dependencies: [
-        .target(name: "WithDrawFeatureInterface"),
+        .target(name: "ResignFeatureInterface"),
         .SPM.NeedleFoundation,
         .SPM.ComposableArchitecture
     ]
 )
 
 let project = Project(
-    name: "WithDrawFeature",
+    name: "ResignFeature",
     organizationName: env.organizationName,
     settings: settings,
     targets: [interfaceTarget, implementationTarget]

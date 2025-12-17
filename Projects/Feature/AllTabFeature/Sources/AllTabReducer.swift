@@ -18,7 +18,7 @@ public struct AllTabReducer: Reducer {
     public struct State: Equatable {
         public var myName: MyNameEntity?
         public var shouldLogout = false
-        public var shouldWithdraw = false
+        public var shouldResign = false
 
         public init() {}
     }
@@ -28,8 +28,8 @@ public struct AllTabReducer: Reducer {
         case myNameResponse(TaskResult<MyNameEntity>)
         case logoutButtonTapped
         case tokenRefreshNeeded
-        case confirmWithdraw
-        case withdrawResponse(TaskResult<Void>)
+        case confirmResign
+        case resignResponse(TaskResult<Void>)
     }
 
     public var body: some Reducer<State, Action> {
@@ -59,20 +59,20 @@ public struct AllTabReducer: Reducer {
                 state.shouldLogout = true
                 return .none
 
-            case .confirmWithdraw:
+            case .confirmResign:
                 return .run { send in
-                    await send(.withdrawResponse(
+                    await send(.resignResponse(
                         await TaskResult {
-                            for try await _ in authRepository.withdraw().values {}
+                            for try await _ in authRepository.resign().values {}
                         }
                     ))
                 }
 
-            case .withdrawResponse(.success):
-                state.shouldWithdraw = true
+            case .resignResponse(.success):
+                state.shouldResign = true
                 return .none
 
-            case .withdrawResponse(.failure):
+            case .resignResponse(.failure):
                 return .none
             }
         }

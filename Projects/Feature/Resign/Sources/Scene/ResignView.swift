@@ -2,8 +2,8 @@ import SwiftUI
 import ComposableArchitecture
 import PiCK_iOS_DesignSystem
 
-struct WithDrawView: View {
-    let store: StoreOf<WithDrawReducer>
+struct ResignView: View {
+    let store: StoreOf<ResignReducer>
 
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in

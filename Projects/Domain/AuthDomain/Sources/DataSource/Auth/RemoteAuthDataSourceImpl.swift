@@ -31,7 +31,7 @@ public final class RemoteAuthDataSourceImpl: BaseRemoteDataSource<AuthAPI>, Remo
             }
             .eraseToAnyPublisher()
     }
-    public func withdraw() -> AnyPublisher<Void, Error> {
+    public func resign() -> AnyPublisher<Void, Error> {
         request(.delete)
             .map { _ in () }
             .eraseToAnyPublisher()

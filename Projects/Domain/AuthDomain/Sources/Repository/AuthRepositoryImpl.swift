@@ -61,8 +61,8 @@ public class AuthRepositoryImpl: AuthRepository {
         localDataSource.logout()
     }
 
-    public func withdraw() -> AnyPublisher<Void, Error> {
-        remoteDataSource.withdraw()
+    public func resign() -> AnyPublisher<Void, Error> {
+        remoteDataSource.resign()
             .handleEvents(receiveOutput: { [weak self] _ in
                 self?.logout()
             })

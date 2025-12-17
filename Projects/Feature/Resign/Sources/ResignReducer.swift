@@ -1,6 +1,6 @@
 import ComposableArchitecture
 
-public struct WithDrawReducer: Reducer {
+public struct ResignReducer: Reducer {
     public init() {}
 
     public struct State: Equatable {
@@ -8,13 +8,13 @@ public struct WithDrawReducer: Reducer {
     }
 
     public enum Action {
-        case withdrawButtonTapped
+        case resignButtonTapped
     }
 
     public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
-            case .withdrawButtonTapped:
+            case .resignButtonTapped:
                 // TODO: API 연동 시 구현
                 return .none
             }

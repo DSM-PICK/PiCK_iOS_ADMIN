@@ -87,13 +87,13 @@ public extension TargetDependency.Projects {
         target: "CheckSelfStudyTeacherDomainInterface",
         path: .relativeToRoot("Projects/Domain/CheckSelfStudyTeacher")
     )
-    static let withDrawDomain = TargetDependency.project(
-        target: "WithDrawDomain",
-        path: .relativeToRoot("Projects/Domain/WithDrawDomain")
+    static let resignDomain = TargetDependency.project(
+        target: "ResignDomain",
+        path: .relativeToRoot("Projects/Domain/ResignDomain")
     )
-    static let withDrawDomainInterface = TargetDependency.project(
-        target: "WithDrawDomainInterface",
-        path: .relativeToRoot("Projects/Domain/WithDrawDomain")
+    static let resignDomainInterface = TargetDependency.project(
+        target: "ResignDomainInterface",
+        path: .relativeToRoot("Projects/Domain/ResignDomain")
     )
     static let selfStudyCheckDomain = TargetDependency.project(
         target: "SelfStudyCheckDomain",
@@ -270,13 +270,13 @@ public extension TargetDependency.Features {
         target: "OutingHistoryFeatureInterface",
         path: .relativeToRoot("Projects/Feature/OutingHistoryFeature")
     )
-    static let withDrawFeature = TargetDependency.project(
-        target: "WithDrawFeature",
-        path: .relativeToRoot("Projects/Feature/WithDraw")
+    static let resignFeature = TargetDependency.project(
+        target: "ResignFeature",
+        path: .relativeToRoot("Projects/Feature/Resign")
     )
-    static let withDrawFeatureInterface = TargetDependency.project(
-        target: "WithDrawFeatureInterface",
-        path: .relativeToRoot("Projects/Feature/WithDraw")
+    static let resignFeatureInterface = TargetDependency.project(
+        target: "ResignFeatureInterface",
+        path: .relativeToRoot("Projects/Feature/Resign")
     )
     // other Module
 }

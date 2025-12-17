@@ -17,10 +17,10 @@ let settings: Settings = .settings(
 )
 
 let interfaceTarget = Target.target(
-    name: "WithDrawDomainInterface",
+    name: "ResignDomainInterface",
     destinations: env.destination,
     product: .framework,
-    bundleId: "(env.organizationName).WithDrawDomainInterface",
+    bundleId: "\(env.organizationName).ResignDomainInterface",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Interface/**"],
@@ -31,22 +31,22 @@ let interfaceTarget = Target.target(
 )
 
 let implementationTarget = Target.target(
-    name: "WithDrawDomain",
+    name: "ResignDomain",
     destinations: env.destination,
     product: .framework,
-    bundleId: "(env.organizationName).WithDrawDomain",
+    bundleId: "\(env.organizationName).ResignDomain",
     deploymentTargets: env.deploymentTargets,
     infoPlist: .default,
     sources: ["Sources/**"],
     dependencies: [
-        .target(name: "WithDrawDomainInterface"),
+        .target(name: "ResignDomainInterface"),
         .Projects.baseDomain,
         .Shared.thirdPartyLib
     ]
 )
 
 let project = Project(
-    name: "WithDrawDomain",
+    name: "ResignDomain",
     organizationName: env.organizationName,
     settings: settings,
     targets: [interfaceTarget, implementationTarget]
