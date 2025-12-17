@@ -111,9 +111,6 @@ struct RootView: View {
         case .outingHistory:
             appComponent.outingHistoryFactory.makeView()
                 .environmentObject(router)
-        case .resign:
-            appComponent.resignFactory.makeView()
-                .environmentObject(router)
         }
     }
     

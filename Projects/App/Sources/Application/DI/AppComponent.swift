@@ -28,10 +28,8 @@ import ClassroomMoveListFeature
 import ClassroomMoveListFeatureInterface
 import OutingHistoryFeature
 import OutingHistoryFeatureInterface
-import ResignFeature
-import ResignFeatureInterface
 
-public final class AppComponent: BootstrapComponent, HomeDependency, AllTabDependency, PlanDependency, SchoolMealDependency, AcceptDependency, CheckSelfStudyTeacherDependency, BugReportDependency, ChangePasswordDependency, NewPasswordDependency, ClassroomMoveListDependency, OutingHistoryDependency, SelfStudyCheckDependency, ResignDependency {
+public final class AppComponent: BootstrapComponent, HomeDependency, AllTabDependency, PlanDependency, SchoolMealDependency, AcceptDependency, CheckSelfStudyTeacherDependency, BugReportDependency, ChangePasswordDependency, NewPasswordDependency, ClassroomMoveListDependency, OutingHistoryDependency, SelfStudyCheckDependency {
 
     private let _keychain: any Keychain
 
@@ -108,8 +106,5 @@ public extension AppComponent {
     }
     var outingHistoryFactory: any OutingHistoryFactory {
         OutingHistoryComponent(parent: self)
-    }
-    var resignFactory: any ResignFactory {
-        ResignComponent(parent: self)
     }
 }

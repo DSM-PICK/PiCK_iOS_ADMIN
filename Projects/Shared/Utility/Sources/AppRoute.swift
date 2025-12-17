@@ -16,5 +16,4 @@ public enum AppRoute: Hashable {
     case selfStudyCheck
     case classroomMoveList
     case outingHistory
-    case resign
 }

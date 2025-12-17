@@ -407,17 +407,6 @@ private class SelfStudyCheckDependency541bf16d168d450a004dProvider: SelfStudyChe
 private func factory68e543969404535bb08ff47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return SelfStudyCheckDependency541bf16d168d450a004dProvider(appComponent: parent1(component) as! AppComponent)
 }
-private class ResignDependencydee02721f7aaf48b10ebProvider: ResignDependency {
-
-
-    init() {
-
-    }
-}
-/// ^->AppComponent->ResignComponent
-private func factory155257d2b67c35b75fb7e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return ResignDependencydee02721f7aaf48b10ebProvider()
-}
 private class AcceptDependency380d0282470c8b91ca89Provider: AcceptDependency {
     var getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol {
         return appComponent.getAllApplicationsUseCase
@@ -490,7 +479,6 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["selfStudyCheckFactory-any SelfStudyCheckFactory"] = { [unowned self] in self.selfStudyCheckFactory as Any }
         localTable["classroomMoveListFactory-any ClassroomMoveListFactory"] = { [unowned self] in self.classroomMoveListFactory as Any }
         localTable["outingHistoryFactory-any OutingHistoryFactory"] = { [unowned self] in self.outingHistoryFactory as Any }
-        localTable["resignFactory-any ResignFactory"] = { [unowned self] in self.resignFactory as Any }
         localTable["fetchSelfStudyTeacherUseCase-any FetchSelfStudyTeacherUseCaseProtocol"] = { [unowned self] in self.fetchSelfStudyTeacherUseCase as Any }
         localTable["changePasswordProvider-MoyaProvider<ChangePasswordAPI>"] = { [unowned self] in self.changePasswordProvider as Any }
         localTable["remoteChangePasswordDataSource-any RemoteChangePasswordDataSource"] = { [unowned self] in self.remoteChangePasswordDataSource as Any }
@@ -635,11 +623,6 @@ extension SelfStudyCheckComponent: NeedleFoundation.Registration {
         keyPathToName[\SelfStudyCheckDependency.saveAttendanceUseCase] = "saveAttendanceUseCase-any SaveAttendanceUseCase"
     }
 }
-extension ResignComponent: NeedleFoundation.Registration {
-    public func registerItems() {
-
-    }
-}
 extension AcceptComponent: NeedleFoundation.Registration {
     public func registerItems() {
         keyPathToName[\AcceptDependency.getAllApplicationsUseCase] = "getAllApplicationsUseCase-any GetAllApplicationsUseCaseProtocol"
@@ -685,7 +668,6 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->NewPasswordComponent", factory52985a6d5ec65d75bd97f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->OutingHistoryComponent", factory2d7d5b0952348896c27cf47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->SelfStudyCheckComponent", factory68e543969404535bb08ff47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->ResignComponent", factory155257d2b67c35b75fb7e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->AcceptComponent", factorye0727acbbfbe9e00fe23f47b58f8f304c97af4d5)
 }
 #endif
