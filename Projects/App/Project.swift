@@ -86,8 +86,6 @@ let appDependencies: [TargetDependency] = [
     .Features.schoolMealFeatureInterface,
     .Features.acceptFeature,
     .Features.acceptFeatureInterface,
-    .Features.resignFeature,
-    .Features.resignFeatureInterface,
     .Features.selfStudyCheckFeature,
     .Features.selfStudyCheckFeatureInterface,
     .Features.outingHistoryFeature,

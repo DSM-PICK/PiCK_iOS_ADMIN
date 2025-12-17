@@ -262,14 +262,6 @@ public extension TargetDependency.Features {
         target: "OutingHistoryFeatureInterface",
         path: .relativeToRoot("Projects/Feature/OutingHistoryFeature")
     )
-    static let resignFeature = TargetDependency.project(
-        target: "ResignFeature",
-        path: .relativeToRoot("Projects/Feature/Resign")
-    )
-    static let resignFeatureInterface = TargetDependency.project(
-        target: "ResignFeatureInterface",
-        path: .relativeToRoot("Projects/Feature/Resign")
-    )
     // other Module
 }
 
