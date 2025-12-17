@@ -117,7 +117,6 @@ public struct AllTabView: View {
                             },
                             onResignTap: {
                                 showResignAlert = true
-                                navigationPath.append(.outingHistory)
                             }
                         )
                         .padding(.top, 32)

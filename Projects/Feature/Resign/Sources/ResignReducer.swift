@@ -15,7 +15,6 @@ public struct ResignReducer: Reducer {
         Reduce { state, action in
             switch action {
             case .resignButtonTapped:
-                // TODO: API 연동 시 구현
                 return .none
             }
         }

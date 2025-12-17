@@ -84,7 +84,7 @@ public struct AllTabMenuList: View {
                         action: onLogoutTap
                     ),
                     MenuItemModel(
-                        icon: PiCKImage.resign,
+                        icon: PiCKImage.withDraw,
                         title: "회원탈퇴",
                         iconColor: Color.Error.error,
                         action: onResignTap
