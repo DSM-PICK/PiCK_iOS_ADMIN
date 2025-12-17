@@ -40,7 +40,42 @@ public struct ApplicationEntity: Equatable, Identifiable {
         self.num = num
         self.reason = reason
     }
+    
+    public var studentNumber: String {
+        return "\(grade)\(classNum)\(num < 10 ? "0" : "")\(num)"
+    }
+    
+    public var outgoingType: OutgoingType {
+        if end.isEmpty {
+            return .outgoing
+        }
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm"
+        
+        if let endTime = dateFormatter.date(from: end),
+           let schoolEndTime = dateFormatter.date(from: "16:00") {
+            return endTime >= schoolEndTime ? .earlyLeave : .outgoing
+        }
+        
+        return .outgoing
+    }
 }
+
+public enum OutgoingType {
+    case outgoing
+    case earlyLeave
+
+    public var title: String {
+        switch self {
+        case .outgoing:
+            return "외출"
+        case .earlyLeave:
+            return "조기귀가"
+        }
+    }
+}
+
 
 public struct ClassroomMoveEntity: Equatable, Identifiable {
     public let id: String
