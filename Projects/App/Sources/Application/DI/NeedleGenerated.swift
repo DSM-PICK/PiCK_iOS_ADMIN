@@ -51,6 +51,8 @@ import PlanDomain
 import PlanDomainInterface
 import PlanFeature
 import PlanFeatureInterface
+import ResignFeature
+import ResignFeatureInterface
 import SchoolMealDomain
 import SchoolMealDomainInterface
 import SchoolMealFeature

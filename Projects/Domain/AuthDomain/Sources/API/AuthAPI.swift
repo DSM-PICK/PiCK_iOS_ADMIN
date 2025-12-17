@@ -8,6 +8,7 @@ public enum AuthAPI {
     case refreshToken
     case secretKey(SecretKeyRequestParams)
     case signup(SignupRequestParams)
+    case delete
 }
 
 public struct SigninResponseDTO: Decodable {
@@ -43,6 +44,8 @@ extension AuthAPI: PiCKAPI {
             return "/key"
         case .signup:
             return "/signup"
+        case .delete:
+            return "/delete"
         }
     }
 
@@ -52,6 +55,8 @@ extension AuthAPI: PiCKAPI {
             return .post
         case .refreshToken:
             return .put
+        case .delete:
+            return .delete
         }
     }
 
@@ -72,6 +77,8 @@ extension AuthAPI: PiCKAPI {
         switch self {
         case .refreshToken:
             return .refreshToken
+        case .delete:
+            return .accessToken
         default:
             return .tokenIsEmpty
         }

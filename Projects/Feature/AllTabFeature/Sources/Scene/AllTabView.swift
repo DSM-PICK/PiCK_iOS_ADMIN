@@ -22,6 +22,8 @@ import ClassroomMoveListFeature
 import OutListFeature
 import OutingHistoryFeature
 import SelfStudyCheckFeature
+import SelfStudyCheckDomainInterface
+import ResignFeature
 
 public struct AllTabView: View {
     let store: StoreOf<AllTabReducer>
@@ -42,6 +44,7 @@ public struct AllTabView: View {
     @EnvironmentObject var router: AppRouter
     @State private var navigationPath: [AppRoute] = []
     @State private var showPasswordChangeSuccess = false
+    @State private var showResignAlert = false
     @State private var showLogoutConfirm = false
 
     public init(
@@ -110,7 +113,10 @@ public struct AllTabView: View {
                                 navigationPath.append(.selfStudyCheck)
                             },
                             onOutingHistoryTap: {
-                                navigationPath.append(.outingHistory)
+                                router.path.append(.outingHistory)
+                            },
+                            onResignTap: {
+                                showResignAlert = true
                             }
                         )
                         .padding(.top, 32)
@@ -129,6 +135,15 @@ public struct AllTabView: View {
                         }
                     }
                 }
+                .onChange(of: viewStore.shouldResign) { shouldResign in
+                    if shouldResign {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                router.path.removeAll()
+                            }
+                        }
+                    }
+                }
                 .confirmPopUp(
                     title: "로그아웃",
                     explain: "정말 로그아웃 하시겠습니까?",
@@ -137,6 +152,17 @@ public struct AllTabView: View {
                     onAction: { action in
                         if action == .accept {
                             viewStore.send(.logoutButtonTapped)
+                        }
+                    }
+                )
+                .confirmPopUp(
+                    title: "회원탈퇴",
+                    explain: "정말로 탈퇴하시겠습니까?\n탈퇴 후에는 계정을 복구할 수 없습니다.",
+                    type: .reject,
+                    isPresented: $showResignAlert,
+                    onAction: { action in
+                        if action == .accept {
+                            viewStore.send(.confirmResign)
                         }
                     }
                 )

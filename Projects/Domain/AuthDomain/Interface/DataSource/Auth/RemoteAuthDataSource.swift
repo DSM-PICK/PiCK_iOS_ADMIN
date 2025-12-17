@@ -5,4 +5,5 @@ public protocol RemoteAuthDataSource {
     func refreshToken() -> AnyPublisher<TokenDTO, Error>
     func secretKey(req: SecretKeyRequestParams) -> AnyPublisher<Bool, Error>
     func signup(req: SignupRequestParams) -> AnyPublisher<TokenDTO, Error>
+    func resign() -> AnyPublisher<Void, Error>
 }
