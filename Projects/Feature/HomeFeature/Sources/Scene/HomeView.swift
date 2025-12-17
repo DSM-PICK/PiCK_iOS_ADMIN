@@ -21,6 +21,21 @@ public struct HomeView: View {
                     .frame(maxWidth: .infinity)
                     .frame(height: 72)
 
+                    if ((viewStore.classroom) != "0-0") {
+                        AccordionView(badge: viewStore.classroom, title: "외출 수락", content: {
+                            VStack {
+                                AcceptCell(
+                                    studentNumber: "3333",
+                                    name: "하원하원",
+                                    type: .earlyLeave,
+                                    onAccept: {},
+                                    onReject: {}
+                                )
+                            }
+                            .padding(.vertical, 12)
+                        })
+                    }
+
                     AllSelfStudyView(selfStudyDirector: viewStore.selfStudyDirector)
                         .frame(maxWidth: .infinity)
                 }
@@ -36,6 +51,7 @@ public struct HomeView: View {
             .onAppear {
                 viewStore.send(.fetchSelfStudyDirector(date: Date.todayString()))
                 viewStore.send(.fetchAdminSelfStudyInfo)
+                viewStore.send(.fetchMyName)
             }
         }
     }

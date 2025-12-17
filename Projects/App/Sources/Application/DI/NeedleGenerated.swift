@@ -308,6 +308,15 @@ private class HomeDependency443c4e1871277bd8432aProvider: HomeDependency {
     var getAdminSelfStudyInfoUseCase: any GetAdminSelfStudyInfoUseCaseProtocol {
         return appComponent.getAdminSelfStudyInfoUseCase
     }
+    var getMyNameUseCase: any GetMyNameUseCaseProtocol {
+        return appComponent.getMyNameUseCase
+    }
+    var getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol {
+        return appComponent.getAllApplicationsUseCase
+    }
+    var updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol {
+        return appComponent.updateApplicationStatusUseCase
+    }
     var allTabFactory: any AllTabFactory {
         return appComponent.allTabFactory
     }
@@ -569,6 +578,9 @@ extension HomeComponent: NeedleFoundation.Registration {
     public func registerItems() {
         keyPathToName[\HomeDependency.getSelfStudyDirectorUseCase] = "getSelfStudyDirectorUseCase-any GetSelfStudyDirectorUseCaseProtocol"
         keyPathToName[\HomeDependency.getAdminSelfStudyInfoUseCase] = "getAdminSelfStudyInfoUseCase-any GetAdminSelfStudyInfoUseCaseProtocol"
+        keyPathToName[\HomeDependency.getMyNameUseCase] = "getMyNameUseCase-any GetMyNameUseCaseProtocol"
+        keyPathToName[\HomeDependency.getAllApplicationsUseCase] = "getAllApplicationsUseCase-any GetAllApplicationsUseCaseProtocol"
+        keyPathToName[\HomeDependency.updateApplicationStatusUseCase] = "updateApplicationStatusUseCase-any UpdateApplicationStatusUseCaseProtocol"
         keyPathToName[\HomeDependency.allTabFactory] = "allTabFactory-any AllTabFactory"
         keyPathToName[\HomeDependency.planFactory] = "planFactory-any PlanFactory"
         keyPathToName[\HomeDependency.schoolMealFactory] = "schoolMealFactory-any SchoolMealFactory"
