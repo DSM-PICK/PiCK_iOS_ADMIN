@@ -151,6 +151,17 @@ public struct AllTabView: View {
                         }
                     }
                 )
+                .confirmPopUp(
+                    title: "회원탈퇴",
+                    explain: "정말로 탈퇴하시겠습니까?\n탈퇴 후에는 계정을 복구할 수 없습니다.",
+                    type: .reject,
+                    isPresented: $showResignAlert,
+                    onAction: { action in
+                        if action == .accept {
+                            viewStore.send(.confirmResign)
+                        }
+                    }
+                )
                 .navigationDestination(for: AppRoute.self) { route in
                     switch route {
                     case .checkSelfStudyTeacher:
@@ -270,14 +281,6 @@ public struct AllTabView: View {
                     Button("확인", role: .cancel) { }
                 } message: {
                     Text("비밀번호가 성공적으로 변경되었습니다.")
-                }
-                .alert("회원탈퇴", isPresented: $showResignAlert) {
-                    Button("취소", role: .cancel) { }
-                    Button("탈퇴", role: .destructive) {
-                        viewStore.send(.confirmResign)
-                    }
-                } message: {
-                    Text("정말로 탈퇴하시겠습니까?\n탈퇴 후에는 계정을 복구할 수 없습니다.")
                 }
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
