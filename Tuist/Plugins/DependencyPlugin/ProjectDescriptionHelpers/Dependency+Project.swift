@@ -87,14 +87,6 @@ public extension TargetDependency.Projects {
         target: "CheckSelfStudyTeacherDomainInterface",
         path: .relativeToRoot("Projects/Domain/CheckSelfStudyTeacher")
     )
-    static let resignDomain = TargetDependency.project(
-        target: "ResignDomain",
-        path: .relativeToRoot("Projects/Domain/ResignDomain")
-    )
-    static let resignDomainInterface = TargetDependency.project(
-        target: "ResignDomainInterface",
-        path: .relativeToRoot("Projects/Domain/ResignDomain")
-    )
     static let selfStudyCheckDomain = TargetDependency.project(
         target: "SelfStudyCheckDomain",
         path: .relativeToRoot("Projects/Domain/SelfStudyCheckDomain")

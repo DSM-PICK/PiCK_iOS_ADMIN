@@ -119,8 +119,6 @@ let appDependencies: [TargetDependency] = [
     .Projects.outListDomainInterface,
     .Projects.checkSelfStudyTeacherDomain,
     .Projects.checkSelfStudyTeacherDomainInterface,
-    .Projects.resignDomain,
-    .Projects.resignDomainInterface,
     .Projects.selfStudyCheckDomain,
     .Projects.selfStudyCheckDomainInterface,
     .Projects.outingHistoryDomain,
