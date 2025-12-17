@@ -232,15 +232,6 @@ public struct AllTabView: View {
                                 }
                             )
                         )
-                    case .resign:
-                        ResignFeature(
-                            store: .init(
-                                initialState: ResignReducer.State(),
-                                reducer: {
-                                    ResignReducer()
-                                }
-                            )
-                        )
                     case .outList:
                         OutListView(
                             store: .init(
