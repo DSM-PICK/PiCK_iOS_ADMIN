@@ -28,6 +28,7 @@ public struct AllTabView: View {
     @EnvironmentObject var router: AppRouter
     @State private var navigationPath: [AppRoute] = []
     @State private var showPasswordChangeSuccess = false
+    @State private var showWithdrawAlert = false
 
     public init(
         store: StoreOf<AllTabReducer>,
@@ -86,7 +87,7 @@ public struct AllTabView: View {
                                 router.path.append(.outingHistory)
                             },
                             onWithDrawTap: {
-                                navigationPath.append(.withDraw)
+                                showWithdrawAlert = true
                             }
                         )
                         .padding(.top, 32)
@@ -98,6 +99,11 @@ public struct AllTabView: View {
                 }
                 .onChange(of: viewStore.shouldLogout) { shouldLogout in
                     if shouldLogout {
+                        router.path.removeAll()
+                    }
+                }
+                .onChange(of: viewStore.shouldWithdraw) { shouldWithdraw in
+                    if shouldWithdraw {
                         router.path.removeAll()
                     }
                 }
@@ -184,6 +190,14 @@ public struct AllTabView: View {
                     Button("확인", role: .cancel) { }
                 } message: {
                     Text("비밀번호가 성공적으로 변경되었습니다.")
+                }
+                .alert("회원탈퇴", isPresented: $showWithdrawAlert) {
+                    Button("취소", role: .cancel) { }
+                    Button("탈퇴", role: .destructive) {
+                        viewStore.send(.confirmWithdraw)
+                    }
+                } message: {
+                    Text("정말로 탈퇴하시겠습니까?\n탈퇴 후에는 계정을 복구할 수 없습니다.")
                 }
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {

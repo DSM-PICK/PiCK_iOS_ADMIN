@@ -1,6 +1,7 @@
 import ComposableArchitecture
 import AllTabDomainInterface
 import AuthDomainInterface
+import Combine
 
 public struct AllTabReducer: Reducer {
     private let getMyNameUseCase: any GetMyNameUseCaseProtocol
@@ -17,7 +18,8 @@ public struct AllTabReducer: Reducer {
     public struct State: Equatable {
         public var myName: MyNameEntity?
         public var shouldLogout = false
-        
+        public var shouldWithdraw = false
+
         public init() {}
     }
 
@@ -26,6 +28,8 @@ public struct AllTabReducer: Reducer {
         case myNameResponse(TaskResult<MyNameEntity>)
         case logoutButtonTapped
         case tokenRefreshNeeded
+        case confirmWithdraw
+        case withdrawResponse(TaskResult<Void>)
     }
 
     public var body: some Reducer<State, Action> {
@@ -53,6 +57,22 @@ public struct AllTabReducer: Reducer {
             case .logoutButtonTapped:
                 authRepository.logout()
                 state.shouldLogout = true
+                return .none
+
+            case .confirmWithdraw:
+                return .run { send in
+                    await send(.withdrawResponse(
+                        await TaskResult {
+                            for try await _ in authRepository.withdraw().values {}
+                        }
+                    ))
+                }
+
+            case .withdrawResponse(.success):
+                state.shouldWithdraw = true
+                return .none
+
+            case .withdrawResponse(.failure):
                 return .none
             }
         }
