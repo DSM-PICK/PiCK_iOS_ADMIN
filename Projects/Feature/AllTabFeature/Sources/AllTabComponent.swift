@@ -28,7 +28,7 @@ public protocol AllTabDependency: NeedleFoundation.Dependency {
     var getEarlyReturnUseCase: any GetEarlyReturnUseCase { get }
     var getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase { get }
     var getClassroomMoveByClassroomUseCase: any GetClassroomMoveByClassroomUseCase { get }
-    var getOutingHistoryUseCase: GetOutingHistoryUseCase { get }
+    var getOutingHistoryUseCase: any GetOutingHistoryUseCase { get }
 }
 
 public final class AllTabComponent: Component<AllTabDependency>, AllTabFactory {

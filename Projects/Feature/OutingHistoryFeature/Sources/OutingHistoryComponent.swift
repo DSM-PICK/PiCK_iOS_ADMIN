@@ -5,7 +5,7 @@ import ComposableArchitecture
 import OutingHistoryDomainInterface
 
 public protocol OutingHistoryDependency: NeedleFoundation.Dependency {
-    var getOutingHistoryUseCase: GetOutingHistoryUseCase { get }
+    var getOutingHistoryUseCase: any GetOutingHistoryUseCase { get }
 }
 
 public final class OutingHistoryComponent: Component<OutingHistoryDependency>, OutingHistoryFactory {
