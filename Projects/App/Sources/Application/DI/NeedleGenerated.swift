@@ -244,6 +244,24 @@ private class AllTabDependencyacdab75b3325eec9d649Provider: AllTabDependency {
     var saveAttendanceUseCase: any SaveAttendanceUseCase {
         return appComponent.saveAttendanceUseCase
     }
+    var getOutListUseCase: any GetOutListUseCase {
+        return appComponent.getOutListUseCase
+    }
+    var returnStudentsUseCase: any ReturnStudentsUseCase {
+        return appComponent.returnStudentsUseCase
+    }
+    var getEarlyReturnUseCase: any GetEarlyReturnUseCase {
+        return appComponent.getEarlyReturnUseCase
+    }
+    var getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase {
+        return appComponent.getClassroomMoveByFloorUseCase
+    }
+    var getClassroomMoveByClassroomUseCase: any GetClassroomMoveByClassroomUseCase {
+        return appComponent.getClassroomMoveByClassroomUseCase
+    }
+    var getOutingHistoryUseCase: GetOutingHistoryUseCase {
+        return appComponent.getOutingHistoryUseCase
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -545,6 +563,12 @@ extension AllTabComponent: NeedleFoundation.Registration {
         keyPathToName[\AllTabDependency.passwordChangeUseCase] = "passwordChangeUseCase-any PasswordChangeUseCase"
         keyPathToName[\AllTabDependency.getStudentAttendanceUseCase] = "getStudentAttendanceUseCase-any GetStudentAttendanceUseCase"
         keyPathToName[\AllTabDependency.saveAttendanceUseCase] = "saveAttendanceUseCase-any SaveAttendanceUseCase"
+        keyPathToName[\AllTabDependency.getOutListUseCase] = "getOutListUseCase-any GetOutListUseCase"
+        keyPathToName[\AllTabDependency.returnStudentsUseCase] = "returnStudentsUseCase-any ReturnStudentsUseCase"
+        keyPathToName[\AllTabDependency.getEarlyReturnUseCase] = "getEarlyReturnUseCase-any GetEarlyReturnUseCase"
+        keyPathToName[\AllTabDependency.getClassroomMoveByFloorUseCase] = "getClassroomMoveByFloorUseCase-any GetClassroomMoveByFloorUseCase"
+        keyPathToName[\AllTabDependency.getClassroomMoveByClassroomUseCase] = "getClassroomMoveByClassroomUseCase-any GetClassroomMoveByClassroomUseCase"
+        keyPathToName[\AllTabDependency.getOutingHistoryUseCase] = "getOutingHistoryUseCase-GetOutingHistoryUseCase"
     }
 }
 extension ClassroomMoveListComponent: NeedleFoundation.Registration {
