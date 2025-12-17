@@ -8,7 +8,7 @@ import OutingHistoryDomainInterface
 import BaseDomain
 
 public extension AppComponent {
-    var getOutingHistoryUseCase: GetOutingHistoryUseCase {
+    var getOutingHistoryUseCase: any GetOutingHistoryUseCase {
         shared {
             GetOutingHistoryUseCaseImpl(repository: outingHistoryRepository)
         }

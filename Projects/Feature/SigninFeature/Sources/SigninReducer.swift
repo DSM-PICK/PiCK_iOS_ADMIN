@@ -1,5 +1,6 @@
 import ComposableArchitecture
 import AuthDomainInterface
+import Core
 
 public struct SigninReducer: Reducer {
     private let signinUseCase: any SigninUseCase
@@ -52,13 +53,15 @@ public struct SigninReducer: Reducer {
     
     private func performSignin(with state: State) -> Effect<Action> {
         .run { send in
+            let deviceToken = UserDefaultStorage.shared.get(forKey: .deviceToken) as? String
+
             await send(.signinResponse(
                 await TaskResult {
                     for try await _ in signinUseCase.execute(
                         req: .init(
                             adminID: state.email,
                             password: state.password,
-                            deviceToken: nil
+                            deviceToken: deviceToken
                         )
                     ).values {}
                 }

@@ -4,6 +4,7 @@ import ComposableArchitecture
 import PiCK_iOS_DesignSystem
 
 public struct OutingHistoryView: View {
+    @Environment(\.dismiss) var dismiss
     let store: StoreOf<OutingHistoryReducer>
 
     public init(store: StoreOf<OutingHistoryReducer>) {
@@ -32,6 +33,7 @@ public struct OutingHistoryView: View {
                     }
                     .background(Color.Gray.gray50)
                     .cornerRadius(8)
+                    .padding(.top, 24)
                     .padding(.bottom, 20)
                     .padding(.horizontal, 24)
 
@@ -70,6 +72,18 @@ public struct OutingHistoryView: View {
                 }
                 .navigationTitle("이전 외출 기록")
                 .navigationBarTitleDisplayMode(.inline)
+                .navigationBarBackButtonHidden(true)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Image(systemName: "chevron.left")
+                                .foregroundColor(.Gray.gray800)
+                                .font(.system(size: 20))
+                        }
+                    }
+                }
             }
             .contentShape(Rectangle())
             .onTapGesture {

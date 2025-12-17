@@ -4,6 +4,7 @@ import ComposableArchitecture
 import PiCK_iOS_DesignSystem
 
 public struct ClassroomMoveListView: View {
+    @Environment(\.dismiss) var dismiss
     let store: StoreOf<ClassroomMoveListReducer>
     @State private var isCurrentTypeBottomSheetPresented = false
     @State private var isClassroomBottomSheetPresented = false
@@ -111,8 +112,23 @@ public struct ClassroomMoveListView: View {
 
                         Spacer()
                     }
-                }.onAppear {
+                }
+                .onAppear {
                     viewStore.send(.onAppear)
+                }
+                .navigationTitle("교실 이동 현황")
+                .navigationBarTitleDisplayMode(.inline)
+                .navigationBarBackButtonHidden(true)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Image(systemName: "chevron.left")
+                                .foregroundColor(.Gray.gray800)
+                                .font(.system(size: 20))
+                        }
+                    }
                 }
                 .sheet(isPresented: $isCurrentTypeBottomSheetPresented) {
                     PiCK_iOS_DesignSystem.SinglePickerBottomSheet(
@@ -157,8 +173,6 @@ public struct ClassroomMoveListView: View {
                     .presentationDetents([.height(350)])
                     .presentationDragIndicator(.hidden)
                 }
-                .navigationTitle("교실 이동 현황")
-                .navigationBarTitleDisplayMode(.inline)
             }
         }
     }

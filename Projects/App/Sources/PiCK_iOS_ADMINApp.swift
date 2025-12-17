@@ -34,7 +34,18 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         _ application: UIApplication,
         didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
     ) {
+        let tokenParts = deviceToken.map { data in String(format: "%02.2hhx", data) }
+        let token = tokenParts.joined()
+        print("APNS device token: \(token)")
+
         Messaging.messaging().apnsToken = deviceToken
+    }
+
+    func application(
+        _ application: UIApplication,
+        didFailToRegisterForRemoteNotificationsWithError error: Error
+    ) {
+        print("Failed to register for remote notifications: \(error.localizedDescription)")
     }
 
 }
@@ -84,12 +95,18 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 }
 
 extension AppDelegate: MessagingDelegate {
-    
+
     func messaging(
         _ messaging: Messaging,
         didReceiveRegistrationToken fcmToken: String?
     ) {
         print("FCM registration token: \(String(describing: fcmToken))")
+
+        if let fcmToken = fcmToken {
+            DispatchQueue.main.async {
+                UserDefaultStorage.shared.set(to: fcmToken, forKey: .deviceToken)
+            }
+        }
     }
 
 }
