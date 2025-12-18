@@ -38,7 +38,7 @@ extension AcceptAPI: PiCKAPI {
         case .updateClassroomMoveStatus:
             return "/status"
         case .getEarlyReturnByGrade:
-            return "grade"
+            return "/grade"
         }
     }
 

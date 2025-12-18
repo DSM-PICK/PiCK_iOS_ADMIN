@@ -87,6 +87,31 @@ public class AcceptDataSourceImpl: AcceptDataSource {
         }
     }
 
+    public func getEarlyReturnByGrade(grade: Int, classNum: Int) async throws -> EarlyReturnListResponseDTO {
+        try await withCheckedThrowingContinuation { continuation in
+            provider.request(.getEarlyReturnByGrade(grade: grade, classNum: classNum)) { result in
+                switch result {
+                case .success(let response):
+                    do {
+                        let data = try response.map(EarlyReturnListResponseDTO.self)
+                        continuation.resume(returning: data)
+                    } catch {
+                        continuation.resume(throwing: error)
+                    }
+                case .failure(let error):
+                    if let moyaError = error as? MoyaError,
+                       let code = moyaError.response?.statusCode,
+                       let errorMap = AcceptAPI.getEarlyReturnByGrade(grade: grade, classNum: classNum).errorMap,
+                       let mappedError = errorMap[code] {
+                        continuation.resume(throwing: mappedError)
+                    } else {
+                        continuation.resume(throwing: error)
+                    }
+                }
+            }
+        }
+    }
+
     public func updateApplicationStatus(status: String, idList: [String]) async throws {
         try await withCheckedThrowingContinuation { continuation in
             provider.request(.updateApplicationStatus(status: status, idList: idList)) { result in

@@ -51,8 +51,6 @@ import PlanDomain
 import PlanDomainInterface
 import PlanFeature
 import PlanFeatureInterface
-import ResignFeature
-import ResignFeatureInterface
 import SchoolMealDomain
 import SchoolMealDomainInterface
 import SchoolMealFeature
@@ -417,6 +415,9 @@ private class AcceptDependency380d0282470c8b91ca89Provider: AcceptDependency {
     var getClassroomMovesUseCase: any GetClassroomMovesUseCaseProtocol {
         return appComponent.getClassroomMovesUseCase
     }
+    var getEarlyReturnByGradeUseCase: any GetEarlyReturnByGradeUseCaseProtocol {
+        return appComponent.getEarlyReturnByGradeUseCase
+    }
     var updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol {
         return appComponent.updateApplicationStatusUseCase
     }
@@ -450,6 +451,7 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["getAllApplicationsUseCase-any GetAllApplicationsUseCaseProtocol"] = { [unowned self] in self.getAllApplicationsUseCase as Any }
         localTable["getApplicationsByFloorUseCase-any GetApplicationsByFloorUseCaseProtocol"] = { [unowned self] in self.getApplicationsByFloorUseCase as Any }
         localTable["getClassroomMovesUseCase-any GetClassroomMovesUseCaseProtocol"] = { [unowned self] in self.getClassroomMovesUseCase as Any }
+        localTable["getEarlyReturnByGradeUseCase-any GetEarlyReturnByGradeUseCaseProtocol"] = { [unowned self] in self.getEarlyReturnByGradeUseCase as Any }
         localTable["updateApplicationStatusUseCase-any UpdateApplicationStatusUseCaseProtocol"] = { [unowned self] in self.updateApplicationStatusUseCase as Any }
         localTable["updateClassroomMoveStatusUseCase-any UpdateClassroomMoveStatusUseCaseProtocol"] = { [unowned self] in self.updateClassroomMoveStatusUseCase as Any }
         localTable["bugReportDataSource-BugReportDataSource"] = { [unowned self] in self.bugReportDataSource as Any }
@@ -628,6 +630,7 @@ extension AcceptComponent: NeedleFoundation.Registration {
         keyPathToName[\AcceptDependency.getAllApplicationsUseCase] = "getAllApplicationsUseCase-any GetAllApplicationsUseCaseProtocol"
         keyPathToName[\AcceptDependency.getApplicationsByFloorUseCase] = "getApplicationsByFloorUseCase-any GetApplicationsByFloorUseCaseProtocol"
         keyPathToName[\AcceptDependency.getClassroomMovesUseCase] = "getClassroomMovesUseCase-any GetClassroomMovesUseCaseProtocol"
+        keyPathToName[\AcceptDependency.getEarlyReturnByGradeUseCase] = "getEarlyReturnByGradeUseCase-any GetEarlyReturnByGradeUseCaseProtocol"
         keyPathToName[\AcceptDependency.updateApplicationStatusUseCase] = "updateApplicationStatusUseCase-any UpdateApplicationStatusUseCaseProtocol"
         keyPathToName[\AcceptDependency.updateClassroomMoveStatusUseCase] = "updateClassroomMoveStatusUseCase-any UpdateClassroomMoveStatusUseCaseProtocol"
     }

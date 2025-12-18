@@ -4,6 +4,7 @@ public protocol AcceptRepository {
     func getApplicationsByGrade(grade: Int, classNum: Int) async throws -> [ApplicationEntity]
     func getApplicationsByFloor(floor: Int) async throws -> [ClassroomMoveEntity]
     func getClassroomMovesByGrade(grade: Int, classNum: Int) async throws -> [ClassroomMoveEntity]
+    func getEarlyReturnByGrade(grade: Int, classNum: Int) async throws -> [EarlyReturnEntity]
     func updateApplicationStatus(status: String, idList: [String]) async throws
     func updateClassroomMoveStatus(status: String, idList: [String]) async throws
 }
@@ -76,6 +77,34 @@ public struct ClassroomMoveEntity: Equatable, Identifiable {
         self.num = num
         self.start = start
         self.end = end
+    }
+}
+
+public struct EarlyReturnEntity: Equatable, Identifiable {
+    public let id: String
+    public let userName: String
+    public let start: String
+    public let grade: Int
+    public let classNum: Int
+    public let num: Int
+    public let reason: String
+
+    public init(
+        id: String,
+        userName: String,
+        start: String,
+        grade: Int,
+        classNum: Int,
+        num: Int,
+        reason: String
+    ) {
+        self.id = id
+        self.userName = userName
+        self.start = start
+        self.grade = grade
+        self.classNum = classNum
+        self.num = num
+        self.reason = reason
     }
 }
 
