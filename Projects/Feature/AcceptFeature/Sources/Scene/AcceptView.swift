@@ -7,6 +7,7 @@ import BaseFeature
 public enum ApplicationType: String, Equatable, Hashable {
     case outgoing = "외출 수락"
     case classroomMove = "교실 이동"
+    case earlyReturn = "조기 귀가"
 
     var title: String { rawValue }
 }
