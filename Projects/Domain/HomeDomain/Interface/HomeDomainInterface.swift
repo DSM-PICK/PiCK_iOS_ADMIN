@@ -15,3 +15,15 @@ public struct SelfStudyDirectorEntity: Equatable {
         self.teacherName = teacherName
     }
 }
+
+public struct GetSelfStudyAndClassroomEntity: Equatable {
+    public let selfStudyFloor: Int
+    public let grade: Int
+    public let classNum: Int
+
+    public init(selfStudyFloor: Int, grade: Int, classNum: Int) {
+        self.selfStudyFloor = selfStudyFloor
+        self.grade = grade
+        self.classNum = classNum
+    }
+}
