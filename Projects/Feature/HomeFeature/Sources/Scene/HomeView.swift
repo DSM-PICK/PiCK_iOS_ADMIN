@@ -38,7 +38,7 @@ public struct HomeView: View {
                                             AcceptCell(
                                                 studentNumber: item.studentNumber,
                                                 name: item.userName,
-                                                type: item.outgoingType,
+                                                type: .outgoing,
                                                 onAccept: {
                                                     viewStore.send(.acceptApplication(id: item.id))
                                                 },

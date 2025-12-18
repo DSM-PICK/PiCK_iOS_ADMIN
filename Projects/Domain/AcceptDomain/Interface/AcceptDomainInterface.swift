@@ -44,22 +44,6 @@ public struct ApplicationEntity: Equatable, Identifiable {
     public var studentNumber: String {
         return "\(grade)\(classNum)\(num < 10 ? "0" : "")\(num)"
     }
-    
-    public var outgoingType: OutgoingType {
-        if end.isEmpty {
-            return .outgoing
-        }
-
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "HH:mm"
-        
-        if let endTime = dateFormatter.date(from: end),
-           let schoolEndTime = dateFormatter.date(from: "16:00") {
-            return endTime >= schoolEndTime ? .earlyLeave : .outgoing
-        }
-        
-        return .outgoing
-    }
 }
 
 public enum OutgoingType {
