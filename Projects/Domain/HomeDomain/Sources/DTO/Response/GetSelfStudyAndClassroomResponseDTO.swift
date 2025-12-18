@@ -1,4 +1,5 @@
 import Foundation
+import HomeDomainInterface
 
 public struct GetSelfStudyAndClassroomResponseDTO: Decodable {
     public let selfStudyFloor: Int
@@ -15,5 +16,15 @@ public struct GetSelfStudyAndClassroomResponseDTO: Decodable {
         self.selfStudyFloor = selfStudyFloor
         self.grade = grade
         self.classNum = classNum
+    }
+}
+
+extension GetSelfStudyAndClassroomResponseDTO {
+    public func toEntity() -> GetSelfStudyAndClassroomEntity {
+        .init(
+            selfStudyFloor: selfStudyFloor,
+            grade: grade,
+            classNum: classNum
+        )
     }
 }

@@ -18,6 +18,12 @@ public class HomeRepositoryImpl: HomeRepository {
     public func getAdminSelfStudyInfo() -> AnyPublisher<String, Error> {
         dataSource.getAdminSelfStudyInfo()
     }
+
+    public func getSelfStudyAndClassroom() -> AnyPublisher<GetSelfStudyAndClassroomEntity, Error> {
+        dataSource.getSelfStudyAndClassroom()
+            .map { $0.toEntity() }
+            .eraseToAnyPublisher()
+    }
 }
 
 extension SelfStudyDirectorResponseDTO {

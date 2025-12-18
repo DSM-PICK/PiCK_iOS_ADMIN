@@ -3,33 +3,57 @@ import BaseDomain
 import Moya
 
 public enum MainAPI {
-    case getSelfStudyAndClassroom(selfStudyFloor: Int, grade: Int, classNum: Int)
+    case getSelfStudyDirector(date: String)
+    case getAdminSelfStudyInfo
+    case getSelfStudyAndClassroom
 }
 
 extension MainAPI: PiCKAPI {
-    public typealias ErrorType = PiCKError
+    public typealias ErrorType = Never
 
     public var domain: BaseDomain.PiCKDomain {
-        return .admin
+        switch self {
+        case .getAdminSelfStudyInfo, .getSelfStudyDirector:
+            return .selfStudy
+        case .getSelfStudyAndClassroom:
+            return .admin
+        }
     }
 
     public var urlPath: String {
-        return "/main"
+        switch self {
+        case .getSelfStudyDirector:
+            return "/today"
+        case .getAdminSelfStudyInfo:
+            return "/admin"
+        case .getSelfStudyAndClassroom:
+            return "/main"
+        }
     }
 
     public var method: Moya.Method {
-        return .get
+        .get
     }
 
     public var task: Moya.Task {
-        return .requestPlain
+        switch self {
+        case let .getSelfStudyDirector(date):
+            return .requestParameters(
+                parameters: ["date": date],
+                encoding: URLEncoding.queryString
+            )
+        case .getAdminSelfStudyInfo:
+            return .requestPlain
+        case .getSelfStudyAndClassroom:
+            return .requestPlain
+        }
     }
 
     public var pickHeader: BaseDomain.TokenType {
         .accessToken
     }
-
-    public var errorMap: [Int : BaseDomain.PiCKError]? {
+    
+    public var errorMap: [Int : ErrorType]? {
         return nil
     }
 }

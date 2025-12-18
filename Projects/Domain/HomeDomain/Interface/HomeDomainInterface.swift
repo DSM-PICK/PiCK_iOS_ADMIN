@@ -4,6 +4,7 @@ import Combine
 public protocol HomeRepository {
     func getSelfStudyDirector(date: String) -> AnyPublisher<[SelfStudyDirectorEntity], Error>
     func getAdminSelfStudyInfo() -> AnyPublisher<String, Error>
+    func getSelfStudyAndClassroom() -> AnyPublisher<GetSelfStudyAndClassroomEntity, Error>
 }
 
 public struct SelfStudyDirectorEntity: Equatable {
