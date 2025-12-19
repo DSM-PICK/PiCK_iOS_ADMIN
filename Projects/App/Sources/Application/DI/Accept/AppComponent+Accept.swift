@@ -39,6 +39,12 @@ public extension AppComponent {
         }
     }
 
+    var updateEarlyReturnStatusUseCase: any UpdateEarlyReturnStatusUseCaseProtocol {
+        shared {
+            UpdateEarlyReturnStatusUseCase(repository: acceptRepository)
+        }
+    }
+
     private var acceptRepository: AcceptRepository {
         shared {
             AcceptRepositoryImpl(dataSource: acceptDataSource)

@@ -31,6 +31,10 @@ public class AcceptRepositoryImpl: AcceptRepository {
     public func updateClassroomMoveStatus(status: String, idList: [String]) async throws {
         try await dataSource.updateClassroomMoveStatus(status: status, idList: idList)
     }
+
+    public func updateEarlyReturnStatus(status: String, idList: [String]) async throws {
+        try await dataSource.updateEarlyReturnStatus(status: status, idList: idList)
+    }
 }
 
 extension ApplicationResponseDTO {

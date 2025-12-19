@@ -7,4 +7,5 @@ public protocol AcceptDataSource {
     func getEarlyReturnByGrade(grade: Int, classNum: Int) async throws -> EarlyReturnListResponseDTO
     func updateApplicationStatus(status: String, idList: [String]) async throws
     func updateClassroomMoveStatus(status: String, idList: [String]) async throws
+    func updateEarlyReturnStatus(status: String, idList: [String]) async throws
 }

@@ -424,6 +424,9 @@ private class AcceptDependency380d0282470c8b91ca89Provider: AcceptDependency {
     var updateClassroomMoveStatusUseCase: any UpdateClassroomMoveStatusUseCaseProtocol {
         return appComponent.updateClassroomMoveStatusUseCase
     }
+    var updateEarlyReturnStatusUseCase: any UpdateEarlyReturnStatusUseCaseProtocol {
+        return appComponent.updateEarlyReturnStatusUseCase
+    }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
         self.appComponent = appComponent
@@ -454,6 +457,7 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["getEarlyReturnByGradeUseCase-any GetEarlyReturnByGradeUseCaseProtocol"] = { [unowned self] in self.getEarlyReturnByGradeUseCase as Any }
         localTable["updateApplicationStatusUseCase-any UpdateApplicationStatusUseCaseProtocol"] = { [unowned self] in self.updateApplicationStatusUseCase as Any }
         localTable["updateClassroomMoveStatusUseCase-any UpdateClassroomMoveStatusUseCaseProtocol"] = { [unowned self] in self.updateClassroomMoveStatusUseCase as Any }
+        localTable["updateEarlyReturnStatusUseCase-any UpdateEarlyReturnStatusUseCaseProtocol"] = { [unowned self] in self.updateEarlyReturnStatusUseCase as Any }
         localTable["bugReportDataSource-BugReportDataSource"] = { [unowned self] in self.bugReportDataSource as Any }
         localTable["bugReportRepository-BugReportRepository"] = { [unowned self] in self.bugReportRepository as Any }
         localTable["uploadBugImagesUseCase-any UploadBugImagesUseCaseProtocol"] = { [unowned self] in self.uploadBugImagesUseCase as Any }
@@ -633,6 +637,7 @@ extension AcceptComponent: NeedleFoundation.Registration {
         keyPathToName[\AcceptDependency.getEarlyReturnByGradeUseCase] = "getEarlyReturnByGradeUseCase-any GetEarlyReturnByGradeUseCaseProtocol"
         keyPathToName[\AcceptDependency.updateApplicationStatusUseCase] = "updateApplicationStatusUseCase-any UpdateApplicationStatusUseCaseProtocol"
         keyPathToName[\AcceptDependency.updateClassroomMoveStatusUseCase] = "updateClassroomMoveStatusUseCase-any UpdateClassroomMoveStatusUseCaseProtocol"
+        keyPathToName[\AcceptDependency.updateEarlyReturnStatusUseCase] = "updateEarlyReturnStatusUseCase-any UpdateEarlyReturnStatusUseCaseProtocol"
     }
 }
 

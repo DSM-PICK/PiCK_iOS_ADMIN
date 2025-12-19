@@ -11,6 +11,7 @@ public protocol AcceptDependency: NeedleFoundation.Dependency {
     var getEarlyReturnByGradeUseCase: any GetEarlyReturnByGradeUseCaseProtocol { get }
     var updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol { get }
     var updateClassroomMoveStatusUseCase: any UpdateClassroomMoveStatusUseCaseProtocol { get }
+    var updateEarlyReturnStatusUseCase: any UpdateEarlyReturnStatusUseCaseProtocol { get }
 }
 
 public final class AcceptComponent: Component<AcceptDependency>, AcceptFactory {
@@ -27,7 +28,8 @@ public final class AcceptComponent: Component<AcceptDependency>, AcceptFactory {
                                 getClassroomMovesUseCase: self.dependency.getClassroomMovesUseCase,
                                 getEarlyReturnByGradeUseCase: self.dependency.getEarlyReturnByGradeUseCase,
                                 updateApplicationStatusUseCase: self.dependency.updateApplicationStatusUseCase,
-                                updateClassroomMoveStatusUseCase: self.dependency.updateClassroomMoveStatusUseCase
+                                updateClassroomMoveStatusUseCase: self.dependency.updateClassroomMoveStatusUseCase,
+                                updateEarlyReturnStatusUseCase: self.dependency.updateEarlyReturnStatusUseCase
                             )
                         }
                     )

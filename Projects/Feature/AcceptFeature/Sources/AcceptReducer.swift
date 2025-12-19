@@ -8,6 +8,7 @@ public struct AcceptReducer: Reducer {
     private let getEarlyReturnByGradeUseCase: any GetEarlyReturnByGradeUseCaseProtocol
     private let updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol
     private let updateClassroomMoveStatusUseCase: any UpdateClassroomMoveStatusUseCaseProtocol
+    private let updateEarlyReturnStatusUseCase: any UpdateEarlyReturnStatusUseCaseProtocol
 
     public init(
         getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol,
@@ -15,7 +16,8 @@ public struct AcceptReducer: Reducer {
         getClassroomMovesUseCase: any GetClassroomMovesUseCaseProtocol,
         getEarlyReturnByGradeUseCase: any GetEarlyReturnByGradeUseCaseProtocol,
         updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol,
-        updateClassroomMoveStatusUseCase: any UpdateClassroomMoveStatusUseCaseProtocol
+        updateClassroomMoveStatusUseCase: any UpdateClassroomMoveStatusUseCaseProtocol,
+        updateEarlyReturnStatusUseCase: any UpdateEarlyReturnStatusUseCaseProtocol
     ) {
         self.getAllApplicationsUseCase = getAllApplicationsUseCase
         self.getApplicationsByFloorUseCase = getApplicationsByFloorUseCase
@@ -23,6 +25,7 @@ public struct AcceptReducer: Reducer {
         self.getEarlyReturnByGradeUseCase = getEarlyReturnByGradeUseCase
         self.updateApplicationStatusUseCase = updateApplicationStatusUseCase
         self.updateClassroomMoveStatusUseCase = updateClassroomMoveStatusUseCase
+        self.updateEarlyReturnStatusUseCase = updateEarlyReturnStatusUseCase
     }
 
     public enum StudentItem: Equatable, Identifiable {
@@ -174,10 +177,12 @@ public struct AcceptReducer: Reducer {
                 return .run { send in
                     let result = await TaskResult {
                         switch currentType {
-                        case .outgoing, .earlyReturn:
+                        case .outgoing:
                             try await updateApplicationStatusUseCase.execute(status: "OK", idList: idList)
                         case .classroomMove:
                             try await updateClassroomMoveStatusUseCase.execute(status: "OK", idList: idList)
+                        case .earlyReturn:
+                            try await updateEarlyReturnStatusUseCase.execute(status: "OK", idList: idList)
                         }
                     }
 
@@ -209,10 +214,12 @@ public struct AcceptReducer: Reducer {
                 return .run { send in
                     let result = await TaskResult {
                         switch currentType {
-                        case .outgoing, .earlyReturn:
+                        case .outgoing:
                             try await updateApplicationStatusUseCase.execute(status: "NO", idList: idList)
                         case .classroomMove:
                             try await updateClassroomMoveStatusUseCase.execute(status: "NO", idList: idList)
+                        case .earlyReturn:
+                            try await updateEarlyReturnStatusUseCase.execute(status: "NO", idList: idList)
                         }
                     }
 

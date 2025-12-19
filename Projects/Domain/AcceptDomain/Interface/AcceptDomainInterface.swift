@@ -7,6 +7,7 @@ public protocol AcceptRepository {
     func getEarlyReturnByGrade(grade: Int, classNum: Int) async throws -> [EarlyReturnEntity]
     func updateApplicationStatus(status: String, idList: [String]) async throws
     func updateClassroomMoveStatus(status: String, idList: [String]) async throws
+    func updateEarlyReturnStatus(status: String, idList: [String]) async throws
 }
 
 public struct ApplicationEntity: Equatable, Identifiable {

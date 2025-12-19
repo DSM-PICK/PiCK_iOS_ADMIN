@@ -9,6 +9,7 @@ public enum AcceptAPI {
     case getClassroomMovesByGrade(grade: Int, classNum: Int)
     case updateApplicationStatus(status: String, idList: [String])
     case updateClassroomMoveStatus(status: String, idList: [String])
+    case updateEarlyReturnStatus(status: String, idList: [String])
 }
 
 extension AcceptAPI: PiCKAPI {
@@ -20,7 +21,7 @@ extension AcceptAPI: PiCKAPI {
             return .application
         case .getApplicationsByFloor, .getClassroomMovesByGrade, .updateClassroomMoveStatus:
             return .classroom
-        case .getEarlyReturnByGrade:
+        case .getEarlyReturnByGrade, .updateEarlyReturnStatus:
             return .earlyReturn
         }
     }
@@ -39,6 +40,8 @@ extension AcceptAPI: PiCKAPI {
             return "/status"
         case .getEarlyReturnByGrade:
             return "/grade"
+        case .updateEarlyReturnStatus:
+            return "/status"
         }
     }
 
@@ -46,7 +49,7 @@ extension AcceptAPI: PiCKAPI {
         switch self {
         case .getApplicationsByGrade, .getApplicationsByFloor, .getClassroomMovesByGrade, .getEarlyReturnByGrade:
             return .get
-        case .updateApplicationStatus, .updateClassroomMoveStatus:
+        case .updateApplicationStatus, .updateClassroomMoveStatus, .updateEarlyReturnStatus:
             return .patch
         }
     }
@@ -82,6 +85,10 @@ extension AcceptAPI: PiCKAPI {
                 UpdateStatusRequest(status: status, idList: idList)
             )
         case let .updateClassroomMoveStatus(status, idList):
+            return .requestJSONEncodable(
+                UpdateStatusRequest(status: status, idList: idList)
+            )
+        case let .updateEarlyReturnStatus(status, idList):
             return .requestJSONEncodable(
                 UpdateStatusRequest(status: status, idList: idList)
             )
