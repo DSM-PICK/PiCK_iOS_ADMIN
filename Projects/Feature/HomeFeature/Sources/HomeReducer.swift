@@ -77,7 +77,7 @@ public struct HomeReducer: Reducer {
         case selfStudyAndClassroomResponse(TaskResult<GetSelfStudyAndClassroomEntity>)
 
         case acceptResponse(TaskResult<[ApplicationEntity]>)
-        case ealryReturnAcceptListResponse(TaskResult<[EarlyReturnAcceptEntity]>)
+        case earlyReturnAcceptListResponse(TaskResult<[EarlyReturnAcceptEntity]>)
 
         case acceptApplication(id: String)
         case rejectApplication(id: String)
@@ -172,14 +172,14 @@ public struct HomeReducer: Reducer {
             case .acceptResponse(.failure):
                 return .none
 
-            case let .ealryReturnAcceptListResponse(.success(students)):
+            case let .earlyReturnAcceptListResponse(.success(students)):
                 state.earlyReturnAcceptList = students
                 state.outingAcceptList = combineAcceptLists(
                     acceptList: state.acceptList,
                     earlyReturnAcceptList: students
                 )
                 return .none
-            case .ealryReturnAcceptListResponse(.failure):
+            case .earlyReturnAcceptListResponse(.failure):
                 return .none
 
             case let .acceptApplication(id):
@@ -345,7 +345,7 @@ extension HomeReducer {
     private func loadEarlyReturnAcceptList(grade: Int, classNum: Int) -> Effect<Action> {
         .run { send in
             await send(
-                .ealryReturnAcceptListResponse(
+                .earlyReturnAcceptListResponse(
                     await TaskResult {
                         try await getEarlyReturnByGradeUseCase.execute(grade: grade, classNum: classNum)
                     }

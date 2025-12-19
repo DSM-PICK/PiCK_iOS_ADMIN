@@ -101,7 +101,11 @@ public struct HomeView: View {
                                     } else {
                                         ForEach(viewStore.classroomMoveList, id: \.id) { item in
                                             PiCKClassroomMoveCell(
-                                                studentNumber: self.studentNumber(grade: item.grade, classNum: item.grade, num: item.num),
+                                                studentNumber: self.studentNumber(
+                                                    grade: item.grade,
+                                                    classNum: item.classNum,
+                                                    num: item.num
+                                                ),
                                                 studentName: item.userName,
                                                 startPeriod: item.start,
                                                 endPeriod: item.end,
