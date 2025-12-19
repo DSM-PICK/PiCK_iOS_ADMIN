@@ -1,6 +1,5 @@
 import SwiftUI
 import PiCK_iOS_DesignSystem
-import OutListDomainInterface
 
 struct OutingCell: View {
     let studentNumber: String

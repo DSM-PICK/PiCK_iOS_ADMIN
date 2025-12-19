@@ -20,7 +20,7 @@ public struct HomeReducer: Reducer {
         getSelfStudyAndClassroomUseCase: any GetSelfStudyAndClassroomUseCase,
         getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol,
         updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol,
-        getClassroomMoveByFloorUaseCase: any GetClassroomMoveByFloorUseCase,
+        getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase,
         getOutListUseCase: any GetOutListUseCase
     ) {
         self.getSelfStudyDirectorUseCase = getSelfStudyDirectorUseCase
@@ -28,7 +28,7 @@ public struct HomeReducer: Reducer {
         self.getSelfStudyAndClassroomUseCase = getSelfStudyAndClassroomUseCase
         self.getAllApplicationsUseCase = getAllApplicationsUseCase
         self.updateApplicationStatusUseCase = updateApplicationStatusUseCase
-        self.getClassroomMoveByFloorUseCase = getClassroomMoveByFloorUaseCase
+        self.getClassroomMoveByFloorUseCase = getClassroomMoveByFloorUseCase
         self.getOutListUseCase = getOutListUseCase
     }
 

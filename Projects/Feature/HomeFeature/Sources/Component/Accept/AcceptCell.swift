@@ -1,6 +1,5 @@
 import SwiftUI
 import PiCK_iOS_DesignSystem
-import AcceptDomainInterface
 
 struct AcceptCell: View {
     let studentNumber: String

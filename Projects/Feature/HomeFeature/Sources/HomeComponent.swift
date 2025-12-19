@@ -39,7 +39,7 @@ public final class HomeComponent: Component<HomeDependency>, HomeFactory {
                             getSelfStudyAndClassroomUseCase: self.dependency.getSelfStudyAndClassroomUseCase,
                             getAllApplicationsUseCase: self.dependency.getAllApplicationsUseCase,
                             updateApplicationStatusUseCase: self.dependency.updateApplicationStatusUseCase,
-                            getClassroomMoveByFloorUaseCase: self.dependency.getClassroomMoveByFloorUseCase,
+                            getClassroomMoveByFloorUseCase: self.dependency.getClassroomMoveByFloorUseCase,
                             getOutListUseCase: self.dependency.getOutListUseCase
                             
                         )
