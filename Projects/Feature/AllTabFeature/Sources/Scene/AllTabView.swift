@@ -112,7 +112,7 @@ public struct AllTabView: View {
                                 navigationPath.append(.selfStudyCheck)
                             },
                             onOutingHistoryTap: {
-                                router.path.append(.outingHistory)
+                                navigationPath.append(.outingHistory)
                             },
                             onResignTap: {
                                 showResignAlert = true
