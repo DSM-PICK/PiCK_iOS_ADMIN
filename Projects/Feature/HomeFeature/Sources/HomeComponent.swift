@@ -9,6 +9,8 @@ import AllTabFeatureInterface
 import PlanFeatureInterface
 import SchoolMealFeatureInterface
 import AcceptFeatureInterface
+import ClassroomMoveListDomainInterface
+import OutListDomainInterface
 
 public protocol HomeDependency: NeedleFoundation.Dependency {
     var getSelfStudyDirectorUseCase: any GetSelfStudyDirectorUseCaseProtocol { get }
@@ -16,6 +18,8 @@ public protocol HomeDependency: NeedleFoundation.Dependency {
     var getSelfStudyAndClassroomUseCase: any GetSelfStudyAndClassroomUseCase { get }
     var getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol { get }
     var updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol { get }
+    var getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase { get }
+    var getOutListUseCase: any GetOutListUseCase { get }
     var allTabFactory: any AllTabFactory { get }
     var planFactory: any PlanFactory { get }
     var schoolMealFactory: any SchoolMealFactory { get }
@@ -34,7 +38,10 @@ public final class HomeComponent: Component<HomeDependency>, HomeFactory {
                             getAdminSelfStudyInfoUseCase: self.dependency.getAdminSelfStudyInfoUseCase,
                             getSelfStudyAndClassroomUseCase: self.dependency.getSelfStudyAndClassroomUseCase,
                             getAllApplicationsUseCase: self.dependency.getAllApplicationsUseCase,
-                            updateApplicationStatusUseCase: self.dependency.updateApplicationStatusUseCase
+                            updateApplicationStatusUseCase: self.dependency.updateApplicationStatusUseCase,
+                            getClassroomMoveByFloorUaseCase: self.dependency.getClassroomMoveByFloorUseCase,
+                            getOutListUseCase: self.dependency.getOutListUseCase
+                            
                         )
                     }
                 ),

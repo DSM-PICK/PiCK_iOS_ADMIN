@@ -46,21 +46,6 @@ public struct ApplicationEntity: Equatable, Identifiable {
     }
 }
 
-public enum OutgoingType {
-    case outgoing
-    case earlyLeave
-
-    public var title: String {
-        switch self {
-        case .outgoing:
-            return "외출"
-        case .earlyLeave:
-            return "조기귀가"
-        }
-    }
-}
-
-
 public struct ClassroomMoveEntity: Equatable, Identifiable {
     public let id: String
     public let userId: String

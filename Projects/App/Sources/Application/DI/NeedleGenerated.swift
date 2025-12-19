@@ -317,6 +317,12 @@ private class HomeDependency443c4e1871277bd8432aProvider: HomeDependency {
     var updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol {
         return appComponent.updateApplicationStatusUseCase
     }
+    var getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase {
+        return appComponent.getClassroomMoveByFloorUseCase
+    }
+    var getOutListUseCase: any GetOutListUseCase {
+        return appComponent.getOutListUseCase
+    }
     var allTabFactory: any AllTabFactory {
         return appComponent.allTabFactory
     }
@@ -582,6 +588,8 @@ extension HomeComponent: NeedleFoundation.Registration {
         keyPathToName[\HomeDependency.getSelfStudyAndClassroomUseCase] = "getSelfStudyAndClassroomUseCase-any GetSelfStudyAndClassroomUseCase"
         keyPathToName[\HomeDependency.getAllApplicationsUseCase] = "getAllApplicationsUseCase-any GetAllApplicationsUseCaseProtocol"
         keyPathToName[\HomeDependency.updateApplicationStatusUseCase] = "updateApplicationStatusUseCase-any UpdateApplicationStatusUseCaseProtocol"
+        keyPathToName[\HomeDependency.getClassroomMoveByFloorUseCase] = "getClassroomMoveByFloorUseCase-any GetClassroomMoveByFloorUseCase"
+        keyPathToName[\HomeDependency.getOutListUseCase] = "getOutListUseCase-any GetOutListUseCase"
         keyPathToName[\HomeDependency.allTabFactory] = "allTabFactory-any AllTabFactory"
         keyPathToName[\HomeDependency.planFactory] = "planFactory-any PlanFactory"
         keyPathToName[\HomeDependency.schoolMealFactory] = "schoolMealFactory-any SchoolMealFactory"
