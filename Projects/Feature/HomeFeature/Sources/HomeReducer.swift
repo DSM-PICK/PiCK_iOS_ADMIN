@@ -1,23 +1,48 @@
-
 import ComposableArchitecture
 import HomeDomainInterface
+import AcceptDomainInterface
+import OutListDomainInterface
+import ClassroomMoveListDomainInterface
 import Combine
 
 public struct HomeReducer: Reducer {
     private let getSelfStudyDirectorUseCase: any GetSelfStudyDirectorUseCaseProtocol
     private let getAdminSelfStudyInfoUseCase: any GetAdminSelfStudyInfoUseCaseProtocol
+    private let getSelfStudyAndClassroomUseCase: any GetSelfStudyAndClassroomUseCase
+    private let getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol // 외출 신청자 반별로 조회
+    private let updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol // 외출 수락/거절
+    private let getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase // 교실 이동자 층별로 조회
+    private let getOutListUseCase: any GetOutListUseCase // 외출자 층별로 조회
 
     public init(
         getSelfStudyDirectorUseCase: any GetSelfStudyDirectorUseCaseProtocol,
-        getAdminSelfStudyInfoUseCase: any GetAdminSelfStudyInfoUseCaseProtocol
+        getAdminSelfStudyInfoUseCase: any GetAdminSelfStudyInfoUseCaseProtocol,
+        getSelfStudyAndClassroomUseCase: any GetSelfStudyAndClassroomUseCase,
+        getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol,
+        updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol,
+        getClassroomMoveByFloorUaseCase: any GetClassroomMoveByFloorUseCase,
+        getOutListUseCase: any GetOutListUseCase
     ) {
         self.getSelfStudyDirectorUseCase = getSelfStudyDirectorUseCase
         self.getAdminSelfStudyInfoUseCase = getAdminSelfStudyInfoUseCase
+        self.getSelfStudyAndClassroomUseCase = getSelfStudyAndClassroomUseCase
+        self.getAllApplicationsUseCase = getAllApplicationsUseCase
+        self.updateApplicationStatusUseCase = updateApplicationStatusUseCase
+        self.getClassroomMoveByFloorUseCase = getClassroomMoveByFloorUaseCase
+        self.getOutListUseCase = getOutListUseCase
     }
 
     public struct State: Equatable {
         public var selfStudyDirector: [SelfStudyDirectorEntity] = []
         public var adminSelfStudyTeacher: String?
+        public var classroom: String = "0-0"
+        public var floor: String = "0층"
+        public var isHomeroomTeacher: Bool = false
+        public var isSelfStudyTeacher: Bool = false
+        public var acceptList: [ApplicationEntity] = []
+        public var classroomMoveList: [ClassroomMoveListEntity] = []
+        public var outList: [OutListEntity] = []
+
         public init() {}
     }
 
@@ -26,6 +51,14 @@ public struct HomeReducer: Reducer {
         case selfStudyDirectorResponse(Result<[SelfStudyDirectorEntity], Error>)
         case fetchAdminSelfStudyInfo
         case adminSelfStudyInfoResponse(Result<String, Error>)
+        case fetchSelfStudyAndClassroom
+        case selfStudyAndClassroomResponse(TaskResult<GetSelfStudyAndClassroomEntity>)
+        case acceptResponse(TaskResult<[ApplicationEntity]>)
+        case acceptApplication(id: String)
+        case rejectApplication(id: String)
+        case updateStatusResponse(TaskResult<Void>)
+        case classroomMoveResponse(TaskResult<[ClassroomMoveListEntity]>)
+        case outListResponse(TaskResult<[OutListEntity]>)
     }
 
     public var body: some Reducer<State, Action> {
@@ -44,21 +77,173 @@ public struct HomeReducer: Reducer {
 
             case .selfStudyDirectorResponse(.failure):
                 return .none
-                
+
             case .fetchAdminSelfStudyInfo:
                 return .publisher {
                     getAdminSelfStudyInfoUseCase.execute()
                         .map { Action.adminSelfStudyInfoResponse(.success($0)) }
                         .catch { Just(Action.adminSelfStudyInfoResponse(.failure($0))) }
                 }
-                
+
             case let .adminSelfStudyInfoResponse(.success(teacher)):
                 state.adminSelfStudyTeacher = teacher
                 return .none
-                
+
             case .adminSelfStudyInfoResponse(.failure):
                 return .none
+
+            case .fetchSelfStudyAndClassroom:
+                return .publisher {
+                    getSelfStudyAndClassroomUseCase.execute()
+                        .map { Action.selfStudyAndClassroomResponse(.success($0)) }
+                        .catch { Just(Action.selfStudyAndClassroomResponse(.failure($0))) }
+                }
+
+            case let .selfStudyAndClassroomResponse(.success(data)):
+                let grade = data.grade
+                let classNum = data.classNum
+                let selfStudyFloor = data.selfStudyFloor
+
+                state.classroom = "\(grade)-\(classNum)"
+                state.floor = "\(selfStudyFloor)층"
+
+                var effects: [Effect<Action>] = []
+
+                if selfStudyFloor != 0 {
+                    state.isSelfStudyTeacher = true
+                    effects.append(loadClassroomMoveList(floor: selfStudyFloor))
+                    effects.append(loadOutList(floor: selfStudyFloor))
+                } else {
+                    state.isSelfStudyTeacher = false
+                }
+
+                if grade != 0 && classNum != 0 {
+                    state.isHomeroomTeacher = true
+                    effects.append(loadAcceptList(grade: grade, classNum: classNum))
+                } else {
+                    state.isHomeroomTeacher = false
+                }
+
+                return .merge(effects)
+
+            case .selfStudyAndClassroomResponse(.failure):
+                return .none
+
+            case let .acceptResponse(.success(list)):
+                state.acceptList = list
+                return .none
+
+            case .acceptResponse(.failure):
+                return .none
+                
+            case let .acceptApplication(id):
+                return .run { send in
+                    await send(
+                        .updateStatusResponse(
+                            await TaskResult {
+                                try await updateApplicationStatusUseCase.execute(
+                                    status: "OK",
+                                    idList: [id]
+                                )
+                            }
+                        )
+                    )
+                }
+                
+            case let .rejectApplication(id):
+                return .run { send in
+                    await send(
+                        .updateStatusResponse(
+                            await TaskResult {
+                                try await updateApplicationStatusUseCase.execute(
+                                    status: "NO",
+                                    idList: [id]
+                                )
+                            }
+                        )
+                    )
+                }
+                
+            case .updateStatusResponse(.success):
+                let components = state.classroom.split(separator: "-").compactMap { Int($0) }
+                if components.count == 2 {
+                    return loadAcceptList(grade: components[0], classNum: components[1])
+                }
+                return .none
+                
+            case .updateStatusResponse(.failure):
+                return .none
+
+            case let .classroomMoveResponse(.success(students)):
+                state.classroomMoveList = students
+                return .none
+
+            case .classroomMoveResponse(.failure(_)):
+                return .none
+
+            case let .outListResponse(.success(students)):
+                state.outList = students
+                return .none
+
+            case .outListResponse(.failure):
+                return .none
             }
+        }
+    }
+}
+
+extension HomeReducer {
+    private func loadAcceptList(grade: Int, classNum: Int) -> Effect<Action> {
+        .run { send in
+            await send(
+                .acceptResponse(
+                    await TaskResult {
+                        try await getAllApplicationsUseCase.execute(
+                            grade: grade,
+                            classNum: classNum
+                        )
+                    }
+                )
+            )
+        }
+    }
+
+    private func loadClassroomMoveList(floor: Int) -> Effect<
+        Action> {
+            .run { send in
+                await send(
+                    .classroomMoveResponse(
+                        await TaskResult {
+                            try await getClassroomMoveByFloorUseCase.execute(floor: floor)
+                        }
+                    )
+                )
+            }
+        }
+
+    private func loadOutList(floor: Int) -> Effect<Action> {
+        .run { send in
+            await send(
+                .outListResponse(
+                    await TaskResult {
+                        try await getOutListUseCase.execute(floor: floor)
+                    }
+                )
+            )
+        }
+    }
+}
+
+public enum OutgoingType {
+    case outgoing
+    case earlyLeave
+
+    public var title: String {
+        switch self {
+        case .outgoing:
+            return "외출"
+        case .earlyLeave:
+            return "조기귀가"
         }
     }
 }

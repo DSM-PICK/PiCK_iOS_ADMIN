@@ -72,10 +72,10 @@ struct FloorTeacherRow: View {
     var body: some View {
         HStack(spacing: 16) {
             Text(floor)
-                .pickText(type: .body2, textColor: Color.Primary.primary500)
+                .pickText(type: .label2, textColor: Color.Primary.primary500)
             
             Text("\(teacherName) 선생님")
-                .pickText(type: .subTitle3, textColor: Color.Normal.black)
+                .pickText(type: .subTitle2, textColor: Color.Normal.black)
         }
     }
 }

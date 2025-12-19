@@ -326,6 +326,21 @@ private class HomeDependency443c4e1871277bd8432aProvider: HomeDependency {
     var getAdminSelfStudyInfoUseCase: any GetAdminSelfStudyInfoUseCaseProtocol {
         return appComponent.getAdminSelfStudyInfoUseCase
     }
+    var getSelfStudyAndClassroomUseCase: any GetSelfStudyAndClassroomUseCase {
+        return appComponent.getSelfStudyAndClassroomUseCase
+    }
+    var getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol {
+        return appComponent.getAllApplicationsUseCase
+    }
+    var updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol {
+        return appComponent.updateApplicationStatusUseCase
+    }
+    var getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase {
+        return appComponent.getClassroomMoveByFloorUseCase
+    }
+    var getOutListUseCase: any GetOutListUseCase {
+        return appComponent.getOutListUseCase
+    }
     var allTabFactory: any AllTabFactory {
         return appComponent.allTabFactory
     }
@@ -450,6 +465,7 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["keychain-any Keychain"] = { [unowned self] in self.keychain as Any }
         localTable["getSelfStudyDirectorUseCase-any GetSelfStudyDirectorUseCaseProtocol"] = { [unowned self] in self.getSelfStudyDirectorUseCase as Any }
         localTable["getAdminSelfStudyInfoUseCase-any GetAdminSelfStudyInfoUseCaseProtocol"] = { [unowned self] in self.getAdminSelfStudyInfoUseCase as Any }
+        localTable["getSelfStudyAndClassroomUseCase-any GetSelfStudyAndClassroomUseCase"] = { [unowned self] in self.getSelfStudyAndClassroomUseCase as Any }
         localTable["getOutingHistoryUseCase-any GetOutingHistoryUseCase"] = { [unowned self] in self.getOutingHistoryUseCase as Any }
         localTable["getAllApplicationsUseCase-any GetAllApplicationsUseCaseProtocol"] = { [unowned self] in self.getAllApplicationsUseCase as Any }
         localTable["getApplicationsByFloorUseCase-any GetApplicationsByFloorUseCaseProtocol"] = { [unowned self] in self.getApplicationsByFloorUseCase as Any }
@@ -601,6 +617,11 @@ extension HomeComponent: NeedleFoundation.Registration {
     public func registerItems() {
         keyPathToName[\HomeDependency.getSelfStudyDirectorUseCase] = "getSelfStudyDirectorUseCase-any GetSelfStudyDirectorUseCaseProtocol"
         keyPathToName[\HomeDependency.getAdminSelfStudyInfoUseCase] = "getAdminSelfStudyInfoUseCase-any GetAdminSelfStudyInfoUseCaseProtocol"
+        keyPathToName[\HomeDependency.getSelfStudyAndClassroomUseCase] = "getSelfStudyAndClassroomUseCase-any GetSelfStudyAndClassroomUseCase"
+        keyPathToName[\HomeDependency.getAllApplicationsUseCase] = "getAllApplicationsUseCase-any GetAllApplicationsUseCaseProtocol"
+        keyPathToName[\HomeDependency.updateApplicationStatusUseCase] = "updateApplicationStatusUseCase-any UpdateApplicationStatusUseCaseProtocol"
+        keyPathToName[\HomeDependency.getClassroomMoveByFloorUseCase] = "getClassroomMoveByFloorUseCase-any GetClassroomMoveByFloorUseCase"
+        keyPathToName[\HomeDependency.getOutListUseCase] = "getOutListUseCase-any GetOutListUseCase"
         keyPathToName[\HomeDependency.allTabFactory] = "allTabFactory-any AllTabFactory"
         keyPathToName[\HomeDependency.planFactory] = "planFactory-any PlanFactory"
         keyPathToName[\HomeDependency.schoolMealFactory] = "schoolMealFactory-any SchoolMealFactory"

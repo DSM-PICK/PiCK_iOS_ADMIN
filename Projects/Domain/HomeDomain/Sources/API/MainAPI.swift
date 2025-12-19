@@ -2,16 +2,22 @@ import Foundation
 import BaseDomain
 import Moya
 
-public enum SelfStudyAPI {
+public enum MainAPI {
     case getSelfStudyDirector(date: String)
     case getAdminSelfStudyInfo
+    case getSelfStudyAndClassroom
 }
 
-extension SelfStudyAPI: PiCKAPI {
+extension MainAPI: PiCKAPI {
     public typealias ErrorType = Never
 
     public var domain: BaseDomain.PiCKDomain {
-        .selfStudy
+        switch self {
+        case .getAdminSelfStudyInfo, .getSelfStudyDirector:
+            return .selfStudy
+        case .getSelfStudyAndClassroom:
+            return .admin
+        }
     }
 
     public var urlPath: String {
@@ -20,6 +26,8 @@ extension SelfStudyAPI: PiCKAPI {
             return "/today"
         case .getAdminSelfStudyInfo:
             return "/admin"
+        case .getSelfStudyAndClassroom:
+            return "/main"
         }
     }
 
@@ -35,6 +43,8 @@ extension SelfStudyAPI: PiCKAPI {
                 encoding: URLEncoding.queryString
             )
         case .getAdminSelfStudyInfo:
+            return .requestPlain
+        case .getSelfStudyAndClassroom:
             return .requestPlain
         }
     }
