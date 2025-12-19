@@ -165,7 +165,14 @@ public struct AcceptView: View {
                     Spacer()
                 }
                 .onAppear {
-                    viewStore.send(.fetchApplications(type: .outgoing, grade: 5, classNum: 5))
+                    switch selectedOption {
+                    case .outgoing:
+                        viewStore.send(.fetchApplications(type: .outgoing, grade: 5, classNum: 5))
+                    case .classroomMove:
+                        viewStore.send(.fetchApplicationsByFloor(floor: selectedFloor))
+                    case .earlyReturn:
+                        viewStore.send(.fetchApplications(type: .earlyReturn, grade: 5, classNum: 5))
+                    }
                 }
                 .navigationBarBackButtonHidden(true)
                 .toolbar {
