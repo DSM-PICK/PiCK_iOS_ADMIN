@@ -60,7 +60,11 @@ public struct OutListReducer: Reducer {
                 state.currentFloor = floor
                 state.isLoading = true
                 state.selectedStudents.removeAll()
-                return loadOutList(floor: floor)
+                if state.currentType == .earlyReturn {
+                    return loadEarlyReturn(floor: floor)
+                } else {
+                    return loadOutList(floor: floor)
+                }
 
             case let .fetchByType(type):
                 state.currentType = type
@@ -69,7 +73,7 @@ public struct OutListReducer: Reducer {
                 if state.currentType == .outing {
                     return loadOutList(floor: state.currentFloor)
                 } else {
-                    return loadEarlyReturn()
+                    return loadEarlyReturn(floor: state.currentFloor)
                 }
 
             case .outListResponse(.success(let students)):
@@ -146,11 +150,11 @@ extension OutListReducer {
         }
     }
 
-    private func loadEarlyReturn() -> Effect<Action> {
+    private func loadEarlyReturn(floor: Int) -> Effect<Action> {
         .run { send in
             await send(.earlyReturnResponse(
                 await TaskResult {
-                    try await getEarlyReturnUseCase.execute()
+                    try await getEarlyReturnUseCase.execute(floor: floor, status: "OK")
                 }
             ))
         }

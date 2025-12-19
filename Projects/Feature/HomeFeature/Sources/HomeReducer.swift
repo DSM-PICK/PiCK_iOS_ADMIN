@@ -8,11 +8,17 @@ import Combine
 public struct HomeReducer: Reducer {
     private let getSelfStudyDirectorUseCase: any GetSelfStudyDirectorUseCaseProtocol
     private let getAdminSelfStudyInfoUseCase: any GetAdminSelfStudyInfoUseCaseProtocol
-    private let getSelfStudyAndClassroomUseCase: any GetSelfStudyAndClassroomUseCase
+
+    private let getSelfStudyAndClassroomUseCase: any GetSelfStudyAndClassroomUseCase // 어드민 자감/다임 여부
+
     private let getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol // 외출 신청자 반별로 조회
     private let updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol // 외출 수락/거절
+    private let getEarlyReturnByGradeUseCase: any GetEarlyReturnByGradeUseCaseProtocol // 조기귀가 신청자 반별로 조회
+    private let updateEarlyReturnStatusUseCase: any UpdateEarlyReturnStatusUseCaseProtocol // 조기귀가 수락/거절
+
     private let getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase // 교실 이동자 층별로 조회
     private let getOutListUseCase: any GetOutListUseCase // 외출자 층별로 조회
+    private let getEarlyReturnUseCase: any GetEarlyReturnUseCase // 조기귀가자 층별로 조회
 
     public init(
         getSelfStudyDirectorUseCase: any GetSelfStudyDirectorUseCaseProtocol,
@@ -20,16 +26,22 @@ public struct HomeReducer: Reducer {
         getSelfStudyAndClassroomUseCase: any GetSelfStudyAndClassroomUseCase,
         getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol,
         updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol,
+        getEarlyReturnByGradeUseCase: any GetEarlyReturnByGradeUseCaseProtocol,
+        updateEarlyReturnStatusUseCase: any UpdateEarlyReturnStatusUseCaseProtocol,
         getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase,
-        getOutListUseCase: any GetOutListUseCase
+        getOutListUseCase: any GetOutListUseCase,
+        getEarlyReturnUseCase: any GetEarlyReturnUseCase
     ) {
         self.getSelfStudyDirectorUseCase = getSelfStudyDirectorUseCase
         self.getAdminSelfStudyInfoUseCase = getAdminSelfStudyInfoUseCase
         self.getSelfStudyAndClassroomUseCase = getSelfStudyAndClassroomUseCase
         self.getAllApplicationsUseCase = getAllApplicationsUseCase
         self.updateApplicationStatusUseCase = updateApplicationStatusUseCase
+        self.getEarlyReturnByGradeUseCase = getEarlyReturnByGradeUseCase
+        self.updateEarlyReturnStatusUseCase = updateEarlyReturnStatusUseCase
         self.getClassroomMoveByFloorUseCase = getClassroomMoveByFloorUseCase
         self.getOutListUseCase = getOutListUseCase
+        self.getEarlyReturnUseCase = getEarlyReturnUseCase
     }
 
     public struct State: Equatable {
@@ -39,9 +51,18 @@ public struct HomeReducer: Reducer {
         public var floor: String = "0층"
         public var isHomeroomTeacher: Bool = false
         public var isSelfStudyTeacher: Bool = false
-        public var acceptList: [ApplicationEntity] = []
+
+        // 내부용 리스트
+        var earlyReturnList: [EarlyReturnEntity] = []
+        var outList: [OutListEntity] = []
+        var acceptList: [ApplicationEntity] = []
+        var earlyReturnAcceptList: [EarlyReturnAcceptEntity] = []
+        
+        // View에서 사용할 합쳐진 리스트
+        public var outingStudentList: [OutingStudentViewModel] = []
+        public var outingAcceptList: [OutingAcceptViewModel] = []
+        
         public var classroomMoveList: [ClassroomMoveListEntity] = []
-        public var outList: [OutListEntity] = []
 
         public init() {}
     }
@@ -51,14 +72,24 @@ public struct HomeReducer: Reducer {
         case selfStudyDirectorResponse(Result<[SelfStudyDirectorEntity], Error>)
         case fetchAdminSelfStudyInfo
         case adminSelfStudyInfoResponse(Result<String, Error>)
+
         case fetchSelfStudyAndClassroom
         case selfStudyAndClassroomResponse(TaskResult<GetSelfStudyAndClassroomEntity>)
+
         case acceptResponse(TaskResult<[ApplicationEntity]>)
+        case earlyReturnAcceptListResponse(TaskResult<[EarlyReturnAcceptEntity]>)
+
         case acceptApplication(id: String)
         case rejectApplication(id: String)
+        case acceptEarlyReturn(id: String)
+        case rejectEarlyReturn(id: String)
+
         case updateStatusResponse(TaskResult<Void>)
+        case updateEarlyReturnStatusResponse(TaskResult<Void>)
+
         case classroomMoveResponse(TaskResult<[ClassroomMoveListEntity]>)
         case outListResponse(TaskResult<[OutListEntity]>)
+        case earlyReturnListResponse(TaskResult<[EarlyReturnEntity]>)
     }
 
     public var body: some Reducer<State, Action> {
@@ -113,6 +144,7 @@ public struct HomeReducer: Reducer {
                     state.isSelfStudyTeacher = true
                     effects.append(loadClassroomMoveList(floor: selfStudyFloor))
                     effects.append(loadOutList(floor: selfStudyFloor))
+                    effects.append(loadEarlyReturnList(floor: selfStudyFloor))
                 } else {
                     state.isSelfStudyTeacher = false
                 }
@@ -120,6 +152,7 @@ public struct HomeReducer: Reducer {
                 if grade != 0 && classNum != 0 {
                     state.isHomeroomTeacher = true
                     effects.append(loadAcceptList(grade: grade, classNum: classNum))
+                    effects.append(loadEarlyReturnAcceptList(grade: grade, classNum: classNum))
                 } else {
                     state.isHomeroomTeacher = false
                 }
@@ -131,11 +164,24 @@ public struct HomeReducer: Reducer {
 
             case let .acceptResponse(.success(list)):
                 state.acceptList = list
+                state.outingAcceptList = combineAcceptLists(
+                    acceptList: list,
+                    earlyReturnAcceptList: state.earlyReturnAcceptList
+                )
                 return .none
-
             case .acceptResponse(.failure):
                 return .none
-                
+
+            case let .earlyReturnAcceptListResponse(.success(students)):
+                state.earlyReturnAcceptList = students
+                state.outingAcceptList = combineAcceptLists(
+                    acceptList: state.acceptList,
+                    earlyReturnAcceptList: students
+                )
+                return .none
+            case .earlyReturnAcceptListResponse(.failure):
+                return .none
+
             case let .acceptApplication(id):
                 return .run { send in
                     await send(
@@ -149,7 +195,6 @@ public struct HomeReducer: Reducer {
                         )
                     )
                 }
-                
             case let .rejectApplication(id):
                 return .run { send in
                     await send(
@@ -163,29 +208,81 @@ public struct HomeReducer: Reducer {
                         )
                     )
                 }
-                
+            case let .acceptEarlyReturn(id):
+                return .run { send in
+                    await send(
+                        .updateEarlyReturnStatusResponse(
+                            await TaskResult {
+                                try await updateEarlyReturnStatusUseCase.execute(
+                                    status: "OK",
+                                    idList: [id]
+                                )
+                            }
+                        )
+                    )
+                }
+            case let .rejectEarlyReturn(id):
+                return .run { send in
+                    await send(
+                        .updateEarlyReturnStatusResponse(
+                            await TaskResult {
+                                try await updateEarlyReturnStatusUseCase.execute(
+                                    status: "NO",
+                                    idList: [id]
+                                )
+                            }
+                        )
+                    )
+                }
+
             case .updateStatusResponse(.success):
                 let components = state.classroom.split(separator: "-").compactMap { Int($0) }
                 if components.count == 2 {
-                    return loadAcceptList(grade: components[0], classNum: components[1])
+                    return .merge(
+                        loadAcceptList(grade: components[0], classNum: components[1]),
+                        loadEarlyReturnAcceptList(grade: components[0], classNum: components[1])
+                    )
                 }
                 return .none
-                
             case .updateStatusResponse(.failure):
+                return .none
+
+            case .updateEarlyReturnStatusResponse(.success):
+                let components = state.classroom.split(separator: "-").compactMap { Int($0) }
+                if components.count == 2 {
+                    return .merge(
+                        loadAcceptList(grade: components[0], classNum: components[1]),
+                        loadEarlyReturnAcceptList(grade: components[0], classNum: components[1])
+                    )
+                }
+                return .none
+            case .updateEarlyReturnStatusResponse(.failure):
                 return .none
 
             case let .classroomMoveResponse(.success(students)):
                 state.classroomMoveList = students
                 return .none
-
             case .classroomMoveResponse(.failure(_)):
                 return .none
 
             case let .outListResponse(.success(students)):
                 state.outList = students
+                state.outingStudentList = combineOutingLists(
+                    outList: students,
+                    earlyReturnList: state.earlyReturnList
+                )
+                return .none
+            case .outListResponse(.failure):
                 return .none
 
-            case .outListResponse(.failure):
+            case let .earlyReturnListResponse(.success(students)):
+                state.earlyReturnList = students
+                state.outingStudentList = combineOutingLists(
+                    outList: state.outList,
+                    earlyReturnList: students
+                )
+                return .none
+            case .earlyReturnListResponse(.failure):
                 return .none
             }
         }
@@ -232,18 +329,55 @@ extension HomeReducer {
             )
         }
     }
-}
 
-public enum OutgoingType {
-    case outgoing
-    case earlyLeave
+    private func loadEarlyReturnList(floor: Int) -> Effect<Action> {
+        .run { send in
+            await send(
+                .earlyReturnListResponse(
+                    await TaskResult {
+                        try await getEarlyReturnUseCase.execute(floor: floor, status: "OK")
+                    }
+                )
+            )
+        }
+    }
+    
+    private func loadEarlyReturnAcceptList(grade: Int, classNum: Int) -> Effect<Action> {
+        .run { send in
+            await send(
+                .earlyReturnAcceptListResponse(
+                    await TaskResult {
+                        try await getEarlyReturnByGradeUseCase.execute(grade: grade, classNum: classNum)
+                    }
+                )
+            )
+        }
+    }
 
-    public var title: String {
-        switch self {
-        case .outgoing:
-            return "외출"
-        case .earlyLeave:
-            return "조기귀가"
+    private func combineOutingLists(
+        outList: [OutListEntity],
+        earlyReturnList: [EarlyReturnEntity]
+    ) -> [OutingStudentViewModel] {
+        let outViewModels = outList.map { OutingStudentViewModel(from: $0) }
+        let earlyReturnViewModels = earlyReturnList.map { OutingStudentViewModel(from: $0) }
+        
+        let combined = outViewModels + earlyReturnViewModels
+        
+        return combined.sorted {
+            ($0.grade, $0.classNum, $0.num) < ($1.grade, $1.classNum, $1.num)
+        }
+    }
+    private func combineAcceptLists(
+        acceptList: [ApplicationEntity],
+        earlyReturnAcceptList: [EarlyReturnAcceptEntity]
+    ) -> [OutingAcceptViewModel] {
+        let outViewModels = acceptList.map { OutingAcceptViewModel(from: $0) }
+        let earlyReturnViewModels = earlyReturnAcceptList.map { OutingAcceptViewModel(from: $0) }
+        
+        let combined = outViewModels + earlyReturnViewModels
+        
+        return combined.sorted {
+            ($0.grade, $0.classNum, $0.num) < ($1.grade, $1.classNum, $1.num)
         }
     }
 }

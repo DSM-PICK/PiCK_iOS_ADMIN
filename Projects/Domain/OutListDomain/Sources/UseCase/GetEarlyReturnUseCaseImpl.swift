@@ -8,7 +8,7 @@ public class GetEarlyReturnUseCaseImpl: GetEarlyReturnUseCase {
         self.repository = repository
     }
 
-    public func execute() async throws -> [EarlyReturnEntity] {
-        try await repository.getEarlyReturn()
+    public func execute(floor: Int, status: String) async throws -> [EarlyReturnEntity] {
+        try await repository.getEarlyReturn(floor: floor, status: status)
     }
 }

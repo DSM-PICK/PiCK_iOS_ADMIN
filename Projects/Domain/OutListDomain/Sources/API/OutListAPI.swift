@@ -5,7 +5,7 @@ import Moya
 public enum OutListAPI {
     case getOutList(floor: Int)
     case returnStudents(ids: [String])
-    case earlyReturnList
+    case earlyReturnList(floor: Int, status: String)
 }
 
 extension OutListAPI: PiCKAPI {
@@ -28,7 +28,7 @@ extension OutListAPI: PiCKAPI {
         case .returnStudents:
             return "/return"
         case .earlyReturnList:
-            return "/ok"
+            return "/floor"
         }
     }
 
@@ -52,8 +52,13 @@ extension OutListAPI: PiCKAPI {
             )
         case let .returnStudents(ids):
             return .requestJSONEncodable(ids)
-        case .earlyReturnList:
-            return .requestPlain
+        case let .earlyReturnList(floor, status):
+            return .requestParameters(
+                parameters: [
+                    "floor": floor,
+                    "status": status
+                ], encoding: URLEncoding.queryString
+            )
         }
     }
 

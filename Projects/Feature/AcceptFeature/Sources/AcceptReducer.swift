@@ -31,7 +31,7 @@ public struct AcceptReducer: Reducer {
     public enum StudentItem: Equatable, Identifiable {
         case application(ApplicationEntity)
         case classroomMove(ClassroomMoveEntity)
-        case earlyReturn(EarlyReturnEntity)
+        case earlyReturn(EarlyReturnAcceptEntity)
 
         public var id: String {
             switch self {
@@ -65,7 +65,7 @@ public struct AcceptReducer: Reducer {
         case fetchApplicationsByFloor(floor: Int)
         case applicationsResponse(Result<[ApplicationEntity], Error>)
         case classroomMovesResponse(Result<[ClassroomMoveEntity], Error>)
-        case earlyReturnResponse(Result<[EarlyReturnEntity], Error>)
+        case earlyReturnResponse(Result<[EarlyReturnAcceptEntity], Error>)
         case toggleSelection(id: String)
         case approveSelectedApplications
         case rejectSelectedApplications
