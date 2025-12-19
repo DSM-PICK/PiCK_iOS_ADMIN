@@ -29,7 +29,9 @@ public struct HomeReducer: Reducer {
         public var selfStudyDirector: [SelfStudyDirectorEntity] = []
         public var adminSelfStudyTeacher: String?
         public var classroom: String = "0-0"
+        public var floor: String = "0층"
         public var isHomeroomTeacher: Bool = false
+        public var isSelfStudyTeacher: Bool = false
         public var outList: [ApplicationEntity] = []
 
         public init() {}
@@ -90,8 +92,16 @@ public struct HomeReducer: Reducer {
             case let .selfStudyAndClassroomResponse(.success(data)):
                 let grade = data.grade
                 let classNum = data.classNum
+                let selfStudyFloor = data.selfStudyFloor
 
                 state.classroom = "\(grade)-\(classNum)"
+                state.floor = "\(selfStudyFloor)층"
+
+                if selfStudyFloor != 0 {
+                    state.isSelfStudyTeacher = true
+                } else {
+                    state.isSelfStudyTeacher = false
+                }
 
                 if grade != 0 && classNum != 0 {
                     state.isHomeroomTeacher = true

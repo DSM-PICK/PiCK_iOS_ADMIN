@@ -54,6 +54,68 @@ public struct HomeView: View {
                         )
                     }
 
+                    if viewStore.isSelfStudyTeacher {
+                        AccordionView(
+                            badge: viewStore.floor,
+                            title: "외출자 확인",
+                            content: {
+                                VStack(spacing: 8) {
+                                    if viewStore.outList.isEmpty {
+                                        Text("외출자가 없습니다")
+                                            .pickText(type: .body1, textColor: .Gray.gray600)
+                                            .frame(maxWidth: .infinity)
+                                            .padding(.vertical, 24)
+                                    } else {
+                                        ForEach(viewStore.outList) { item in
+                                            AcceptCell(
+                                                studentNumber: item.studentNumber,
+                                                name: item.userName,
+                                                type: .outgoing,
+                                                onAccept: {
+                                                    viewStore.send(.acceptApplication(id: item.id))
+                                                },
+                                                onReject: {
+                                                    viewStore.send(.rejectApplication(id: item.id))
+                                                }
+                                            )
+                                        }
+                                    }
+                                }
+                                .padding(.vertical, 12)
+                            }
+                        )
+
+                        AccordionView(
+                            badge: viewStore.floor,
+                            title: "교실 이동자 확인",
+                            content: {
+                                VStack(spacing: 8) {
+                                    if viewStore.outList.isEmpty {
+                                        Text("교실 이동자가 없습니다")
+                                            .pickText(type: .body1, textColor: .Gray.gray600)
+                                            .frame(maxWidth: .infinity)
+                                            .padding(.vertical, 24)
+                                    } else {
+                                        ForEach(viewStore.outList) { item in
+                                            AcceptCell(
+                                                studentNumber: item.studentNumber,
+                                                name: item.userName,
+                                                type: .outgoing,
+                                                onAccept: {
+                                                    viewStore.send(.acceptApplication(id: item.id))
+                                                },
+                                                onReject: {
+                                                    viewStore.send(.rejectApplication(id: item.id))
+                                                }
+                                            )
+                                        }
+                                    }
+                                }
+                                .padding(.vertical, 12)
+                            }
+                        )
+                    }
+
                     AllSelfStudyView(selfStudyDirector: viewStore.selfStudyDirector)
                         .frame(maxWidth: .infinity)
                 }
