@@ -21,6 +21,12 @@ public extension AppComponent {
         }
     }
 
+    var getEarlyReturnByGradeUseCase: any GetEarlyReturnByGradeUseCaseProtocol {
+        shared {
+            GetEarlyReturnByGradeUseCase(repository: acceptRepository)
+        }
+    }
+
     var updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol {
         shared {
             UpdateApplicationStatusUseCase(repository: acceptRepository)

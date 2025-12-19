@@ -23,7 +23,6 @@ import OutListFeature
 import OutingHistoryFeature
 import SelfStudyCheckFeature
 import SelfStudyCheckDomainInterface
-import ResignFeature
 
 public struct AllTabView: View {
     let store: StoreOf<AllTabReducer>

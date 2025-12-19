@@ -92,7 +92,7 @@ public struct AcceptView: View {
                 }
 
                 HStack(spacing: 0) {
-                    Text("\(selectedOption == .outgoing ? "외출 수락" : "교실 이동") 신청한 학생")
+                    Text("\(selectedOption == .outgoing ? "외출 수락" : selectedOption == .classroomMove ? "교실 이동" : "조기 귀가") 신청한 학생")
                         .pickText(type: .body2, textColor: .Gray.gray600)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
@@ -141,6 +141,19 @@ public struct AcceptView: View {
                                             viewStore.send(.toggleSelection(id: move.id))
                                         }
                                     )
+                                case .earlyReturn(let earlyReturn):
+                                    PiCKAcceptStudentCell(
+                                        studentNumber: "\(earlyReturn.grade)\(earlyReturn.classNum)\(String(format: "%02d", earlyReturn.num))",
+                                        studentName: earlyReturn.userName,
+                                        startTime: earlyReturn.start,
+                                        endTime: "",
+                                        activityType: "조기 귀가",
+                                        reason: earlyReturn.reason,
+                                        isSelected: viewStore.selectedItemIds.contains(earlyReturn.id),
+                                        onTap: {
+                                            viewStore.send(.toggleSelection(id: earlyReturn.id))
+                                        }
+                                    )
                                 }
                             }
                         }
@@ -165,18 +178,21 @@ public struct AcceptView: View {
                     PiCK_iOS_DesignSystem.SinglePickerBottomSheet(
                         isPresented: $isApplyBottomSheetPresented,
                         title: "수락 항목을 선택해주세요",
-                        options: ["외출 수락", "교실 이동"],
+                        options: ["외출 수락", "교실 이동", "조기 귀가"],
                         onComplete: { option in
                             if option == "외출 수락" {
                                 selectedOption = .outgoing
                                 viewStore.send(.fetchApplications(type: .outgoing, grade: 5, classNum: 5))
-                            } else {
+                            } else if option == "교실 이동" {
                                 selectedOption = .classroomMove
                                 viewStore.send(.fetchApplicationsByFloor(floor: selectedFloor))
+                            } else if option == "조기 귀가" {
+                                selectedOption = .earlyReturn
+                                viewStore.send(.fetchApplications(type: .earlyReturn, grade: 5, classNum: 5))
                             }
                         }
                     )
-                    .presentationDetents([.height(350)])
+                    .presentationDetents([.height(400)])
                     .presentationDragIndicator(.hidden)
                 }
 
