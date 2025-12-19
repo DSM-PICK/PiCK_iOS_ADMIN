@@ -20,6 +20,8 @@ public protocol HomeDependency: NeedleFoundation.Dependency {
     var updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol { get }
     var getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase { get }
     var getOutListUseCase: any GetOutListUseCase { get }
+    var getEarlyReturnUseCase: any GetEarlyReturnUseCase { get }
+
     var allTabFactory: any AllTabFactory { get }
     var planFactory: any PlanFactory { get }
     var schoolMealFactory: any SchoolMealFactory { get }
@@ -40,8 +42,8 @@ public final class HomeComponent: Component<HomeDependency>, HomeFactory {
                             getAllApplicationsUseCase: self.dependency.getAllApplicationsUseCase,
                             updateApplicationStatusUseCase: self.dependency.updateApplicationStatusUseCase,
                             getClassroomMoveByFloorUseCase: self.dependency.getClassroomMoveByFloorUseCase,
-                            getOutListUseCase: self.dependency.getOutListUseCase
-                            
+                            getOutListUseCase: self.dependency.getOutListUseCase,
+                            getEarlyReturnUseCase: self.dependency.getEarlyReturnUseCase
                         )
                     }
                 ),

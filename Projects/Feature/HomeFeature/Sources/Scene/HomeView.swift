@@ -36,7 +36,7 @@ public struct HomeView: View {
                                     } else {
                                         ForEach(viewStore.acceptList) { item in
                                             AcceptCell(
-                                                studentNumber: item.studentNumber,
+                                                studentNumber: self.studentNumber(grade: item.grade, classNum: item.grade, num: item.num),
                                                 name: item.userName,
                                                 type: .outgoing,
                                                 onAccept: {
@@ -60,7 +60,7 @@ public struct HomeView: View {
                             title: "외출자 확인",
                             content: {
                                 VStack(spacing: 8) {
-                                    if viewStore.outList.isEmpty {
+                                    if viewStore.outList.isEmpty && viewStore.earlyReturnList.isEmpty {
                                         Text("외출자가 없습니다")
                                             .pickText(type: .body1, textColor: .Gray.gray600)
                                             .frame(maxWidth: .infinity)
@@ -68,9 +68,16 @@ public struct HomeView: View {
                                     } else {
                                         ForEach(viewStore.outList) { item in
                                             OutingCell(
-                                                studentNumber: item.studentNumber,
+                                                studentNumber: self.studentNumber(grade: item.grade, classNum: item.grade, num: item.num),
                                                 name: item.userName,
                                                 type: .outgoing)
+                                        }
+                                        ForEach(viewStore.earlyReturnList) { item in
+                                            OutingCell(
+                                                studentNumber: self.studentNumber(grade: item.grade, classNum: item.grade, num: item.num),
+                                                name: item.userName,
+                                                type: .earlyReturn
+                                            )
                                         }
                                     }
                                 }
@@ -91,7 +98,7 @@ public struct HomeView: View {
                                     } else {
                                         ForEach(viewStore.classroomMoveList, id: \.id) { item in
                                             PiCKClassroomMoveCell(
-                                                studentNumber: "\(item.grade)\(item.classNum)\(String(format: "%02d", item.num))",
+                                                studentNumber: self.studentNumber(grade: item.grade, classNum: item.grade, num: item.num),
                                                 studentName: item.userName,
                                                 startPeriod: item.start,
                                                 endPeriod: item.end,
@@ -126,5 +133,11 @@ public struct HomeView: View {
                 viewStore.send(.fetchSelfStudyAndClassroom)
             }
         }
+    }
+}
+
+extension HomeView {
+    private func studentNumber(grade: Int, classNum: Int, num: Int) -> String {
+        return "\(grade)\(classNum)\(num < 10 ? "0" : "")\(num)"
     }
 }

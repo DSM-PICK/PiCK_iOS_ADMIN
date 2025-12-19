@@ -341,6 +341,9 @@ private class HomeDependency443c4e1871277bd8432aProvider: HomeDependency {
     var getOutListUseCase: any GetOutListUseCase {
         return appComponent.getOutListUseCase
     }
+    var getEarlyReturnUseCase: any GetEarlyReturnUseCase {
+        return appComponent.getEarlyReturnUseCase
+    }
     var allTabFactory: any AllTabFactory {
         return appComponent.allTabFactory
     }
@@ -622,6 +625,7 @@ extension HomeComponent: NeedleFoundation.Registration {
         keyPathToName[\HomeDependency.updateApplicationStatusUseCase] = "updateApplicationStatusUseCase-any UpdateApplicationStatusUseCaseProtocol"
         keyPathToName[\HomeDependency.getClassroomMoveByFloorUseCase] = "getClassroomMoveByFloorUseCase-any GetClassroomMoveByFloorUseCase"
         keyPathToName[\HomeDependency.getOutListUseCase] = "getOutListUseCase-any GetOutListUseCase"
+        keyPathToName[\HomeDependency.getEarlyReturnUseCase] = "getEarlyReturnUseCase-any GetEarlyReturnUseCase"
         keyPathToName[\HomeDependency.allTabFactory] = "allTabFactory-any AllTabFactory"
         keyPathToName[\HomeDependency.planFactory] = "planFactory-any PlanFactory"
         keyPathToName[\HomeDependency.schoolMealFactory] = "schoolMealFactory-any SchoolMealFactory"

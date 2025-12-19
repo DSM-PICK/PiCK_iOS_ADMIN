@@ -32,8 +32,4 @@ public struct OutListEntity: Equatable, Identifiable {
         self.num = num
         self.reason = reason
     }
-
-    public var studentNumber: String {
-        return "\(grade)\(classNum)\(num < 10 ? "0" : "")\(num)"
-    }
 }

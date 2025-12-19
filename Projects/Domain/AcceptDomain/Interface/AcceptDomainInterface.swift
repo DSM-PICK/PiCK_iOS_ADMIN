@@ -42,10 +42,6 @@ public struct ApplicationEntity: Equatable, Identifiable {
         self.num = num
         self.reason = reason
     }
-    
-    public var studentNumber: String {
-        return "\(grade)\(classNum)\(num < 10 ? "0" : "")\(num)"
-    }
 }
 
 public struct ClassroomMoveEntity: Equatable, Identifiable {

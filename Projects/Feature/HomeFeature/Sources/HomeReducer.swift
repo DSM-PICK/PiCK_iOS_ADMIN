@@ -13,6 +13,7 @@ public struct HomeReducer: Reducer {
     private let updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol // 외출 수락/거절
     private let getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase // 교실 이동자 층별로 조회
     private let getOutListUseCase: any GetOutListUseCase // 외출자 층별로 조회
+    private let getEarlyReturnUseCase: any GetEarlyReturnUseCase // 조기귀가자 층별로 조회
 
     public init(
         getSelfStudyDirectorUseCase: any GetSelfStudyDirectorUseCaseProtocol,
@@ -21,7 +22,8 @@ public struct HomeReducer: Reducer {
         getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol,
         updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol,
         getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase,
-        getOutListUseCase: any GetOutListUseCase
+        getOutListUseCase: any GetOutListUseCase,
+        getEarlyReturnUseCase: any GetEarlyReturnUseCase
     ) {
         self.getSelfStudyDirectorUseCase = getSelfStudyDirectorUseCase
         self.getAdminSelfStudyInfoUseCase = getAdminSelfStudyInfoUseCase
@@ -30,6 +32,7 @@ public struct HomeReducer: Reducer {
         self.updateApplicationStatusUseCase = updateApplicationStatusUseCase
         self.getClassroomMoveByFloorUseCase = getClassroomMoveByFloorUseCase
         self.getOutListUseCase = getOutListUseCase
+        self.getEarlyReturnUseCase = getEarlyReturnUseCase
     }
 
     public struct State: Equatable {
@@ -40,6 +43,7 @@ public struct HomeReducer: Reducer {
         public var isHomeroomTeacher: Bool = false
         public var isSelfStudyTeacher: Bool = false
         public var acceptList: [ApplicationEntity] = []
+        public var earlyReturnList: [EarlyReturnEntity] = []
         public var classroomMoveList: [ClassroomMoveListEntity] = []
         public var outList: [OutListEntity] = []
 
@@ -59,6 +63,7 @@ public struct HomeReducer: Reducer {
         case updateStatusResponse(TaskResult<Void>)
         case classroomMoveResponse(TaskResult<[ClassroomMoveListEntity]>)
         case outListResponse(TaskResult<[OutListEntity]>)
+        case earlyReturnListResponse(TaskResult<[EarlyReturnEntity]>)
     }
 
     public var body: some Reducer<State, Action> {
@@ -113,6 +118,7 @@ public struct HomeReducer: Reducer {
                     state.isSelfStudyTeacher = true
                     effects.append(loadClassroomMoveList(floor: selfStudyFloor))
                     effects.append(loadOutList(floor: selfStudyFloor))
+                    effects.append(loadEarlyReturnList(floor: selfStudyFloor))
                 } else {
                     state.isSelfStudyTeacher = false
                 }
@@ -187,6 +193,13 @@ public struct HomeReducer: Reducer {
 
             case .outListResponse(.failure):
                 return .none
+
+            case let .earlyReturnListResponse(.success(students)):
+                state.earlyReturnList = students
+                return .none
+
+            case .earlyReturnListResponse(.failure):
+                return .none
             }
         }
     }
@@ -232,17 +245,29 @@ extension HomeReducer {
             )
         }
     }
+
+    private func loadEarlyReturnList(floor: Int) -> Effect<Action> {
+        .run { send in
+            await send(
+                .earlyReturnListResponse(
+                    await TaskResult {
+                        try await getEarlyReturnUseCase.execute(floor: floor, status: "OK")
+                    }
+                )
+            )
+        }
+    }
 }
 
 public enum OutgoingType {
     case outgoing
-    case earlyLeave
+    case earlyReturn
 
     public var title: String {
         switch self {
         case .outgoing:
             return "외출"
-        case .earlyLeave:
+        case .earlyReturn:
             return "조기귀가"
         }
     }
