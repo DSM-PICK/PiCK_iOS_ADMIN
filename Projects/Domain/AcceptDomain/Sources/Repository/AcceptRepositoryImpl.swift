@@ -20,12 +20,20 @@ public class AcceptRepositoryImpl: AcceptRepository {
         try await dataSource.getClassroomMovesByGrade(grade: grade, classNum: classNum).map { $0.toEntity() }
     }
 
+    public func getEarlyReturnByGrade(grade: Int, classNum: Int) async throws -> [EarlyReturnEntity] {
+        try await dataSource.getEarlyReturnByGrade(grade: grade, classNum: classNum).map { $0.toEntity() }
+    }
+
     public func updateApplicationStatus(status: String, idList: [String]) async throws {
         try await dataSource.updateApplicationStatus(status: status, idList: idList)
     }
 
     public func updateClassroomMoveStatus(status: String, idList: [String]) async throws {
         try await dataSource.updateClassroomMoveStatus(status: status, idList: idList)
+    }
+
+    public func updateEarlyReturnStatus(status: String, idList: [String]) async throws {
+        try await dataSource.updateEarlyReturnStatus(status: status, idList: idList)
     }
 }
 
@@ -58,6 +66,20 @@ extension ClassroomMoveResponseDTO {
             num: num,
             start: start,
             end: end
+        )
+    }
+}
+
+extension EarlyReturnResponseDTO {
+    func toEntity() -> EarlyReturnEntity {
+        .init(
+            id: id,
+            userName: userName,
+            start: start,
+            grade: grade,
+            classNum: classNum,
+            num: num,
+            reason: reason
         )
     }
 }

@@ -23,7 +23,6 @@ import OutListFeature
 import OutingHistoryFeature
 import SelfStudyCheckFeature
 import SelfStudyCheckDomainInterface
-import ResignFeature
 
 public struct AllTabView: View {
     let store: StoreOf<AllTabReducer>
@@ -113,7 +112,7 @@ public struct AllTabView: View {
                                 navigationPath.append(.selfStudyCheck)
                             },
                             onOutingHistoryTap: {
-                                router.path.append(.outingHistory)
+                                navigationPath.append(.outingHistory)
                             },
                             onResignTap: {
                                 showResignAlert = true

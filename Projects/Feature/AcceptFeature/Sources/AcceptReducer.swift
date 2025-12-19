@@ -5,32 +5,41 @@ public struct AcceptReducer: Reducer {
     private let getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol
     private let getApplicationsByFloorUseCase: any GetApplicationsByFloorUseCaseProtocol
     private let getClassroomMovesUseCase: any GetClassroomMovesUseCaseProtocol
+    private let getEarlyReturnByGradeUseCase: any GetEarlyReturnByGradeUseCaseProtocol
     private let updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol
     private let updateClassroomMoveStatusUseCase: any UpdateClassroomMoveStatusUseCaseProtocol
+    private let updateEarlyReturnStatusUseCase: any UpdateEarlyReturnStatusUseCaseProtocol
 
     public init(
         getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol,
         getApplicationsByFloorUseCase: any GetApplicationsByFloorUseCaseProtocol,
         getClassroomMovesUseCase: any GetClassroomMovesUseCaseProtocol,
+        getEarlyReturnByGradeUseCase: any GetEarlyReturnByGradeUseCaseProtocol,
         updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol,
-        updateClassroomMoveStatusUseCase: any UpdateClassroomMoveStatusUseCaseProtocol
+        updateClassroomMoveStatusUseCase: any UpdateClassroomMoveStatusUseCaseProtocol,
+        updateEarlyReturnStatusUseCase: any UpdateEarlyReturnStatusUseCaseProtocol
     ) {
         self.getAllApplicationsUseCase = getAllApplicationsUseCase
         self.getApplicationsByFloorUseCase = getApplicationsByFloorUseCase
         self.getClassroomMovesUseCase = getClassroomMovesUseCase
+        self.getEarlyReturnByGradeUseCase = getEarlyReturnByGradeUseCase
         self.updateApplicationStatusUseCase = updateApplicationStatusUseCase
         self.updateClassroomMoveStatusUseCase = updateClassroomMoveStatusUseCase
+        self.updateEarlyReturnStatusUseCase = updateEarlyReturnStatusUseCase
     }
 
     public enum StudentItem: Equatable, Identifiable {
         case application(ApplicationEntity)
         case classroomMove(ClassroomMoveEntity)
+        case earlyReturn(EarlyReturnEntity)
 
         public var id: String {
             switch self {
             case .application(let entity):
                 return entity.id
             case .classroomMove(let entity):
+                return entity.id
+            case .earlyReturn(let entity):
                 return entity.id
             }
         }
@@ -56,6 +65,7 @@ public struct AcceptReducer: Reducer {
         case fetchApplicationsByFloor(floor: Int)
         case applicationsResponse(Result<[ApplicationEntity], Error>)
         case classroomMovesResponse(Result<[ClassroomMoveEntity], Error>)
+        case earlyReturnResponse(Result<[EarlyReturnEntity], Error>)
         case toggleSelection(id: String)
         case approveSelectedApplications
         case rejectSelectedApplications
@@ -88,6 +98,13 @@ public struct AcceptReducer: Reducer {
                             try await getClassroomMovesUseCase.execute(grade: grade, classNum: classNum)
                         }
                         await send(.classroomMovesResponse(Result(result)))
+                    }
+                case .earlyReturn:
+                    return .run { send in
+                        let result = await TaskResult {
+                            try await getEarlyReturnByGradeUseCase.execute(grade: grade, classNum: classNum)
+                        }
+                        await send(.earlyReturnResponse(Result(result)))
                     }
                 }
 
@@ -123,6 +140,15 @@ public struct AcceptReducer: Reducer {
                 state.isLoading = false
                 return .none
 
+            case let .earlyReturnResponse(.success(earlyReturns)):
+                state.studentItems = earlyReturns.map { .earlyReturn($0) }
+                state.isLoading = false
+                return .none
+
+            case .earlyReturnResponse(.failure):
+                state.isLoading = false
+                return .none
+
             case let .toggleSelection(id):
                 if state.selectedItemIds.contains(id) {
                     state.selectedItemIds.remove(id)
@@ -137,7 +163,15 @@ public struct AcceptReducer: Reducer {
                 state.isLoading = true
 
                 let count = idList.count
-                let typeText = state.currentType == .outgoing ? "외출 신청" : "교실 이동"
+                let typeText: String
+                switch state.currentType {
+                case .outgoing:
+                    typeText = "외출 신청"
+                case .classroomMove:
+                    typeText = "교실 이동"
+                case .earlyReturn:
+                    typeText = "조기 귀가"
+                }
                 let currentType = state.currentType
 
                 return .run { send in
@@ -147,6 +181,8 @@ public struct AcceptReducer: Reducer {
                             try await updateApplicationStatusUseCase.execute(status: "OK", idList: idList)
                         case .classroomMove:
                             try await updateClassroomMoveStatusUseCase.execute(status: "OK", idList: idList)
+                        case .earlyReturn:
+                            try await updateEarlyReturnStatusUseCase.execute(status: "OK", idList: idList)
                         }
                     }
 
@@ -164,7 +200,15 @@ public struct AcceptReducer: Reducer {
                 state.isLoading = true
 
                 let count = idList.count
-                let typeText = state.currentType == .outgoing ? "외출 신청" : "교실 이동"
+                let typeText: String
+                switch state.currentType {
+                case .outgoing:
+                    typeText = "외출 신청"
+                case .classroomMove:
+                    typeText = "교실 이동"
+                case .earlyReturn:
+                    typeText = "조기 귀가"
+                }
                 let currentType = state.currentType
 
                 return .run { send in
@@ -174,6 +218,8 @@ public struct AcceptReducer: Reducer {
                             try await updateApplicationStatusUseCase.execute(status: "NO", idList: idList)
                         case .classroomMove:
                             try await updateClassroomMoveStatusUseCase.execute(status: "NO", idList: idList)
+                        case .earlyReturn:
+                            try await updateEarlyReturnStatusUseCase.execute(status: "NO", idList: idList)
                         }
                     }
 
