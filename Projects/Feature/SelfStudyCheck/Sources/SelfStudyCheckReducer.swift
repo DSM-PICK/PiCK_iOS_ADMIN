@@ -72,14 +72,14 @@ public struct SelfStudyCheckReducer: Reducer {
         switch status.uppercased() {
         case "ATTENDANCE":
             return "출석"
-        case "OUTING":
-            return "외출"
         case "MOVEMENT":
             return "이동"
-        case "FIELD_TRIP":
-            return "현체"
-        case "HOME":
+        case "HOME", "GO_HOME":
             return "귀가"
+        case "OUTING", "GO_OUT":
+            return "외출"
+        case "FIELD_TRIP", "PICNIC":
+            return "현체"
         case "EMPLOYMENT":
             return "취업중"
         case "TRUANCY":
