@@ -48,7 +48,7 @@ public struct HomeView: View {
                                                     case .outgoing:
                                                         viewStore.send(.acceptApplication(id: item.id))
                                                     case .earlyReturn:
-                                                        viewStore.send(.earlyReturnAccept(id: item.id))
+                                                        viewStore.send(.acceptEarlyReturn(id: item.id))
                                                     }
                                                 },
                                                 onReject: {
@@ -56,7 +56,7 @@ public struct HomeView: View {
                                                     case .outgoing:
                                                         viewStore.send(.rejectApplication(id: item.id))
                                                     case .earlyReturn:
-                                                        viewStore.send(.earlyReturnReject(id: item.id))
+                                                        viewStore.send(.rejectEarlyReturn(id: item.id))
                                                     }
                                                 }
                                             )

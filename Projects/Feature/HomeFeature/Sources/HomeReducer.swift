@@ -72,19 +72,24 @@ public struct HomeReducer: Reducer {
         case selfStudyDirectorResponse(Result<[SelfStudyDirectorEntity], Error>)
         case fetchAdminSelfStudyInfo
         case adminSelfStudyInfoResponse(Result<String, Error>)
+
         case fetchSelfStudyAndClassroom
         case selfStudyAndClassroomResponse(TaskResult<GetSelfStudyAndClassroomEntity>)
+
         case acceptResponse(TaskResult<[ApplicationEntity]>)
+        case ealryReturnAcceptListResponse(TaskResult<[EarlyReturnAcceptEntity]>)
+
         case acceptApplication(id: String)
         case rejectApplication(id: String)
-        case earlyReturnAccept(id: String)
-        case earlyReturnReject(id: String)
+        case acceptEarlyReturn(id: String)
+        case rejectEarlyReturn(id: String)
+
         case updateStatusResponse(TaskResult<Void>)
         case updateEarlyReturnStatusResponse(TaskResult<Void>)
+
         case classroomMoveResponse(TaskResult<[ClassroomMoveListEntity]>)
         case outListResponse(TaskResult<[OutListEntity]>)
         case earlyReturnListResponse(TaskResult<[EarlyReturnEntity]>)
-        case ealryReturnAcceptListResponse(TaskResult<[EarlyReturnAcceptEntity]>)
     }
 
     public var body: some Reducer<State, Action> {
@@ -167,6 +172,16 @@ public struct HomeReducer: Reducer {
             case .acceptResponse(.failure):
                 return .none
 
+            case let .ealryReturnAcceptListResponse(.success(students)):
+                state.earlyReturnAcceptList = students
+                state.outingAcceptList = combineAcceptLists(
+                    acceptList: state.acceptList,
+                    earlyReturnAcceptList: students
+                )
+                return .none
+            case .ealryReturnAcceptListResponse(.failure):
+                return .none
+
             case let .acceptApplication(id):
                 return .run { send in
                     await send(
@@ -180,7 +195,6 @@ public struct HomeReducer: Reducer {
                         )
                     )
                 }
-                
             case let .rejectApplication(id):
                 return .run { send in
                     await send(
@@ -194,8 +208,7 @@ public struct HomeReducer: Reducer {
                         )
                     )
                 }
-
-            case let .earlyReturnAccept(id):
+            case let .acceptEarlyReturn(id):
                 return .run { send in
                     await send(
                         .updateEarlyReturnStatusResponse(
@@ -208,8 +221,7 @@ public struct HomeReducer: Reducer {
                         )
                     )
                 }
-                
-            case let .earlyReturnReject(id):
+            case let .rejectEarlyReturn(id):
                 return .run { send in
                     await send(
                         .updateEarlyReturnStatusResponse(
@@ -271,16 +283,6 @@ public struct HomeReducer: Reducer {
                 )
                 return .none
             case .earlyReturnListResponse(.failure):
-                return .none
-
-            case let .ealryReturnAcceptListResponse(.success(students)):
-                state.earlyReturnAcceptList = students
-                state.outingAcceptList = combineAcceptLists(
-                    acceptList: state.acceptList,
-                    earlyReturnAcceptList: students
-                )
-                return .none
-            case .ealryReturnAcceptListResponse(.failure):
                 return .none
             }
         }
@@ -376,20 +378,6 @@ extension HomeReducer {
         
         return combined.sorted {
             ($0.grade, $0.classNum, $0.num) < ($1.grade, $1.classNum, $1.num)
-        }
-    }
-}
-
-public enum OutgoingType {
-    case outgoing
-    case earlyReturn
-
-    public var title: String {
-        switch self {
-        case .outgoing:
-            return "외출"
-        case .earlyReturn:
-            return "조기귀가"
         }
     }
 }
