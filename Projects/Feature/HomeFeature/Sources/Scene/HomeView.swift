@@ -28,22 +28,36 @@ public struct HomeView: View {
                             title: "외출 수락",
                             content: {
                                 VStack(spacing: 8) {
-                                    if viewStore.acceptList.isEmpty {
+                                    if viewStore.outingAcceptList.isEmpty {
                                         Text("외출 신청이 없습니다")
                                             .pickText(type: .body1, textColor: .Gray.gray600)
                                             .frame(maxWidth: .infinity)
                                             .padding(.vertical, 24)
                                     } else {
-                                        ForEach(viewStore.acceptList) { item in
+                                        ForEach(viewStore.outingAcceptList) { item in
                                             AcceptCell(
-                                                studentNumber: self.studentNumber(grade: item.grade, classNum: item.grade, num: item.num),
+                                                studentNumber: self.studentNumber(
+                                                    grade: item.grade,
+                                                    classNum: item.classNum,
+                                                    num: item.num
+                                                ),
                                                 name: item.userName,
-                                                type: .outgoing,
+                                                type: item.type,
                                                 onAccept: {
-                                                    viewStore.send(.acceptApplication(id: item.id))
+                                                    switch item.type {
+                                                    case .outgoing:
+                                                        viewStore.send(.acceptApplication(id: item.id))
+                                                    case .earlyReturn:
+                                                        viewStore.send(.earlyReturnAccept(id: item.id))
+                                                    }
                                                 },
                                                 onReject: {
-                                                    viewStore.send(.rejectApplication(id: item.id))
+                                                    switch item.type {
+                                                    case .outgoing:
+                                                        viewStore.send(.rejectApplication(id: item.id))
+                                                    case .earlyReturn:
+                                                        viewStore.send(.earlyReturnReject(id: item.id))
+                                                    }
                                                 }
                                             )
                                         }
