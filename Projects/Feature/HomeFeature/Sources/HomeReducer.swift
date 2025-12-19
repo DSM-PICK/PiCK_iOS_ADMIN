@@ -43,9 +43,15 @@ public struct HomeReducer: Reducer {
         public var isHomeroomTeacher: Bool = false
         public var isSelfStudyTeacher: Bool = false
         public var acceptList: [ApplicationEntity] = []
-        public var earlyReturnList: [EarlyReturnEntity] = []
+        
+        // 내부용 리스트
+        var earlyReturnList: [EarlyReturnEntity] = []
+        var outList: [OutListEntity] = []
+        
+        // View에서 사용할 합쳐진 리스트
+        public var outingStudentList: [OutingStudentViewModel] = []
+        
         public var classroomMoveList: [ClassroomMoveListEntity] = []
-        public var outList: [OutListEntity] = []
 
         public init() {}
     }
@@ -189,6 +195,10 @@ public struct HomeReducer: Reducer {
 
             case let .outListResponse(.success(students)):
                 state.outList = students
+                state.outingStudentList = combineOutingLists(
+                    outList: students,
+                    earlyReturnList: state.earlyReturnList
+                )
                 return .none
 
             case .outListResponse(.failure):
@@ -196,6 +206,10 @@ public struct HomeReducer: Reducer {
 
             case let .earlyReturnListResponse(.success(students)):
                 state.earlyReturnList = students
+                state.outingStudentList = combineOutingLists(
+                    outList: state.outList,
+                    earlyReturnList: students
+                )
                 return .none
 
             case .earlyReturnListResponse(.failure):
@@ -255,6 +269,20 @@ extension HomeReducer {
                     }
                 )
             )
+        }
+    }
+
+    private func combineOutingLists(
+        outList: [OutListEntity],
+        earlyReturnList: [EarlyReturnEntity]
+    ) -> [OutingStudentViewModel] {
+        let outViewModels = outList.map { OutingStudentViewModel(from: $0) }
+        let earlyReturnViewModels = earlyReturnList.map { OutingStudentViewModel(from: $0) }
+        
+        let combined = outViewModels + earlyReturnViewModels
+        
+        return combined.sorted {
+            ($0.grade, $0.classNum, $0.num) < ($1.grade, $1.classNum, $1.num)
         }
     }
 }

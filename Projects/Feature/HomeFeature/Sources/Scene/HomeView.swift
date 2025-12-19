@@ -60,23 +60,21 @@ public struct HomeView: View {
                             title: "외출자 확인",
                             content: {
                                 VStack(spacing: 8) {
-                                    if viewStore.outList.isEmpty && viewStore.earlyReturnList.isEmpty {
+                                    if viewStore.outingStudentList.isEmpty {
                                         Text("외출자가 없습니다")
                                             .pickText(type: .body1, textColor: .Gray.gray600)
                                             .frame(maxWidth: .infinity)
                                             .padding(.vertical, 24)
                                     } else {
-                                        ForEach(viewStore.outList) { item in
+                                        ForEach(viewStore.outingStudentList) { item in
                                             OutingCell(
-                                                studentNumber: self.studentNumber(grade: item.grade, classNum: item.grade, num: item.num),
+                                                studentNumber: self.studentNumber(
+                                                    grade: item.grade,
+                                                    classNum: item.classNum,
+                                                    num: item.num
+                                                ),
                                                 name: item.userName,
-                                                type: .outgoing)
-                                        }
-                                        ForEach(viewStore.earlyReturnList) { item in
-                                            OutingCell(
-                                                studentNumber: self.studentNumber(grade: item.grade, classNum: item.grade, num: item.num),
-                                                name: item.userName,
-                                                type: .earlyReturn
+                                                type: item.type
                                             )
                                         }
                                     }
