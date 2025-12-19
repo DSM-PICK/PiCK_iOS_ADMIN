@@ -22,7 +22,11 @@ struct OnboardingView: View {
                 
                 PiCKButton(
                     buttonText: "로그인",
-                    action: { router.path.append(.signin) }
+                    action: {
+                        withAnimation(.easeOut(duration: 0.35)) {
+                            router.path.append(.signin)
+                        }
+                    }
                 )
                 .padding(.horizontal, 24)
                 .padding(.bottom, 28)

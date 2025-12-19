@@ -1,16 +1,26 @@
 import SwiftUI
-import PiCK_iOS_DesignSystem
 import ComposableArchitecture
-import AllTabDomainInterface
-import HomeFeature
+import PiCK_iOS_DesignSystem
 import Utility
-import CheckSelfStudyTeacherFeature
-import CheckSelfStudyTeacherDomainInterface
-import BugReportFeature
-import BugReportDomainInterface
-import ChangePasswordFeature
+import AllTabDomainInterface
 import AuthDomainInterface
+import BugReportDomainInterface
 import ChangePasswordDomainInterface
+import CheckSelfStudyTeacherDomainInterface
+import ClassroomMoveListDomainInterface
+import ClassroomMoveListFeatureInterface
+import OutListDomainInterface
+import OutListFeatureInterface
+import OutingHistoryDomainInterface
+import OutingHistoryFeatureInterface
+import SelfStudyCheckDomainInterface
+import HomeFeature
+import BugReportFeature
+import ChangePasswordFeature
+import CheckSelfStudyTeacherFeature
+import ClassroomMoveListFeature
+import OutListFeature
+import OutingHistoryFeature
 import SelfStudyCheckFeature
 import SelfStudyCheckDomainInterface
 
@@ -24,9 +34,17 @@ public struct AllTabView: View {
     let passwordChangeUseCase: any PasswordChangeUseCase
     let getStudentAttendanceUseCase: any GetStudentAttendanceUseCase
     let saveAttendanceUseCase: any SaveAttendanceUseCase
+    let getOutListUseCase: any GetOutListUseCase
+    let returnStudentsUseCase: any ReturnStudentsUseCase
+    let getEarlyReturnUseCase: any GetEarlyReturnUseCase
+    let getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase
+    let getClassroomMoveByClassroomUseCase: any GetClassroomMoveByClassroomUseCase
+    let getOutingHistoryUseCase: GetOutingHistoryUseCase
     @EnvironmentObject var router: AppRouter
     @State private var navigationPath: [AppRoute] = []
     @State private var showPasswordChangeSuccess = false
+    @State private var showResignAlert = false
+    @State private var showLogoutConfirm = false
 
     public init(
         store: StoreOf<AllTabReducer>,
@@ -37,7 +55,13 @@ public struct AllTabView: View {
         codeCheckUseCase: any CodeCheckUseCase,
         passwordChangeUseCase: any PasswordChangeUseCase,
         getStudentAttendanceUseCase: any GetStudentAttendanceUseCase,
-        saveAttendanceUseCase: any SaveAttendanceUseCase
+        saveAttendanceUseCase: any SaveAttendanceUseCase,
+        getOutListUseCase: any GetOutListUseCase,
+        returnStudentsUseCase: any ReturnStudentsUseCase,
+        getEarlyReturnUseCase: any GetEarlyReturnUseCase,
+        getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase,
+        getClassroomMoveByClassroomUseCase: any GetClassroomMoveByClassroomUseCase,
+        getOutingHistoryUseCase: GetOutingHistoryUseCase
     ) {
         self.store = store
         self.fetchSelfStudyTeacherUseCase = fetchSelfStudyTeacherUseCase
@@ -48,6 +72,12 @@ public struct AllTabView: View {
         self.passwordChangeUseCase = passwordChangeUseCase
         self.getStudentAttendanceUseCase = getStudentAttendanceUseCase
         self.saveAttendanceUseCase = saveAttendanceUseCase
+        self.getOutListUseCase = getOutListUseCase
+        self.returnStudentsUseCase = returnStudentsUseCase
+        self.getEarlyReturnUseCase = getEarlyReturnUseCase
+        self.getClassroomMoveByFloorUseCase = getClassroomMoveByFloorUseCase
+        self.getClassroomMoveByClassroomUseCase = getClassroomMoveByClassroomUseCase
+        self.getOutingHistoryUseCase = getOutingHistoryUseCase
     }
 
     public var body: some View {
@@ -61,13 +91,13 @@ public struct AllTabView: View {
 
                         AllTabMenuList(
                             onOutListTap: {
-                                router.path.append(.outList)
+                                navigationPath.append(.outList)
                             },
                             onClassroomMoveListTap: {
-                                router.path.append(.classroomMoveList)
+                                navigationPath.append(.classroomMoveList)
                             },
                             onLogoutTap: {
-                                viewStore.send(.logoutButtonTapped)
+                                showLogoutConfirm = true
                             },
                             onCheckTeacherTap: {
                                 navigationPath.append(.checkSelfStudyTeacher)
@@ -82,7 +112,10 @@ public struct AllTabView: View {
                                 navigationPath.append(.selfStudyCheck)
                             },
                             onOutingHistoryTap: {
-                                router.path.append(.outingHistory)
+                                navigationPath.append(.outingHistory)
+                            },
+                            onResignTap: {
+                                showResignAlert = true
                             }
                         )
                         .padding(.top, 32)
@@ -94,9 +127,44 @@ public struct AllTabView: View {
                 }
                 .onChange(of: viewStore.shouldLogout) { shouldLogout in
                     if shouldLogout {
-                        router.path.removeAll()
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                router.path.removeAll()
+                            }
+                        }
                     }
                 }
+                .onChange(of: viewStore.shouldResign) { shouldResign in
+                    if shouldResign {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                            withAnimation(.easeInOut(duration: 0.3)) {
+                                router.path.removeAll()
+                            }
+                        }
+                    }
+                }
+                .confirmPopUp(
+                    title: "로그아웃",
+                    explain: "정말 로그아웃 하시겠습니까?",
+                    type: .reject,
+                    isPresented: $showLogoutConfirm,
+                    onAction: { action in
+                        if action == .accept {
+                            viewStore.send(.logoutButtonTapped)
+                        }
+                    }
+                )
+                .confirmPopUp(
+                    title: "회원탈퇴",
+                    explain: "정말로 탈퇴하시겠습니까?\n탈퇴 후에는 계정을 복구할 수 없습니다.",
+                    type: .reject,
+                    isPresented: $showResignAlert,
+                    onAction: { action in
+                        if action == .accept {
+                            viewStore.send(.confirmResign)
+                        }
+                    }
+                )
                 .navigationDestination(for: AppRoute.self) { route in
                     switch route {
                     case .checkSelfStudyTeacher:
@@ -159,6 +227,42 @@ public struct AllTabView: View {
                                     SelfStudyCheckReducer(
                                         getStudentAttendanceUseCase: getStudentAttendanceUseCase,
                                         saveAttendanceUseCase: saveAttendanceUseCase
+                                    )
+                                }
+                            )
+                        )
+                    case .outList:
+                        OutListView(
+                            store: .init(
+                                initialState: OutListReducer.State(),
+                                reducer: {
+                                    OutListReducer(
+                                        getOutListUseCase: getOutListUseCase,
+                                        returnStudentsUseCase: returnStudentsUseCase,
+                                        getEarlyReturnUseCase: getEarlyReturnUseCase
+                                    )
+                                }
+                            )
+                        )
+                    case .classroomMoveList:
+                        ClassroomMoveListView(
+                            store: .init(
+                                initialState: ClassroomMoveListReducer.State(),
+                                reducer: {
+                                    ClassroomMoveListReducer(
+                                        getClassroomMoveByFloorUseCase: getClassroomMoveByFloorUseCase,
+                                        getClassroomMoveByClassroomUseCase: getClassroomMoveByClassroomUseCase
+                                    )
+                                }
+                            )
+                        )
+                    case .outingHistory:
+                        OutingHistoryView(
+                            store: .init(
+                                initialState: OutingHistoryReducer.State(),
+                                reducer: {
+                                    OutingHistoryReducer(
+                                        getOutingHistoryUseCase: getOutingHistoryUseCase
                                     )
                                 }
                             )

@@ -60,6 +60,14 @@ public class AuthRepositoryImpl: AuthRepository {
         JwtStore.shared.clearTokens()
         localDataSource.logout()
     }
+
+    public func resign() -> AnyPublisher<Void, Error> {
+        remoteDataSource.resign()
+            .handleEvents(receiveOutput: { [weak self] _ in
+                self?.logout()
+            })
+            .eraseToAnyPublisher()
+    }
     
     private func saveTokens(_ tokenData: TokenDTO, with req: SigninRequestParams) {
         JwtStore.shared.accessToken = tokenData.accessToken

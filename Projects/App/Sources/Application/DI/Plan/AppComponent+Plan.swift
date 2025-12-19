@@ -13,13 +13,15 @@ public protocol PlanDependency: Dependency {
 }
 
 public final class PlanComponent: Component<PlanDependency>, PlanFactory {
-    public func makePlanView() -> AnyView {
-        let planComponent = PlanComponentImpl(
+    private lazy var planComponentImpl: PlanComponentImpl = {
+        PlanComponentImpl(
             fetchMonthAcademicScheduleUseCase: dependency.fetchMonthAcademicScheduleUseCase,
             fetchAcademicScheduleUseCase: dependency.fetchAcademicScheduleUseCase
         )
-        
-        return planComponent.makePlanView()
+    }()
+
+    public func makePlanView() -> AnyView {
+        return planComponentImpl.makePlanView()
     }
 }
 
@@ -49,6 +51,8 @@ public extension AppComponent {
     }
     
     var planFactory: any PlanFactory {
-        PlanComponent(parent: self)
+        shared {
+            PlanComponent(parent: self)
+        }
     }
 }

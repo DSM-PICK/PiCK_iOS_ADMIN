@@ -10,6 +10,7 @@ public struct AllTabMenuList: View {
     let onChangePasswordTap: () -> Void
     let onSelfStudyCheckTap: () -> Void
     let onOutingHistoryTap: () -> Void
+    let onResignTap: () -> Void
 
     public init(
         onOutListTap: @escaping () -> Void,
@@ -19,7 +20,8 @@ public struct AllTabMenuList: View {
         onBugReportTap: @escaping () -> Void,
         onChangePasswordTap: @escaping () -> Void,
         onSelfStudyCheckTap: @escaping () -> Void,
-        onOutingHistoryTap: @escaping () -> Void
+        onOutingHistoryTap: @escaping () -> Void,
+        onResignTap: @escaping () -> Void
     ) {
         self.onOutListTap = onOutListTap
         self.onClassroomMoveListTap = onClassroomMoveListTap
@@ -29,6 +31,7 @@ public struct AllTabMenuList: View {
         self.onChangePasswordTap = onChangePasswordTap
         self.onSelfStudyCheckTap = onSelfStudyCheckTap
         self.onOutingHistoryTap = onOutingHistoryTap
+        self.onResignTap = onResignTap
     }
 
     public var body: some View {
@@ -79,6 +82,12 @@ public struct AllTabMenuList: View {
                         title: "로그아웃",
                         iconColor: Color.Error.error,
                         action: onLogoutTap
+                    ),
+                    MenuItemModel(
+                        icon: PiCKImage.withDraw,
+                        title: "회원탈퇴",
+                        iconColor: Color.Error.error,
+                        action: onResignTap
                     )
                 ])
             ]

@@ -27,6 +27,14 @@ open class BaseRemoteDataSource<API: PiCKAPI> {
                 }
 
                 if code == 401 {
+                    if api.pickHeader == .tokenIsEmpty {
+                        throw api.errorMap?[code] ??
+                            PiCKError.error(
+                                message: (try? moyaError.response?
+                                    .mapJSON() as? NSDictionary)?["message"] as? String ?? "",
+                                errorBody: [:]
+                            )
+                    }
                     return self.refreshTokenAndRetry(api: api, originalError: moyaError)
                 }
 

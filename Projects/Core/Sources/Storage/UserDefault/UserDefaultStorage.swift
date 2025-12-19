@@ -6,6 +6,7 @@ public enum UserDefaultKeys: String {
     case pickerTimeMode
     case userInfoData
     case userNameData
+    case deviceToken
 }
 
 public struct UserDefaultStorage: UserDefault {

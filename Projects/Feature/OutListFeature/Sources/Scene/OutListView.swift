@@ -4,6 +4,7 @@ import ComposableArchitecture
 import PiCK_iOS_DesignSystem
 
 public struct OutListView: View {
+    @Environment(\.dismiss) var dismiss
     @State private var isApplyBottomSheetPresented = false
     let store: StoreOf<OutListReducer>
 
@@ -185,6 +186,18 @@ public struct OutListView: View {
                 }
                 .navigationTitle("외출자 목록")
                 .navigationBarTitleDisplayMode(.inline)
+                .navigationBarBackButtonHidden(true)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Image(systemName: "chevron.left")
+                                .foregroundColor(.Gray.gray800)
+                                .font(.system(size: 20))
+                        }
+                    }
+                }
 
                 if viewStore.showAlert {
                     PiCKDisappearAlert(

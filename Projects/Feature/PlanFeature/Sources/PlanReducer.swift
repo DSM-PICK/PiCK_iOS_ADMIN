@@ -19,7 +19,8 @@ public struct PlanReducer: Reducer {
         public var academicSchedule: AcademicScheduleEntity = []
         public var selectedDate: Date = Date()
         public var currentMonth: Date = Date()
-        
+        public var hasLoadedInitialData: Bool = false
+
         public init() {}
     }
 
@@ -30,11 +31,29 @@ public struct PlanReducer: Reducer {
         case academicScheduleResponse(TaskResult<AcademicScheduleEntity>)
         case selectDate(Date)
         case changeMonth(Date)
+        case loadInitialData
     }
 
     public var body: some Reducer<State, Action> {
         Reduce { state, action in
             switch action {
+            case .loadInitialData:
+                guard !state.hasLoadedInitialData else {
+                    return .none
+                }
+                state.hasLoadedInitialData = true
+                let today = Date()
+                state.selectedDate = today
+                state.currentMonth = today
+                let calendar = Calendar.current
+                let year = String(calendar.component(.year, from: today))
+                let month = monthFormatter.string(from: today)
+                let dateString = dateFormatter.string(from: today)
+                return .merge(
+                    .send(.fetchMonthAcademicSchedule(year: year, month: month)),
+                    .send(.fetchAcademicSchedule(date: dateString))
+                )
+
             case let .fetchMonthAcademicSchedule(year, month):
                 return .run { send in
                     await send(.monthAcademicScheduleResponse(

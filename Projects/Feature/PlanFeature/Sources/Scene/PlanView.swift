@@ -60,9 +60,7 @@ public struct PlanView: View {
                     }
                 }
                 .onAppear {
-                    let today = Date()
-                    viewStore.send(.changeMonth(today))
-                    viewStore.send(.selectDate(today))
+                    viewStore.send(.loadInitialData)
                 }
             }
         }

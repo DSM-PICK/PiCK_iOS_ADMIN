@@ -21,6 +21,12 @@ public extension AppComponent {
         }
     }
 
+    var getEarlyReturnByGradeUseCase: any GetEarlyReturnByGradeUseCaseProtocol {
+        shared {
+            GetEarlyReturnByGradeUseCase(repository: acceptRepository)
+        }
+    }
+
     var updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol {
         shared {
             UpdateApplicationStatusUseCase(repository: acceptRepository)
@@ -30,6 +36,12 @@ public extension AppComponent {
     var updateClassroomMoveStatusUseCase: any UpdateClassroomMoveStatusUseCaseProtocol {
         shared {
             UpdateClassroomMoveStatusUseCase(repository: acceptRepository)
+        }
+    }
+
+    var updateEarlyReturnStatusUseCase: any UpdateEarlyReturnStatusUseCaseProtocol {
+        shared {
+            UpdateEarlyReturnStatusUseCase(repository: acceptRepository)
         }
     }
 

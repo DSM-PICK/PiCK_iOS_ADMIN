@@ -3,11 +3,13 @@ import BaseDomain
 import Moya
 
 public enum AcceptAPI {
+    case getEarlyReturnByGrade(grade: Int, classNum: Int)
     case getApplicationsByGrade(grade: Int, classNum: Int)
     case getApplicationsByFloor(floor: Int)
     case getClassroomMovesByGrade(grade: Int, classNum: Int)
     case updateApplicationStatus(status: String, idList: [String])
     case updateClassroomMoveStatus(status: String, idList: [String])
+    case updateEarlyReturnStatus(status: String, idList: [String])
 }
 
 extension AcceptAPI: PiCKAPI {
@@ -19,6 +21,8 @@ extension AcceptAPI: PiCKAPI {
             return .application
         case .getApplicationsByFloor, .getClassroomMovesByGrade, .updateClassroomMoveStatus:
             return .classroom
+        case .getEarlyReturnByGrade, .updateEarlyReturnStatus:
+            return .earlyReturn
         }
     }
 
@@ -34,14 +38,18 @@ extension AcceptAPI: PiCKAPI {
             return "/status"
         case .updateClassroomMoveStatus:
             return "/status"
+        case .getEarlyReturnByGrade:
+            return "/grade"
+        case .updateEarlyReturnStatus:
+            return "/status"
         }
     }
 
     public var method: Moya.Method {
         switch self {
-        case .getApplicationsByGrade, .getApplicationsByFloor, .getClassroomMovesByGrade:
+        case .getApplicationsByGrade, .getApplicationsByFloor, .getClassroomMovesByGrade, .getEarlyReturnByGrade:
             return .get
-        case .updateApplicationStatus, .updateClassroomMoveStatus:
+        case .updateApplicationStatus, .updateClassroomMoveStatus, .updateEarlyReturnStatus:
             return .patch
         }
     }
@@ -79,6 +87,18 @@ extension AcceptAPI: PiCKAPI {
         case let .updateClassroomMoveStatus(status, idList):
             return .requestJSONEncodable(
                 UpdateStatusRequest(status: status, idList: idList)
+            )
+        case let .updateEarlyReturnStatus(status, idList):
+            return .requestJSONEncodable(
+                UpdateStatusRequest(status: status, idList: idList)
+            )
+        case let .getEarlyReturnByGrade(grade, classNum):
+            return .requestParameters(
+                parameters: [
+                    "grade": grade,
+                    "class_num": classNum
+                ],
+                encoding: URLEncoding.queryString
             )
         }
     }
