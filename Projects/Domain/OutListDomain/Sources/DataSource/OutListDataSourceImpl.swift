@@ -58,9 +58,9 @@ public final class OutListDataSourceImpl: OutListDataSource {
         }
     }
 
-    public func getEarlyReturn() async throws -> [EarlyReturnResponseDTO] {
+    public func getEarlyReturn(floor: Int, status: String) async throws -> [EarlyReturnResponseDTO] {
         try await withCheckedThrowingContinuation { continuation in
-            provider.request(.earlyReturnList) { result in
+            provider.request(.earlyReturnList(floor: floor, status: status)) { result in
                 switch result {
                 case .success(let response):
                     do {
@@ -72,7 +72,7 @@ public final class OutListDataSourceImpl: OutListDataSource {
                 case .failure(let error):
                     if let moyaError = error as? MoyaError,
                        let code = moyaError.response?.statusCode,
-                       let errorMap = OutListAPI.earlyReturnList.errorMap,
+                       let errorMap = OutListAPI.earlyReturnList(floor: floor, status: status).errorMap,
                        let mappedError = errorMap[code] {
                         continuation.resume(throwing: mappedError)
                     } else {

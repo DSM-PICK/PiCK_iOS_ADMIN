@@ -16,7 +16,7 @@ public class OutListRepositoryImpl: OutListRepository {
         try await dataSource.returnStudents(ids: ids)
     }
 
-    public func getEarlyReturn() async throws -> [EarlyReturnEntity] {
-        try await dataSource.getEarlyReturn().map { $0.toEntity() }
+    public func getEarlyReturn(floor: Int, status: String) async throws -> [EarlyReturnEntity] {
+        try await dataSource.getEarlyReturn(floor: floor, status: status).map { $0.toEntity() }
     }
 }

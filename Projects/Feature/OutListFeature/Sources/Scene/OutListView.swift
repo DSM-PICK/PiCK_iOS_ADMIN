@@ -22,14 +22,12 @@ public struct OutListView: View {
                                 .padding(.leading, 24)
 
                             Spacer()
-
-                            if viewStore.currentType == .outing {
-                                ClassroomFilterButton(
-                                    selectedClassroom: floorDisplayText(viewStore.currentFloor),
-                                    onTap: { isApplyBottomSheetPresented = true }
-                                )
-                                .padding(.trailing, 24)
-                            }
+                            
+                            ClassroomFilterButton(
+                                selectedClassroom: floorDisplayText(viewStore.currentFloor),
+                                onTap: { isApplyBottomSheetPresented = true }
+                            )
+                            .padding(.trailing, 24)
                         }
                         .padding(.top, 24)
 
