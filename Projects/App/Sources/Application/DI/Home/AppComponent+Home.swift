@@ -15,6 +15,12 @@ public extension AppComponent {
             GetAdminSelfStudyInfoUseCase(repository: homeRepository)
         }
     }
+
+    var getSelfStudyAndClassroomUseCase: any GetSelfStudyAndClassroomUseCase {
+        shared {
+            GetSelfStudyAndClassroomUseCaseImpl(repository: homeRepository)
+        }
+    }
     
     private var homeRepository: HomeRepository {
         shared {

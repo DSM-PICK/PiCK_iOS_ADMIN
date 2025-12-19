@@ -1,6 +1,5 @@
 import ComposableArchitecture
 import HomeDomainInterface
-import AllTabDomainInterface
 import AcceptDomainInterface
 import OutListDomainInterface
 import Combine
@@ -8,20 +7,20 @@ import Combine
 public struct HomeReducer: Reducer {
     private let getSelfStudyDirectorUseCase: any GetSelfStudyDirectorUseCaseProtocol
     private let getAdminSelfStudyInfoUseCase: any GetAdminSelfStudyInfoUseCaseProtocol
-    private let getMyNameUseCase: any GetMyNameUseCaseProtocol // 어드민 정보 조회
+    private let getSelfStudyAndClassroomUseCase: any GetSelfStudyAndClassroomUseCase
     private let getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol // 외출 신청자 반별로 조회
     private let updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol // 외출 수락/거절
 
     public init(
         getSelfStudyDirectorUseCase: any GetSelfStudyDirectorUseCaseProtocol,
         getAdminSelfStudyInfoUseCase: any GetAdminSelfStudyInfoUseCaseProtocol,
-        getMyNameUseCase: any GetMyNameUseCaseProtocol,
+        getSelfStudyAndClassroomUseCase: any GetSelfStudyAndClassroomUseCase,
         getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol,
         updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol
     ) {
         self.getSelfStudyDirectorUseCase = getSelfStudyDirectorUseCase
         self.getAdminSelfStudyInfoUseCase = getAdminSelfStudyInfoUseCase
-        self.getMyNameUseCase = getMyNameUseCase
+        self.getSelfStudyAndClassroomUseCase = getSelfStudyAndClassroomUseCase
         self.getAllApplicationsUseCase = getAllApplicationsUseCase
         self.updateApplicationStatusUseCase = updateApplicationStatusUseCase
     }
@@ -41,8 +40,8 @@ public struct HomeReducer: Reducer {
         case selfStudyDirectorResponse(Result<[SelfStudyDirectorEntity], Error>)
         case fetchAdminSelfStudyInfo
         case adminSelfStudyInfoResponse(Result<String, Error>)
-        case fetchMyName
-        case myNameResponse(TaskResult<MyNameEntity>)
+        case fetchSelfStudyAndClassroom
+        case selfStudyAndClassroomResponse(TaskResult<GetSelfStudyAndClassroomEntity>)
         case loadOutList(grade: Int, classNum: Int)
         case outListResponse(TaskResult<[ApplicationEntity]>)
         case acceptApplication(id: String)
@@ -81,16 +80,16 @@ public struct HomeReducer: Reducer {
             case .adminSelfStudyInfoResponse(.failure):
                 return .none
 
-            case .fetchMyName:
-                return .run { send in
-                    await send(.myNameResponse(
-                        await TaskResult { try await getMyNameUseCase.execute() }
-                    ))
+            case .fetchSelfStudyAndClassroom:
+                return .publisher {
+                    getSelfStudyAndClassroomUseCase.execute()
+                        .map { Action.selfStudyAndClassroomResponse(.success($0)) }
+                        .catch { Just(Action.selfStudyAndClassroomResponse(.failure($0))) }
                 }
 
-            case let .myNameResponse(.success(myName)):
-                let grade = myName.grade
-                let classNum = myName.classNum
+            case let .selfStudyAndClassroomResponse(.success(data)):
+                let grade = data.grade
+                let classNum = data.classNum
 
                 state.classroom = "\(grade)-\(classNum)"
 
@@ -102,7 +101,7 @@ public struct HomeReducer: Reducer {
                     return .none
                 }
 
-            case let .myNameResponse(.failure(error)):
+            case .selfStudyAndClassroomResponse(.failure):
                 return .none
 
             case let .outListResponse(.success(list)):

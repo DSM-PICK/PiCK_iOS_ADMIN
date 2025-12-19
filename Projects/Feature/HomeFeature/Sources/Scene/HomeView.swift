@@ -69,7 +69,7 @@ public struct HomeView: View {
             .onAppear {
                 viewStore.send(.fetchSelfStudyDirector(date: Date.todayString()))
                 viewStore.send(.fetchAdminSelfStudyInfo)
-                viewStore.send(.fetchMyName)
+                viewStore.send(.fetchSelfStudyAndClassroom)
             }
         }
     }
