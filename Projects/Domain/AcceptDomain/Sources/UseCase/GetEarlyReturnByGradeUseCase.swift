@@ -8,7 +8,7 @@ public class GetEarlyReturnByGradeUseCase: GetEarlyReturnByGradeUseCaseProtocol 
         self.repository = repository
     }
 
-    public func execute(grade: Int, classNum: Int) async throws -> [EarlyReturnEntity] {
+    public func execute(grade: Int, classNum: Int) async throws -> [EarlyReturnAcceptEntity] {
         try await repository.getEarlyReturnByGrade(grade: grade, classNum: classNum)
     }
 }

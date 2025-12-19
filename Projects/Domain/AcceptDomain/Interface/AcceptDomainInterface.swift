@@ -6,7 +6,7 @@ public protocol AcceptRepository {
     func getClassroomMovesByGrade(grade: Int, classNum: Int) async throws -> [ClassroomMoveEntity] // 반별로 교실 이동자 조회 (사용하지 않음)
     func updateApplicationStatus(status: String, idList: [String]) async throws // 외출 수락/거절
     func updateClassroomMoveStatus(status: String, idList: [String]) async throws // 교실 이동 수락/거절
-    func getEarlyReturnByGrade(grade: Int, classNum: Int) async throws -> [EarlyReturnEntity]
+    func getEarlyReturnByGrade(grade: Int, classNum: Int) async throws -> [EarlyReturnAcceptEntity]
     func updateEarlyReturnStatus(status: String, idList: [String]) async throws
 }
 
@@ -85,7 +85,7 @@ public struct ClassroomMoveEntity: Equatable, Identifiable {
     }
 }
 
-public struct EarlyReturnEntity: Equatable, Identifiable {
+public struct EarlyReturnAcceptEntity: Equatable, Identifiable {
     public let id: String
     public let userName: String
     public let start: String
