@@ -29,10 +29,7 @@ public struct HomeView: View {
                             content: {
                                 VStack(spacing: 8) {
                                     if viewStore.outingAcceptList.isEmpty {
-                                        Text("외출 신청이 없습니다")
-                                            .pickText(type: .body1, textColor: .Gray.gray600)
-                                            .frame(maxWidth: .infinity)
-                                            .padding(.vertical, 24)
+                                        emptyStateView(message: "외출 신청이 없습니다")
                                     } else {
                                         ForEach(viewStore.outingAcceptList) { item in
                                             AcceptCell(
@@ -75,10 +72,7 @@ public struct HomeView: View {
                             content: {
                                 VStack(spacing: 8) {
                                     if viewStore.outingStudentList.isEmpty {
-                                        Text("외출자가 없습니다")
-                                            .pickText(type: .body1, textColor: .Gray.gray600)
-                                            .frame(maxWidth: .infinity)
-                                            .padding(.vertical, 24)
+                                        emptyStateView(message: "외출자가 없습니다")
                                     } else {
                                         ForEach(viewStore.outingStudentList) { item in
                                             OutingCell(
@@ -103,10 +97,7 @@ public struct HomeView: View {
                             content: {
                                 VStack(spacing: 8) {
                                     if viewStore.classroomMoveList.isEmpty {
-                                        Text("교실 이동자가 없습니다")
-                                            .pickText(type: .body1, textColor: .Gray.gray600)
-                                            .frame(maxWidth: .infinity)
-                                            .padding(.vertical, 24)
+                                        emptyStateView(message: "교실 이동자가 없습니다")
                                     } else {
                                         ForEach(viewStore.classroomMoveList, id: \.id) { item in
                                             PiCKClassroomMoveCell(
@@ -151,5 +142,12 @@ public struct HomeView: View {
 extension HomeView {
     private func studentNumber(grade: Int, classNum: Int, num: Int) -> String {
         return "\(grade)\(classNum)\(num < 10 ? "0" : "")\(num)"
+    }
+
+    private func emptyStateView(message: String) -> some View {
+        Text(message)
+            .pickText(type: .body1, textColor: .Gray.gray600)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 24)
     }
 }
