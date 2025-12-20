@@ -1,5 +1,6 @@
 import Foundation
 import AcceptDomainInterface
+import Combine
 
 public class AcceptRepositoryImpl: AcceptRepository {
     private let dataSource: AcceptDataSource
@@ -8,32 +9,40 @@ public class AcceptRepositoryImpl: AcceptRepository {
         self.dataSource = dataSource
     }
 
-    public func getApplicationsByGrade(grade: Int, classNum: Int) async throws -> [ApplicationEntity] {
-        try await dataSource.getApplicationsByGrade(grade: grade, classNum: classNum).map { $0.toEntity() }
+    public func getApplicationsByGrade(grade: Int, classNum: Int) -> AnyPublisher<[ApplicationEntity], Error> {
+        dataSource.getApplicationsByGrade(grade: grade, classNum: classNum)
+            .map { $0.map { $0.toEntity() } }
+            .eraseToAnyPublisher()
     }
 
-    public func getApplicationsByFloor(floor: Int) async throws -> [ClassroomMoveEntity] {
-        try await dataSource.getApplicationsByFloor(floor: floor).map { $0.toEntity() }
+    public func getApplicationsByFloor(floor: Int) -> AnyPublisher<[ClassroomMoveEntity], Error> {
+        dataSource.getApplicationsByFloor(floor: floor)
+            .map { $0.map { $0.toEntity() } }
+            .eraseToAnyPublisher()
     }
 
-    public func getClassroomMovesByGrade(grade: Int, classNum: Int) async throws -> [ClassroomMoveEntity] {
-        try await dataSource.getClassroomMovesByGrade(grade: grade, classNum: classNum).map { $0.toEntity() }
+    public func getClassroomMovesByGrade(grade: Int, classNum: Int) -> AnyPublisher<[ClassroomMoveEntity], Error> {
+        dataSource.getClassroomMovesByGrade(grade: grade, classNum: classNum)
+            .map { $0.map { $0.toEntity() } }
+            .eraseToAnyPublisher()
     }
 
-    public func getEarlyReturnByGrade(grade: Int, classNum: Int) async throws -> [EarlyReturnAcceptEntity] {
-        try await dataSource.getEarlyReturnByGrade(grade: grade, classNum: classNum).map { $0.toEntity() }
+    public func getEarlyReturnByGrade(grade: Int, classNum: Int) -> AnyPublisher<[EarlyReturnAcceptEntity], Error> {
+        dataSource.getEarlyReturnByGrade(grade: grade, classNum: classNum)
+            .map { $0.map { $0.toEntity() } }
+            .eraseToAnyPublisher()
     }
 
-    public func updateApplicationStatus(status: String, idList: [String]) async throws {
-        try await dataSource.updateApplicationStatus(status: status, idList: idList)
+    public func updateApplicationStatus(status: String, idList: [String]) -> AnyPublisher<Void, Error> {
+        dataSource.updateApplicationStatus(status: status, idList: idList)
     }
 
-    public func updateClassroomMoveStatus(status: String, idList: [String]) async throws {
-        try await dataSource.updateClassroomMoveStatus(status: status, idList: idList)
+    public func updateClassroomMoveStatus(status: String, idList: [String]) -> AnyPublisher<Void, Error> {
+        dataSource.updateClassroomMoveStatus(status: status, idList: idList)
     }
 
-    public func updateEarlyReturnStatus(status: String, idList: [String]) async throws {
-        try await dataSource.updateEarlyReturnStatus(status: status, idList: idList)
+    public func updateEarlyReturnStatus(status: String, idList: [String]) -> AnyPublisher<Void, Error> {
+        dataSource.updateEarlyReturnStatus(status: status, idList: idList)
     }
 }
 

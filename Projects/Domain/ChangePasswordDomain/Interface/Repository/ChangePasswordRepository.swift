@@ -1,5 +1,6 @@
 import Foundation
+import Combine
 
 public protocol ChangePasswordRepository {
-    func changePassword(req: PasswordChangeRequestParams) async throws
+    func changePassword(req: PasswordChangeRequestParams) -> AnyPublisher<Void, Error>
 }

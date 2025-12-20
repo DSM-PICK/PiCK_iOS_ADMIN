@@ -127,8 +127,6 @@ let appDependencies: [TargetDependency] = [
     .Projects.bugReportDomainInterface,
     .Projects.changePasswordDomain,
     .Projects.changePasswordDomainInterface,
-    .Projects.teacherDomain,
-    .Projects.teacherDomainInterface,
     .Projects.core,
     .Shared.thirdPartyLib,
     .Shared.utility

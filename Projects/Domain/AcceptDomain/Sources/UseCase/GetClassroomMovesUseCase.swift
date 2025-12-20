@@ -1,5 +1,6 @@
 import Foundation
 import AcceptDomainInterface
+import Combine
 
 public class GetClassroomMovesUseCase: GetClassroomMovesUseCaseProtocol {
     private let repository: AcceptRepository
@@ -8,7 +9,7 @@ public class GetClassroomMovesUseCase: GetClassroomMovesUseCaseProtocol {
         self.repository = repository
     }
 
-    public func execute(grade: Int, classNum: Int) async throws -> [ClassroomMoveEntity] {
-        try await repository.getClassroomMovesByGrade(grade: grade, classNum: classNum)
+    public func execute(grade: Int, classNum: Int) -> AnyPublisher<[ClassroomMoveEntity], Error> {
+        repository.getClassroomMovesByGrade(grade: grade, classNum: classNum)
     }
 }

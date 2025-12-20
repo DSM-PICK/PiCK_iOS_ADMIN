@@ -189,56 +189,32 @@ public struct HomeReducer: Reducer {
                 return .none
 
             case let .acceptApplication(id):
-                return .run { send in
-                    await send(
-                        .updateStatusResponse(
-                            await TaskResult {
-                                try await updateApplicationStatusUseCase.execute(
-                                    status: "OK",
-                                    idList: [id]
-                                )
-                            }
-                        )
-                    )
+                return .publisher {
+                    updateApplicationStatusUseCase.execute(status: "OK", idList: [id])
+                        .mapError { $0 as Error }
+                        .map { Action.updateStatusResponse(.success($0)) }
+                        .catch { Just(Action.updateStatusResponse(.failure($0))) }
                 }
             case let .rejectApplication(id):
-                return .run { send in
-                    await send(
-                        .updateStatusResponse(
-                            await TaskResult {
-                                try await updateApplicationStatusUseCase.execute(
-                                    status: "NO",
-                                    idList: [id]
-                                )
-                            }
-                        )
-                    )
+                return .publisher {
+                    updateApplicationStatusUseCase.execute(status: "NO", idList: [id])
+                        .mapError { $0 as Error }
+                        .map { Action.updateStatusResponse(.success($0)) }
+                        .catch { Just(Action.updateStatusResponse(.failure($0))) }
                 }
             case let .acceptEarlyReturn(id):
-                return .run { send in
-                    await send(
-                        .updateEarlyReturnStatusResponse(
-                            await TaskResult {
-                                try await updateEarlyReturnStatusUseCase.execute(
-                                    status: "OK",
-                                    idList: [id]
-                                )
-                            }
-                        )
-                    )
+                return .publisher {
+                    updateEarlyReturnStatusUseCase.execute(status: "OK", idList: [id])
+                        .mapError { $0 as Error }
+                        .map { Action.updateEarlyReturnStatusResponse(.success($0)) }
+                        .catch { Just(Action.updateEarlyReturnStatusResponse(.failure($0))) }
                 }
             case let .rejectEarlyReturn(id):
-                return .run { send in
-                    await send(
-                        .updateEarlyReturnStatusResponse(
-                            await TaskResult {
-                                try await updateEarlyReturnStatusUseCase.execute(
-                                    status: "NO",
-                                    idList: [id]
-                                )
-                            }
-                        )
-                    )
+                return .publisher {
+                    updateEarlyReturnStatusUseCase.execute(status: "NO", idList: [id])
+                        .mapError { $0 as Error }
+                        .map { Action.updateEarlyReturnStatusResponse(.success($0)) }
+                        .catch { Just(Action.updateEarlyReturnStatusResponse(.failure($0))) }
                 }
 
             case .updateStatusResponse(.success):
@@ -315,66 +291,47 @@ public struct HomeReducer: Reducer {
 
 extension HomeReducer {
     private func loadAcceptList(grade: Int, classNum: Int) -> Effect<Action> {
-        .run { send in
-            await send(
-                .acceptResponse(
-                    await TaskResult {
-                        try await getAllApplicationsUseCase.execute(
-                            grade: grade,
-                            classNum: classNum
-                        )
-                    }
-                )
-            )
+        .publisher {
+            getAllApplicationsUseCase.execute(grade: grade, classNum: classNum)
+                .mapError { $0 as Error }
+                .map { Action.acceptResponse(.success($0)) }
+                .catch { Just(Action.acceptResponse(.failure($0))) }
         }
     }
 
-    private func loadClassroomMoveList(floor: Int) -> Effect<
-        Action> {
-            .run { send in
-                await send(
-                    .classroomMoveResponse(
-                        await TaskResult {
-                            try await getClassroomMoveByFloorUseCase.execute(floor: floor)
-                        }
-                    )
-                )
-            }
+    private func loadClassroomMoveList(floor: Int) -> Effect<Action> {
+        .publisher {
+            getClassroomMoveByFloorUseCase.execute(floor: floor)
+                .mapError { $0 as Error }
+                .map { Action.classroomMoveResponse(.success($0)) }
+                .catch { Just(Action.classroomMoveResponse(.failure($0))) }
         }
+    }
 
     private func loadOutList(floor: Int) -> Effect<Action> {
-        .run { send in
-            await send(
-                .outListResponse(
-                    await TaskResult {
-                        try await getOutListUseCase.execute(floor: floor)
-                    }
-                )
-            )
+        .publisher {
+            getOutListUseCase.execute(floor: floor)
+                .mapError { $0 as Error }
+                .map { Action.outListResponse(.success($0)) }
+                .catch { Just(Action.outListResponse(.failure($0))) }
         }
     }
 
     private func loadEarlyReturnList(floor: Int) -> Effect<Action> {
-        .run { send in
-            await send(
-                .earlyReturnListResponse(
-                    await TaskResult {
-                        try await getEarlyReturnUseCase.execute(floor: floor, status: "OK")
-                    }
-                )
-            )
+        .publisher {
+            getEarlyReturnUseCase.execute(floor: floor, status: "OK")
+                .mapError { $0 as Error }
+                .map { Action.earlyReturnListResponse(.success($0)) }
+                .catch { Just(Action.earlyReturnListResponse(.failure($0))) }
         }
     }
     
     private func loadEarlyReturnAcceptList(grade: Int, classNum: Int) -> Effect<Action> {
-        .run { send in
-            await send(
-                .earlyReturnAcceptListResponse(
-                    await TaskResult {
-                        try await getEarlyReturnByGradeUseCase.execute(grade: grade, classNum: classNum)
-                    }
-                )
-            )
+        .publisher {
+            getEarlyReturnByGradeUseCase.execute(grade: grade, classNum: classNum)
+                .mapError { $0 as Error }
+                .map { Action.earlyReturnAcceptListResponse(.success($0)) }
+                .catch { Just(Action.earlyReturnAcceptListResponse(.failure($0))) }
         }
     }
 

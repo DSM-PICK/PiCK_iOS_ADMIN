@@ -1,8 +1,8 @@
 import Foundation
+import Combine
 
 public protocol CheckSelfStudyTeacherDomainInterface {}
 
-// MARK: - Entity
 public struct SelfStudyTeacherEntity: Equatable, Identifiable {
     public var id: Int { floor }
     public let floor: Int
@@ -17,12 +17,10 @@ public struct SelfStudyTeacherEntity: Equatable, Identifiable {
     }
 }
 
-// MARK: - Repository
 public protocol CheckSelfStudyTeacherRepository {
-    func getSelfStudyTeacher(date: String) async throws -> [SelfStudyTeacherEntity]
+    func getSelfStudyTeacher(date: String) -> AnyPublisher<[SelfStudyTeacherEntity], Error>
 }
 
-// MARK: - UseCase
 public protocol FetchSelfStudyTeacherUseCaseProtocol {
-    func execute(date: String) async throws -> [SelfStudyTeacherEntity]
+    func execute(date: String) -> AnyPublisher<[SelfStudyTeacherEntity], Error>
 }

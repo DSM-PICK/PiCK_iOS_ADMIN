@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 import OutListDomainInterface
 
 public class GetEarlyReturnUseCaseImpl: GetEarlyReturnUseCase {
@@ -8,7 +9,7 @@ public class GetEarlyReturnUseCaseImpl: GetEarlyReturnUseCase {
         self.repository = repository
     }
 
-    public func execute(floor: Int, status: String) async throws -> [EarlyReturnEntity] {
-        try await repository.getEarlyReturn(floor: floor, status: status)
+    public func execute(floor: Int, status: String) -> AnyPublisher<[EarlyReturnEntity], Error> {
+        repository.getEarlyReturn(floor: floor, status: status)
     }
 }

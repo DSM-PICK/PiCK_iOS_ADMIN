@@ -1,5 +1,6 @@
 import Foundation
 import BugReportDomainInterface
+import Combine
 
 public class UploadBugImagesUseCase: UploadBugImagesUseCaseProtocol {
     private let repository: BugReportRepository
@@ -8,7 +9,7 @@ public class UploadBugImagesUseCase: UploadBugImagesUseCaseProtocol {
         self.repository = repository
     }
 
-    public func execute(images: [Data]) async throws -> [String] {
-        try await repository.uploadImages(images: images)
+    public func execute(images: [Data]) -> AnyPublisher<[String], Error> {
+        repository.uploadImages(images: images)
     }
 }

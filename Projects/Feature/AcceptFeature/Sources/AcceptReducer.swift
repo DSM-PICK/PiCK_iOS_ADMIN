@@ -1,6 +1,7 @@
 import ComposableArchitecture
 import AcceptDomainInterface
 import PiCK_iOS_DesignSystem
+import Combine
 
 public struct AcceptReducer: Reducer {
     private let getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol
@@ -87,25 +88,22 @@ public struct AcceptReducer: Reducer {
 
                 switch type {
                 case .outgoing:
-                    return .run { send in
-                        let result = await TaskResult {
-                            try await getAllApplicationsUseCase.execute(grade: grade, classNum: classNum)
-                        }
-                        await send(.applicationsResponse(Result(result)))
+                    return .publisher {
+                        getAllApplicationsUseCase.execute(grade: grade, classNum: classNum)
+                            .map { Action.applicationsResponse(.success($0)) }
+                            .catch { Just(Action.applicationsResponse(.failure($0))) }
                     }
                 case .classroomMove:
-                    return .run { send in
-                        let result = await TaskResult {
-                            try await getClassroomMovesUseCase.execute(grade: grade, classNum: classNum)
-                        }
-                        await send(.classroomMovesResponse(Result(result)))
+                    return .publisher {
+                        getClassroomMovesUseCase.execute(grade: grade, classNum: classNum)
+                            .map { Action.classroomMovesResponse(.success($0)) }
+                            .catch { Just(Action.classroomMovesResponse(.failure($0))) }
                     }
                 case .earlyReturn:
-                    return .run { send in
-                        let result = await TaskResult {
-                            try await getEarlyReturnByGradeUseCase.execute(grade: grade, classNum: classNum)
-                        }
-                        await send(.earlyReturnResponse(Result(result)))
+                    return .publisher {
+                        getEarlyReturnByGradeUseCase.execute(grade: grade, classNum: classNum)
+                            .map { Action.earlyReturnResponse(.success($0)) }
+                            .catch { Just(Action.earlyReturnResponse(.failure($0))) }
                     }
                 }
 
@@ -116,11 +114,10 @@ public struct AcceptReducer: Reducer {
                 state.selectedItemIds = []
                 state.studentItems = []
 
-                return .run { send in
-                    let result = await TaskResult {
-                        try await getApplicationsByFloorUseCase.execute(floor: floor)
-                    }
-                    await send(.classroomMovesResponse(Result(result)))
+                return .publisher {
+                    getApplicationsByFloorUseCase.execute(floor: floor)
+                        .map { Action.classroomMovesResponse(.success($0)) }
+                        .catch { Just(Action.classroomMovesResponse(.failure($0))) }
                 }
 
             case let .applicationsResponse(.success(applications)):
@@ -175,24 +172,20 @@ public struct AcceptReducer: Reducer {
                 }
                 let currentType = state.currentType
 
-                return .run { send in
-                    let result = await TaskResult {
-                        switch currentType {
-                        case .outgoing:
-                            try await updateApplicationStatusUseCase.execute(status: "OK", idList: idList)
-                        case .classroomMove:
-                            try await updateClassroomMoveStatusUseCase.execute(status: "OK", idList: idList)
-                        case .earlyReturn:
-                            try await updateEarlyReturnStatusUseCase.execute(status: "OK", idList: idList)
-                        }
+                return .publisher {
+                    let publisher: AnyPublisher<Void, Error>
+                    switch currentType {
+                    case .outgoing:
+                        publisher = updateApplicationStatusUseCase.execute(status: "OK", idList: idList)
+                    case .classroomMove:
+                        publisher = updateClassroomMoveStatusUseCase.execute(status: "OK", idList: idList)
+                    case .earlyReturn:
+                        publisher = updateEarlyReturnStatusUseCase.execute(status: "OK", idList: idList)
                     }
 
-                    switch result {
-                    case .success:
-                        await send(.updateStatusResponse(.success("\(count)명의 \(typeText) 수락이 완료되었습니다!")))
-                    case .failure(let error):
-                        await send(.updateStatusResponse(.failure(error)))
-                    }
+                    return publisher
+                        .map { Action.updateStatusResponse(.success("\(count)명의 \(typeText) 수락이 완료되었습니다!")) }
+                        .catch { Just(Action.updateStatusResponse(.failure($0))) }
                 }
 
             case .rejectSelectedApplications:
@@ -212,24 +205,20 @@ public struct AcceptReducer: Reducer {
                 }
                 let currentType = state.currentType
 
-                return .run { send in
-                    let result = await TaskResult {
-                        switch currentType {
-                        case .outgoing:
-                            try await updateApplicationStatusUseCase.execute(status: "NO", idList: idList)
-                        case .classroomMove:
-                            try await updateClassroomMoveStatusUseCase.execute(status: "NO", idList: idList)
-                        case .earlyReturn:
-                            try await updateEarlyReturnStatusUseCase.execute(status: "NO", idList: idList)
-                        }
+                return .publisher {
+                    let publisher: AnyPublisher<Void, Error>
+                    switch currentType {
+                    case .outgoing:
+                        publisher = updateApplicationStatusUseCase.execute(status: "NO", idList: idList)
+                    case .classroomMove:
+                        publisher = updateClassroomMoveStatusUseCase.execute(status: "NO", idList: idList)
+                    case .earlyReturn:
+                        publisher = updateEarlyReturnStatusUseCase.execute(status: "NO", idList: idList)
                     }
 
-                    switch result {
-                    case .success:
-                        await send(.updateStatusResponse(.success("\(count)명의 \(typeText) 거절이 완료되었습니다!")))
-                    case let .failure(error):
-                        await send(.updateStatusResponse(.failure(error)))
-                    }
+                    return publisher
+                        .map { Action.updateStatusResponse(.success("\(count)명의 \(typeText) 거절이 완료되었습니다!")) }
+                        .catch { Just(Action.updateStatusResponse(.failure($0))) }
                 }
 
             case let .updateStatusResponse(.success(message)):

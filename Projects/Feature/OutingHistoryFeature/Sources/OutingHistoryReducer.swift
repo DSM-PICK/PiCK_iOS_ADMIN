@@ -1,6 +1,7 @@
 import ComposableArchitecture
 import PiCK_iOS_DesignSystem
 import Foundation
+import Combine
 import OutingHistoryDomainInterface
 
 public struct OutingHistoryReducer: Reducer {
@@ -50,12 +51,11 @@ public struct OutingHistoryReducer: Reducer {
 
 extension OutingHistoryReducer {
     private func loadOutingHistory() -> Effect<Action> {
-        .run { send in
-            await send(.outingHistoryResponse(
-                await TaskResult {
-                    try await getOutingHistoryUseCase.execute()
-                }
-            ))
+        .publisher {
+            getOutingHistoryUseCase.execute()
+                .mapError { $0 as Error }
+                .map { Action.outingHistoryResponse(.success($0)) }
+                .catch { Just(Action.outingHistoryResponse(.failure($0))) }
         }
     }
 }

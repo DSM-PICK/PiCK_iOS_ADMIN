@@ -20,7 +20,6 @@ let project = Project.makeModule(
         .Projects.classroomMoveListDomain,
         .Projects.outListDomain,
         .Projects.testDomain,
-        .Projects.teacherDomain,
         .Projects.checkSelfStudyTeacher
     ]
 )

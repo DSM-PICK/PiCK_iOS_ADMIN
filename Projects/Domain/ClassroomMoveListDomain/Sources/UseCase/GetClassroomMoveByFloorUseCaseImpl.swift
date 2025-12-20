@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 import ClassroomMoveListDomainInterface
 
 public class GetClassroomMoveByFloorUseCaseImpl: GetClassroomMoveByFloorUseCase {
@@ -8,7 +9,7 @@ public class GetClassroomMoveByFloorUseCaseImpl: GetClassroomMoveByFloorUseCase 
         self.repository = repository
     }
 
-    public func execute(floor: Int) async throws -> [ClassroomMoveListEntity] {
-        try await repository.getClassroomMoveByFloor(floor: floor)
+    public func execute(floor: Int) -> AnyPublisher<[ClassroomMoveListEntity], Error> {
+        repository.getClassroomMoveByFloor(floor: floor)
     }
 }

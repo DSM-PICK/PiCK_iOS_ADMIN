@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 import ClassroomMoveListDomainInterface
 
 public class ClassroomMoveListRepositoryImpl: ClassroomMoveListRepository {
@@ -8,11 +9,15 @@ public class ClassroomMoveListRepositoryImpl: ClassroomMoveListRepository {
         self.dataSource = dataSource
     }
 
-    public func getClassroomMoveByFloor(floor: Int) async throws -> [ClassroomMoveListEntity] {
-        try await dataSource.getClassroomMoveByFloor(floor: floor).map { $0.toEntity() }
+    public func getClassroomMoveByFloor(floor: Int) -> AnyPublisher<[ClassroomMoveListEntity], Error> {
+        dataSource.getClassroomMoveByFloor(floor: floor)
+            .map { $0.map { $0.toEntity() } }
+            .eraseToAnyPublisher()
     }
 
-    public func getClassroomMoveByClassroom(grade: Int, classNum: Int) async throws -> [ClassroomMoveListEntity] {
-        try await dataSource.getClassroomMoveByClassroom(grade: grade, classNum: classNum).map { $0.toEntity() }
+    public func getClassroomMoveByClassroom(grade: Int, classNum: Int) -> AnyPublisher<[ClassroomMoveListEntity], Error> {
+        dataSource.getClassroomMoveByClassroom(grade: grade, classNum: classNum)
+            .map { $0.map { $0.toEntity() } }
+            .eraseToAnyPublisher()
     }
 }

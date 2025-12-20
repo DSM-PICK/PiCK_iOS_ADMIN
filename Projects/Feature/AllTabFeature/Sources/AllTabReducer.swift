@@ -36,10 +36,10 @@ public struct AllTabReducer: Reducer {
         Reduce { state, action in
             switch action {
             case .fetchMyName:
-                return .run { send in
-                    await send(.myNameResponse(
-                        await TaskResult { try await getMyNameUseCase.execute() }
-                    ))
+                return .publisher {
+                    getMyNameUseCase.execute()
+                        .map { Action.myNameResponse(.success($0)) }
+                        .catch { Just(Action.myNameResponse(.failure($0))) }
                 }
 
             case let .myNameResponse(.success(myName)):

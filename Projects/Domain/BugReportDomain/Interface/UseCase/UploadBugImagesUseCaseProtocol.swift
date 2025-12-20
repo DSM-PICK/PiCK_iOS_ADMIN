@@ -1,5 +1,6 @@
 import Foundation
+import Combine
 
 public protocol UploadBugImagesUseCaseProtocol {
-    func execute(images: [Data]) async throws -> [String]
+    func execute(images: [Data]) -> AnyPublisher<[String], Error>
 }

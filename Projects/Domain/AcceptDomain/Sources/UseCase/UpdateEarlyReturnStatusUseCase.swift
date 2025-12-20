@@ -1,5 +1,6 @@
 import Foundation
 import AcceptDomainInterface
+import Combine
 
 public class UpdateEarlyReturnStatusUseCase: UpdateEarlyReturnStatusUseCaseProtocol {
     private let repository: AcceptRepository
@@ -8,7 +9,7 @@ public class UpdateEarlyReturnStatusUseCase: UpdateEarlyReturnStatusUseCaseProto
         self.repository = repository
     }
 
-    public func execute(status: String, idList: [String]) async throws {
-        try await repository.updateEarlyReturnStatus(status: status, idList: idList)
+    public func execute(status: String, idList: [String]) -> AnyPublisher<Void, Error> {
+        repository.updateEarlyReturnStatus(status: status, idList: idList)
     }
 }
