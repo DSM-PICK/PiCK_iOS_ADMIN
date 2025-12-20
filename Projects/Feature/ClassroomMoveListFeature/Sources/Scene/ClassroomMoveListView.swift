@@ -68,7 +68,8 @@ public struct ClassroomMoveListView: View {
                                     }
                                 }
                                 .padding(.horizontal, 24)
-                            }.onAppear {
+                            }
+                            .onAppear {
                                 proxy.scrollTo(3, anchor: .center)
                             }
                         }
