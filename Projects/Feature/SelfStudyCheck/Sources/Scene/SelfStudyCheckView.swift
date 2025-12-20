@@ -35,7 +35,7 @@ public struct SelfStudyCheckView: View {
                     .padding(.top, 16)
 
                     HStack(spacing: 0) {
-                        Text(Date().koreanMonthDayString + "출결")
+                        Text(Date().koreanMonthDayString + " 출결")
                             .pickText(type: .heading4, textColor: .Normal.black)
                             .padding(.leading, 24)
 
@@ -56,33 +56,28 @@ public struct SelfStudyCheckView: View {
                         .padding(.top, 20)
                         .padding(.horizontal, 24)
 
-                    VStack(alignment: .leading, spacing: 0) {
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 8) {
-                                ForEach(SelfStudyCheckReducer.Period.allCases, id: \.self) { period in
-                                    Button {
-                                        viewStore.send(.selectPeriod(period), animation: .spring())
-                                    } label: {
-                                        Text(period.title)
-                                            .pickText(
-                                                type: .body1,
-                                                textColor: viewStore.selectedPeriod == period ? .Primary.primary500 : .Gray.gray600
-                                            )
-                                            .frame(width: 114, height: 32)
-                                            .background(Color.clear)
-                                            .cornerRadius(8)
-                                    }
-                                }
+                    HStack(spacing: 8) {
+                        ForEach(SelfStudyCheckReducer.Period.allCases, id: \.self) { period in
+                            Button {
+                                viewStore.send(.selectPeriod(period), animation: .spring())
+                            } label: {
+                                Text(period.title)
+                                    .pickText(
+                                        type: .body1,
+                                        textColor: viewStore.selectedPeriod == period ? .Primary.primary500 : .Gray.gray600
+                                    )
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: 32)
+                                    .background(
+                                        viewStore.selectedPeriod == period
+                                        ? Color.Primary.primary50
+                                        : Color.clear
+                                    )
+                                    .cornerRadius(8)
                             }
-                            .padding(.horizontal, 24)
                         }
-
-                        Rectangle()
-                            .fill(Color.Primary.primary500)
-                            .frame(width: 114, height: 1)
-                            .offset(x: indicatorOffset(for: viewStore.selectedPeriod))
-                            .animation(.spring(), value: viewStore.selectedPeriod)
                     }
+                    .padding(.horizontal, 24)
                     .padding(.top, 16)
 
                 ScrollView {

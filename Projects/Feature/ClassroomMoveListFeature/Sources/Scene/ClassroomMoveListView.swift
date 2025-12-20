@@ -55,7 +55,8 @@ public struct ClassroomMoveListView: View {
                                                 type: .body1,
                                                 textColor: selectedFloor == floor ? .Primary.primary500 : .Gray.gray600
                                             )
-                                            .frame(width: 114, height: 32)
+                                            .frame(maxWidth: .infinity)
+                                            .frame(height: 32)
                                             .background(
                                                 selectedFloor == floor
                                                 ? Color.Primary.primary50
