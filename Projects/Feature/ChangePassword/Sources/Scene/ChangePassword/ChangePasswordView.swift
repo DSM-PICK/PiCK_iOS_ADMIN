@@ -106,7 +106,7 @@ public struct ChangePasswordView: View {
             }
         )
         .padding(.horizontal, 24)
-        .padding(.top, 75)
+        .padding(.top, 50)
     }
 
     private func codeTextField(_ viewStore: ViewStoreOf<ChangePasswordReducer>) -> some View {
