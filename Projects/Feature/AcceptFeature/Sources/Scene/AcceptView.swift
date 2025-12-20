@@ -254,38 +254,14 @@ public struct AcceptView: View {
                     }
                 }
 
-                if viewStore.showToast, let message = viewStore.toastMessage {
-                    VStack {
-                        Spacer()
-
-                        HStack(spacing: 12) {
-                            Image(systemName: "checkmark.circle.fill")
-                                .foregroundColor(.Primary.primary500)
-                                .font(.system(size: 20))
-
-                            Text(message)
-                                .pickText(type: .body1, textColor: .Normal.black)
-                        }
-                        .padding(.horizontal, 16)
-                        .frame(height: 48)
-                        .background(Color.Gray.gray50)
-                        .cornerRadius(24)
-                        .shadow(color: Color.black.opacity(0.1), radius: 10, x: 0, y: 4)
-                        .padding(.bottom, 40)
-                        .transition(.move(edge: .bottom).combined(with: .opacity))
-                        .onAppear {
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
-                                viewStore.send(.hideToast)
-                            }
-                        }
+                if viewStore.showAlert {
+                    PiCKDisappearAlert(
+                        successType: viewStore.alertSuccessType,
+                        message: viewStore.alertMessage
+                    )
+                    .onDisappear {
+                        viewStore.send(.dismissAlert)
                     }
-                    .zIndex(1000)
-                    .animation(.spring(response: 0.5, dampingFraction: 0.7), value: viewStore.showToast)
-                }
-            }
-            .onChange(of: viewStore.shouldDismiss) { shouldDismiss in
-                if shouldDismiss {
-                    dismiss()
                 }
             }
         }

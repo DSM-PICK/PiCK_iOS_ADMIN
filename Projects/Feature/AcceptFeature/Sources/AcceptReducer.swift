@@ -1,5 +1,6 @@
 import ComposableArchitecture
 import AcceptDomainInterface
+import PiCK_iOS_DesignSystem
 
 public struct AcceptReducer: Reducer {
     private let getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol
@@ -53,9 +54,9 @@ public struct AcceptReducer: Reducer {
         public var currentClassNum: Int = 5
         public var currentFloor: Int = 1
         public var currentType: ApplicationType = .outgoing
-        public var toastMessage: String? = nil
-        public var showToast: Bool = false
-        public var shouldDismiss: Bool = false
+        public var showAlert = false
+        public var alertSuccessType: SuccessType = .success
+        public var alertMessage: String = ""
 
         public init() {}
     }
@@ -70,7 +71,7 @@ public struct AcceptReducer: Reducer {
         case approveSelectedApplications
         case rejectSelectedApplications
         case updateStatusResponse(Result<String, Error>)
-        case hideToast
+        case dismissAlert
     }
 
     public var body: some Reducer<State, Action> {
@@ -226,7 +227,7 @@ public struct AcceptReducer: Reducer {
                     switch result {
                     case .success:
                         await send(.updateStatusResponse(.success("\(count)명의 \(typeText) 거절이 완료되었습니다!")))
-                    case .failure(let error):
+                    case let .failure(error):
                         await send(.updateStatusResponse(.failure(error)))
                     }
                 }
@@ -238,20 +239,19 @@ public struct AcceptReducer: Reducer {
                     removedIds.contains(item.id)
                 }
                 state.selectedItemIds = []
-                state.toastMessage = message
-                state.showToast = true
-                state.shouldDismiss = true
+                state.alertMessage = message
+                state.showAlert = true
                 return .none
 
             case .updateStatusResponse(.failure):
                 state.isLoading = false
-                state.toastMessage = "처리에 실패했습니다"
-                state.showToast = true
+                state.alertMessage = "처리를 실패했습니다"
+                state.showAlert = true
+                state.alertSuccessType = .fail
                 return .none
 
-            case .hideToast:
-                state.showToast = false
-                state.toastMessage = nil
+            case .dismissAlert:
+                state.showAlert = false
                 return .none
             }
         }

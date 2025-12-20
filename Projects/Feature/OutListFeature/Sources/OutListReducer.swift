@@ -121,7 +121,7 @@ public struct OutListReducer: Reducer {
                 state.alertMessage = "복귀가 완료되었습니다!"
                 return loadOutList(floor: state.currentFloor)
 
-            case let .returnStudentsResponse(.failure(error)):
+            case .returnStudentsResponse(.failure):
                 state.showAlert = true
                 state.alertSuccessType = .fail
                 state.alertMessage = "복귀를 실패하였습니다"
