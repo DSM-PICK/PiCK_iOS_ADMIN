@@ -29,6 +29,13 @@ struct SigninView: View {
                 }
             }
             .navigationBarHidden(true)
+            .errorToast(
+                message: viewStore.errorMessage ?? "에러발생!",
+                isPresented: viewStore.binding(
+                    get: { $0.errorMessage != nil },
+                    send: .clearError
+                )
+            )
         }
     }
     
