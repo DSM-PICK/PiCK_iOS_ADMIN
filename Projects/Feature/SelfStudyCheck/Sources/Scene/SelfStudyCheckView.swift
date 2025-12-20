@@ -77,23 +77,10 @@ public struct SelfStudyCheckView: View {
 
                         Spacer()
 
-                        Button {
-                            tempSelectedGrade = "\(viewStore.selectedGrade)"
-                            tempSelectedClass = "\(viewStore.selectedClass)"
-                            isClassBottomSheetPresented = true
-                        } label: {
-                            HStack(spacing: 8) {
-                                Text("\(viewStore.selectedGrade)학년 \(viewStore.selectedClass)반")
-                                    .pickText(type: .body1, textColor: .Gray.gray800)
-
-                                Image(systemName: "chevron.down")
-                                    .foregroundColor(.Gray.gray600)
-                                    .font(.system(size: 12))
-                            }
-                            .frame(width: 103, height: 34)
-                            .background(Color.Gray.gray50)
-                            .cornerRadius(8)
-                        }
+                        ClassroomFilterButton(
+                            selectedClassroom: "\(viewStore.selectedGrade)학년 \(viewStore.selectedClass)반",
+                            onTap: { isClassBottomSheetPresented = true }
+                        )
                         .padding(.trailing, 24)
                     }
                     .padding(.top, 20)
