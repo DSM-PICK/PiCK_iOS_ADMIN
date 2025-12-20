@@ -199,14 +199,4 @@ extension SelfStudyCheckView {
             return .Gray.gray600
         }
     }
-
-    private func indicatorOffset(for period: SelfStudyCheckReducer.Period) -> CGFloat {
-        let allCases = SelfStudyCheckReducer.Period.allCases
-        guard let selectedIndex = allCases.firstIndex(of: period) else { return 0 }
-        let buttonWidth: CGFloat = 114
-        let spacing: CGFloat = 8
-        let horizontalPadding: CGFloat = 24
-
-        return horizontalPadding + CGFloat(selectedIndex) * (buttonWidth + spacing)
-    }
 }
