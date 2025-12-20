@@ -67,7 +67,7 @@ public struct AcceptView: View {
                     ScrollViewReader { proxy in
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 8) {
-                                ForEach(2...4, id: \.self) { floor in
+                                ForEach([1, 2, 3, 4, 5], id: \.self) { floor in
                                     Button {
                                         selectedFloor = floor
                                         viewStore.send(.fetchApplicationsByFloor(floor: floor))
