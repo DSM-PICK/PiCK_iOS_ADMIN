@@ -42,13 +42,11 @@ public struct SchoolMealReducer: Reducer {
             case .fetchMeal(let dateString):
                 state.isLoading = true
                 state.errorMessage = nil
-                return .run { send in
-                    do {
-                        let mealEntity = try await fetchSchoolMealsUseCase.execute(date: dateString)
-                        await send(.mealFetched(mealEntity))
-                    } catch {
-                        await send(.fetchFailed(error.localizedDescription))
-                    }
+                return .publisher {
+                    fetchSchoolMealsUseCase.execute(date: dateString)
+                        .mapError { $0 as Error }
+                        .map { Action.mealFetched($0) }
+                        .catch { Just(Action.fetchFailed($0.localizedDescription)) }
                 }
                 
             case .mealFetched(let mealEntity):

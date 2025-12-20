@@ -1,5 +1,6 @@
 import Foundation
+import Combine
 
 public protocol SchoolMealRepository {
-    func fetchSchoolMeal(date: String) async throws -> SchoolMealEntity
+    func fetchSchoolMeal(date: String) -> AnyPublisher<SchoolMealEntity, Error>
 }
