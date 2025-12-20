@@ -189,56 +189,32 @@ public struct HomeReducer: Reducer {
                 return .none
 
             case let .acceptApplication(id):
-                return .run { send in
-                    await send(
-                        .updateStatusResponse(
-                            await TaskResult {
-                                try await updateApplicationStatusUseCase.execute(
-                                    status: "OK",
-                                    idList: [id]
-                                )
-                            }
-                        )
-                    )
+                return .publisher {
+                    updateApplicationStatusUseCase.execute(status: "OK", idList: [id])
+                        .mapError { $0 as Error }
+                        .map { Action.updateStatusResponse(.success($0)) }
+                        .catch { Just(Action.updateStatusResponse(.failure($0))) }
                 }
             case let .rejectApplication(id):
-                return .run { send in
-                    await send(
-                        .updateStatusResponse(
-                            await TaskResult {
-                                try await updateApplicationStatusUseCase.execute(
-                                    status: "NO",
-                                    idList: [id]
-                                )
-                            }
-                        )
-                    )
+                return .publisher {
+                    updateApplicationStatusUseCase.execute(status: "NO", idList: [id])
+                        .mapError { $0 as Error }
+                        .map { Action.updateStatusResponse(.success($0)) }
+                        .catch { Just(Action.updateStatusResponse(.failure($0))) }
                 }
             case let .acceptEarlyReturn(id):
-                return .run { send in
-                    await send(
-                        .updateEarlyReturnStatusResponse(
-                            await TaskResult {
-                                try await updateEarlyReturnStatusUseCase.execute(
-                                    status: "OK",
-                                    idList: [id]
-                                )
-                            }
-                        )
-                    )
+                return .publisher {
+                    updateEarlyReturnStatusUseCase.execute(status: "OK", idList: [id])
+                        .mapError { $0 as Error }
+                        .map { Action.updateEarlyReturnStatusResponse(.success($0)) }
+                        .catch { Just(Action.updateEarlyReturnStatusResponse(.failure($0))) }
                 }
             case let .rejectEarlyReturn(id):
-                return .run { send in
-                    await send(
-                        .updateEarlyReturnStatusResponse(
-                            await TaskResult {
-                                try await updateEarlyReturnStatusUseCase.execute(
-                                    status: "NO",
-                                    idList: [id]
-                                )
-                            }
-                        )
-                    )
+                return .publisher {
+                    updateEarlyReturnStatusUseCase.execute(status: "NO", idList: [id])
+                        .mapError { $0 as Error }
+                        .map { Action.updateEarlyReturnStatusResponse(.success($0)) }
+                        .catch { Just(Action.updateEarlyReturnStatusResponse(.failure($0))) }
                 }
 
             case .updateStatusResponse(.success):
