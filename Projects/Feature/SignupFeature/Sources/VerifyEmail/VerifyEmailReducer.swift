@@ -1,3 +1,4 @@
+import Foundation
 import ComposableArchitecture
 import AuthDomainInterface
 
@@ -47,17 +48,15 @@ public struct VerifyEmailReducer: Reducer {
                 return performCodeCheck(with: state)
             case .emailSendResponse(.success):
                 return .none
-            case .emailSendResponse(.failure(let error)):
-                let emailError = error as? AuthDomainInterface.EmailError ?? .clientError
-                state.errorMessage = emailError.errorDescription
+            case let .emailSendResponse(.failure(error)):
+                state.errorMessage = parseErrorMessage(from: error)
                 return .none
             case let .codeCheckResponse(.success(isValid)):
                 state.isSuccessful = isValid
                 if !isValid { state.errorMessage = "올바른 인증코드를 입력해주세요" }
                 return .none
-            case .codeCheckResponse(.failure(let error)):
-                let emailError = error as? AuthDomainInterface.EmailError ?? .clientError
-                state.errorMessage = emailError.errorDescription
+            case let .codeCheckResponse(.failure(error)):
+                state.errorMessage = parseErrorMessage(from: error)
                 return .none
             case .clearError:
                 state.errorMessage = nil
@@ -103,5 +102,16 @@ extension VerifyEmailReducer {
                 )
             )
         }
+    }
+
+    private func parseErrorMessage(from error: Error) -> String {
+        if let pickError = error as? PiCKError {
+            return pickError.localizedDescription
+        }
+        if error is URLError {
+            return "네트워크 연결을 확인해주세요"
+        }
+
+        return error.localizedDescription
     }
 }

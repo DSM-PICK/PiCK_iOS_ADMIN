@@ -1,3 +1,4 @@
+import Foundation
 import ComposableArchitecture
 import AuthDomainInterface
 
@@ -54,8 +55,7 @@ public struct InfoSettingReducer: Reducer {
                 state.isSignupSuccessful = true
                 return .none
             case let .signupResponse(.failure(error)):
-                let authError = error as? AuthDomainInterface.AuthError ?? .clientError
-                state.errorMessage = authError.errorDescription
+                state.errorMessage = parseErrorMessage(from: error)
                 return .none
             case .clearError:
                 state.errorMessage = nil
@@ -63,7 +63,9 @@ public struct InfoSettingReducer: Reducer {
             }
         }
     }
+}
 
+extension InfoSettingReducer {
     private func performSignup(with state: State) -> Effect<Action> {
         .run { send in
             await send(.signupResponse(
@@ -82,5 +84,16 @@ public struct InfoSettingReducer: Reducer {
                 }
             ))
         }
+    }
+
+    private func parseErrorMessage(from error: Error) -> String {
+        if let pickError = error as? PiCKError {
+            return pickError.localizedDescription
+        }
+        if error is URLError {
+            return "네트워크 연결을 확인해주세요"
+        }
+
+        return error.localizedDescription
     }
 }

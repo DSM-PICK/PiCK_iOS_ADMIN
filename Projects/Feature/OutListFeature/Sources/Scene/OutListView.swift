@@ -185,6 +185,7 @@ public struct OutListView: View {
                 .navigationTitle("외출자 목록")
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarBackButtonHidden(true)
+                .toolbar(.hidden, for: .tabBar)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button {

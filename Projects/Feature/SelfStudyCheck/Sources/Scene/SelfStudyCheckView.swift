@@ -16,37 +16,6 @@ public struct SelfStudyCheckView: View {
         self.store = store
     }
 
-    private func statusColor(_ status: String) -> Color {
-        switch status {
-        case "출석":
-            return .Primary.primary300
-        case "현체":
-            return .Gray.gray300
-        case "이동":
-            return .Gray.gray800
-        case "외출":
-            return .Primary.primary500
-        case "무단":
-            return .Error.error
-        case "귀가", "결과":
-            return .Gray.gray600
-        case "취업중":
-            return .Primary.primary500
-        default:
-            return .Gray.gray600
-        }
-    }
-
-    private func indicatorOffset(for period: SelfStudyCheckReducer.Period) -> CGFloat {
-        let allCases = SelfStudyCheckReducer.Period.allCases
-        guard let selectedIndex = allCases.firstIndex(of: period) else { return 0 }
-        let buttonWidth: CGFloat = 114
-        let spacing: CGFloat = 8
-        let horizontalPadding: CGFloat = 24
-
-        return horizontalPadding + CGFloat(selectedIndex) * (buttonWidth + spacing)
-    }
-
     public var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
             ZStack {
@@ -66,34 +35,16 @@ public struct SelfStudyCheckView: View {
                     .padding(.top, 16)
 
                     HStack(spacing: 0) {
-                        HStack(spacing: 16) {
-                            Text(Date().koreanMonthDayString)
-                                .pickText(type: .label1, textColor: .Normal.black)
-
-                            Text("출결")
-                                .pickText(type: .label1, textColor: .Normal.black)
-                        }
-                        .padding(.leading, 24)
+                        Text(Date().koreanMonthDayString + " 출결")
+                            .pickText(type: .heading4, textColor: .Normal.black)
+                            .padding(.leading, 24)
 
                         Spacer()
 
-                        Button {
-                            tempSelectedGrade = "\(viewStore.selectedGrade)"
-                            tempSelectedClass = "\(viewStore.selectedClass)"
-                            isClassBottomSheetPresented = true
-                        } label: {
-                            HStack(spacing: 8) {
-                                Text("\(viewStore.selectedGrade)학년 \(viewStore.selectedClass)반")
-                                    .pickText(type: .body1, textColor: .Gray.gray800)
-
-                                Image(systemName: "chevron.down")
-                                    .foregroundColor(.Gray.gray600)
-                                    .font(.system(size: 12))
-                            }
-                            .frame(width: 103, height: 34)
-                            .background(Color.Gray.gray50)
-                            .cornerRadius(8)
-                        }
+                        ClassroomFilterButton(
+                            selectedClassroom: "\(viewStore.selectedGrade)학년 \(viewStore.selectedClass)반",
+                            onTap: { isClassBottomSheetPresented = true }
+                        )
                         .padding(.trailing, 24)
                     }
                     .padding(.top, 20)
@@ -105,33 +56,28 @@ public struct SelfStudyCheckView: View {
                         .padding(.top, 20)
                         .padding(.horizontal, 24)
 
-                    VStack(alignment: .leading, spacing: 0) {
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 8) {
-                                ForEach(SelfStudyCheckReducer.Period.allCases, id: \.self) { period in
-                                    Button {
-                                        viewStore.send(.selectPeriod(period), animation: .spring())
-                                    } label: {
-                                        Text(period.title)
-                                            .pickText(
-                                                type: .body1,
-                                                textColor: viewStore.selectedPeriod == period ? .Primary.primary500 : .Gray.gray600
-                                            )
-                                            .frame(width: 114, height: 32)
-                                            .background(Color.clear)
-                                            .cornerRadius(8)
-                                    }
-                                }
+                    HStack(spacing: 8) {
+                        ForEach(SelfStudyCheckReducer.Period.allCases, id: \.self) { period in
+                            Button {
+                                viewStore.send(.selectPeriod(period), animation: .spring())
+                            } label: {
+                                Text(period.title)
+                                    .pickText(
+                                        type: .body1,
+                                        textColor: viewStore.selectedPeriod == period ? .Primary.primary500 : .Gray.gray600
+                                    )
+                                    .frame(maxWidth: .infinity)
+                                    .frame(height: 32)
+                                    .background(
+                                        viewStore.selectedPeriod == period
+                                        ? Color.Primary.primary50
+                                        : Color.clear
+                                    )
+                                    .cornerRadius(8)
                             }
-                            .padding(.horizontal, 24)
                         }
-
-                        Rectangle()
-                            .fill(Color.Primary.primary500)
-                            .frame(width: 114, height: 1)
-                            .offset(x: indicatorOffset(for: viewStore.selectedPeriod))
-                            .animation(.spring(), value: viewStore.selectedPeriod)
                     }
+                    .padding(.horizontal, 24)
                     .padding(.top, 16)
 
                 ScrollView {
@@ -146,15 +92,10 @@ public struct SelfStudyCheckView: View {
                         }
                         .frame(maxWidth: .infinity, minHeight: UIScreen.main.bounds.height - 400)
                     } else {
-                        VStack(spacing: 20) {
+                        VStack(spacing: 16) {
                             ForEach(viewStore.studentItems) { item in
                                 HStack(spacing: 0) {
-                                    Text("\(item.grade)\(item.classNum)\(String(format: "%02d", item.num))")
-                                        .pickText(type: .body1, textColor: .Normal.black)
-
-                                    Text(" ")
-
-                                    Text(item.userName)
+                                    Text("\(item.grade)\(item.classNum)\(String(format: "%02d", item.num)) \(item.userName)")
                                         .pickText(type: .subTitle3, textColor: .Normal.black)
 
                                     Spacer()
@@ -164,7 +105,7 @@ public struct SelfStudyCheckView: View {
                                         isStatusBottomSheetPresented = true
                                     } label: {
                                         Text(item.status)
-                                            .pickText(type: .body3, textColor: .Normal.white)
+                                            .pickText(type: .body1, textColor: .Normal.white)
                                             .frame(width: 55, height: 29)
                                             .background(statusColor(item.status))
                                             .cornerRadius(8)
@@ -177,7 +118,6 @@ public struct SelfStudyCheckView: View {
                                 .cornerRadius(12)
                             }
                         }
-                        .padding(.top, 20)
                         .padding(.horizontal, 24)
                     }
                 }
@@ -235,5 +175,38 @@ public struct SelfStudyCheckView: View {
                 }
             }
         }
+    }
+}
+
+extension SelfStudyCheckView {
+    private func statusColor(_ status: String) -> Color {
+        switch status {
+        case "출석":
+            return .Primary.primary300
+        case "현체":
+            return .Gray.gray300
+        case "이동":
+            return .Gray.gray800
+        case "외출":
+            return .Primary.primary500
+        case "무단":
+            return .Error.error
+        case "귀가", "결과":
+            return .Gray.gray600
+        case "취업중":
+            return .Primary.primary500
+        default:
+            return .Gray.gray600
+        }
+    }
+
+    private func indicatorOffset(for period: SelfStudyCheckReducer.Period) -> CGFloat {
+        let allCases = SelfStudyCheckReducer.Period.allCases
+        guard let selectedIndex = allCases.firstIndex(of: period) else { return 0 }
+        let buttonWidth: CGFloat = 114
+        let spacing: CGFloat = 8
+        let horizontalPadding: CGFloat = 24
+
+        return horizontalPadding + CGFloat(selectedIndex) * (buttonWidth + spacing)
     }
 }

@@ -73,6 +73,7 @@ public struct OutingHistoryView: View {
                 .navigationTitle("이전 외출 기록")
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarBackButtonHidden(true)
+                .toolbar(.hidden, for: .tabBar)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button {
