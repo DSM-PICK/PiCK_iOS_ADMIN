@@ -16,7 +16,7 @@ public struct AcceptView: View {
     @Environment(\.dismiss) var dismiss
     @State private var isApplyBottomSheetPresented = false
     @State private var selectedOption: ApplicationType = .outgoing
-    @State private var selectedFloor: Int = 2
+    @State private var selectedFloor: Int = 3
     @State private var showApprovePopup = false
     @State private var showRejectPopup = false
     let store: StoreOf<AcceptReducer>
@@ -67,7 +67,7 @@ public struct AcceptView: View {
                     ScrollViewReader { proxy in
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 8) {
-                                ForEach(1...5, id: \.self) { floor in
+                                ForEach(2...4, id: \.self) { floor in
                                     Button {
                                         selectedFloor = floor
                                         viewStore.send(.fetchApplicationsByFloor(floor: floor))
@@ -91,12 +91,12 @@ public struct AcceptView: View {
                             .padding(.horizontal, 24)
                         }
                         .onAppear {
-                            proxy.scrollTo(2, anchor: .leading)
+                            proxy.scrollTo(3, anchor: .center)
                         }
                         .onChange(of: selectedOption) { newValue in
                             if newValue == .classroomMove {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                    proxy.scrollTo(2, anchor: .leading)
+                                    proxy.scrollTo(3, anchor: .center)
                                 }
                             }
                         }
