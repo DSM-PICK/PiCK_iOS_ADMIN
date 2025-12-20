@@ -120,6 +120,7 @@ public struct ClassroomMoveListView: View {
                 .navigationTitle("교실 이동 현황")
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationBarBackButtonHidden(true)
+                .toolbar(.hidden, for: .tabBar)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button {
