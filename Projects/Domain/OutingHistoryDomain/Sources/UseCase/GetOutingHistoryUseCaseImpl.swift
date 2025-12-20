@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 import OutingHistoryDomainInterface
 
 public class GetOutingHistoryUseCaseImpl: GetOutingHistoryUseCase {
@@ -8,7 +9,7 @@ public class GetOutingHistoryUseCaseImpl: GetOutingHistoryUseCase {
         self.repository = repository
     }
 
-    public func execute() async throws -> [OutingHistoryEntity] {
-        try await repository.getOutingHistory()
+    public func execute() -> AnyPublisher<[OutingHistoryEntity], Error> {
+        repository.getOutingHistory()
     }
 }

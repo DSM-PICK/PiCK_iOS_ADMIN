@@ -1,5 +1,7 @@
+import Foundation
+import Combine
 import OutingHistoryDomainInterface
 
 public protocol OutingHistoryDataSource {
-    func getOutingHistory() async throws -> [OutingHistoryResponseDTO]
+    func getOutingHistory() -> AnyPublisher<[OutingHistoryResponseDTO], Error>
 }

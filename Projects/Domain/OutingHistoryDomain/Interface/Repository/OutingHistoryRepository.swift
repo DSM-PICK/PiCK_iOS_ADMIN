@@ -1,5 +1,6 @@
 import Foundation
+import Combine
 
 public protocol OutingHistoryRepository {
-    func getOutingHistory() async throws -> [OutingHistoryEntity]
+    func getOutingHistory() -> AnyPublisher<[OutingHistoryEntity], Error>
 }
