@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 import CheckSelfStudyTeacherDomainInterface
 
 public class CheckSelfStudyTeacherRepositoryImpl: CheckSelfStudyTeacherRepository {
@@ -8,8 +9,10 @@ public class CheckSelfStudyTeacherRepositoryImpl: CheckSelfStudyTeacherRepositor
         self.dataSource = dataSource
     }
 
-    public func getSelfStudyTeacher(date: String) async throws -> [SelfStudyTeacherEntity] {
-        try await dataSource.getSelfStudyTeacher(date: date).map { $0.toEntity() }
+    public func getSelfStudyTeacher(date: String) -> AnyPublisher<[SelfStudyTeacherEntity], Error> {
+        dataSource.getSelfStudyTeacher(date: date)
+            .map { $0.map { $0.toEntity() } }
+            .eraseToAnyPublisher()
     }
 }
 

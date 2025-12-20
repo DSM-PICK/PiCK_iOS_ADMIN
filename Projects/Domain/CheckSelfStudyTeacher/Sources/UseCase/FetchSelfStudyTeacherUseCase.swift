@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 import CheckSelfStudyTeacherDomainInterface
 
 public class FetchSelfStudyTeacherUseCase: FetchSelfStudyTeacherUseCaseProtocol {
@@ -8,7 +9,7 @@ public class FetchSelfStudyTeacherUseCase: FetchSelfStudyTeacherUseCaseProtocol 
         self.repository = repository
     }
 
-    public func execute(date: String) async throws -> [SelfStudyTeacherEntity] {
-        try await repository.getSelfStudyTeacher(date: date)
+    public func execute(date: String) -> AnyPublisher<[SelfStudyTeacherEntity], Error> {
+        repository.getSelfStudyTeacher(date: date)
     }
 }

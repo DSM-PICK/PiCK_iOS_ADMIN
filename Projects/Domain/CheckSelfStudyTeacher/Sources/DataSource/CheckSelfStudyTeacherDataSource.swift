@@ -1,5 +1,6 @@
 import Foundation
+import Combine
 
 public protocol CheckSelfStudyTeacherDataSource {
-    func getSelfStudyTeacher(date: String) async throws -> [SelfStudyTeacherResponseDTO]
+    func getSelfStudyTeacher(date: String) -> AnyPublisher<[SelfStudyTeacherResponseDTO], Error>
 }

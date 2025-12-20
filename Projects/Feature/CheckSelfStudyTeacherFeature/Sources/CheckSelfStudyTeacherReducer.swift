@@ -1,6 +1,7 @@
 import ComposableArchitecture
 import CheckSelfStudyTeacherDomainInterface
 import Foundation
+import Combine
 
 public struct CheckSelfStudyTeacherReducer: Reducer {
     private let fetchSelfStudyTeacherUseCase: any FetchSelfStudyTeacherUseCaseProtocol
@@ -40,11 +41,11 @@ public struct CheckSelfStudyTeacherReducer: Reducer {
 
             case let .fetchSelfStudyTeacher(date):
                 state.isLoading = true
-                return .run { send in
-                    let result = await TaskResult {
-                        try await fetchSelfStudyTeacherUseCase.execute(date: date)
-                    }
-                    await send(.selfStudyTeacherResponse(Result(result)))
+                return .publisher {
+                    fetchSelfStudyTeacherUseCase.execute(date: date)
+                        .mapError { $0 as Error }
+                        .map { Action.selfStudyTeacherResponse(.success($0)) }
+                        .catch { Just(Action.selfStudyTeacherResponse(.failure($0))) }
                 }
 
             case let .selfStudyTeacherResponse(.success(teachers)):

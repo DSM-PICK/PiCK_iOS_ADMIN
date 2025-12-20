@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 
 public protocol CheckSelfStudyTeacherDomainInterface {}
 
@@ -17,9 +18,9 @@ public struct SelfStudyTeacherEntity: Equatable, Identifiable {
 }
 
 public protocol CheckSelfStudyTeacherRepository {
-    func getSelfStudyTeacher(date: String) async throws -> [SelfStudyTeacherEntity]
+    func getSelfStudyTeacher(date: String) -> AnyPublisher<[SelfStudyTeacherEntity], Error>
 }
 
 public protocol FetchSelfStudyTeacherUseCaseProtocol {
-    func execute(date: String) async throws -> [SelfStudyTeacherEntity]
+    func execute(date: String) -> AnyPublisher<[SelfStudyTeacherEntity], Error>
 }
