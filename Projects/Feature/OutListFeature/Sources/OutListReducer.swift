@@ -124,7 +124,7 @@ public struct OutListReducer: Reducer {
             case let .returnStudentsResponse(.failure(error)):
                 state.showAlert = true
                 state.alertSuccessType = .fail
-                state.alertMessage = error.localizedDescription
+                state.alertMessage = "복귀를 실패하였습니다"
                 return .none
 
             case .clearError:
