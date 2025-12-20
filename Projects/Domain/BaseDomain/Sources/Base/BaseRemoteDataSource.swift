@@ -38,12 +38,14 @@ open class BaseRemoteDataSource<API: PiCKAPI> {
                     return self.refreshTokenAndRetry(api: api, originalError: moyaError)
                 }
 
-                throw api.errorMap?[code] ??
-                    PiCKError.error(
-                        message: (try? moyaError.response?
-                            .mapJSON() as? NSDictionary)?["message"] as? String ?? "",
-                        errorBody: [:]
-                    )
+                let serverMessage = (try? moyaError.response?
+                    .mapJSON() as? NSDictionary)?["message"] as? String ?? ""
+
+                if !serverMessage.isEmpty {
+                    throw PiCKError.error(message: serverMessage, errorBody: [:])
+                }
+
+                throw api.errorMap?[code] ?? PiCKError.error(message: "오류가 발생했습니다.", errorBody: [:])
             }
             .eraseToAnyPublisher()
     }
