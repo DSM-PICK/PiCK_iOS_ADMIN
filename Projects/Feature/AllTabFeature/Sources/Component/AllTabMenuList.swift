@@ -49,7 +49,7 @@ public struct AllTabMenuList: View {
                         action: onSelfStudyCheckTap
                     ),
                     MenuItemModel(
-                        icon: PiCKImage.classRoomMove, // admin classroomMove 아이콘 추가 필요
+                        icon: PiCKImage.moveClass,
                         title: "교실 이동 현황",
                         action: onClassroomMoveListTap
                     ),
