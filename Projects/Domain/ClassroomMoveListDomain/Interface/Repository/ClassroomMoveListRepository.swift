@@ -1,6 +1,7 @@
 import Foundation
+import Combine
 
 public protocol ClassroomMoveListRepository {
-    func getClassroomMoveByFloor(floor: Int) async throws -> [ClassroomMoveListEntity]
-    func getClassroomMoveByClassroom(grade: Int, classNum: Int) async throws -> [ClassroomMoveListEntity]
+    func getClassroomMoveByFloor(floor: Int) -> AnyPublisher<[ClassroomMoveListEntity], Error>
+    func getClassroomMoveByClassroom(grade: Int, classNum: Int) -> AnyPublisher<[ClassroomMoveListEntity], Error>
 }

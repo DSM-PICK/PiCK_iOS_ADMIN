@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 import ClassroomMoveListDomainInterface
 import ComposableArchitecture
 import PiCK_iOS_DesignSystem
@@ -81,22 +82,20 @@ public struct ClassroomMoveListReducer: Reducer {
 extension ClassroomMoveListReducer {
 
     private func loadClassroomMoveListByFloor(floor: Int) -> Effect<Action> {
-        .run { send in
-            await send(.fetchFloorResponse(
-                await TaskResult {
-                    try await getClassroomMoveByFloorUseCase.execute(floor: floor)
-                }
-            ))
+        .publisher {
+            getClassroomMoveByFloorUseCase.execute(floor: floor)
+                .mapError { $0 as Error }
+                .map { Action.fetchFloorResponse(.success($0)) }
+                .catch { Just(Action.fetchFloorResponse(.failure($0))) }
         }
     }
 
     private func loadClassroomMoveListByClassroom(grade: Int, classNum: Int) -> Effect<Action> {
-        .run { send in
-            await send(.fetchFloorResponse(
-                await TaskResult {
-                    try await getClassroomMoveByClassroomUseCase.execute(grade: grade, classNum: classNum)
-                }
-            ))
+        .publisher {
+            getClassroomMoveByClassroomUseCase.execute(grade: grade, classNum: classNum)
+                .mapError { $0 as Error }
+                .map { Action.fetchFloorResponse(.success($0)) }
+                .catch { Just(Action.fetchFloorResponse(.failure($0))) }
         }
     }
 

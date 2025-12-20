@@ -1,7 +1,8 @@
+import Foundation
+import Combine
 import ClassroomMoveListDomainInterface
 
 public protocol ClassroomMoveListDataSource {
-    func getClassroomMoveByFloor(floor: Int) async throws -> [ClassroomMoveListResponseDTO]
-    func getClassroomMoveByClassroom(grade: Int, classNum: Int) async throws ->
-    [ClassroomMoveListResponseDTO]
+    func getClassroomMoveByFloor(floor: Int) -> AnyPublisher<[ClassroomMoveListResponseDTO], Error>
+    func getClassroomMoveByClassroom(grade: Int, classNum: Int) -> AnyPublisher<[ClassroomMoveListResponseDTO], Error>
 }

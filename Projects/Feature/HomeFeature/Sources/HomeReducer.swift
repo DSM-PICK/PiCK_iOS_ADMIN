@@ -323,18 +323,14 @@ extension HomeReducer {
         }
     }
 
-    private func loadClassroomMoveList(floor: Int) -> Effect<
-        Action> {
-            .run { send in
-                await send(
-                    .classroomMoveResponse(
-                        await TaskResult {
-                            try await getClassroomMoveByFloorUseCase.execute(floor: floor)
-                        }
-                    )
-                )
-            }
+    private func loadClassroomMoveList(floor: Int) -> Effect<Action> {
+        .publisher {
+            getClassroomMoveByFloorUseCase.execute(floor: floor)
+                .mapError { $0 as Error }
+                .map { Action.classroomMoveResponse(.success($0)) }
+                .catch { Just(Action.classroomMoveResponse(.failure($0))) }
         }
+    }
 
     private func loadOutList(floor: Int) -> Effect<Action> {
         .run { send in
