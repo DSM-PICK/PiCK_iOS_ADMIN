@@ -1,5 +1,5 @@
 {
-  "originHash" : "5e792815a394a99bd4011bb7877b6201e79793a715b784601f0444277284160c",
+  "originHash" : "a792d0109389fdf28f5b27ad4507d398dfd9ee3ee028aadd6ed16d8bf2370015",
   "pins" : [
     {
       "identity" : "abseil-cpp-binary",
@@ -186,8 +186,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/DSM-PICK/PiCK_iOS_DesignSystem.git",
       "state" : {
-        "revision" : "d494fcec18fefa724c806ecbdfe0aaea4ac8e4a8",
-        "version" : "1.2.5"
+        "revision" : "03aa1514c97b151f255c9958ab98c9ee2b54ab84",
+        "version" : "1.2.7"
       }
     },
     {
