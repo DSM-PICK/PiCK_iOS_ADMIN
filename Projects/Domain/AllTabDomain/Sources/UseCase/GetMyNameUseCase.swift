@@ -1,5 +1,6 @@
 import Foundation
 import AllTabDomainInterface
+import Combine
 
 public class GetMyNameUseCase: GetMyNameUseCaseProtocol {
     private let repository: AllTabRepository
@@ -8,7 +9,7 @@ public class GetMyNameUseCase: GetMyNameUseCaseProtocol {
         self.repository = repository
     }
 
-    public func execute() async throws -> MyNameEntity {
-        try await repository.getMyName()
+    public func execute() -> AnyPublisher<MyNameEntity, Error> {
+        repository.getMyName()
     }
 }

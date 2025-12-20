@@ -1,5 +1,6 @@
 import Foundation
 import AllTabDomainInterface
+import Combine
 
 public class AllTabRepositoryImpl: AllTabRepository {
     private let dataSource: AllTabDataSource
@@ -8,8 +9,10 @@ public class AllTabRepositoryImpl: AllTabRepository {
         self.dataSource = dataSource
     }
 
-    public func getMyName() async throws -> MyNameEntity {
-        try await dataSource.getMyName().toEntity()
+    public func getMyName() -> AnyPublisher<MyNameEntity, Error> {
+        dataSource.getMyName()
+            .map { $0.toEntity() }
+            .eraseToAnyPublisher()
     }
 }
 

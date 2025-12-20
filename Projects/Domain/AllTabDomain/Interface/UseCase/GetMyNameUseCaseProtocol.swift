@@ -1,5 +1,6 @@
 import Foundation
+import Combine
 
 public protocol GetMyNameUseCaseProtocol {
-    func execute() async throws -> MyNameEntity
+    func execute() -> AnyPublisher<MyNameEntity, Error>
 }

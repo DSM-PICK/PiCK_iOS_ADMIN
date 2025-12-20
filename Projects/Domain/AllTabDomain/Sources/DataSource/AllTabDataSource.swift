@@ -1,5 +1,6 @@
 import Foundation
+import Combine
 
 public protocol AllTabDataSource {
-    func getMyName() async throws -> MyNameResponseDTO
+    func getMyName() -> AnyPublisher<MyNameResponseDTO, Error>
 }

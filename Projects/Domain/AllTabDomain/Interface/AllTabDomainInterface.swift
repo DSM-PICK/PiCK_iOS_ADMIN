@@ -1,7 +1,8 @@
 import Foundation
+import Combine
 
 public protocol AllTabRepository {
-    func getMyName() async throws -> MyNameEntity
+    func getMyName() -> AnyPublisher<MyNameEntity, Error>
 }
 
 public struct MyNameEntity: Equatable {
