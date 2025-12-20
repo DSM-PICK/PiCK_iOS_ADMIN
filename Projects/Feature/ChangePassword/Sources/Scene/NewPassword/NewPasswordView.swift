@@ -21,59 +21,63 @@ public struct NewPasswordView: View {
 
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            VStack(alignment: .leading, spacing: 0) {
-                headerSection
-                newPasswordTextField(viewStore)
-                newPasswordCheckTextField(viewStore)
+            ZStack {
+                VStack(alignment: .leading, spacing: 0) {
+                    headerSection
+                    newPasswordTextField(viewStore)
+                    newPasswordCheckTextField(viewStore)
 
-                if let errorMessage = viewStore.errorMessage {
-                    Text(errorMessage)
-                        .pickText(type: .body1, textColor: .Error.error)
-                        .padding(.horizontal, 24)
-                        .padding(.top, 8)
-                }
+                    if let errorMessage = viewStore.errorMessage {
+                        Text(errorMessage)
+                            .pickText(type: .body1, textColor: .Error.error)
+                            .padding(.horizontal, 24)
+                            .padding(.top, 8)
+                    }
 
-                Spacer()
-                changeButton(viewStore)
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .onChange(of: viewStore.isChangeSuccessful) { isSuccessful in
-                if isSuccessful {
-                    showSuccessAlert = true
+                    Spacer()
+                    changeButton(viewStore)
                 }
-            }
-            .navigationBarBackButtonHidden(true)
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationTitle("비밀번호 변경")
-            .toolbar(.hidden, for: .tabBar)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: {
-                        dismiss()
-                    }) {
-                        Image(systemName: "chevron.left")
-                            .foregroundColor(.black)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .onChange(of: viewStore.isChangeSuccessful) { isSuccessful in
+                    if isSuccessful {
+                        showSuccessAlert = true
                     }
                 }
-            }
-            .alert("비밀번호 변경 완료", isPresented: $showSuccessAlert) {
-                Button("확인", role: .cancel) {
-                    // router.path에 changePassword가 있으면 로그인 뷰에서 온 것
-                    if let changePasswordIndex = router.path.firstIndex(where: { route in
-                        if case .changePassword = route { return true }
-                        return false
-                    }) {
-                        router.path.removeSubrange(changePasswordIndex...)
-                    } else {
-                        // 전체 탭에서 온 경우 - dismiss를 두 번 호출
-                        dismiss()
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                .navigationBarBackButtonHidden(true)
+                .navigationBarTitleDisplayMode(.inline)
+                .navigationTitle("비밀번호 변경")
+                .toolbar(.hidden, for: .tabBar)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(action: {
                             dismiss()
+                        }) {
+                            Image(systemName: "chevron.left")
+                                .foregroundColor(.black)
                         }
                     }
                 }
-            } message: {
-                Text("비밀번호가 성공적으로 변경되었습니다.")
+
+                if showSuccessAlert {
+                    PiCKDisappearAlert(
+                        successType: .success,
+                        message: "비밀번호가 성공적으로 변경되었습니다."
+                    )
+                    .onDisappear {
+                        showSuccessAlert = false
+                        if let changePasswordIndex = router.path.firstIndex(where: { route in
+                            if case .changePassword = route { return true }
+                            return false
+                        }) {
+                            router.path.removeSubrange(changePasswordIndex...)
+                        } else {
+                            dismiss()
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                                dismiss()
+                            }
+                        }
+                    }
+                }
             }
         }
     }
