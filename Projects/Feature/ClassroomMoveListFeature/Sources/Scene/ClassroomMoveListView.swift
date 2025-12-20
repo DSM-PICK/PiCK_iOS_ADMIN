@@ -43,30 +43,34 @@ public struct ClassroomMoveListView: View {
                         .padding(.horizontal, 24)
 
                     if viewStore.currentType == .floor {
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 8) {
-                                ForEach([2, 3, 4], id: \.self) { floor in
-                                    Button {
-                                        selectedFloor = floor
-                                        viewStore.send(.fetchFloor(floor))
-                                    } label: {
-                                        Text("\(floor)층")
-                                            .pickText(
-                                                type: .body1,
-                                                textColor: selectedFloor == floor ? .Primary.primary500 : .Gray.gray600
-                                            )
-                                            .frame(maxWidth: .infinity)
-                                            .frame(height: 32)
-                                            .background(
-                                                selectedFloor == floor
-                                                ? Color.Primary.primary50
-                                                : Color.clear
-                                            )
-                                            .cornerRadius(8)
+                        ScrollViewReader { proxy in
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 8) {
+                                    ForEach([1, 2, 3, 4, 5], id: \.self) { floor in
+                                        Button {
+                                            selectedFloor = floor
+                                            viewStore.send(.fetchFloor(floor))
+                                        } label: {
+                                            Text("\(floor)층")
+                                                .pickText(
+                                                    type: .body1,
+                                                    textColor: selectedFloor == floor ? .Primary.primary500 : .Gray.gray600
+                                                )
+                                                .frame(width: 114, height: 32)
+                                                .background(
+                                                    selectedFloor == floor
+                                                    ? Color.Primary.primary50
+                                                    : Color.clear
+                                                )
+                                                .cornerRadius(8)
+                                        }
+                                        .id(floor)
                                     }
                                 }
+                                .padding(.horizontal, 24)
+                            }.onAppear {
+                                proxy.scrollTo(3, anchor: .center)
                             }
-                            .padding(.horizontal, 24)
                         }
                         .padding(.top, 16)
                     } else {
