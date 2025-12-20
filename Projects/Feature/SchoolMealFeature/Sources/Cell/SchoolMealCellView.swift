@@ -9,6 +9,7 @@ struct SchoolMealCellView: View {
     var body: some View {
         HStack(spacing: 0) {
             Spacer()
+
             VStack(spacing: 16) {
                 Text(mealTime)
                     .pickText(type: .subTitle1, textColor: .Primary.primary700)
@@ -16,19 +17,20 @@ struct SchoolMealCellView: View {
                 if !menu.isEmpty {
                     Text(kcal)
                         .pickText(type: .caption2, textColor: .Normal.white)
-                        .frame(width: 75, height: 22)
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 4)
                         .background(Color.Primary.primary500)
                         .cornerRadius(12)
                 }
             }
-            .frame(width: 140)
 
             Spacer()
 
             Text(menu.isEmpty ? "급식이 없습니다" : menu.joined(separator: "\n"))
                 .pickText(type: .label1, textColor: .Normal.black)
                 .multilineTextAlignment(.leading)
-                .frame(width: 200)
+                .frame(width: 120)
+
             Spacer()
         }
         .frame(maxWidth: .infinity, minHeight: 140)
