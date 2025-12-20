@@ -127,14 +127,6 @@ public extension TargetDependency.Projects {
         target: "ChangePasswordDomainInterface",
         path: .relativeToRoot("Projects/Domain/ChangePasswordDomain")
     )
-    static let teacherDomain = TargetDependency.project(
-        target: "TeacherDomain",
-        path: .relativeToRoot("Projects/Domain/TeacherDomain")
-    )
-    static let teacherDomainInterface = TargetDependency.project(
-        target: "TeacherDomainInterface",
-        path: .relativeToRoot("Projects/Domain/TeacherDomain")
-    )
 }
 
 public extension TargetDependency.Features {
