@@ -315,17 +315,11 @@ public struct HomeReducer: Reducer {
 
 extension HomeReducer {
     private func loadAcceptList(grade: Int, classNum: Int) -> Effect<Action> {
-        .run { send in
-            await send(
-                .acceptResponse(
-                    await TaskResult {
-                        try await getAllApplicationsUseCase.execute(
-                            grade: grade,
-                            classNum: classNum
-                        )
-                    }
-                )
-            )
+        .publisher {
+            getAllApplicationsUseCase.execute(grade: grade, classNum: classNum)
+                .mapError { $0 as Error }
+                .map { Action.acceptResponse(.success($0)) }
+                .catch { Just(Action.acceptResponse(.failure($0))) }
         }
     }
 
@@ -367,14 +361,11 @@ extension HomeReducer {
     }
     
     private func loadEarlyReturnAcceptList(grade: Int, classNum: Int) -> Effect<Action> {
-        .run { send in
-            await send(
-                .earlyReturnAcceptListResponse(
-                    await TaskResult {
-                        try await getEarlyReturnByGradeUseCase.execute(grade: grade, classNum: classNum)
-                    }
-                )
-            )
+        .publisher {
+            getEarlyReturnByGradeUseCase.execute(grade: grade, classNum: classNum)
+                .mapError { $0 as Error }
+                .map { Action.earlyReturnAcceptListResponse(.success($0)) }
+                .catch { Just(Action.earlyReturnAcceptListResponse(.failure($0))) }
         }
     }
 

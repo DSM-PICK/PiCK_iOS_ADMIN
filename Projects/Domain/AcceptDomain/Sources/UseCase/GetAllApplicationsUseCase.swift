@@ -1,5 +1,6 @@
 import Foundation
 import AcceptDomainInterface
+import Combine
 
 public class GetAllApplicationsUseCase: GetAllApplicationsUseCaseProtocol {
     private let repository: AcceptRepository
@@ -8,7 +9,7 @@ public class GetAllApplicationsUseCase: GetAllApplicationsUseCaseProtocol {
         self.repository = repository
     }
 
-    public func execute(grade: Int, classNum: Int) async throws -> [ApplicationEntity] {
-        try await repository.getApplicationsByGrade(grade: grade, classNum: classNum)
+    public func execute(grade: Int, classNum: Int) -> AnyPublisher<[ApplicationEntity], Error> {
+        repository.getApplicationsByGrade(grade: grade, classNum: classNum)
     }
 }

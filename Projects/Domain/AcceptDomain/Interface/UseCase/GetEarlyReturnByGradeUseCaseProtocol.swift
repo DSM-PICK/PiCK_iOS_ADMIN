@@ -1,5 +1,7 @@
 import Foundation
+import Combine
 
 public protocol GetEarlyReturnByGradeUseCaseProtocol {
-    func execute(grade: Int, classNum: Int) async throws -> [EarlyReturnAcceptEntity]
+    func execute(grade: Int, classNum: Int) -> AnyPublisher<[EarlyReturnAcceptEntity], Error>
 }
+ 

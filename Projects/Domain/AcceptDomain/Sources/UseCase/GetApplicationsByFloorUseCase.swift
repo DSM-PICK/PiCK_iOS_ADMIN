@@ -1,5 +1,6 @@
 import Foundation
 import AcceptDomainInterface
+import Combine
 
 public class GetApplicationsByFloorUseCase: GetApplicationsByFloorUseCaseProtocol {
     private let repository: AcceptRepository
@@ -8,7 +9,7 @@ public class GetApplicationsByFloorUseCase: GetApplicationsByFloorUseCaseProtoco
         self.repository = repository
     }
 
-    public func execute(floor: Int) async throws -> [ClassroomMoveEntity] {
-        try await repository.getApplicationsByFloor(floor: floor)
+    public func execute(floor: Int) -> AnyPublisher<[ClassroomMoveEntity], Error> {
+        repository.getApplicationsByFloor(floor: floor)
     }
 }

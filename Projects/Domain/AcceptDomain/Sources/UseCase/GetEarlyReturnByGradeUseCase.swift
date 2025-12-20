@@ -1,5 +1,6 @@
 import Foundation
 import AcceptDomainInterface
+import Combine
 
 public class GetEarlyReturnByGradeUseCase: GetEarlyReturnByGradeUseCaseProtocol {
     private let repository: AcceptRepository
@@ -8,7 +9,7 @@ public class GetEarlyReturnByGradeUseCase: GetEarlyReturnByGradeUseCaseProtocol 
         self.repository = repository
     }
 
-    public func execute(grade: Int, classNum: Int) async throws -> [EarlyReturnAcceptEntity] {
-        try await repository.getEarlyReturnByGrade(grade: grade, classNum: classNum)
+    public func execute(grade: Int, classNum: Int) -> AnyPublisher<[EarlyReturnAcceptEntity], Error> {
+        repository.getEarlyReturnByGrade(grade: grade, classNum: classNum)
     }
 }

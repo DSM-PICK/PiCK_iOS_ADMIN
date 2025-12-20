@@ -1,13 +1,14 @@
 import Foundation
+import Combine
 
 public protocol AcceptRepository {
-    func getApplicationsByGrade(grade: Int, classNum: Int) async throws -> [ApplicationEntity] // 반별로 외출 신청자 조회
-    func getApplicationsByFloor(floor: Int) async throws -> [ClassroomMoveEntity] // 층별로 교실 이동 신청자 조회
-    func getClassroomMovesByGrade(grade: Int, classNum: Int) async throws -> [ClassroomMoveEntity] // 반별로 교실 이동자 조회 (사용하지 않음)
-    func updateApplicationStatus(status: String, idList: [String]) async throws // 외출 수락/거절
-    func updateClassroomMoveStatus(status: String, idList: [String]) async throws // 교실 이동 수락/거절
-    func getEarlyReturnByGrade(grade: Int, classNum: Int) async throws -> [EarlyReturnAcceptEntity]
-    func updateEarlyReturnStatus(status: String, idList: [String]) async throws
+    func getApplicationsByGrade(grade: Int, classNum: Int) -> AnyPublisher<[ApplicationEntity], Error>
+    func getApplicationsByFloor(floor: Int) -> AnyPublisher<[ClassroomMoveEntity], Error>
+    func getClassroomMovesByGrade(grade: Int, classNum: Int) -> AnyPublisher<[ClassroomMoveEntity], Error>
+    func updateApplicationStatus(status: String, idList: [String]) -> AnyPublisher<Void, Error>
+    func updateClassroomMoveStatus(status: String, idList: [String]) -> AnyPublisher<Void, Error>
+    func getEarlyReturnByGrade(grade: Int, classNum: Int) -> AnyPublisher<[EarlyReturnAcceptEntity], Error>
+    func updateEarlyReturnStatus(status: String, idList: [String]) -> AnyPublisher<Void, Error>
 }
 
 public struct ApplicationEntity: Equatable, Identifiable {
