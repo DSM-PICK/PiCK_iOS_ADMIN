@@ -15,27 +15,38 @@ public struct BugReportView: View {
 
     public var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
-            VStack(spacing: 0) {
-                customNavigationBar
+            ZStack {
+                VStack(spacing: 0) {
+                    customNavigationBar
 
-                ScrollView {
-                    formContent(viewStore: viewStore)
-                }
+                    ScrollView {
+                        formContent(viewStore: viewStore)
+                    }
 
-                submitButton(viewStore: viewStore)
-            }
-            .background(Color.Background.background)
-            .navigationBarHidden(true)
-            .toolbar(.hidden, for: .tabBar)
-            .alert("제보 완료", isPresented: viewStore.binding(
-                get: \.showSuccessAlert,
-                send: .dismissSuccessAlert
-            )) {
-                Button("확인") {
-                    dismiss()
+                    submitButton(viewStore: viewStore)
                 }
-            } message: {
-                Text("버그 제보가 성공적으로 완료되었습니다.")
+                .background(Color.Background.background)
+                .navigationBarHidden(true)
+                .toolbar(.hidden, for: .tabBar)
+                
+                if viewStore.showAlert {
+                    VStack {
+                        Spacer()
+                        PiCKDisappearAlert(
+                            successType: viewStore.alertSuccessType,
+                            message: viewStore.alertMessage
+                        )
+                        .onDisappear {
+                            viewStore.send(.dismissAlert)
+                            if viewStore.shouldDismiss {
+                                dismiss()
+                            }
+                        }
+                        .padding(.bottom, 40)
+                    }
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                    .zIndex(999)
+                }
             }
         }
     }
