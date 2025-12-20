@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import PiCK_iOS_DesignSystem
 import Foundation
 import PhotosUI
 import SwiftUI
@@ -21,7 +22,10 @@ public struct BugReportReducer: Reducer {
         public var bugDescription: String = ""
         public var selectedImages: [Data] = []
         public var isSubmitting: Bool = false
-        public var showSuccessAlert: Bool = false
+        public var showAlert: Bool = false
+        public var alertSuccessType: SuccessType = .success
+        public var alertMessage: String = ""
+        public var shouldDismiss: Bool = false
         public var isSubmitButtonEnabled: Bool = false
 
         public init() {}
@@ -35,7 +39,7 @@ public struct BugReportReducer: Reducer {
         case submitButtonTapped
         case uploadImagesResponse(TaskResult<[String]>)
         case submitBugReportResponse(TaskResult<Void>)
-        case dismissSuccessAlert
+        case dismissAlert
         case updateSubmitButtonState
     }
 
@@ -101,24 +105,33 @@ public struct BugReportReducer: Reducer {
                     ))
                 }
 
-            case let .uploadImagesResponse(.failure(error)):
+            case .uploadImagesResponse(.failure):
                 state.isSubmitting = false
+                state.alertSuccessType = .fail
+                state.alertMessage = "이미지 업로드를 실패했어요"
+                state.showAlert = true
                 return .none
 
             case .submitBugReportResponse(.success):
                 state.isSubmitting = false
-                state.showSuccessAlert = true
+                state.alertSuccessType = .success
+                state.alertMessage = "버그 제보가 완료되었습니다"
+                state.showAlert = true
+                state.shouldDismiss = true
                 state.bugLocation = ""
                 state.bugDescription = ""
                 state.selectedImages = []
                 return .none
 
-            case let .submitBugReportResponse(.failure(error)):
+            case .submitBugReportResponse(.failure):
                 state.isSubmitting = false
+                state.alertSuccessType = .fail
+                state.alertMessage = "버그 제보를 실패했어요"
+                state.showAlert = true
                 return .none
 
-            case .dismissSuccessAlert:
-                state.showSuccessAlert = false
+            case .dismissAlert:
+                state.showAlert = false
                 return .none
 
             case .updateSubmitButtonState:
