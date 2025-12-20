@@ -1,5 +1,6 @@
 import Foundation
 import BugReportDomainInterface
+import Combine
 
 public class BugReportRepositoryImpl: BugReportRepository {
     private let dataSource: BugReportDataSource
@@ -8,11 +9,11 @@ public class BugReportRepositoryImpl: BugReportRepository {
         self.dataSource = dataSource
     }
 
-    public func uploadImages(images: [Data]) async throws -> [String] {
-        try await dataSource.uploadImages(images: images)
+    public func uploadImages(images: [Data]) -> AnyPublisher<[String], Error> {
+        dataSource.uploadImages(images: images)
     }
 
-    public func submitBugReport(title: String, content: String, fileNames: [String]) async throws {
-        try await dataSource.submitBugReport(title: title, content: content, fileNames: fileNames)
+    public func submitBugReport(title: String, content: String, fileNames: [String]) -> AnyPublisher<Void, Error> {
+        dataSource.submitBugReport(title: title, content: content, fileNames: fileNames)
     }
 }

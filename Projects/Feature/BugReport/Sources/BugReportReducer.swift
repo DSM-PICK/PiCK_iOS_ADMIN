@@ -4,6 +4,7 @@ import Foundation
 import PhotosUI
 import SwiftUI
 import BugReportDomainInterface
+import Combine
 
 public struct BugReportReducer: Reducer {
     private let uploadBugImagesUseCase: any UploadBugImagesUseCaseProtocol
@@ -71,38 +72,32 @@ public struct BugReportReducer: Reducer {
                 state.isSubmitting = true
 
                 if state.selectedImages.isEmpty {
-                    return .run { [title = state.bugLocation, content = state.bugDescription] send in
-                        await send(.submitBugReportResponse(
-                            await TaskResult {
-                                try await submitBugReportUseCase.execute(
-                                    title: title,
-                                    content: content,
-                                    fileNames: []
-                                )
-                            }
-                        ))
+                    return .publisher { [title = state.bugLocation, content = state.bugDescription] in
+                        submitBugReportUseCase.execute(
+                            title: title,
+                            content: content,
+                            fileNames: []
+                        )
+                        .map { Action.submitBugReportResponse(.success(())) }
+                        .catch { Just(Action.submitBugReportResponse(.failure($0))) }
                     }
                 } else {
-                    return .run { [images = state.selectedImages] send in
-                        await send(.uploadImagesResponse(
-                            await TaskResult {
-                                try await uploadBugImagesUseCase.execute(images: images)
-                            }
-                        ))
+                    return .publisher { [images = state.selectedImages] in
+                        uploadBugImagesUseCase.execute(images: images)
+                            .map { Action.uploadImagesResponse(.success($0)) }
+                            .catch { Just(Action.uploadImagesResponse(.failure($0))) }
                     }
                 }
 
             case let .uploadImagesResponse(.success(fileNames)):
-                return .run { [title = state.bugLocation, content = state.bugDescription] send in
-                    await send(.submitBugReportResponse(
-                        await TaskResult {
-                            try await submitBugReportUseCase.execute(
-                                title: title,
-                                content: content,
-                                fileNames: fileNames
-                            )
-                        }
-                    ))
+                return .publisher { [title = state.bugLocation, content = state.bugDescription] in
+                    submitBugReportUseCase.execute(
+                        title: title,
+                        content: content,
+                        fileNames: fileNames
+                    )
+                    .map { Action.submitBugReportResponse(.success(())) }
+                    .catch { Just(Action.submitBugReportResponse(.failure($0))) }
                 }
 
             case .uploadImagesResponse(.failure):
