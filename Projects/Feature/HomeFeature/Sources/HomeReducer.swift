@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import PiCK_iOS_DesignSystem
 import HomeDomainInterface
 import AcceptDomainInterface
 import OutListDomainInterface
@@ -51,6 +52,9 @@ public struct HomeReducer: Reducer {
         public var floor: String = "0층"
         public var isHomeroomTeacher: Bool = false
         public var isSelfStudyTeacher: Bool = false
+        public var showAlert: Bool = false
+        public var alertSuccessType: SuccessType = .success
+        public var alertMessage: String = ""
 
         // 내부용 리스트
         var earlyReturnList: [EarlyReturnEntity] = []
@@ -90,6 +94,8 @@ public struct HomeReducer: Reducer {
         case classroomMoveResponse(TaskResult<[ClassroomMoveListEntity]>)
         case outListResponse(TaskResult<[OutListEntity]>)
         case earlyReturnListResponse(TaskResult<[EarlyReturnEntity]>)
+
+        case dismissAlert
     }
 
     public var body: some Reducer<State, Action> {
@@ -236,6 +242,10 @@ public struct HomeReducer: Reducer {
                 }
 
             case .updateStatusResponse(.success):
+                state.alertSuccessType = .success
+                state.alertMessage = "외출 처리를 성공했어요"
+                state.showAlert = true
+
                 let components = state.classroom.split(separator: "-").compactMap { Int($0) }
                 if components.count == 2 {
                     return .merge(
@@ -245,9 +255,16 @@ public struct HomeReducer: Reducer {
                 }
                 return .none
             case .updateStatusResponse(.failure):
+                state.alertSuccessType = .fail
+                state.alertMessage = "외출 처리를 실패했어요"
+                state.showAlert = true
                 return .none
 
             case .updateEarlyReturnStatusResponse(.success):
+                state.alertSuccessType = .success
+                state.alertMessage = "조기귀가 처리를 성공했어요"
+                state.showAlert = true
+
                 let components = state.classroom.split(separator: "-").compactMap { Int($0) }
                 if components.count == 2 {
                     return .merge(
@@ -257,6 +274,9 @@ public struct HomeReducer: Reducer {
                 }
                 return .none
             case .updateEarlyReturnStatusResponse(.failure):
+                state.alertSuccessType = .fail
+                state.alertMessage = "조기귀가 처리를 실패했어요"
+                state.showAlert = true
                 return .none
 
             case let .classroomMoveResponse(.success(students)):
@@ -283,6 +303,10 @@ public struct HomeReducer: Reducer {
                 )
                 return .none
             case .earlyReturnListResponse(.failure):
+                return .none
+
+            case .dismissAlert:
+                state.showAlert = false
                 return .none
             }
         }

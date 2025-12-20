@@ -14,130 +14,141 @@ public struct HomeView: View {
     
     public var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
-            ScrollView {
-                VStack(spacing: 24) {
-                    SelfStudyView(
-                        adminMessage: viewStore.adminSelfStudyTeacher
-                    )
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 72)
-
-                    if viewStore.isHomeroomTeacher {
-                        AccordionView(
-                            badge: viewStore.classroom,
-                            title: "외출 수락",
-                            content: {
-                                VStack(spacing: 8) {
-                                    if viewStore.outingAcceptList.isEmpty {
-                                        emptyStateView(message: "외출 신청이 없습니다")
-                                    } else {
-                                        ForEach(viewStore.outingAcceptList) { item in
-                                            AcceptCell(
-                                                studentNumber: self.studentNumber(
-                                                    grade: item.grade,
-                                                    classNum: item.classNum,
-                                                    num: item.num
-                                                ),
-                                                name: item.userName,
-                                                type: item.type,
-                                                onAccept: {
-                                                    switch item.type {
-                                                    case .outgoing:
-                                                        viewStore.send(.acceptApplication(id: item.id))
-                                                    case .earlyReturn:
-                                                        viewStore.send(.acceptEarlyReturn(id: item.id))
-                                                    }
-                                                },
-                                                onReject: {
-                                                    switch item.type {
-                                                    case .outgoing:
-                                                        viewStore.send(.rejectApplication(id: item.id))
-                                                    case .earlyReturn:
-                                                        viewStore.send(.rejectEarlyReturn(id: item.id))
-                                                    }
-                                                }
-                                            )
-                                        }
-                                    }
-                                }
-                                .padding(.vertical, 12)
-                            }
+            ZStack {
+                ScrollView {
+                    VStack(spacing: 24) {
+                        SelfStudyView(
+                            adminMessage: viewStore.adminSelfStudyTeacher
                         )
-                    }
-
-                    if viewStore.isSelfStudyTeacher {
-                        AccordionView(
-                            badge: viewStore.floor,
-                            title: "외출자 확인",
-                            content: {
-                                VStack(spacing: 8) {
-                                    if viewStore.outingStudentList.isEmpty {
-                                        emptyStateView(message: "외출자가 없습니다")
-                                    } else {
-                                        ForEach(viewStore.outingStudentList) { item in
-                                            OutingCell(
-                                                studentNumber: self.studentNumber(
-                                                    grade: item.grade,
-                                                    classNum: item.classNum,
-                                                    num: item.num
-                                                ),
-                                                name: item.userName,
-                                                type: item.type
-                                            )
-                                        }
-                                    }
-                                }
-                                .padding(.vertical, 12)
-                            }
-                        )
-
-                        AccordionView(
-                            badge: viewStore.floor,
-                            title: "교실 이동자 확인",
-                            content: {
-                                VStack(spacing: 8) {
-                                    if viewStore.classroomMoveList.isEmpty {
-                                        emptyStateView(message: "교실 이동자가 없습니다")
-                                    } else {
-                                        ForEach(viewStore.classroomMoveList, id: \.id) { item in
-                                            PiCKClassroomMoveCell(
-                                                studentNumber: self.studentNumber(
-                                                    grade: item.grade,
-                                                    classNum: item.classNum,
-                                                    num: item.num
-                                                ),
-                                                studentName: item.userName,
-                                                startPeriod: item.start,
-                                                endPeriod: item.end,
-                                                currentClassroom: "\(item.grade)학년 \(item.classNum)반",
-                                                moveToClassroom: item.classroomName,
-                                                isSelected: false,
-                                                onTap: {}
-                                            )
-                                        }
-                                    }
-                                }
-                                .padding(.vertical, 12)
-                            }
-                        )
-                    }
-
-                    AllSelfStudyView(selfStudyDirector: viewStore.selfStudyDirector)
                         .frame(maxWidth: .infinity)
+                        .frame(height: 72)
+
+                        if viewStore.isHomeroomTeacher {
+                            AccordionView(
+                                badge: viewStore.classroom,
+                                title: "외출 수락",
+                                content: {
+                                    VStack(spacing: 8) {
+                                        if viewStore.outingAcceptList.isEmpty {
+                                            emptyStateView(message: "외출 신청이 없습니다")
+                                        } else {
+                                            ForEach(viewStore.outingAcceptList) { item in
+                                                AcceptCell(
+                                                    studentNumber: self.studentNumber(
+                                                        grade: item.grade,
+                                                        classNum: item.classNum,
+                                                        num: item.num
+                                                    ),
+                                                    name: item.userName,
+                                                    type: item.type,
+                                                    onAccept: {
+                                                        switch item.type {
+                                                        case .outgoing:
+                                                            viewStore.send(.acceptApplication(id: item.id))
+                                                        case .earlyReturn:
+                                                            viewStore.send(.acceptEarlyReturn(id: item.id))
+                                                        }
+                                                    },
+                                                    onReject: {
+                                                        switch item.type {
+                                                        case .outgoing:
+                                                            viewStore.send(.rejectApplication(id: item.id))
+                                                        case .earlyReturn:
+                                                            viewStore.send(.rejectEarlyReturn(id: item.id))
+                                                        }
+                                                    }
+                                                )
+                                            }
+                                        }
+                                    }
+                                    .padding(.vertical, 12)
+                                }
+                            )
+                        }
+
+                        if viewStore.isSelfStudyTeacher {
+                            AccordionView(
+                                badge: viewStore.floor,
+                                title: "외출자 확인",
+                                content: {
+                                    VStack(spacing: 8) {
+                                        if viewStore.outingStudentList.isEmpty {
+                                            emptyStateView(message: "외출자가 없습니다")
+                                        } else {
+                                            ForEach(viewStore.outingStudentList) { item in
+                                                OutingCell(
+                                                    studentNumber: self.studentNumber(
+                                                        grade: item.grade,
+                                                        classNum: item.classNum,
+                                                        num: item.num
+                                                    ),
+                                                    name: item.userName,
+                                                    type: item.type
+                                                )
+                                            }
+                                        }
+                                    }
+                                    .padding(.vertical, 12)
+                                }
+                            )
+
+                            AccordionView(
+                                badge: viewStore.floor,
+                                title: "교실 이동자 확인",
+                                content: {
+                                    VStack(spacing: 8) {
+                                        if viewStore.classroomMoveList.isEmpty {
+                                            emptyStateView(message: "교실 이동자가 없습니다")
+                                        } else {
+                                            ForEach(viewStore.classroomMoveList, id: \.id) { item in
+                                                PiCKClassroomMoveCell(
+                                                    studentNumber: self.studentNumber(
+                                                        grade: item.grade,
+                                                        classNum: item.classNum,
+                                                        num: item.num
+                                                    ),
+                                                    studentName: item.userName,
+                                                    startPeriod: item.start,
+                                                    endPeriod: item.end,
+                                                    currentClassroom: "\(item.grade)학년 \(item.classNum)반",
+                                                    moveToClassroom: item.classroomName,
+                                                    isSelected: false,
+                                                    onTap: {}
+                                                )
+                                            }
+                                        }
+                                    }
+                                    .padding(.vertical, 12)
+                                }
+                            )
+                        }
+
+                        AllSelfStudyView(selfStudyDirector: viewStore.selfStudyDirector)
+                            .frame(maxWidth: .infinity)
+                    }
+                    .padding(24)
                 }
-                .padding(24)
-            }
-            .navigationBarBackButtonHidden(true)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    PiCKNavigationBar()
-                        .padding(.leading, 8)
+                .navigationBarBackButtonHidden(true)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        PiCKNavigationBar()
+                            .padding(.leading, 8)
+                    }
                 }
-            }
-            .onAppear {
-                viewStore.send(.fetchSelfStudyDirector(date: Date.todayString()))
-                viewStore.send(.fetchAdminSelfStudyInfo)
-                viewStore.send(.fetchSelfStudyAndClassroom)
+                .onAppear {
+                    viewStore.send(.fetchSelfStudyDirector(date: Date.todayString()))
+                    viewStore.send(.fetchAdminSelfStudyInfo)
+                    viewStore.send(.fetchSelfStudyAndClassroom)
+                }
+                if viewStore.showAlert {
+                    PiCKDisappearAlert(
+                        successType: viewStore.alertSuccessType,
+                        message: viewStore.alertMessage
+                    )
+                    .onDisappear {
+                        viewStore.send(.dismissAlert)
+                    }
+                }
             }
         }
     }
