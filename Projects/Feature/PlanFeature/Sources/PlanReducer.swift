@@ -1,6 +1,7 @@
 import ComposableArchitecture
 import PlanDomainInterface
 import Foundation
+import Combine
 
 public struct PlanReducer: Reducer {
     private let fetchMonthAcademicScheduleUseCase: any FetchMonthAcademicScheduleUseCaseProtocol
@@ -55,15 +56,11 @@ public struct PlanReducer: Reducer {
                 )
 
             case let .fetchMonthAcademicSchedule(year, month):
-                return .run { send in
-                    await send(.monthAcademicScheduleResponse(
-                        await TaskResult { 
-                            try await fetchMonthAcademicScheduleUseCase.execute(
-                                year: year,
-                                month: month
-                            )
-                        }
-                    ))
+                return .publisher {
+                    fetchMonthAcademicScheduleUseCase.execute(year: year, month: month)
+                        .mapError { $0 as Error }
+                        .map { Action.monthAcademicScheduleResponse(.success($0)) }
+                        .catch { Just(Action.monthAcademicScheduleResponse(.failure($0))) }
                 }
 
             case let .monthAcademicScheduleResponse(.success(schedule)):
@@ -75,12 +72,11 @@ public struct PlanReducer: Reducer {
                 return .none
 
             case let .fetchAcademicSchedule(date):
-                return .run { send in
-                    await send(.academicScheduleResponse(
-                        await TaskResult { 
-                            try await fetchAcademicScheduleUseCase.execute(date: date)
-                        }
-                    ))
+                return .publisher {
+                    fetchAcademicScheduleUseCase.execute(date: date)
+                        .mapError { $0 as Error }
+                        .map { Action.academicScheduleResponse(.success($0)) }
+                        .catch { Just(Action.academicScheduleResponse(.failure($0))) }
                 }
 
             case let .academicScheduleResponse(.success(schedule)):
