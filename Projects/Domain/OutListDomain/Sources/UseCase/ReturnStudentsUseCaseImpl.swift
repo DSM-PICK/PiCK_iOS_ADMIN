@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 import OutListDomainInterface
 
 public class ReturnStudentsUseCaseImpl: ReturnStudentsUseCase {
@@ -9,7 +10,7 @@ public class ReturnStudentsUseCaseImpl: ReturnStudentsUseCase {
         self.repository = repository
     }
 
-    public func execute(ids: [String]) async throws {
-        try await repository.returnStudents(ids: ids)
+    public func execute(ids: [String]) -> AnyPublisher<Void, Error> {
+        repository.returnStudents(ids: ids)
     }
 }

@@ -333,26 +333,20 @@ extension HomeReducer {
     }
 
     private func loadOutList(floor: Int) -> Effect<Action> {
-        .run { send in
-            await send(
-                .outListResponse(
-                    await TaskResult {
-                        try await getOutListUseCase.execute(floor: floor)
-                    }
-                )
-            )
+        .publisher {
+            getOutListUseCase.execute(floor: floor)
+                .mapError { $0 as Error }
+                .map { Action.outListResponse(.success($0)) }
+                .catch { Just(Action.outListResponse(.failure($0))) }
         }
     }
 
     private func loadEarlyReturnList(floor: Int) -> Effect<Action> {
-        .run { send in
-            await send(
-                .earlyReturnListResponse(
-                    await TaskResult {
-                        try await getEarlyReturnUseCase.execute(floor: floor, status: "OK")
-                    }
-                )
-            )
+        .publisher {
+            getEarlyReturnUseCase.execute(floor: floor, status: "OK")
+                .mapError { $0 as Error }
+                .map { Action.earlyReturnListResponse(.success($0)) }
+                .catch { Just(Action.earlyReturnListResponse(.failure($0))) }
         }
     }
     

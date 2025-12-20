@@ -1,6 +1,7 @@
 import ComposableArchitecture
 import PiCK_iOS_DesignSystem
 import Foundation
+import Combine
 import OutListDomainInterface
 
 public struct OutListReducer: Reducer {
@@ -106,12 +107,11 @@ public struct OutListReducer: Reducer {
 
             case .returnStudents:
                 let ids = Array(state.selectedStudents)
-                return .run { send in
-                    await send(.returnStudentsResponse(
-                        await TaskResult {
-                            try await returnStudentsUseCase.execute(ids: ids)
-                        }
-                    ))
+                return .publisher {
+                    returnStudentsUseCase.execute(ids: ids)
+                        .mapError { $0 as Error }
+                        .map { Action.returnStudentsResponse(.success($0)) }
+                        .catch { Just(Action.returnStudentsResponse(.failure($0))) }
                 }
 
             case .returnStudentsResponse(.success):
@@ -141,22 +141,20 @@ public struct OutListReducer: Reducer {
 
 extension OutListReducer {
     private func loadOutList(floor: Int) -> Effect<Action> {
-        .run { send in
-            await send(.outListResponse(
-                await TaskResult {
-                    try await getOutListUseCase.execute(floor: floor)
-                }
-            ))
+        .publisher {
+            getOutListUseCase.execute(floor: floor)
+                .mapError { $0 as Error }
+                .map { Action.outListResponse(.success($0)) }
+                .catch { Just(Action.outListResponse(.failure($0))) }
         }
     }
 
     private func loadEarlyReturn(floor: Int) -> Effect<Action> {
-        .run { send in
-            await send(.earlyReturnResponse(
-                await TaskResult {
-                    try await getEarlyReturnUseCase.execute(floor: floor, status: "OK")
-                }
-            ))
+        .publisher {
+            getEarlyReturnUseCase.execute(floor: floor, status: "OK")
+                .mapError { $0 as Error }
+                .map { Action.earlyReturnResponse(.success($0)) }
+                .catch { Just(Action.earlyReturnResponse(.failure($0))) }
         }
     }
 

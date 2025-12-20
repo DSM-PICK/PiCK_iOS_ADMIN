@@ -1,7 +1,8 @@
 import Foundation
+import Combine
 
 public protocol OutListRepository {
-    func getOutList(floor: Int) async throws -> [OutListEntity]
-    func returnStudents(ids: [String]) async throws
-    func getEarlyReturn(floor: Int, status: String) async throws -> [EarlyReturnEntity]
+    func getOutList(floor: Int) -> AnyPublisher<[OutListEntity], Error>
+    func returnStudents(ids: [String]) -> AnyPublisher<Void, Error>
+    func getEarlyReturn(floor: Int, status: String) -> AnyPublisher<[EarlyReturnEntity], Error>
 }
