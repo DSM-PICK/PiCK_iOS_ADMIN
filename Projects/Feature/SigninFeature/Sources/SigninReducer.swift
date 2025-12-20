@@ -1,4 +1,5 @@
 import ComposableArchitecture
+import Foundation
 import AuthDomainInterface
 import Core
 
@@ -14,6 +15,7 @@ public struct SigninReducer: Reducer {
         public var password = ""
         public var isSigninSuccessful = false
         public var isLoading = false
+        public var errorMessage: String? = nil
         public init() {}
     }
 
@@ -22,6 +24,7 @@ public struct SigninReducer: Reducer {
         case passwordChanged(String)
         case signinButtonTapped
         case signinResponse(TaskResult<Void>)
+        case clearError
     }
 
     public var body: some Reducer<State, Action> {
@@ -44,13 +47,20 @@ public struct SigninReducer: Reducer {
                 state.isSigninSuccessful = true
                 return .none
 
-            case .signinResponse(.failure):
+            case let .signinResponse(.failure(error)):
                 state.isLoading = false
+                state.errorMessage = parseErrorMessage(from: error)
+                return .none
+
+            case .clearError:
+                state.errorMessage = nil
                 return .none
             }
         }
     }
-    
+}
+
+extension SigninReducer {
     private func performSignin(with state: State) -> Effect<Action> {
         .run { send in
             let deviceToken = UserDefaultStorage.shared.get(forKey: .deviceToken) as? String
@@ -67,5 +77,16 @@ public struct SigninReducer: Reducer {
                 }
             ))
         }
+    }
+
+    private func parseErrorMessage(from error: Error) -> String {
+        if let pickError = error as? PiCKError {
+            return pickError.localizedDescription
+        }
+        if error is URLError {
+            return "네트워크 연결을 확인해주세요"
+        }
+
+        return error.localizedDescription
     }
 }
