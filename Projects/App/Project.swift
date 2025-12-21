@@ -24,7 +24,9 @@ let projectSettings: Settings = .settings(
 )
 
 let targetSettings: Settings = .settings(
-    base: ["OTHER_LDFLAGS": "-ObjC"],
+    base: SettingsDictionary()
+        .merging(["OTHER_LDFLAGS": "-ObjC"])
+        .merging(.codeSign),
     configurations: [
         .debug(
             name: ConfigurationName.configuration("DEV"),
