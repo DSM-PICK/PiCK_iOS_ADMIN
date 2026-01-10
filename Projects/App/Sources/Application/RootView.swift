@@ -8,6 +8,7 @@ import HomeFeatureInterface
 import ChangePasswordFeature
 import BaseDomain
 import Utility
+import Core
 
 struct RootView: View {
     @StateObject var router = AppRouter()
@@ -115,6 +116,13 @@ struct RootView: View {
     }
     
     private func checkAuthStatus() {
+        let hasLaunched = UserDefaultStorage.shared.get(forKey: .hasLaunchedBefore) as? Bool ?? false
+
+        if !hasLaunched {
+            JwtStore.shared.clearTokens()
+            UserDefaultStorage.shared.set(to: true, forKey: .hasLaunchedBefore)
+        }
+
         if JwtStore.shared.hasValidToken {
             router.path = [.home]
         }
