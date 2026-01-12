@@ -29,16 +29,6 @@ public class AuthRepositoryImpl: AuthRepository {
             .eraseToAnyPublisher()
     }
 
-    public func refreshToken() -> AnyPublisher<Void, Error> {
-        remoteDataSource.refreshToken()
-            .handleEvents(receiveOutput: { tokenData in
-                JwtStore.shared.accessToken = tokenData.accessToken
-                JwtStore.shared.refreshToken = tokenData.refreshToken
-            })
-            .map { _ in () }
-            .eraseToAnyPublisher()
-    }
-
     public func secretKey(req: SecretKeyRequestParams) -> AnyPublisher<Bool, Error> {
         remoteDataSource.secretKey(req: req)
             .map { response in

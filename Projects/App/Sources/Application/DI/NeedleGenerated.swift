@@ -530,7 +530,6 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["authRepository-any AuthRepository"] = { [unowned self] in self.authRepository as Any }
         localTable["mailRepository-any MailRepository"] = { [unowned self] in self.mailRepository as Any }
         localTable["signinUseCase-any SigninUseCase"] = { [unowned self] in self.signinUseCase as Any }
-        localTable["refreshTokenUseCase-any RefreshTokenUseCase"] = { [unowned self] in self.refreshTokenUseCase as Any }
         localTable["secretKeyUseCase-any SecretKeyUseCase"] = { [unowned self] in self.secretKeyUseCase as Any }
         localTable["emailSendUseCase-any EmailSendUseCase"] = { [unowned self] in self.emailSendUseCase as Any }
         localTable["codeCheckUseCase-any CodeCheckUseCase"] = { [unowned self] in self.codeCheckUseCase as Any }
