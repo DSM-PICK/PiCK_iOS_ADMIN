@@ -33,7 +33,7 @@ private enum AutoLoginAPI {
 
 extension AutoLoginAPI: TargetType {
     var baseURL: URL {
-        URL(string: "https://\(Bundle.main.object(forInfoDictionaryKey: "BASE_URL") as? String ?? "")dsm-pick.com")!
+        URLUtil.baseURL
     }
 
     var path: String {
