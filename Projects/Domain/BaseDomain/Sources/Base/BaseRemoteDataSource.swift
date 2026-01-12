@@ -24,7 +24,10 @@ private struct AutoLoginRequest: Encodable {
 
 private struct AutoLoginResponse: Decodable {
     let accessToken: String
-    let refreshToken: String
+
+    enum CodingKeys: String, CodingKey {
+        case accessToken = "access_token"
+    }
 }
 
 private enum AutoLoginAPI {
@@ -148,7 +151,6 @@ open class BaseRemoteDataSource<API: PiCKAPI> {
             }
             .handleEvents(receiveOutput: { token in
                 JwtStore.shared.accessToken = token.accessToken
-                JwtStore.shared.refreshToken = token.refreshToken
             })
             .map { _ in () }
             .catch { [weak self] error -> AnyPublisher<Void, Error> in

@@ -23,9 +23,7 @@ public final class JwtStore {
     
     public var hasValidToken: Bool {
         guard let access = accessToken,
-              let refresh = refreshToken,
-              !access.isEmpty,
-              !refresh.isEmpty else {
+              !access.isEmpty else {
             return false
         }
         return true
