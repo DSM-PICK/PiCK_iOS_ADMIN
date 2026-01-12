@@ -152,8 +152,23 @@ open class BaseRemoteDataSource<API: PiCKAPI> {
             })
             .map { _ in () }
             .catch { [weak self] error -> AnyPublisher<Void, Error> in
-                self?.clearAuthData()
-                NotificationCenter.default.post(name: .autoLoginDidFail, object: nil)
+                guard let self = self else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+
+                let shouldClearCredentials: Bool = {
+                    if let moyaError = error as? MoyaError,
+                       let statusCode = moyaError.response?.statusCode {
+                        return [401, 403, 404].contains(statusCode)
+                    }
+                    return false
+                }()
+
+                if shouldClearCredentials {
+                    self.clearAuthData()
+                    NotificationCenter.default.post(name: .autoLoginDidFail, object: nil)
+                }
+
                 return Fail(error: error).eraseToAnyPublisher()
             }
             .handleEvents(
