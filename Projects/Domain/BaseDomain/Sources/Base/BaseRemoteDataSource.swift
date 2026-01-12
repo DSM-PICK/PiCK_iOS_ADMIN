@@ -131,10 +131,12 @@ open class BaseRemoteDataSource<API: PiCKAPI> {
             return Fail(error: PiCKError.error(message: "저장된 인증 정보가 없습니다.", errorBody: [:])).eraseToAnyPublisher()
         }
 
+        let deviceToken = UserDefaultStorage.shared.get(forKey: .deviceToken) as? String
+
         let loginRequest = AutoLoginRequest(
             adminID: adminID,
             password: password,
-            deviceToken: nil
+            deviceToken: deviceToken
         )
 
         let authProvider = MoyaProvider<AutoLoginAPI>(plugins: [MoyaLoggingPlugin()])
