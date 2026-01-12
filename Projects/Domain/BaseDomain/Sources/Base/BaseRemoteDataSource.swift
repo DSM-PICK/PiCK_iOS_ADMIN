@@ -119,9 +119,9 @@ open class BaseRemoteDataSource<API: PiCKAPI> {
         let key = String(describing: API.self)
 
         AutoLoginCache.lock.lock()
-        defer { AutoLoginCache.lock.unlock() }
 
         if let ongoing = AutoLoginCache.cache[key] {
+            AutoLoginCache.lock.unlock()
             return ongoing
         }
 
@@ -129,6 +129,7 @@ open class BaseRemoteDataSource<API: PiCKAPI> {
         let password = keychain.load(type: .password)
 
         guard !adminID.isEmpty, !password.isEmpty else {
+            AutoLoginCache.lock.unlock()
             clearAuthData()
             NotificationCenter.default.post(name: .autoLoginDidFail, object: nil)
             return Fail(error: PiCKError.error(message: "저장된 인증 정보가 없습니다.", errorBody: [:])).eraseToAnyPublisher()
@@ -184,6 +185,8 @@ open class BaseRemoteDataSource<API: PiCKAPI> {
             .eraseToAnyPublisher()
 
         AutoLoginCache.cache[key] = autoLogin
+        AutoLoginCache.lock.unlock()
+
         return autoLogin
     }
 
