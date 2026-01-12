@@ -116,11 +116,11 @@ open class BaseRemoteDataSource<API: PiCKAPI> {
         let key = String(describing: API.self)
 
         AutoLoginCache.lock.lock()
+        defer { AutoLoginCache.lock.unlock() }
+
         if let ongoing = AutoLoginCache.cache[key] {
-            AutoLoginCache.lock.unlock()
             return ongoing
         }
-        AutoLoginCache.lock.unlock()
 
         let adminID = keychain.load(type: .id)
         let password = keychain.load(type: .password)
@@ -161,12 +161,10 @@ open class BaseRemoteDataSource<API: PiCKAPI> {
                     AutoLoginCache.lock.unlock()
                 }
             )
+            .share()
             .eraseToAnyPublisher()
 
-        AutoLoginCache.lock.lock()
         AutoLoginCache.cache[key] = autoLogin
-        AutoLoginCache.lock.unlock()
-
         return autoLogin
     }
 
