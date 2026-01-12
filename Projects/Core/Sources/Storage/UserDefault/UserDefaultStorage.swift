@@ -7,6 +7,7 @@ public enum UserDefaultKeys: String {
     case userInfoData
     case userNameData
     case deviceToken
+    case hasLaunchedBefore
 }
 
 public struct UserDefaultStorage: UserDefault {
