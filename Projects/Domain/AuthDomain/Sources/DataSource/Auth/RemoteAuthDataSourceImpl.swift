@@ -10,13 +10,7 @@ public final class RemoteAuthDataSourceImpl: BaseRemoteDataSource<AuthAPI>, Remo
             }
             .eraseToAnyPublisher()
     }
-    public func refreshToken() -> AnyPublisher<TokenDTO, Error> {
-        request(.refreshToken)
-            .tryMap { response in
-                try response.map(TokenDTO.self)
-            }
-            .eraseToAnyPublisher()
-    }
+
     public func secretKey(req: SecretKeyRequestParams) -> AnyPublisher<Bool, Error> {
         request(.secretKey(req))
             .tryMap { response in

@@ -26,6 +26,9 @@ struct RootView: View {
             }
         }
         .onAppear(perform: checkAuthStatus)
+        .onReceive(NotificationCenter.default.publisher(for: .autoLoginDidFail)) { _ in
+            handleAutoLoginFailure()
+        }
     }
     
     private var authLoadingView: some View {
@@ -127,5 +130,9 @@ struct RootView: View {
             router.path = [.home]
         }
         isCheckingAuth = false
+    }
+
+    private func handleAutoLoginFailure() {
+        router.path = []
     }
 }

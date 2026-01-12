@@ -5,7 +5,6 @@ import AuthDomainInterface
 
 public enum AuthAPI {
     case signin(SigninRequestParams)
-    case refreshToken
     case secretKey(SecretKeyRequestParams)
     case signup(SignupRequestParams)
     case delete
@@ -38,8 +37,6 @@ extension AuthAPI: PiCKAPI {
         switch self {
         case .signin:
             return "/login"
-        case .refreshToken:
-            return "/refresh"
         case .secretKey:
             return "/key"
         case .signup:
@@ -53,8 +50,6 @@ extension AuthAPI: PiCKAPI {
         switch self {
         case .signin, .secretKey, .signup:
             return .post
-        case .refreshToken:
-            return .put
         case .delete:
             return .delete
         }
@@ -75,8 +70,6 @@ extension AuthAPI: PiCKAPI {
 
     public var pickHeader: TokenType {
         switch self {
-        case .refreshToken:
-            return .refreshToken
         case .delete:
             return .accessToken
         default:

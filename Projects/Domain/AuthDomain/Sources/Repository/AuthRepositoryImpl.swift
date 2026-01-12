@@ -29,16 +29,6 @@ public class AuthRepositoryImpl: AuthRepository {
             .eraseToAnyPublisher()
     }
 
-    public func refreshToken() -> AnyPublisher<Void, Error> {
-        remoteDataSource.refreshToken()
-            .handleEvents(receiveOutput: { tokenData in
-                JwtStore.shared.accessToken = tokenData.accessToken
-                JwtStore.shared.refreshToken = tokenData.refreshToken
-            })
-            .map { _ in () }
-            .eraseToAnyPublisher()
-    }
-
     public func secretKey(req: SecretKeyRequestParams) -> AnyPublisher<Bool, Error> {
         remoteDataSource.secretKey(req: req)
             .map { response in
@@ -71,14 +61,12 @@ public class AuthRepositoryImpl: AuthRepository {
     
     private func saveTokens(_ tokenData: TokenDTO, with req: SigninRequestParams) {
         JwtStore.shared.accessToken = tokenData.accessToken
-        JwtStore.shared.refreshToken = tokenData.refreshToken
         keyChain.save(type: .id, value: req.adminID)
         keyChain.save(type: .password, value: req.password)
     }
 
     private func saveTokens(_ tokenData: TokenDTO, with req: SignupRequestParams) {
         JwtStore.shared.accessToken = tokenData.accessToken
-        JwtStore.shared.refreshToken = tokenData.refreshToken
         keyChain.save(type: .id, value: req.accountId)
         keyChain.save(type: .password, value: req.password)
     }
