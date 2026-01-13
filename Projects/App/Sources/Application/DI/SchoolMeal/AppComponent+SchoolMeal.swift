@@ -36,7 +36,7 @@ public extension AppComponent {
 
     private var schoolMealRemoteDataSource: SchoolMealRemoteDataSource {
         shared {
-            SchoolMealRemoteDataSourceImpl(keychain: keychain)
+            SchoolMealRemoteDataSourceImpl()
         }
     }
 
