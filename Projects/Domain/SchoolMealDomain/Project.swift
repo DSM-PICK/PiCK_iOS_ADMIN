@@ -41,7 +41,8 @@ let implementationTarget = Target.target(
     dependencies: [
         .target(name: "SchoolMealDomainInterface"),
         .Projects.baseDomain,
-        .Shared.thirdPartyLib
+        .Shared.thirdPartyLib,
+        .Shared.utility
     ]
 )
 

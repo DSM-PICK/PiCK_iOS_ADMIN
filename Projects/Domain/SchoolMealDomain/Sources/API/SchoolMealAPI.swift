@@ -1,5 +1,6 @@
 import Foundation
 import Moya
+import Utility
 
 public enum SchoolMealAPI {
     case fetchSchoolMeal(date: String)
@@ -7,7 +8,7 @@ public enum SchoolMealAPI {
 
 extension SchoolMealAPI: TargetType {
     public var baseURL: URL {
-        return URL(string: "https://open.neis.go.kr/hub")!
+        return URLUtil.neisBaseURL
     }
 
     public var path: String {
@@ -27,12 +28,12 @@ extension SchoolMealAPI: TargetType {
             let neisDate = date.replacingOccurrences(of: "-", with: "")
             return .requestParameters(
                 parameters: [
-                    "KEY": "d7841b2039214f68b21eafc749ba196a",
+                    "KEY": URLUtil.neisAPIKey,
                     "Type": "json",
                     "pIndex": 1,
                     "pSize": 100,
-                    "ATPT_OFCDC_SC_CODE": "G10",
-                    "SD_SCHUL_CODE": "7430310",
+                    "ATPT_OFCDC_SC_CODE": URLUtil.neisAtptOfcdcScCode,
+                    "SD_SCHUL_CODE": URLUtil.neisSdSchulCode,
                     "MLSV_YMD": neisDate
                 ],
                 encoding: URLEncoding.queryString
