@@ -8,9 +8,10 @@ public struct AcademicScheduleCalendarView: View {
     let currentMonth: Date
     let onDateSelect: (Date) -> Void
     let onMonthChange: (Date) -> Void
-    
+
     private let calendar = Calendar.current
     private let daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"]
+    private let impactFeedback = UIImpactFeedbackGenerator(style: .light)
     
     public init(
         monthSchedule: AcademicScheduleEntity,
@@ -49,6 +50,7 @@ public struct AcademicScheduleCalendarView: View {
                             isCurrentMonth: calendar.isDate(date, equalTo: currentMonth, toGranularity: .month)
                         )
                         .onTapGesture {
+                            impactFeedback.impactOccurred()
                             onDateSelect(date)
                         }
                     } else {
