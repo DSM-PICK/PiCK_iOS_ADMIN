@@ -32,7 +32,6 @@ public struct SchoolMealDTO: Decodable {
     init(from neisResponse: NEISMealResponse, date: String) {
         self.date = date
 
-        var breakfast = MealDTOElement(menu: [], cal: "")
         var lunch = MealDTOElement(menu: [], cal: "")
         var dinner = MealDTOElement(menu: [], cal: "")
 
@@ -57,8 +56,6 @@ public struct SchoolMealDTO: Decodable {
                 let calInfo = row.calInfo
 
                 switch row.mealCode {
-                case "1":
-                    breakfast = MealDTOElement(menu: menuItems, cal: calInfo)
                 case "2":
                     lunch = MealDTOElement(menu: menuItems, cal: calInfo)
                 case "3":
@@ -70,7 +67,6 @@ public struct SchoolMealDTO: Decodable {
         }
 
         self.meals = SchoolMealDTOElement(
-            breakfast: breakfast,
             lunch: lunch,
             dinner: dinner
         )
@@ -84,14 +80,13 @@ extension SchoolMealDTO {
 }
 
 public struct SchoolMealDTOElement: Decodable {
-    public let breakfast, lunch, dinner: MealDTOElement
+    public let lunch, dinner: MealDTOElement
 }
 
 extension SchoolMealDTOElement {
     func toDomain() -> SchoolMealEntityElement {
         return .init(
             mealBundle: [
-                ("조식", breakfast.toDomain()),
                 ("중식", lunch.toDomain()),
                 ("석식", dinner.toDomain())
             ]
