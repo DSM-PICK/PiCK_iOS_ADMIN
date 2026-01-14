@@ -120,7 +120,7 @@ public struct AcceptView: View {
                                 .resizable()
                                 .frame(width: 88, height: 91)
 
-                            Text("아직 외출을 신청한 학생이 없어요")
+                            Text(selectedOption == .outgoing ? "아직 외출을 신청한 학생이 없어요" : selectedOption == .classroomMove ? "아직 교실 이동을 신청한 학생이 없어요" : "아직 조기 귀가를 신청한 학생이 없어요")
                                 .pickText(type: .subTitle2, textColor: .Gray.gray500)
                         }
                         .frame(maxWidth: .infinity, minHeight: UIScreen.main.bounds.height - 400)

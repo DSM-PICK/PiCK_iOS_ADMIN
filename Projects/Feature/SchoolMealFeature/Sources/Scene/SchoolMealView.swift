@@ -8,7 +8,8 @@ public struct SchoolMealView: View {
     let store: StoreOf<SchoolMealReducer>
     @State private var currentPage = Date()
     @State private var isWeekMode = true
-    
+    private let impactFeedback = UIImpactFeedbackGenerator(style: .light)
+
     public init(store: StoreOf<SchoolMealReducer>) {
         self.store = store
     }
@@ -63,7 +64,10 @@ public struct SchoolMealView: View {
                             send: { .dateChanged($0) }
                         ),
                         currentPage: $currentPage,
-                        isWeekMode: $isWeekMode
+                        isWeekMode: $isWeekMode,
+                        dateSelected: { _ in
+                            impactFeedback.impactOccurred()
+                        }
                     )
                     .shadow(color: Color.black.opacity(0.25), radius: 20, x: 0, y: 0)
                     .background(Color.Background.background)
