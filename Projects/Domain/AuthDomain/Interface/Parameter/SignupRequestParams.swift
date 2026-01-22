@@ -9,6 +9,7 @@ public struct SignupRequestParams: Encodable {
     public let code: String
     public let deviceToken: String
     public let secretKey: String
+    public let os: String
 
     public init(accountId: String, password: String, name: String, grade: Int, classNum: Int, code: String, deviceToken: String, secretKey: String) {
         self.accountId = accountId
@@ -19,6 +20,7 @@ public struct SignupRequestParams: Encodable {
         self.code = code
         self.deviceToken = deviceToken
         self.secretKey = secretKey
+        self.os = "IOS"
     }
 
     enum CodingKeys: String, CodingKey {
@@ -30,5 +32,6 @@ public struct SignupRequestParams: Encodable {
         case code
         case deviceToken = "device_token"
         case secretKey = "secret_key"
+        case os
     }
 }
