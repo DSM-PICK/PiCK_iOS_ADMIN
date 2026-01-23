@@ -27,21 +27,21 @@ struct AcceptCell: View {
             Spacer()
 
             HStack(spacing: 8) {
-                Button(action: onAccept) {
-                    Text("수락")
-                        .pickText(type: .body2, textColor: .Normal.white)
-                        .padding(.horizontal, 15)
-                        .padding(.vertical, 8)
-                        .background(Color.Primary.primary500)
-                        .cornerRadius(8)
-                }
-                
                 Button(action: onReject) {
                     Text("거절")
                         .pickText(type: .body2, textColor: .Normal.white)
                         .padding(.horizontal, 15)
                         .padding(.vertical, 8)
                         .background(Color.Error.error)
+                        .cornerRadius(8)
+                }
+
+                Button(action: onAccept) {
+                    Text("수락")
+                        .pickText(type: .body2, textColor: .Normal.white)
+                        .padding(.horizontal, 15)
+                        .padding(.vertical, 8)
+                        .background(Color.Primary.primary500)
                         .cornerRadius(8)
                 }
             }

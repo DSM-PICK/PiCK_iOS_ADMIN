@@ -9,12 +9,12 @@ struct AcceptActionButtons: View {
     var body: some View {
         HStack(spacing: 8) {
             Button {
-                onAccept()
+                onReject()
             } label: {
-                Text("수락")
+                Text("거절")
                     .pickText(type: .body2, textColor: .Normal.white)
                     .frame(width: 65, height: 34)
-                    .background(Color.Primary.primary900)
+                    .background(Color.Error.error)
                     .cornerRadius(8)
                     .overlay(
                         RoundedRectangle(cornerRadius: 8)
@@ -24,12 +24,12 @@ struct AcceptActionButtons: View {
             .disabled(!isEnabled)
 
             Button {
-                onReject()
+                onAccept()
             } label: {
-                Text("거절")
+                Text("수락")
                     .pickText(type: .body2, textColor: .Normal.white)
                     .frame(width: 65, height: 34)
-                    .background(Color.Error.error)
+                    .background(Color.Primary.primary900)
                     .cornerRadius(8)
                     .overlay(
                         RoundedRectangle(cornerRadius: 8)
