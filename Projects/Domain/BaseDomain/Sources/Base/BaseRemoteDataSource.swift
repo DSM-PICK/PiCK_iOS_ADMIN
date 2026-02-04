@@ -97,7 +97,7 @@ open class BaseRemoteDataSource<API: PiCKAPI> {
                     if !isRetry {
                         return self.autoLogin()
                             .flatMap { _ -> AnyPublisher<Response, Error> in
-                                self.request(api, isRetry: true)
+                                return self.request(api, isRetry: true)
                             }
                             .eraseToAnyPublisher()
                     }
@@ -145,44 +145,36 @@ open class BaseRemoteDataSource<API: PiCKAPI> {
 
         let authProvider = MoyaProvider<AutoLoginAPI>(plugins: [MoyaLoggingPlugin()])
 
-        let autoLogin = authProvider.requestPublisher(.signin(loginRequest))
-            .timeout(.seconds(120), scheduler: DispatchQueue.main)
-            .tryMap { response -> AutoLoginResponse in
-                try response.map(AutoLoginResponse.self)
-            }
-            .handleEvents(receiveOutput: { token in
-                JwtStore.shared.accessToken = token.accessToken
-            })
-            .map { _ in () }
-            .catch { [weak self] error -> AnyPublisher<Void, Error> in
-                guard let self = self else {
-                    return Fail(error: error).eraseToAnyPublisher()
-                }
-
-                let shouldClearCredentials: Bool = {
-                    if let moyaError = error as? MoyaError,
-                       let statusCode = moyaError.response?.statusCode {
-                        return [401, 403, 404].contains(statusCode)
+        let autoLogin = Future<Void, Error> { [weak self] promise in
+            authProvider.request(.signin(loginRequest)) { result in
+                switch result {
+                case .success(let response):
+                    do {
+                        let token = try response.map(AutoLoginResponse.self)
+                        guard self != nil else { return }
+                        JwtStore.shared.accessToken = token.accessToken
+                        promise(.success(()))
+                    } catch {
+                        self?.clearAuthData()
+                        NotificationCenter.default.post(name: .autoLoginDidFail, object: nil)
+                        promise(.failure(error))
                     }
-                    return false
-                }()
-
-                if shouldClearCredentials {
-                    self.clearAuthData()
+                case .failure(let error):
+                    self?.clearAuthData()
                     NotificationCenter.default.post(name: .autoLoginDidFail, object: nil)
+                    promise(.failure(error))
                 }
-
-                return Fail(error: error).eraseToAnyPublisher()
             }
-            .handleEvents(
-                receiveCompletion: { _ in
-                    AutoLoginCache.lock.lock()
-                    AutoLoginCache.cache.removeValue(forKey: key)
-                    AutoLoginCache.lock.unlock()
-                }
-            )
-            .share()
-            .eraseToAnyPublisher()
+        }
+        .handleEvents(
+            receiveCompletion: { _ in
+                AutoLoginCache.lock.lock()
+                AutoLoginCache.cache.removeValue(forKey: key)
+                AutoLoginCache.lock.unlock()
+            }
+        )
+        .share()
+        .eraseToAnyPublisher()
 
         AutoLoginCache.cache[key] = autoLogin
         AutoLoginCache.lock.unlock()
