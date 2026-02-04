@@ -151,7 +151,10 @@ open class BaseRemoteDataSource<API: PiCKAPI> {
                 case .success(let response):
                     do {
                         let token = try response.map(AutoLoginResponse.self)
-                        guard self != nil else { return }
+                        guard self != nil else {
+                            promise(.failure(PiCKError.error(message: "", errorBody: [:])))
+                            return
+                        }
                         JwtStore.shared.accessToken = token.accessToken
                         promise(.success(()))
                     } catch {
