@@ -81,13 +81,13 @@ public struct NewPasswordReducer: Reducer {
         .run { send in
             await send(.passwordChangeResponse(
                 await TaskResult {
-                    try await passwordChangeUseCase.execute(
+                    for try await _ in passwordChangeUseCase.execute(
                         req: .init(
                             password: state.newPassword,
                             adminId: accountId,
                             code: code
                         )
-                    )
+                    ).values {}
                 }
             ))
         }
