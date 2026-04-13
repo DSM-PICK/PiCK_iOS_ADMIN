@@ -1,6 +1,7 @@
 import ComposableArchitecture
 import AuthDomainInterface
 
+@Reducer
 public struct ChangePasswordReducer: Reducer {
     private let emailSendUseCase: any EmailSendUseCase
     private let codeCheckUseCase: any CodeCheckUseCase
@@ -13,6 +14,7 @@ public struct ChangePasswordReducer: Reducer {
         self.codeCheckUseCase = codeCheckUseCase
     }
 
+    @ObservableState
     public struct State: Equatable {
         public var email = ""
         public var code = ""
@@ -33,7 +35,7 @@ public struct ChangePasswordReducer: Reducer {
         case clearSuccessMessage
     }
 
-    public var body: some Reducer<State, Action> {
+    public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case let .emailChanged(email):

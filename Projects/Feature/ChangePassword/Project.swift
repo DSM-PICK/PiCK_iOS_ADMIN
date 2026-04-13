@@ -39,8 +39,27 @@ let implementationTarget = Target.target(
     sources: ["Sources/**"],
     dependencies: [
         .target(name: "ChangePasswordFeatureInterface"),
+        .Projects.authDomainInterface,
+        .Projects.changePasswordDomainInterface,
+        .Shared.utility,
+        .SPM.PDS,
         .SPM.NeedleFoundation,
         .SPM.ComposableArchitecture
+    ]
+)
+
+let testTarget = Target.target(
+    name: "ChangePasswordFeatureTests",
+    destinations: env.destination,
+    product: .unitTests,
+    bundleId: "\(env.organizationName).ChangePasswordFeatureTests",
+    deploymentTargets: env.deploymentTargets,
+    infoPlist: .default,
+    sources: ["Tests/**"],
+    dependencies: [
+        .target(name: "ChangePasswordFeature"),
+        .target(name: "ChangePasswordFeatureInterface"),
+        .Projects.authDomainInterface
     ]
 )
 
@@ -48,5 +67,5 @@ let project = Project(
     name: "ChangePasswordFeature",
     organizationName: env.organizationName,
     settings: settings,
-    targets: [interfaceTarget, implementationTarget]
+    targets: [interfaceTarget, implementationTarget, testTarget]
 )
