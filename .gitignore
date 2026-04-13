@@ -72,3 +72,5 @@ Tuist/Dependencies
 
 /XCConfig
 Projects/App/Resources/Firebase/
+.omx/
+.omc/
