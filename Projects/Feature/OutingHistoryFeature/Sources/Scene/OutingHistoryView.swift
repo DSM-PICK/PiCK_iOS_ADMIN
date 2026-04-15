@@ -5,14 +5,14 @@ import PiCK_iOS_DesignSystem
 
 public struct OutingHistoryView: View {
     @Environment(\.dismiss) var dismiss
-    let store: StoreOf<OutingHistoryReducer>
+    @Perception.Bindable var store: StoreOf<OutingHistoryReducer>
 
     public init(store: StoreOf<OutingHistoryReducer>) {
         self.store = store
     }
 
     public var body: some View {
-        WithViewStore(self.store, observe: { $0 }) { viewStore in
+        WithPerceptionTracking {
             ZStack {
                 VStack(spacing: 0) {
                     HStack(spacing: 4) {
@@ -22,10 +22,7 @@ public struct OutingHistoryView: View {
 
                         TextField(
                             "이름 또는 학번으로 검색",
-                            text: viewStore.binding(
-                                get: \.searchText,
-                                send: OutingHistoryReducer.Action.searchTextChanged
-                            )
+                            text: $store.searchText
                         )
                         .textFieldStyle(PlainTextFieldStyle())
                         .padding(.horizontal, 16)
@@ -38,13 +35,13 @@ public struct OutingHistoryView: View {
                     .padding(.horizontal, 24)
 
                     Group {
-                        if viewStore.isLoading {
+                        if store.isLoading {
                             VStack {
                                 Spacer()
                                 ProgressView()
                                 Spacer()
                             }
-                        } else if viewStore.filteredStudentItems.isEmpty {
+                        } else if store.filteredStudentItems.isEmpty {
                             VStack {
                                 Spacer()
                                 VStack(spacing: 12) {
@@ -60,7 +57,7 @@ public struct OutingHistoryView: View {
                         } else {
                             ScrollView {
                                 VStack {
-                                    ForEach(viewStore.filteredStudentItems, id: \.id) { data in
+                                    ForEach(store.filteredStudentItems, id: \.id) { data in
                                         OutingHistoryCell(data: data)
                                     }
                                 }
@@ -68,7 +65,7 @@ public struct OutingHistoryView: View {
                         }
                     }
                 }.onAppear {
-                    viewStore.send(.onAppear)
+                    store.send(.onAppear)
                 }
                 .navigationTitle("이전 외출 기록")
                 .navigationBarTitleDisplayMode(.inline)

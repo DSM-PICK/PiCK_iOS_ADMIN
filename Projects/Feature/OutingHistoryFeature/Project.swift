@@ -39,8 +39,25 @@ let implementationTarget = Target.target(
     sources: ["Sources/**"],
     dependencies: [
         .target(name: "OutingHistoryFeatureInterface"),
+        .Projects.outingHistoryDomainInterface,
+        .SPM.PDS,
         .SPM.NeedleFoundation,
         .SPM.ComposableArchitecture
+    ]
+)
+
+let testTarget = Target.target(
+    name: "OutingHistoryFeatureTests",
+    destinations: env.destination,
+    product: .unitTests,
+    bundleId: "\(env.organizationName).OutingHistoryFeatureTests",
+    deploymentTargets: env.deploymentTargets,
+    infoPlist: .default,
+    sources: ["Tests/**"],
+    dependencies: [
+        .target(name: "OutingHistoryFeature"),
+        .target(name: "OutingHistoryFeatureInterface"),
+        .Projects.outingHistoryDomainInterface
     ]
 )
 
@@ -48,5 +65,5 @@ let project = Project(
     name: "OutingHistoryFeature",
     organizationName: env.organizationName,
     settings: settings,
-    targets: [interfaceTarget, implementationTarget]
+    targets: [interfaceTarget, implementationTarget, testTarget]
 )
