@@ -5,7 +5,7 @@ import PhotosUI
 
 public struct BugReportView: View {
     @Environment(\.dismiss) var dismiss
-    let store: StoreOf<BugReportReducer>
+    @Perception.Bindable var store: StoreOf<BugReportReducer>
     @State private var selectedItems: [PhotosPickerItem] = []
     @FocusState private var isDescriptionFocused: Bool
 
@@ -14,31 +14,31 @@ public struct BugReportView: View {
     }
 
     public var body: some View {
-        WithViewStore(store, observe: { $0 }) { viewStore in
+        WithPerceptionTracking {
             ZStack {
                 VStack(spacing: 0) {
                     customNavigationBar
 
                     ScrollView {
-                        formContent(viewStore: viewStore)
+                        formContent
                     }
 
-                    submitButton(viewStore: viewStore)
+                    submitButton
                 }
                 .background(Color.Background.background)
                 .navigationBarHidden(true)
                 .toolbar(.hidden, for: .tabBar)
                 
-                if viewStore.showAlert {
+                if store.showAlert {
                     VStack {
                         Spacer()
                         PiCKDisappearAlert(
-                            successType: viewStore.alertSuccessType,
-                            message: viewStore.alertMessage
+                            successType: store.alertSuccessType,
+                            message: store.alertMessage
                         )
                         .onDisappear {
-                            viewStore.send(.dismissAlert)
-                            if viewStore.shouldDismiss {
+                            store.send(.dismissAlert)
+                            if store.shouldDismiss {
                                 dismiss()
                             }
                         }
@@ -65,37 +65,31 @@ public struct BugReportView: View {
         .background(Color.Background.background)
     }
 
-    private func formContent(viewStore: ViewStore<BugReportReducer.State, BugReportReducer.Action>) -> some View {
+    private var formContent: some View {
         VStack(alignment: .leading, spacing: 24) {
-            bugLocationField(viewStore: viewStore)
-            bugDescriptionTextView(viewStore: viewStore)
-            bugImageSection(viewStore: viewStore)
+            bugLocationField
+            bugDescriptionTextView
+            bugImageSection
         }
         .padding(.horizontal, 24)
         .padding(.top, 28)
     }
 
-    private func bugLocationField(viewStore: ViewStore<BugReportReducer.State, BugReportReducer.Action>) -> some View {
+    private var bugLocationField: some View {
         PiCKTextField(
-            text: viewStore.binding(
-                get: \.bugLocation,
-                send: { .bugLocationChanged($0) }
-            ),
+            text: $store.bugLocation,
             placeholder: "예: 메인, 외출 신청",
             titleText: "어디서 버그가 발생했나요?"
         )
     }
 
-    private func bugDescriptionTextView(viewStore: ViewStore<BugReportReducer.State, BugReportReducer.Action>) -> some View {
+    private var bugDescriptionTextView: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("버그에 대해 설명해주세요")
                 .pickText(type: .label1, textColor: .Normal.black)
 
             ZStack(alignment: .topLeading) {
-                TextEditor(text: viewStore.binding(
-                    get: \.bugDescription,
-                    send: { .bugDescriptionChanged($0) }
-                ))
+                TextEditor(text: $store.bugDescription)
                 .pickText(type: .caption2, textColor: .Normal.black)
                 .frame(height: 120)
                 .padding(.horizontal, 12)
@@ -109,7 +103,7 @@ public struct BugReportView: View {
                 .scrollContentBackground(.hidden)
                 .focused($isDescriptionFocused)
 
-                if viewStore.bugDescription.isEmpty {
+                if store.bugDescription.isEmpty {
                     Text("자세히 입력해주세요")
                         .pickText(type: .caption2, textColor: .Gray.gray500)
                         .padding(.horizontal, 16)
@@ -120,24 +114,24 @@ public struct BugReportView: View {
         }
     }
 
-    private func bugImageSection(viewStore: ViewStore<BugReportReducer.State, BugReportReducer.Action>) -> some View {
+    private var bugImageSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("버그 사진을 첨부해주세요")
                 .pickText(type: .label1, textColor: .Normal.black)
 
-            if viewStore.selectedImages.isEmpty {
+            if store.selectedImages.isEmpty {
                 photosPickerButton(hasImages: false)
                     .onChange(of: selectedItems) { newItems in
-                        handleImageSelection(newItems: newItems, viewStore: viewStore)
+                        handleImageSelection(newItems: newItems)
                     }
             } else {
                 HStack(spacing: 0) {
                     photosPickerButton(hasImages: true)
                         .onChange(of: selectedItems) { newItems in
-                            handleImageSelection(newItems: newItems, viewStore: viewStore)
+                            handleImageSelection(newItems: newItems)
                         }
 
-                    selectedImagesScrollView(viewStore: viewStore)
+                    selectedImagesScrollView
                         .padding(.leading, 24)
 
                     Spacer()
@@ -187,19 +181,19 @@ public struct BugReportView: View {
         }
     }
 
-    private func selectedImagesScrollView(viewStore: ViewStore<BugReportReducer.State, BugReportReducer.Action>) -> some View {
+    private var selectedImagesScrollView: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 12) {
-                ForEach(Array(viewStore.selectedImages.enumerated()), id: \.offset) { index, imageData in
+                ForEach(Array(store.selectedImages.enumerated()), id: \.offset) { index, imageData in
                     if let uiImage = UIImage(data: imageData) {
-                        imagePreview(uiImage: uiImage, index: index, viewStore: viewStore)
+                        imagePreview(uiImage: uiImage, index: index)
                     }
                 }
             }
         }
     }
 
-    private func imagePreview(uiImage: UIImage, index: Int, viewStore: ViewStore<BugReportReducer.State, BugReportReducer.Action>) -> some View {
+    private func imagePreview(uiImage: UIImage, index: Int) -> some View {
         ZStack(alignment: .topTrailing) {
             Image(uiImage: uiImage)
                 .resizable()
@@ -208,7 +202,7 @@ public struct BugReportView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 8))
 
             Button(action: {
-                viewStore.send(.removeImage(index))
+                store.send(.removeImage(index))
                 selectedItems.remove(at: index)
             }) {
                 Image(systemName: "xmark.circle.fill")
@@ -219,7 +213,7 @@ public struct BugReportView: View {
         }
     }
 
-    private func handleImageSelection(newItems: [PhotosPickerItem], viewStore: ViewStore<BugReportReducer.State, BugReportReducer.Action>) {
+    private func handleImageSelection(newItems: [PhotosPickerItem]) {
         Task {
             var images: [Data] = []
             for item in newItems {
@@ -229,16 +223,16 @@ public struct BugReportView: View {
                     images.append(compressedData)
                 }
             }
-            viewStore.send(.imagesSelected(images))
+            store.send(.imagesSelected(images))
         }
     }
 
-    private func submitButton(viewStore: ViewStore<BugReportReducer.State, BugReportReducer.Action>) -> some View {
+    private var submitButton: some View {
         PiCKButton(
-            buttonText: viewStore.isSubmitting ? "제보 중..." : "제보하기",
-            isEnabled: viewStore.isSubmitButtonEnabled && !viewStore.isSubmitting,
+            buttonText: store.isSubmitting ? "제보 중..." : "제보하기",
+            isEnabled: store.isSubmitButtonEnabled && !store.isSubmitting,
             action: {
-                viewStore.send(.submitButtonTapped)
+                store.send(.submitButtonTapped)
             }
         )
         .padding(.horizontal, 24)

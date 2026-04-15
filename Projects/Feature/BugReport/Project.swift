@@ -39,8 +39,27 @@ let implementationTarget = Target.target(
     sources: ["Sources/**"],
     dependencies: [
         .target(name: "BugReportFeatureInterface"),
+        .Projects.bugReportDomainInterface,
+        .Shared.utility,
+        .SPM.PDS,
         .SPM.NeedleFoundation,
         .SPM.ComposableArchitecture
+    ]
+)
+
+let testTarget = Target.target(
+    name: "BugReportFeatureTests",
+    destinations: env.destination,
+    product: .unitTests,
+    bundleId: "\(env.organizationName).BugReportFeatureTests",
+    deploymentTargets: env.deploymentTargets,
+    infoPlist: .default,
+    sources: ["Tests/**"],
+    dependencies: [
+        .target(name: "BugReportFeature"),
+        .target(name: "BugReportFeatureInterface"),
+        .Projects.bugReportDomainInterface,
+        .Shared.utility
     ]
 )
 
@@ -48,5 +67,5 @@ let project = Project(
     name: "BugReportFeature",
     organizationName: env.organizationName,
     settings: settings,
-    targets: [interfaceTarget, implementationTarget]
+    targets: [interfaceTarget, implementationTarget, testTarget]
 )

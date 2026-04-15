@@ -6,6 +6,7 @@ import SwiftUI
 import BugReportDomainInterface
 import Combine
 
+@Reducer
 public struct BugReportReducer: Reducer {
     private let uploadBugImagesUseCase: any UploadBugImagesUseCaseProtocol
     private let submitBugReportUseCase: any SubmitBugReportUseCaseProtocol
@@ -18,6 +19,7 @@ public struct BugReportReducer: Reducer {
         self.submitBugReportUseCase = submitBugReportUseCase
     }
 
+    @ObservableState
     public struct State: Equatable {
         public var bugLocation: String = ""
         public var bugDescription: String = ""
@@ -32,37 +34,35 @@ public struct BugReportReducer: Reducer {
         public init() {}
     }
 
-    public enum Action {
-        case bugLocationChanged(String)
-        case bugDescriptionChanged(String)
+    public enum Action: BindableAction {
+        case binding(BindingAction<State>)
         case imagesSelected([Data])
         case removeImage(Int)
         case submitButtonTapped
         case uploadImagesResponse(TaskResult<[String]>)
         case submitBugReportResponse(TaskResult<Void>)
         case dismissAlert
-        case updateSubmitButtonState
     }
 
-    public var body: some Reducer<State, Action> {
+    public var body: some ReducerOf<Self> {
+        BindingReducer()
+
         Reduce { state, action in
             switch action {
-            case let .bugLocationChanged(text):
-                state.bugLocation = text
-                return .send(.updateSubmitButtonState)
-
-            case let .bugDescriptionChanged(text):
-                state.bugDescription = text
-                return .send(.updateSubmitButtonState)
+            case .binding:
+                updateSubmitButtonState(state: &state)
+                return .none
 
             case let .imagesSelected(images):
                 state.selectedImages = images
-                return .send(.updateSubmitButtonState)
+                updateSubmitButtonState(state: &state)
+                return .none
 
             case let .removeImage(index):
                 guard index < state.selectedImages.count else { return .none }
                 state.selectedImages.remove(at: index)
-                return .send(.updateSubmitButtonState)
+                updateSubmitButtonState(state: &state)
+                return .none
 
             case .submitButtonTapped:
                 guard !state.bugLocation.isEmpty && !state.bugDescription.isEmpty else {
@@ -116,6 +116,7 @@ public struct BugReportReducer: Reducer {
                 state.bugLocation = ""
                 state.bugDescription = ""
                 state.selectedImages = []
+                state.isSubmitButtonEnabled = false
                 return .none
 
             case .submitBugReportResponse(.failure):
@@ -128,11 +129,11 @@ public struct BugReportReducer: Reducer {
             case .dismissAlert:
                 state.showAlert = false
                 return .none
-
-            case .updateSubmitButtonState:
-                state.isSubmitButtonEnabled = !state.bugLocation.isEmpty && !state.bugDescription.isEmpty
-                return .none
             }
         }
+    }
+
+    private func updateSubmitButtonState(state: inout State) {
+        state.isSubmitButtonEnabled = !state.bugLocation.isEmpty && !state.bugDescription.isEmpty
     }
 }
