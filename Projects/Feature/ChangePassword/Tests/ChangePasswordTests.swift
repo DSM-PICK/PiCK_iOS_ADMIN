@@ -6,6 +6,24 @@ import AuthDomainInterface
 
 @MainActor
 final class ChangePasswordTests: XCTestCase {
+    func testEmailBinding_UpdatesEmailAndClearsError() async {
+        let store = makeStore(initialState: state(errorMessage: "old error"))
+
+        await store.send(\.binding.email, "pick@dsm.hs.kr") {
+            $0.email = "pick@dsm.hs.kr"
+            $0.errorMessage = nil
+        }
+    }
+
+    func testCodeBinding_UpdatesCodeAndClearsError() async {
+        let store = makeStore(initialState: state(errorMessage: "old error"))
+
+        await store.send(\.binding.code, "123456") {
+            $0.code = "123456"
+            $0.errorMessage = nil
+        }
+    }
+
     func testVerificationButtonTapped_WithEmptyEmail_SetsValidationError() async {
         let emailSendUseCase = EmailSendUseCaseSpy()
         let codeCheckUseCase = CodeCheckUseCaseSpy()
@@ -204,6 +222,16 @@ final class ChangePasswordTests: XCTestCase {
     }
 
     private func makeStore(
+        initialState: ChangePasswordReducer.State = .init()
+    ) -> TestStore<ChangePasswordReducer.State, ChangePasswordReducer.Action> {
+        makeStore(
+            emailSendUseCase: EmailSendUseCaseSpy(),
+            codeCheckUseCase: CodeCheckUseCaseSpy(),
+            initialState: initialState
+        )
+    }
+
+    private func makeStore(
         emailSendUseCase: any EmailSendUseCase,
         codeCheckUseCase: any CodeCheckUseCase,
         initialState: ChangePasswordReducer.State = .init()
@@ -214,6 +242,18 @@ final class ChangePasswordTests: XCTestCase {
                 codeCheckUseCase: codeCheckUseCase
             )
         }
+    }
+
+    private func state(
+        email: String = "",
+        code: String = "",
+        errorMessage: String? = nil
+    ) -> ChangePasswordReducer.State {
+        var state = ChangePasswordReducer.State()
+        state.email = email
+        state.code = code
+        state.errorMessage = errorMessage
+        return state
     }
 }
 

@@ -4,7 +4,7 @@ import PiCK_iOS_DesignSystem
 import Utility
 
 public struct ChangePasswordView: View {
-    let store: StoreOf<ChangePasswordReducer>
+    @Perception.Bindable var store: StoreOf<ChangePasswordReducer>
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var router: AppRouter
 
@@ -94,10 +94,7 @@ public struct ChangePasswordView: View {
 
     private var emailTextField: some View {
         PiCKTextField(
-            text: Binding(
-                get: { store.email },
-                set: { store.send(.emailChanged($0)) }
-            ),
+            text: $store.email,
             placeholder: "학교 이메일을 입력해주세요",
             titleText: "이메일",
             showVerification: true,
@@ -111,10 +108,7 @@ public struct ChangePasswordView: View {
 
     private var codeTextField: some View {
         PiCKTextField(
-            text: Binding(
-                get: { store.code },
-                set: { store.send(.codeChanged($0)) }
-            ),
+            text: $store.code,
             placeholder: "인증 코드를 입력해주세요",
             titleText: "인증 코드"
         )

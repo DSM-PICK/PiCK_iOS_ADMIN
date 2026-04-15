@@ -25,9 +25,8 @@ public struct ChangePasswordReducer: Reducer {
         public init() {}
     }
 
-    public enum Action {
-        case emailChanged(String)
-        case codeChanged(String)
+    public enum Action: BindableAction {
+        case binding(BindingAction<State>)
         case verificationButtonTapped
         case nextButtonTapped
         case emailSendResponse(TaskResult<Void>)
@@ -36,15 +35,11 @@ public struct ChangePasswordReducer: Reducer {
     }
 
     public var body: some ReducerOf<Self> {
+        BindingReducer()
+
         Reduce { state, action in
             switch action {
-            case let .emailChanged(email):
-                state.email = email
-                state.errorMessage = nil
-                return .none
-
-            case let .codeChanged(code):
-                state.code = code
+            case .binding:
                 state.errorMessage = nil
                 return .none
 
