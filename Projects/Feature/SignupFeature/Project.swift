@@ -40,7 +40,23 @@ let implementationTarget = Target.target(
     dependencies: [
         .target(name: "SignupFeatureInterface"),
         .Projects.authDomainInterface,
+        .SPM.ComposableArchitecture,
         .Shared.thirdPartyLib
+    ]
+)
+
+let testTarget = Target.target(
+    name: "SignupFeatureTests",
+    destinations: env.destination,
+    product: .unitTests,
+    bundleId: "\(env.organizationName).SignupFeatureTests",
+    deploymentTargets: env.deploymentTargets,
+    infoPlist: .default,
+    sources: ["Tests/**"],
+    dependencies: [
+        .target(name: "SignupFeature"),
+        .target(name: "SignupFeatureInterface"),
+        .Projects.authDomainInterface
     ]
 )
 
@@ -48,5 +64,5 @@ let project = Project(
     name: "SignupFeature",
     organizationName: env.organizationName,
     settings: settings,
-    targets: [interfaceTarget, implementationTarget]
+    targets: [interfaceTarget, implementationTarget, testTarget]
 )
