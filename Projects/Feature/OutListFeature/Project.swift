@@ -7,6 +7,6 @@ let project = Project.makeFeatureModule(
     includeUnitTests: true,
     implementationDependencies: [
         .SPM.NeedleFoundation,
-        .SPM.ComposableArchitecture
+        .SPM.ComposableArchitecture,
     ]
 )

@@ -8,9 +8,6 @@ let project = Project.makeFeatureModule(
     includeUnitTests: true,
     implementationDependencies: [
         .Projects.authDomainInterface,
-        .Shared.thirdPartyLib
-    ],
-    testDependencies: [
-        .Projects.authDomainInterface
+        .Shared.thirdPartyLib,
     ]
 )
