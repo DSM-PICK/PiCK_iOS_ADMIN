@@ -1,8 +1,9 @@
 # PiCK_iOS_ADMIN Project Conventions
 
-This file adds repository-specific guidance on top of the global `~/.codex/AGENTS.md`.
-Keep generic OMX workflow, delegation, and Lore commit rules in the global file.
-Use this file for PiCK_iOS_ADMIN-only build, verification, and structure rules.
+This file contains repository-specific guidance for PiCK_iOS_ADMIN.
+Keep this file agent-agnostic so the same project rules work for Codex, Claude, or any other coding agent.
+Use this file for repository-local build, verification, PR, and structure rules only.
+Avoid tool-vendor-specific orchestration policy in this file unless the repository truly depends on it.
 
 ## Response / documentation language
 - Default user-facing summaries, issue comments, and PR bodies to Korean unless the user explicitly asks for another language.
