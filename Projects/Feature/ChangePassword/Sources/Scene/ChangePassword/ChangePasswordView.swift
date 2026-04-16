@@ -4,7 +4,7 @@ import PiCK_iOS_DesignSystem
 import Utility
 
 public struct ChangePasswordView: View {
-    let store: StoreOf<ChangePasswordReducer>
+    @Perception.Bindable var store: StoreOf<ChangePasswordReducer>
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var router: AppRouter
 
@@ -13,13 +13,13 @@ public struct ChangePasswordView: View {
     }
 
     public var body: some View {
-        WithViewStore(self.store, observe: { $0 }) { viewStore in
+        WithPerceptionTracking {
             VStack(alignment: .leading, spacing: 0) {
                 headerSection
-                emailTextField(viewStore)
-                codeTextField(viewStore)
+                emailTextField
+                codeTextField
 
-                if let errorMessage = viewStore.errorMessage {
+                if let errorMessage = store.errorMessage {
                     Text(errorMessage)
                         .pickText(type: .body1, textColor: .Error.error)
                         .padding(.horizontal, 24)
@@ -27,12 +27,12 @@ public struct ChangePasswordView: View {
                 }
 
                 Spacer()
-                nextButton(viewStore)
+                nextButton
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .onChange(of: viewStore.accountId) { accountId in
-                if let accountId = accountId, !viewStore.code.isEmpty {
-                    router.path.append(.newPassword(accountId: accountId, code: viewStore.code))
+            .onChange(of: store.accountId) { accountId in
+                if let accountId = accountId, !store.code.isEmpty {
+                    router.path.append(.newPassword(accountId: accountId, code: store.code))
                 }
             }
             .navigationBarBackButtonHidden(true)
@@ -50,7 +50,7 @@ public struct ChangePasswordView: View {
                 }
             }
             .overlay(alignment: .top) {
-                if let successMessage = viewStore.successMessage {
+                if let successMessage = store.successMessage {
                     VStack {
                         HStack(spacing: 8) {
                             Image(systemName: "checkmark.circle.fill")
@@ -67,12 +67,12 @@ public struct ChangePasswordView: View {
                     .transition(.move(edge: .top).combined(with: .opacity))
                     .onAppear {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                            viewStore.send(.clearSuccessMessage)
+                            store.send(.clearSuccessMessage)
                         }
                     }
                 }
             }
-            .animation(.spring(), value: viewStore.successMessage)
+            .animation(.spring(), value: store.successMessage)
         }
     }
 
@@ -92,29 +92,23 @@ public struct ChangePasswordView: View {
         .padding(.leading, 24)
     }
 
-    private func emailTextField(_ viewStore: ViewStoreOf<ChangePasswordReducer>) -> some View {
+    private var emailTextField: some View {
         PiCKTextField(
-            text: viewStore.binding(
-                get: \.email,
-                send: ChangePasswordReducer.Action.emailChanged
-            ),
+            text: $store.email,
             placeholder: "학교 이메일을 입력해주세요",
             titleText: "이메일",
             showVerification: true,
             verificationButtonTapped: {
-                viewStore.send(.verificationButtonTapped)
+                store.send(.verificationButtonTapped)
             }
         )
         .padding(.horizontal, 24)
         .padding(.top, 50)
     }
 
-    private func codeTextField(_ viewStore: ViewStoreOf<ChangePasswordReducer>) -> some View {
+    private var codeTextField: some View {
         PiCKTextField(
-            text: viewStore.binding(
-                get: \.code,
-                send: ChangePasswordReducer.Action.codeChanged
-            ),
+            text: $store.code,
             placeholder: "인증 코드를 입력해주세요",
             titleText: "인증 코드"
         )
@@ -122,11 +116,11 @@ public struct ChangePasswordView: View {
         .padding(.top, 44)
     }
 
-    private func nextButton(_ viewStore: ViewStoreOf<ChangePasswordReducer>) -> some View {
+    private var nextButton: some View {
         PiCKButton(
             buttonText: "다음",
-            isEnabled: !viewStore.email.isEmpty && !viewStore.code.isEmpty,
-            action: { viewStore.send(.nextButtonTapped) }
+            isEnabled: !store.email.isEmpty && !store.code.isEmpty,
+            action: { store.send(.nextButtonTapped) }
         )
         .padding(.horizontal, 24)
         .padding(.bottom, 28)

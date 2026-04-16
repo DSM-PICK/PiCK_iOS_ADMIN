@@ -7,6 +7,10 @@ let project = Project.makeFeatureModule(
     includeUnitTests: true,
     implementationDependencies: [
         .Projects.authDomainInterface,
+        .SPM.ComposableArchitecture,
         .Shared.thirdPartyLib,
+    ],
+    testDependencies: [
+        .Projects.authDomainInterface,
     ]
 )

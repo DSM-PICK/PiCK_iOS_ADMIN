@@ -2,7 +2,9 @@ import ComposableArchitecture
 import Foundation
 import AuthDomainInterface
 
+@Reducer
 public struct PasswordReducer: Reducer {
+    @ObservableState
     public struct State: Equatable {
         public var secretKey = ""
         public var accountId = ""
@@ -19,21 +21,18 @@ public struct PasswordReducer: Reducer {
         }
     }
     
-    public enum Action {
-        case passwordChanged(String)
-        case passwordConfirmChanged(String)
+    public enum Action: BindableAction {
+        case binding(BindingAction<State>)
         case nextButtonTapped
         case clearError
     }
     
-    public var body: some Reducer<State, Action> {
+    public var body: some ReducerOf<Self> {
+        BindingReducer()
+
         Reduce { state, action in
             switch action {
-            case let .passwordChanged(password):
-                state.password = password
-                return .none
-            case let .passwordConfirmChanged(password):
-                state.passwordConfirm = password
+            case .binding:
                 return .none
             case .nextButtonTapped:
                 let passwordRegex = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&()])[A-Za-z\\d!@#$%^&()]{8,30}$"

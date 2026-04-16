@@ -5,7 +5,7 @@ import Utility
 import BaseFeature
 
 struct PasswordView: View {
-    let store: StoreOf<PasswordReducer>
+    @Perception.Bindable var store: StoreOf<PasswordReducer>
     @EnvironmentObject var router: AppRouter
     @Environment(\.dismiss) var dismiss
 
@@ -14,7 +14,7 @@ struct PasswordView: View {
     }
 
     var body: some View {
-        WithViewStore(self.store, observe: { $0 }) { viewStore in
+        WithPerceptionTracking {
             BaseView {
                 VStack(alignment: .leading, spacing: 0) {
                     HStack(spacing: 0) {
@@ -32,10 +32,7 @@ struct PasswordView: View {
                         .padding(.top, 12)
 
                     PiCKTextField(
-                        text: viewStore.binding(
-                            get: \.password,
-                            send: PasswordReducer.Action.passwordChanged
-                        ),
+                        text: $store.password,
                         placeholder: "8~30자 영문자, 숫자, 특수문자 포함하세요",
                         titleText: "비밀번호",
                         isSecurity: true
@@ -44,10 +41,7 @@ struct PasswordView: View {
                     .padding(.top, 50)
 
                     PiCKTextField(
-                        text: viewStore.binding(
-                            get: \.passwordConfirm,
-                            send: PasswordReducer.Action.passwordConfirmChanged
-                        ),
+                        text: $store.passwordConfirm,
                         placeholder: "위에 입력한 비밀번호를 다시 입력해주세요",
                         titleText: "비밀번호 확인",
                         isSecurity: true
@@ -59,29 +53,33 @@ struct PasswordView: View {
 
                     PiCKButton(
                         buttonText: "다음",
-                        isEnabled: !viewStore.password.isEmpty && !viewStore.passwordConfirm.isEmpty,
-                        action: { viewStore.send(.nextButtonTapped) }
+                        isEnabled: !store.password.isEmpty && !store.passwordConfirm.isEmpty,
+                        action: { store.send(.nextButtonTapped) }
                     )
                     .padding(.horizontal, 24)
                     .padding(.bottom, 28)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .onChange(of: viewStore.isSuccessful) { isSuccessful in
+            .onChange(of: store.isSuccessful) { isSuccessful in
                 if isSuccessful {
                     router.path.append(.infoSetting(
-                        secretKey: viewStore.secretKey,
-                        accountId: viewStore.accountId,
-                        code: viewStore.code,
-                        password: viewStore.password
+                        secretKey: store.secretKey,
+                        accountId: store.accountId,
+                        code: store.code,
+                        password: store.password
                     ))
                 }
             }
             .errorToast(
-                message: viewStore.errorMessage ?? "에러발생!",
-                isPresented: viewStore.binding(
-                    get: { $0.errorMessage != nil },
-                    send: .clearError
+                message: store.errorMessage ?? "에러발생!",
+                isPresented: Binding(
+                    get: { store.errorMessage != nil },
+                    set: { isPresented in
+                        if !isPresented {
+                            store.send(.clearError)
+                        }
+                    }
                 )
             )
             .navigationBarBackButtonHidden(true)

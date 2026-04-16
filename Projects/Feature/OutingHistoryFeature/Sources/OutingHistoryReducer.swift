@@ -4,6 +4,7 @@ import Foundation
 import Combine
 import OutingHistoryDomainInterface
 
+@Reducer
 public struct OutingHistoryReducer: Reducer {
     private let getOutingHistoryUseCase: any GetOutingHistoryUseCase
 
@@ -13,6 +14,7 @@ public struct OutingHistoryReducer: Reducer {
         self.getOutingHistoryUseCase = getOutingHistoryUseCase
     }
 
+    @ObservableState
     public struct State: Equatable {
         public var studentItems: [OutingHistoryEntity] = []
         public var searchText: String = ""
@@ -21,15 +23,19 @@ public struct OutingHistoryReducer: Reducer {
         public init() {}
     }
 
-    public enum Action {
+    public enum Action: BindableAction {
+        case binding(BindingAction<State>)
         case onAppear
         case outingHistoryResponse(TaskResult<[OutingHistoryEntity]>)
-        case searchTextChanged(String)
     }
 
-    public var body: some Reducer<State, Action> {
+    public var body: some ReducerOf<Self> {
+        BindingReducer()
+
         Reduce { state, action in
             switch action {
+            case .binding:
+                return .none
             case .onAppear:
                 state.isLoading = true
                 return loadOutingHistory()
@@ -40,9 +46,6 @@ public struct OutingHistoryReducer: Reducer {
             case .outingHistoryResponse(.failure(_)):
                 // 에러 처리 필요
                 state.isLoading = false
-                return .none
-            case let .searchTextChanged(searchText):
-                state.searchText = searchText
                 return .none
             }
         }

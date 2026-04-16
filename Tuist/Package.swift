@@ -45,7 +45,7 @@ let package = Package(
         .package(url: "https://github.com/daltoniam/Starscream.git", from: "4.0.6"),
         .package(url: "https://github.com/ReactorKit/ReactorKit.git", from: "3.0.0"),
         .package(url: "https://github.com/kean/Pulse.git", from: "4.2.0"),
-        .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", from: "1.23.1"),
+        .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", from: "1.25.5"),
         .package(url: "https://github.com/uber/needle.git", from: "0.24.0")
     ],
     targets: [
