@@ -28,6 +28,80 @@ public extension Project {
         )
     }
 
+    static func makeFeatureModule(
+        name: String,
+        interfaceProduct: Product = .framework,
+        implementationProduct: Product = .staticFramework,
+        interfaceSources: SourceFilesList = ["Interface/**"],
+        implementationSources: SourceFilesList = ["Sources/**"],
+        includeUnitTests: Bool = false,
+        interfaceDependencies: [TargetDependency] = [.Features.baseFeature],
+        implementationDependencies: [TargetDependency] = [],
+        testDependencies: [TargetDependency] = []
+    ) -> Project {
+        let configurations: [Configuration] = [
+            .debug(name: .dev),
+            .debug(name: .stage),
+            .release(name: .prod)
+        ]
+
+        let settings: Settings = .settings(
+            base: env.baseSetting.merging(.codeSign),
+            configurations: configurations,
+            defaultSettings: .recommended
+        )
+
+        let interfaceTargetName = "\(name)Interface"
+
+        let interfaceTarget = Target.target(
+            name: interfaceTargetName,
+            destinations: env.destination,
+            product: interfaceProduct,
+            bundleId: "\(env.organizationName).\(interfaceTargetName)",
+            deploymentTargets: env.deploymentTargets,
+            infoPlist: .default,
+            sources: interfaceSources,
+            dependencies: interfaceDependencies
+        )
+
+        let implementationTarget = Target.target(
+            name: name,
+            destinations: env.destination,
+            product: implementationProduct,
+            bundleId: "\(env.organizationName).\(name)",
+            deploymentTargets: env.deploymentTargets,
+            infoPlist: .default,
+            sources: implementationSources,
+            dependencies: [.target(name: interfaceTargetName)] + implementationDependencies
+        )
+
+        var targets: [Target] = [interfaceTarget, implementationTarget]
+
+        if includeUnitTests {
+            let testTarget = Target.target(
+                name: "\(name)Tests",
+                destinations: env.destination,
+                product: .unitTests,
+                bundleId: "\(env.organizationName).\(name)Tests",
+                deploymentTargets: env.deploymentTargets,
+                infoPlist: .default,
+                sources: ["Tests/**"],
+                dependencies: [
+                    .target(name: name),
+                    .target(name: interfaceTargetName)
+                ] + testDependencies
+            )
+            targets.append(testTarget)
+        }
+
+        return Project(
+            name: name,
+            organizationName: env.organizationName,
+            settings: settings,
+            targets: targets
+        )
+    }
+
     static func makeShared(
         name: String,
         product: Product = .staticFramework,
