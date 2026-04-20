@@ -4,12 +4,11 @@ import PiCK_iOS_DesignSystem
 import Utility
 
 public struct NewPasswordView: View {
-    let store: StoreOf<NewPasswordReducer>
+    @Perception.Bindable var store: StoreOf<NewPasswordReducer>
     let onSuccess: () -> Void
     @Environment(\.dismiss) var dismiss
     @EnvironmentObject var router: AppRouter
     @State private var showSuccessAlert = false
-    @State private var dismissCount = 0
 
     public init(
         store: StoreOf<NewPasswordReducer>,
@@ -20,14 +19,14 @@ public struct NewPasswordView: View {
     }
 
     public var body: some View {
-        WithViewStore(self.store, observe: { $0 }) { viewStore in
+        WithPerceptionTracking {
             ZStack {
                 VStack(alignment: .leading, spacing: 0) {
                     headerSection
-                    newPasswordTextField(viewStore)
-                    newPasswordCheckTextField(viewStore)
+                    newPasswordTextField
+                    newPasswordCheckTextField
 
-                    if let errorMessage = viewStore.errorMessage {
+                    if let errorMessage = store.errorMessage {
                         Text(errorMessage)
                             .pickText(type: .body1, textColor: .Error.error)
                             .padding(.horizontal, 24)
@@ -35,10 +34,10 @@ public struct NewPasswordView: View {
                     }
 
                     Spacer()
-                    changeButton(viewStore)
+                    changeButton
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .onChange(of: viewStore.isChangeSuccessful) { isSuccessful in
+                .onChange(of: store.isChangeSuccessful) { isSuccessful in
                     if isSuccessful {
                         showSuccessAlert = true
                     }
@@ -49,12 +48,15 @@ public struct NewPasswordView: View {
                 .toolbar(.hidden, for: .tabBar)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
-                        Button(action: {
-                            dismiss()
-                        }) {
-                            Image(systemName: "chevron.left")
-                                .foregroundColor(.black)
-                        }
+                        Button(
+                            action: {
+                                dismiss()
+                            },
+                            label: {
+                                Image(systemName: "chevron.left")
+                                    .foregroundColor(.black)
+                            }
+                        )
                     }
                 }
 
@@ -98,12 +100,9 @@ public struct NewPasswordView: View {
         .padding(.leading, 24)
     }
 
-    private func newPasswordTextField(_ viewStore: ViewStoreOf<NewPasswordReducer>) -> some View {
+    private var newPasswordTextField: some View {
         PiCKTextField(
-            text: viewStore.binding(
-                get: \.newPassword,
-                send: NewPasswordReducer.Action.newPasswordChanged
-            ),
+            text: $store.newPassword,
             placeholder: "비밀번호를 입력해주세요",
             titleText: "새로운 비밀번호",
             isSecurity: true
@@ -112,12 +111,9 @@ public struct NewPasswordView: View {
         .padding(.top, 75)
     }
 
-    private func newPasswordCheckTextField(_ viewStore: ViewStoreOf<NewPasswordReducer>) -> some View {
+    private var newPasswordCheckTextField: some View {
         PiCKTextField(
-            text: viewStore.binding(
-                get: \.newPasswordCheck,
-                send: NewPasswordReducer.Action.newPasswordCheckChanged
-            ),
+            text: $store.newPasswordCheck,
             placeholder: "비밀번호를 입력해주세요",
             titleText: "새로운 비밀번호 확인",
             isSecurity: true
@@ -126,11 +122,11 @@ public struct NewPasswordView: View {
         .padding(.top, 44)
     }
 
-    private func changeButton(_ viewStore: ViewStoreOf<NewPasswordReducer>) -> some View {
+    private var changeButton: some View {
         PiCKButton(
             buttonText: "변경",
-            isEnabled: !viewStore.newPassword.isEmpty && !viewStore.newPasswordCheck.isEmpty,
-            action: { viewStore.send(.changeButtonTapped) }
+            isEnabled: !store.newPassword.isEmpty && !store.newPasswordCheck.isEmpty,
+            action: { store.send(.changeButtonTapped) }
         )
         .padding(.horizontal, 24)
         .padding(.bottom, 28)

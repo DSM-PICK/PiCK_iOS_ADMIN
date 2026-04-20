@@ -83,12 +83,13 @@ final class ChangePasswordTests: XCTestCase {
                     return true
                 }
                 return false
+            },
+            assert: {
+                $0.isVerificationSent = true
+                $0.errorMessage = nil
+                $0.successMessage = "이메일로 코드가 전송되었어요!"
             }
-        ) {
-            $0.isVerificationSent = true
-            $0.errorMessage = nil
-            $0.successMessage = "이메일로 코드가 전송되었어요!"
-        }
+        )
 
         XCTAssertEqual(emailSendUseCase.receivedRequests.count, 1)
         XCTAssertEqual(emailSendUseCase.receivedRequests.first?.mail, "pick@dsm.hs.kr")
@@ -117,11 +118,12 @@ final class ChangePasswordTests: XCTestCase {
                     return error.localizedDescription == "send failed"
                 }
                 return false
+            },
+            assert: {
+                $0.errorMessage = "send failed"
+                $0.successMessage = nil
             }
-        ) {
-            $0.errorMessage = "send failed"
-            $0.successMessage = nil
-        }
+        )
 
         XCTAssertFalse(store.state.isVerificationSent)
     }
@@ -149,10 +151,11 @@ final class ChangePasswordTests: XCTestCase {
                     return true
                 }
                 return false
+            },
+            assert: {
+                $0.errorMessage = "인증코드가 올바르지 않습니다"
             }
-        ) {
-            $0.errorMessage = "인증코드가 올바르지 않습니다"
-        }
+        )
 
         XCTAssertEqual(codeCheckUseCase.receivedRequests.count, 1)
         XCTAssertEqual(codeCheckUseCase.receivedRequests.first?.email, "pick@dsm.hs.kr")
@@ -184,11 +187,12 @@ final class ChangePasswordTests: XCTestCase {
                     return true
                 }
                 return false
+            },
+            assert: {
+                $0.accountId = "pick@dsm.hs.kr"
+                $0.errorMessage = nil
             }
-        ) {
-            $0.accountId = "pick@dsm.hs.kr"
-            $0.errorMessage = nil
-        }
+        )
     }
 
     func testNextButtonTapped_OnCodeCheckFailure_PropagatesErrorMessage() async {
@@ -213,10 +217,11 @@ final class ChangePasswordTests: XCTestCase {
                     return error.localizedDescription == "check failed"
                 }
                 return false
+            },
+            assert: {
+                $0.errorMessage = "check failed"
             }
-        ) {
-            $0.errorMessage = "check failed"
-        }
+        )
 
         XCTAssertNil(store.state.accountId)
     }
@@ -255,6 +260,7 @@ final class ChangePasswordTests: XCTestCase {
         state.errorMessage = errorMessage
         return state
     }
+
 }
 
 private final class EmailSendUseCaseSpy: EmailSendUseCase {
