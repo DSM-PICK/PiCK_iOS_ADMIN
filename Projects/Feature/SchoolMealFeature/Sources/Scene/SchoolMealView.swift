@@ -1,11 +1,10 @@
 import SwiftUI
-import HomeFeature
 import ComposableArchitecture
 import PiCK_iOS_DesignSystem
 import Utility
 
 public struct SchoolMealView: View {
-    let store: StoreOf<SchoolMealReducer>
+    @Perception.Bindable var store: StoreOf<SchoolMealReducer>
     @State private var currentPage = Date()
     @State private var isWeekMode = true
     private let impactFeedback = UIImpactFeedbackGenerator(style: .light)
@@ -15,21 +14,21 @@ public struct SchoolMealView: View {
     }
     
     public var body: some View {
-        WithViewStore(store, observe: { $0 }) { viewStore in
+        WithPerceptionTracking {
             NavigationStack {
                 ZStack(alignment: .top) {
                     ScrollView {
-                        SelectedDateView(date: viewStore.selectedDate)
+                        SelectedDateView(date: store.selectedDate)
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .pickText(type: .heading4)
                             .padding(.horizontal, 24)
                             .padding(.top, 184)
                             .padding(.bottom, 20)
 
-                        if viewStore.isLoading {
+                        if store.isLoading {
                             ProgressView()
                                 .padding(.top, 40)
-                        } else if let mealData = viewStore.mealData {
+                        } else if let mealData = store.mealData {
                             VStack(spacing: 20) {
                                 ForEach(mealData.meals.mealBundle, id: \.0) { mealTime, mealInfo in
                                     SchoolMealCellView(
@@ -41,7 +40,7 @@ public struct SchoolMealView: View {
                             }
                             .padding(.horizontal, 24)
                             .padding(.bottom, 120)
-                        } else if viewStore.errorMessage != nil {
+                        } else if store.errorMessage != nil {
                             Text("급식 정보를 불러올 수 없습니다")
                                 .pickText(type: .label1, textColor: .Normal.black)
                                 .padding(.top, 40)
@@ -59,10 +58,7 @@ public struct SchoolMealView: View {
                     
                     PiCKCalendarView(
                         calendarType: .schoolMeal,
-                        selectedDate: viewStore.binding(
-                            get: \.selectedDate,
-                            send: { .dateChanged($0) }
-                        ),
+                        selectedDate: $store.selectedDate,
                         currentPage: $currentPage,
                         isWeekMode: $isWeekMode,
                         dateSelected: { _ in
@@ -72,16 +68,18 @@ public struct SchoolMealView: View {
                     .shadow(color: Color.black.opacity(0.25), radius: 20, x: 0, y: 0)
                     .background(Color.Background.background)
                     .frame(maxHeight: .infinity, alignment: .top)
-                    .allowsHitTesting(true)
                 }
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
-                        PiCKNavigationBar()
+                        PiCKImage.pickLogo
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 20)
                             .padding(.leading, 8)
                     }
                 }
                 .onAppear {
-                    viewStore.send(.onAppear)
+                    store.send(.onAppear)
                 }
             }
         }
