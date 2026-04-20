@@ -2,6 +2,7 @@ import ComposableArchitecture
 import SelfStudyCheckDomainInterface
 import Combine
 
+@Reducer
 public struct SelfStudyCheckReducer: Reducer {
     private let getStudentAttendanceUseCase: any GetStudentAttendanceUseCase
     private let saveAttendanceUseCase: any SaveAttendanceUseCase
@@ -42,6 +43,7 @@ public struct SelfStudyCheckReducer: Reducer {
         }
     }
 
+    @ObservableState
     public struct State: Equatable {
         public var studentItems: [StudentItem] = []
         public var initialStudentItems: [StudentItem] = []
@@ -91,7 +93,7 @@ public struct SelfStudyCheckReducer: Reducer {
         }
     }
 
-    public var body: some Reducer<State, Action> {
+    public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case let .selectPeriod(period):

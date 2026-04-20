@@ -7,7 +7,8 @@ let project = Project.makeFeatureModule(
     includeUnitTests: true,
     implementationDependencies: [
         .Features.acceptFeature,
+        .Projects.selfStudyCheckDomainInterface,
         .SPM.NeedleFoundation,
-        .SPM.ComposableArchitecture,
+        .SPM.ComposableArchitecture
     ]
 )
