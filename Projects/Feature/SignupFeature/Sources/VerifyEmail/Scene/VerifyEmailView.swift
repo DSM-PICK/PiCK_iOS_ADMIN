@@ -5,7 +5,7 @@ import Utility
 import BaseFeature
 
 struct VerifyEmailView: View {
-    let store: StoreOf<VerifyEmailReducer>
+    @Perception.Bindable var store: StoreOf<VerifyEmailReducer>
     @EnvironmentObject var router: AppRouter
     @Environment(\.dismiss) var dismiss
 
@@ -14,10 +14,10 @@ struct VerifyEmailView: View {
     }
 
     var body: some View {
-        WithViewStore(self.store, observe: { $0 }) { viewStore in
+        WithPerceptionTracking {
             BaseView {
                 VStack(alignment: .leading, spacing: 0) {
-                    
+
                     HStack(spacing: 0) {
                         Text("PiCK")
                             .foregroundColor(Color.Primary.primary500)
@@ -26,30 +26,24 @@ struct VerifyEmailView: View {
                     .pickText(type: .heading2)
                     .padding(.top, 60)
                     .padding(.leading, 24)
-                    
+
                     Text("DSM 이메일로 인증해주세요.")
                         .pickText(type: .body1)
                         .padding(.leading, 24)
                         .padding(.top, 12)
 
                     PiCKTextField(
-                        text: viewStore.binding(
-                            get: \.email,
-                            send: VerifyEmailReducer.Action.emailChanged
-                        ),
+                        text: $store.email,
                         placeholder: "학교 이메일을 입력해주세요",
                         titleText: "이메일",
                         showVerification: true,
-                        verificationButtonTapped: { viewStore.send(.verificationButtonTapped) }
+                        verificationButtonTapped: { store.send(.verificationButtonTapped) }
                     )
                     .padding(.horizontal, 24)
                     .padding(.top, 50)
 
                     PiCKTextField(
-                        text: viewStore.binding(
-                            get: \.code,
-                            send: VerifyEmailReducer.Action.codeChanged
-                        ),
+                        text: $store.code,
                         placeholder: "인증 코드를 입력해주세요",
                         titleText: "인증 코드"
                     )
@@ -60,39 +54,46 @@ struct VerifyEmailView: View {
 
                     PiCKButton(
                         buttonText: "다음",
-                        isEnabled: !viewStore.email.isEmpty && !viewStore.code.isEmpty,
-                        action: { viewStore.send(.nextButtonTapped) }
+                        isEnabled: !store.email.isEmpty && !store.code.isEmpty,
+                        action: { store.send(.nextButtonTapped) }
                     )
                     .padding(.horizontal, 24)
                     .padding(.bottom, 28)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .onChange(of: viewStore.isSuccessful) { isSuccessful in
+            .onChange(of: store.isSuccessful) { isSuccessful in
                 if isSuccessful {
                     router.path.append(.password(
-                        secretKey: viewStore.secretKey,
-                        accountId: viewStore.email,
-                        code: viewStore.code
+                        secretKey: store.secretKey,
+                        accountId: store.email,
+                        code: store.code
                     ))
                 }
             }
             .errorToast(
-                message: viewStore.errorMessage ?? "에러발생!",
-                isPresented: viewStore.binding(
-                    get: { $0.errorMessage != nil },
-                    send: .clearError
+                message: store.errorMessage ?? "에러발생!",
+                isPresented: Binding(
+                    get: { store.errorMessage != nil },
+                    set: { isPresented in
+                        if !isPresented {
+                            store.send(.clearError)
+                        }
+                    }
                 )
             )
             .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: { router.pop() }) {
+                    Button(
+                        action: { router.pop() },
+                        label: {
                         PiCKImage.leftArrow
                             .resizable()
                             .frame(width: 32, height: 32)
                             .foregroundColor(.Normal.black)
-                    }
+                        }
+                    )
                 }
             }
 

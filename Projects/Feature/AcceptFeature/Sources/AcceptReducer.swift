@@ -1,8 +1,9 @@
-import ComposableArchitecture
 import AcceptDomainInterface
-import PiCK_iOS_DesignSystem
 import Combine
+import ComposableArchitecture
+import PiCK_iOS_DesignSystem
 
+@Reducer
 public struct AcceptReducer: Reducer {
     private let getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol
     private let getApplicationsByFloorUseCase: any GetApplicationsByFloorUseCaseProtocol
@@ -47,13 +48,14 @@ public struct AcceptReducer: Reducer {
         }
     }
 
+    @ObservableState
     public struct State: Equatable {
         public var studentItems: [StudentItem] = []
         public var selectedItemIds: Set<String> = []
         public var isLoading: Bool = false
         public var currentGrade: Int = 5
         public var currentClassNum: Int = 5
-        public var currentFloor: Int = 1
+        public var currentFloor: Int = 3
         public var currentType: ApplicationType = .outgoing
         public var showAlert = false
         public var alertSuccessType: SuccessType = .success
@@ -75,7 +77,7 @@ public struct AcceptReducer: Reducer {
         case dismissAlert
     }
 
-    public var body: some Reducer<State, Action> {
+    public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case let .fetchApplications(type, grade, classNum):
@@ -228,6 +230,7 @@ public struct AcceptReducer: Reducer {
                     removedIds.contains(item.id)
                 }
                 state.selectedItemIds = []
+                state.alertSuccessType = .success
                 state.alertMessage = message
                 state.showAlert = true
                 return .none

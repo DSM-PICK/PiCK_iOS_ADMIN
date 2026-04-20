@@ -4,10 +4,13 @@ import DependencyPlugin
 
 let project = Project.makeFeatureModule(
     name: "PlanFeature",
+    includeUnitTests: true,
     implementationDependencies: [
         .Projects.planDomainInterface,
-        .Features.homeFeature,
         .Shared.utility,
         .Shared.thirdPartyLib,
+    ],
+    testDependencies: [
+        .Projects.planDomainInterface,
     ]
 )

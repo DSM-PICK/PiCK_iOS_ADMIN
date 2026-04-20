@@ -1,6 +1,7 @@
 import ComposableArchitecture
 import AuthDomainInterface
 
+@Reducer
 public struct SecretKeyReducer: Reducer {
     private let secretKeyUseCase: any SecretKeyUseCase
 
@@ -8,25 +9,27 @@ public struct SecretKeyReducer: Reducer {
         self.secretKeyUseCase = secretKeyUseCase
     }
 
+    @ObservableState
     public struct State: Equatable {
         public var secretKey = ""
         public var isSigninSuccessful = false
-        public var errorMessage: String? = nil
+        public var errorMessage: String?
         public init() {}
     }
 
-    public enum Action {
-        case secretKeyChanged(String)
+    public enum Action: BindableAction {
+        case binding(BindingAction<State>)
         case nextButtonTapped
         case secretKeyResponse(TaskResult<Bool>)
         case clearError
     }
 
-    public var body: some Reducer<State, Action> {
+    public var body: some ReducerOf<Self> {
+        BindingReducer()
+
         Reduce { state, action in
             switch action {
-            case let .secretKeyChanged(secretKey):
-                state.secretKey = secretKey
+            case .binding:
                 return .none
             case .nextButtonTapped:
                 return performSecretKey(with: state)

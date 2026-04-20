@@ -5,7 +5,7 @@ import Utility
 import BaseFeature
 
 struct InfoSettingView: View {
-    let store: StoreOf<InfoSettingReducer>
+    @Perception.Bindable var store: StoreOf<InfoSettingReducer>
     @EnvironmentObject var router: AppRouter
     @Environment(\.dismiss) var dismiss
     @State private var isSheetPresented = false
@@ -18,7 +18,7 @@ struct InfoSettingView: View {
     }
 
     var body: some View {
-        WithViewStore(self.store, observe: { $0 }) { viewStore in
+        WithPerceptionTracking {
             ZStack {
                 BaseView {
                     VStack(alignment: .leading, spacing: 0) {
@@ -30,13 +30,13 @@ struct InfoSettingView: View {
                         .pickText(type: .heading2)
                         .padding(.top, 60)
                         .padding(.leading, 24)
-                        
+
                         Text("선생님 정보를 입력해주세요.")
                             .pickText(type: .body1)
                             .padding(.leading, 24)
                             .padding(.top, 12)
 
-                        HStack (spacing: 8){
+                        HStack(spacing: 8) {
                             Text("담임 선생님이신가요?")
                                 .pickText(type: .subTitle1)
                             Button(action: {
@@ -50,17 +50,17 @@ struct InfoSettingView: View {
 
                         if isTeacher {
                             SchoolNumberSelectView(
-                                selectedGrade: viewStore.binding(
-                                    get: \.selectedGrade,
-                                    send: InfoSettingReducer.Action.selectedGradeChanged
+                                selectedGrade: Binding(
+                                    get: { store.selectedGrade == 0 ? nil : store.selectedGrade },
+                                    set: { store.selectedGrade = $0 ?? 0 }
                                 ),
-                                selectedClass: viewStore.binding(
-                                    get: \.selectedClass,
-                                    send: InfoSettingReducer.Action.selectedClassChanged
+                                selectedClass: Binding(
+                                    get: { store.selectedClass == 0 ? nil : store.selectedClass },
+                                    set: { store.selectedClass = $0 ?? 0 }
                                 ),
                                 onTap: {
-                                    tempGrade = viewStore.selectedGrade == 0 ? 1 : viewStore.selectedGrade
-                                    tempClass = viewStore.selectedClass == 0 ? 1 : viewStore.selectedClass
+                                    tempGrade = store.selectedGrade == 0 ? 1 : store.selectedGrade
+                                    tempClass = store.selectedClass == 0 ? 1 : store.selectedClass
                                     isSheetPresented = true
                                 }
                             )
@@ -69,10 +69,7 @@ struct InfoSettingView: View {
                         }
 
                         PiCKTextField(
-                            text: viewStore.binding(
-                                get: \.name,
-                                send: InfoSettingReducer.Action.nameChanged
-                            ),
+                            text: $store.name,
                             placeholder: "이름을 입력해주세요",
                             titleText: "이름"
                         )
@@ -84,16 +81,16 @@ struct InfoSettingView: View {
                         PiCKButton(
                             buttonText: "완료",
                             isEnabled: {
-                                if !viewStore.name.isEmpty {
+                                if !store.name.isEmpty {
                                     if isTeacher {
-                                        return viewStore.selectedGrade != 0 && viewStore.selectedClass != 0
+                                        return store.selectedGrade != 0 && store.selectedClass != 0
                                     } else {
                                         return true
                                     }
                                 }
                                 return false
                             }(),
-                            action: { viewStore.send(.finishButtonTapped) }
+                            action: { store.send(.finishButtonTapped) }
                         )
                         .padding(.horizontal, 24)
                         .padding(.bottom, 28)
@@ -106,24 +103,24 @@ struct InfoSettingView: View {
                             .onTapGesture {
                                 isSheetPresented = false
                             }
-                        
+
                         VStack {
                             Spacer()
-                            
+
                             DualPickerBottomSheet.classroom(
                                 isPresented: $isSheetPresented,
                                 grade: $tempGrade,
                                 klass: $tempClass
                             ) { selectedGrade, selectedKlass in
-                                viewStore.send(.selectedGradeChanged(selectedGrade))
-                                viewStore.send(.selectedClassChanged(selectedKlass))
+                                store.selectedGrade = selectedGrade ?? 0
+                                store.selectedClass = selectedKlass ?? 0
                             }
                         }
                         .ignoresSafeArea()
                     }
                 }
             }
-            .onChange(of: viewStore.isSignupSuccessful) { isSuccessful in
+            .onChange(of: store.isSignupSuccessful) { isSuccessful in
                 if isSuccessful {
                     router.path = [.home]
                 }
@@ -131,19 +128,26 @@ struct InfoSettingView: View {
             .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button(action: { router.pop() }) {
+                    Button(
+                        action: { router.pop() },
+                        label: {
                         PiCKImage.leftArrow
                             .resizable()
                             .frame(width: 32, height: 32)
                             .foregroundColor(.Normal.black)
-                    }
+                        }
+                    )
                 }
             }
             .errorToast(
-                message: viewStore.errorMessage ?? "에러발생!",
-                isPresented: viewStore.binding(
-                    get: { $0.errorMessage != nil },
-                    send: .clearError
+                message: store.errorMessage ?? "에러발생!",
+                isPresented: Binding(
+                    get: { store.errorMessage != nil },
+                    set: { isPresented in
+                        if !isPresented {
+                            store.send(.clearError)
+                        }
+                    }
                 )
             )
         }

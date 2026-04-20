@@ -3,6 +3,7 @@ import PlanDomainInterface
 import Foundation
 import Combine
 
+@Reducer
 public struct PlanReducer: Reducer {
     private let fetchMonthAcademicScheduleUseCase: any FetchMonthAcademicScheduleUseCaseProtocol
     private let fetchAcademicScheduleUseCase: any FetchAcademicScheduleUseCaseProtocol
@@ -15,6 +16,7 @@ public struct PlanReducer: Reducer {
         self.fetchAcademicScheduleUseCase = fetchAcademicScheduleUseCase
     }
 
+    @ObservableState
     public struct State: Equatable {
         public var monthAcademicSchedule: AcademicScheduleEntity = []
         public var academicSchedule: AcademicScheduleEntity = []
@@ -35,7 +37,7 @@ public struct PlanReducer: Reducer {
         case loadInitialData
     }
 
-    public var body: some Reducer<State, Action> {
+    public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .loadInitialData:
@@ -67,7 +69,7 @@ public struct PlanReducer: Reducer {
                 state.monthAcademicSchedule = schedule
                 return .none
 
-            case let .monthAcademicScheduleResponse(.failure(error)):
+            case .monthAcademicScheduleResponse(.failure):
                 state.monthAcademicSchedule = []
                 return .none
 
@@ -83,7 +85,7 @@ public struct PlanReducer: Reducer {
                 state.academicSchedule = schedule
                 return .none
 
-            case let .academicScheduleResponse(.failure(error)):
+            case .academicScheduleResponse(.failure):
                 return .none
 
             case let .selectDate(date):
@@ -100,13 +102,13 @@ public struct PlanReducer: Reducer {
             }
         }
     }
-    
+
     private var dateFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         return formatter
     }
-    
+
     private var monthFormatter: DateFormatter {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMMM"

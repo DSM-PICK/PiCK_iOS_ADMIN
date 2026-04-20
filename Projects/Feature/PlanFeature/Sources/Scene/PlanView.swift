@@ -1,26 +1,23 @@
 import SwiftUI
-import HomeFeature
 import ComposableArchitecture
-import PlanDomainInterface
 import PiCK_iOS_DesignSystem
 import Utility
 
 public struct PlanView: View {
     let store: StoreOf<PlanReducer>
-    private let calendar = Calendar.current
 
     public init(store: StoreOf<PlanReducer>) {
         self.store = store
     }
 
     public var body: some View {
-        WithViewStore(self.store, observe: { $0 }) { viewStore in
+        WithPerceptionTracking {
             NavigationStack {
                 VStack(spacing: 0) {
                     MonthHeaderView(
-                        currentMonth: viewStore.currentMonth,
+                        currentMonth: store.currentMonth,
                         onMonthChange: { date in
-                            viewStore.send(.changeMonth(date))
+                            store.send(.changeMonth(date))
                         }
                     )
                     .padding(.top, 32)
@@ -29,24 +26,24 @@ public struct PlanView: View {
                     ScrollView {
                         VStack(spacing: 0) {
                             AcademicScheduleCalendarView(
-                                monthSchedule: viewStore.monthAcademicSchedule,
-                                selectedDate: viewStore.selectedDate,
-                                currentMonth: viewStore.currentMonth,
+                                monthSchedule: store.monthAcademicSchedule,
+                                selectedDate: store.selectedDate,
+                                currentMonth: store.currentMonth,
                                 onDateSelect: { date in
-                                    viewStore.send(.selectDate(date))
+                                    store.send(.selectDate(date))
                                 },
                                 onMonthChange: { date in
-                                    viewStore.send(.changeMonth(date))
+                                    store.send(.changeMonth(date))
                                 }
                             )
                             .padding(.top, 12)
                             .padding(.horizontal, 24)
-                            
+
                             ScheduleListView(
-                                selectedDate: viewStore.selectedDate,
-                                schedules: viewStore.academicSchedule
+                                selectedDate: store.selectedDate,
+                                schedules: store.academicSchedule
                             )
-                            
+
                             Spacer()
                         }
                     }
@@ -55,12 +52,15 @@ public struct PlanView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
-                        PiCKNavigationBar()
+                        PiCKImage.pickLogo
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 20)
                             .padding(.leading, 8)
                     }
                 }
                 .onAppear {
-                    viewStore.send(.loadInitialData)
+                    store.send(.loadInitialData)
                 }
             }
         }
@@ -74,9 +74,9 @@ struct MonthHeaderView: View {
 
     var body: some View {
         HStack(spacing: 0) {
-            Button(action: {
+            Button {
                 changeMonth(by: -1)
-            }) {
+            } label: {
                 Image(systemName: "chevron.left")
                     .foregroundColor(.black)
                     .frame(width: 24, height: 24)
@@ -92,9 +92,9 @@ struct MonthHeaderView: View {
             Spacer()
                 .frame(width: 12)
 
-            Button(action: {
+            Button {
                 changeMonth(by: 1)
-            }) {
+            } label: {
                 Image(systemName: "chevron.right")
                     .foregroundColor(.black)
                     .frame(width: 24, height: 24)
@@ -105,7 +105,7 @@ struct MonthHeaderView: View {
     private var headerText: String {
         return currentMonth.toKoreanYearMonthString()
     }
-    
+
     private func changeMonth(by value: Int) {
         if let newMonth = calendar.date(byAdding: .month, value: value, to: currentMonth) {
             onMonthChange(newMonth)
