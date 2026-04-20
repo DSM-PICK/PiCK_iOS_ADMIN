@@ -4,41 +4,45 @@ import PiCK_iOS_DesignSystem
 import Utility
 
 struct SigninView: View {
-    let store: StoreOf<SigninReducer>
+    @Perception.Bindable var store: StoreOf<SigninReducer>
     @EnvironmentObject var router: AppRouter
-    
+
     public init(store: StoreOf<SigninReducer>) {
         self.store = store
     }
-    
+
     var body: some View {
-        WithViewStore(self.store, observe: { $0 }) { viewStore in
+        WithPerceptionTracking {
             VStack(alignment: .leading, spacing: 0) {
                 headerSection
-                emailTextField(viewStore)
-                passwordTextField(viewStore)
+                emailTextField
+                passwordTextField
                 forgotPasswordLinkSection
                 Spacer()
                 signupLinkSection
-                signinButton(viewStore)
+                signinButton
             }
             .frame(maxWidth: .infinity, alignment: .leading)
-            .onChange(of: viewStore.isSigninSuccessful) { isSuccessful in
+            .onChange(of: store.isSigninSuccessful) { isSuccessful in
                 if isSuccessful {
                     router.path = [.home]
                 }
             }
             .navigationBarHidden(true)
             .errorToast(
-                message: viewStore.errorMessage ?? "에러발생!",
-                isPresented: viewStore.binding(
-                    get: { $0.errorMessage != nil },
-                    send: .clearError
+                message: store.errorMessage ?? "에러발생!",
+                isPresented: Binding(
+                    get: { store.errorMessage != nil },
+                    set: { isPresented in
+                        if !isPresented {
+                            store.send(.clearError)
+                        }
+                    }
                 )
             )
         }
     }
-    
+
     private var headerSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack(spacing: 0) {
@@ -47,20 +51,17 @@ struct SigninView: View {
                 Text("에 로그인하기")
             }
             .pickText(type: .heading2)
-            
+
             Text("PiCK 계정으로 로그인 해주세요.")
                 .pickText(type: .body1)
         }
         .padding(.top, 80)
         .padding(.leading, 24)
     }
-    
-    private func emailTextField(_ viewStore: ViewStoreOf<SigninReducer>) -> some View {
+
+    private var emailTextField: some View {
         PiCKTextField(
-            text: viewStore.binding(
-                get: \.email,
-                send: SigninReducer.Action.emailChanged
-            ),
+            text: $store.email,
             placeholder: "학교 이메일을 입력해주세요",
             titleText: "이메일",
             showEmail: true
@@ -68,13 +69,10 @@ struct SigninView: View {
         .padding(.horizontal, 24)
         .padding(.top, 50)
     }
-    
-    private func passwordTextField(_ viewStore: ViewStoreOf<SigninReducer>) -> some View {
+
+    private var passwordTextField: some View {
         PiCKTextField(
-            text: viewStore.binding(
-                get: \.password,
-                send: SigninReducer.Action.passwordChanged
-            ),
+            text: $store.password,
             placeholder: "비밀번호를 입력해주세요",
             titleText: "비밀번호",
             isSecurity: true
@@ -108,32 +106,32 @@ struct SigninView: View {
         .padding(.bottom, 12)
     }
 
-    private func signinButton(_ viewStore: ViewStoreOf<SigninReducer>) -> some View {
+    private var signinButton: some View {
         Button {
-            viewStore.send(.signinButtonTapped)
+            store.send(.signinButtonTapped)
         } label: {
             ZStack {
                 Text("로그인하기")
                     .pickText(type: .button1, textColor: .Normal.white)
-                    .opacity(viewStore.isLoading ? 0 : 1)
+                    .opacity(store.isLoading ? 0 : 1)
 
-                if viewStore.isLoading {
+                if store.isLoading {
                     ProgressView()
                         .progressViewStyle(CircularProgressViewStyle(tint: .white))
                 }
             }
             .frame(maxWidth: .infinity)
             .frame(height: 47)
-            .background(buttonBackgroundColor(viewStore))
+            .background(buttonBackgroundColor)
             .cornerRadius(8)
         }
-        .disabled(!viewStore.email.isEmpty && !viewStore.password.isEmpty && !viewStore.isLoading ? false : true)
+        .disabled(store.email.isEmpty || store.password.isEmpty || store.isLoading)
         .padding(.horizontal, 24)
         .padding(.bottom, 28)
     }
 
-    private func buttonBackgroundColor(_ viewStore: ViewStoreOf<SigninReducer>) -> Color {
-        let isFormValid = !viewStore.email.isEmpty && !viewStore.password.isEmpty
-        return (isFormValid && !viewStore.isLoading) ? .Primary.primary500 : .Primary.primary100
+    private var buttonBackgroundColor: Color {
+        let isFormValid = !store.email.isEmpty && !store.password.isEmpty
+        return (isFormValid && !store.isLoading) ? .Primary.primary500 : .Primary.primary100
     }
 }
