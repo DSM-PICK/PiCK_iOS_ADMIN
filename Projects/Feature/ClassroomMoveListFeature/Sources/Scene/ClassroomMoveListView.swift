@@ -5,19 +5,18 @@ import PiCK_iOS_DesignSystem
 
 public struct ClassroomMoveListView: View {
     @Environment(\.dismiss) var dismiss
-    let store: StoreOf<ClassroomMoveListReducer>
+    @Perception.Bindable var store: StoreOf<ClassroomMoveListReducer>
     @State private var isCurrentTypeBottomSheetPresented = false
     @State private var isClassroomBottomSheetPresented = false
-    @State private var selectedFloor: Int = 2
     @State private var gradeValue: String = "전체"
     @State private var classNumValue: String = "전체"
 
     public init(store: StoreOf<ClassroomMoveListReducer>) {
         self.store = store
     }
-    
+
     public var body: some View {
-        WithViewStore(self.store, observe: { $0 }) { viewStore in
+        WithPerceptionTracking {
             ZStack {
                 VStack(spacing: 0) {
                     HStack {
@@ -28,7 +27,7 @@ public struct ClassroomMoveListView: View {
                         Spacer()
 
                         ClassroomFilterButton(
-                            selectedClassroom: viewStore.currentType.displayText,
+                            selectedClassroom: store.currentType.displayText,
                             onTap: { isCurrentTypeBottomSheetPresented = true }
                         )
                         .padding(.trailing, 24)
@@ -42,23 +41,24 @@ public struct ClassroomMoveListView: View {
                         .padding(.top, 16)
                         .padding(.horizontal, 24)
 
-                    if viewStore.currentType == .floor {
+                    if store.currentType == .floor {
                         ScrollViewReader { proxy in
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: 8) {
                                     ForEach([1, 2, 3, 4, 5], id: \.self) { floor in
                                         Button {
-                                            selectedFloor = floor
-                                            viewStore.send(.fetchFloor(floor))
+                                            store.send(.fetchFloor(floor))
                                         } label: {
                                             Text("\(floor)층")
                                                 .pickText(
                                                     type: .body1,
-                                                    textColor: selectedFloor == floor ? .Primary.primary500 : .Gray.gray600
+                                                    textColor: store.selectedFloor == floor
+                                                        ? .Primary.primary500
+                                                        : .Gray.gray600
                                                 )
                                                 .frame(width: 114, height: 32)
                                                 .background(
-                                                    selectedFloor == floor
+                                                    store.selectedFloor == floor
                                                     ? Color.Primary.primary50
                                                     : Color.clear
                                                 )
@@ -87,7 +87,7 @@ public struct ClassroomMoveListView: View {
                     }
 
                     ScrollView {
-                        if viewStore.studentItems.isEmpty {
+                        if store.studentItems.isEmpty {
                             VStack(spacing: 12) {
                                 PiCKImage.blackLogo
                                     .resizable()
@@ -96,21 +96,25 @@ public struct ClassroomMoveListView: View {
                                 Text("아직 교실 이동을 한 학생이 없어요")
                                     .pickText(type: .subTitle2, textColor: .Gray.gray500)
                             }
-                            .frame(maxWidth: .infinity, minHeight: UIScreen.main.bounds.height - 400)
+                            .frame(
+                                maxWidth: .infinity,
+                                minHeight: UIScreen.main.bounds.height - 400
+                            )
                         } else {
                             VStack(spacing: 16) {
-                                ForEach(viewStore.studentItems, id: \.id) { item in
-                                        PiCKClassroomMoveCell(
-                                            studentNumber: "\(item.grade)\(item.classNum)\(String(format: "%02d", item.num))",
-                                            studentName: item.userName,
-                                            startPeriod: item.start,
-                                            endPeriod: item.end,
-                                            currentClassroom: "\(item.grade)학년 \(item.classNum)반",
-                                            moveToClassroom: item.classroomName,
-                                            isSelected: false,
-                                            onTap: {}
-                                        )
-                                    }
+                                ForEach(store.studentItems, id: \.id) { item in
+                                    PiCKClassroomMoveCell(
+                                        studentNumber:
+                                            "\(item.grade)\(item.classNum)\(String(format: "%02d", item.num))",
+                                        studentName: item.userName,
+                                        startPeriod: item.start,
+                                        endPeriod: item.end,
+                                        currentClassroom: "\(item.grade)학년 \(item.classNum)반",
+                                        moveToClassroom: item.classroomName,
+                                        isSelected: false,
+                                        onTap: {}
+                                    )
+                                }
                             }
                             .padding(.top, 20)
                             .padding(.horizontal, 24)
@@ -120,7 +124,9 @@ public struct ClassroomMoveListView: View {
                     }
                 }
                 .onAppear {
-                    viewStore.send(.onAppear)
+                    gradeValue = displayText(for: store.selectedGrade)
+                    classNumValue = displayText(for: store.selectedClassNum)
+                    store.send(.onAppear)
                 }
                 .navigationTitle("교실 이동 현황")
                 .navigationBarTitleDisplayMode(.inline)
@@ -143,8 +149,7 @@ public struct ClassroomMoveListView: View {
                         title: "필터를 선택해주세요",
                         options: ["층으로", "교실로"],
                         onComplete: { option in
-                            let current = typeFromString(option)
-                            viewStore.send(.currentTypeChanged(current))
+                            store.currentType = typeFromString(option)
                         }
                     )
                     .presentationDetents([.height(350)])
@@ -169,7 +174,7 @@ public struct ClassroomMoveListView: View {
                             gradeValue = finalGrade
                             classNumValue = finalClassNum
 
-                            viewStore.send(
+                            store.send(
                                 .fetchClassroom(
                                     grade: classroomFromDisplayText(finalGrade),
                                     classNum: classroomFromDisplayText(finalClassNum)
@@ -210,5 +215,9 @@ extension ClassroomMoveListView {
         case "4": return 4
         default: return 5
         }
+    }
+
+    private func displayText(for value: Int) -> String {
+        value == 5 ? "전체" : "\(value)"
     }
 }

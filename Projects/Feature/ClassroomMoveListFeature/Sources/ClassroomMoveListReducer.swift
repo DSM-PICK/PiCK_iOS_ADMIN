@@ -4,6 +4,7 @@ import ClassroomMoveListDomainInterface
 import ComposableArchitecture
 import PiCK_iOS_DesignSystem
 
+@Reducer
 public struct ClassroomMoveListReducer: Reducer {
     private let getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase
     private let getClassroomMoveByClassroomUseCase: any GetClassroomMoveByClassroomUseCase
@@ -16,6 +17,7 @@ public struct ClassroomMoveListReducer: Reducer {
         self.getClassroomMoveByClassroomUseCase = getClassroomMoveByClassroomUseCase
     }
 
+    @ObservableState
     public struct State: Equatable {
         public var currentType: ClassroomMoveListType = .floor
         public var isLoading: Bool = false
@@ -25,31 +27,40 @@ public struct ClassroomMoveListReducer: Reducer {
         public var selectedClassNum: Int = 5 // 전체
 
         public var studentItems: [ClassroomMoveListEntity] = []
-        public var errorMessage: String? = nil
+        public var errorMessage: String?
 
         public init() {}
     }
-    public enum Action {
+
+    public enum Action: BindableAction {
+        case binding(BindingAction<State>)
         case onAppear
-        case currentTypeChanged(ClassroomMoveListReducer.ClassroomMoveListType)
         case fetchFloor(Int)
         case fetchClassroom(grade: Int, classNum: Int)
-        case fetchFloorResponse(TaskResult<[ClassroomMoveListEntity]>)
+        case fetchResponse(TaskResult<[ClassroomMoveListEntity]>)
     }
-    public var body: some Reducer<State, Action> {
+
+    public var body: some ReducerOf<Self> {
+        BindingReducer()
+
         Reduce { state, action in
             switch action {
-            case .onAppear:
-                state.isLoading = true
-                return loadClassroomMoveListByFloor(floor: state.selectedFloor)
-            case let .currentTypeChanged(current):
-                state.currentType = current
+            case .binding(\.currentType):
                 state.studentItems = []
-                if current == .floor { // 반별로 조회는 전체 조회 X -> floor = 5로 대체
+                state.isLoading = true
+                state.errorMessage = nil
+                if state.currentType == .floor {
                     return loadClassroomMoveListByFloor(floor: state.selectedFloor)
                 } else {
                     return loadClassroomMoveListByFloor(floor: 5)
                 }
+
+            case .binding:
+                return .none
+
+            case .onAppear:
+                state.isLoading = true
+                return loadClassroomMoveListByFloor(floor: state.selectedFloor)
             case let .fetchFloor(floor):
                 state.isLoading = true
                 state.errorMessage = nil
@@ -63,13 +74,16 @@ public struct ClassroomMoveListReducer: Reducer {
                 if state.selectedGrade == 5 { // 반별로 조회는 전체 조회 X -> floor = 5로 대체
                     return loadClassroomMoveListByFloor(floor: 5)
                 } else {
-                    return loadClassroomMoveListByClassroom(grade: state.selectedGrade, classNum: state.selectedClassNum)
+                    return loadClassroomMoveListByClassroom(
+                        grade: state.selectedGrade,
+                        classNum: state.selectedClassNum
+                    )
                 }
-            case let .fetchFloorResponse(.success(students)):
+            case let .fetchResponse(.success(students)):
                 state.isLoading = false
                 state.studentItems = students
                 return .none
-            case let .fetchFloorResponse(.failure(error)):
+            case let .fetchResponse(.failure(error)):
                 state.isLoading = false
                 state.errorMessage = error.localizedDescription
                 state.studentItems = []
@@ -80,13 +94,12 @@ public struct ClassroomMoveListReducer: Reducer {
 }
 
 extension ClassroomMoveListReducer {
-
     private func loadClassroomMoveListByFloor(floor: Int) -> Effect<Action> {
         .publisher {
             getClassroomMoveByFloorUseCase.execute(floor: floor)
                 .mapError { $0 as Error }
-                .map { Action.fetchFloorResponse(.success($0)) }
-                .catch { Just(Action.fetchFloorResponse(.failure($0))) }
+                .map { Action.fetchResponse(.success($0)) }
+                .catch { Just(Action.fetchResponse(.failure($0))) }
         }
     }
 
@@ -94,8 +107,8 @@ extension ClassroomMoveListReducer {
         .publisher {
             getClassroomMoveByClassroomUseCase.execute(grade: grade, classNum: classNum)
                 .mapError { $0 as Error }
-                .map { Action.fetchFloorResponse(.success($0)) }
-                .catch { Just(Action.fetchFloorResponse(.failure($0))) }
+                .map { Action.fetchResponse(.success($0)) }
+                .catch { Just(Action.fetchResponse(.failure($0))) }
         }
     }
 
@@ -110,6 +123,4 @@ extension ClassroomMoveListReducer {
             }
         }
     }
-
-    
 }
