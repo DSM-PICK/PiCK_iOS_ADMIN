@@ -22,7 +22,6 @@ import ClassroomMoveListFeature
 import OutListFeature
 import OutingHistoryFeature
 import SelfStudyCheckFeature
-import SelfStudyCheckDomainInterface
 
 public struct AllTabView: View {
     let store: StoreOf<AllTabReducer>
@@ -46,48 +45,13 @@ public struct AllTabView: View {
     @State private var showResignAlert = false
     @State private var showLogoutConfirm = false
 
-    public init(
-        store: StoreOf<AllTabReducer>,
-        fetchSelfStudyTeacherUseCase: any FetchSelfStudyTeacherUseCaseProtocol,
-        uploadBugImagesUseCase: any UploadBugImagesUseCaseProtocol,
-        submitBugReportUseCase: any SubmitBugReportUseCaseProtocol,
-        emailSendUseCase: any EmailSendUseCase,
-        codeCheckUseCase: any CodeCheckUseCase,
-        passwordChangeUseCase: any PasswordChangeUseCase,
-        getStudentAttendanceUseCase: any GetStudentAttendanceUseCase,
-        saveAttendanceUseCase: any SaveAttendanceUseCase,
-        getOutListUseCase: any GetOutListUseCase,
-        returnStudentsUseCase: any ReturnStudentsUseCase,
-        getEarlyReturnUseCase: any GetEarlyReturnUseCase,
-        getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase,
-        getClassroomMoveByClassroomUseCase: any GetClassroomMoveByClassroomUseCase,
-        getOutingHistoryUseCase: GetOutingHistoryUseCase
-    ) {
-        self.store = store
-        self.fetchSelfStudyTeacherUseCase = fetchSelfStudyTeacherUseCase
-        self.uploadBugImagesUseCase = uploadBugImagesUseCase
-        self.submitBugReportUseCase = submitBugReportUseCase
-        self.emailSendUseCase = emailSendUseCase
-        self.codeCheckUseCase = codeCheckUseCase
-        self.passwordChangeUseCase = passwordChangeUseCase
-        self.getStudentAttendanceUseCase = getStudentAttendanceUseCase
-        self.saveAttendanceUseCase = saveAttendanceUseCase
-        self.getOutListUseCase = getOutListUseCase
-        self.returnStudentsUseCase = returnStudentsUseCase
-        self.getEarlyReturnUseCase = getEarlyReturnUseCase
-        self.getClassroomMoveByFloorUseCase = getClassroomMoveByFloorUseCase
-        self.getClassroomMoveByClassroomUseCase = getClassroomMoveByClassroomUseCase
-        self.getOutingHistoryUseCase = getOutingHistoryUseCase
-    }
-
     public var body: some View {
-        WithViewStore(self.store, observe: { $0 }) { viewStore in
+        WithPerceptionTracking {
             NavigationStack(path: $navigationPath) {
                 ScrollView {
                     VStack(spacing: 0) {
-                        TeacherInfoView(teacherName: viewStore.myName?.name)
+                        TeacherInfoView(teacherName: store.myName?.name)
                             .padding(.top, 24)
-                        
 
                         AllTabMenuList(
                             onOutListTap: {
@@ -123,9 +87,9 @@ public struct AllTabView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .onAppear {
-                    viewStore.send(.fetchMyName)
+                    store.send(.fetchMyName)
                 }
-                .onChange(of: viewStore.shouldLogout) { shouldLogout in
+                .onChange(of: store.shouldLogout) { shouldLogout in
                     if shouldLogout {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                             withAnimation(.easeInOut(duration: 0.3)) {
@@ -134,7 +98,7 @@ public struct AllTabView: View {
                         }
                     }
                 }
-                .onChange(of: viewStore.shouldResign) { shouldResign in
+                .onChange(of: store.shouldResign) { shouldResign in
                     if shouldResign {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                             withAnimation(.easeInOut(duration: 0.3)) {
@@ -150,7 +114,7 @@ public struct AllTabView: View {
                     isPresented: $showLogoutConfirm,
                     onAction: { action in
                         if action == .accept {
-                            viewStore.send(.logoutButtonTapped)
+                            store.send(.logoutButtonTapped)
                         }
                     }
                 )
@@ -161,7 +125,7 @@ public struct AllTabView: View {
                     isPresented: $showResignAlert,
                     onAction: { action in
                         if action == .accept {
-                            viewStore.send(.confirmResign)
+                            store.send(.confirmResign)
                         }
                     }
                 )
@@ -284,5 +248,41 @@ public struct AllTabView: View {
                 }
             }
         }
+    }
+}
+
+public extension AllTabView {
+    init(
+        store: StoreOf<AllTabReducer>,
+        fetchSelfStudyTeacherUseCase: any FetchSelfStudyTeacherUseCaseProtocol,
+        uploadBugImagesUseCase: any UploadBugImagesUseCaseProtocol,
+        submitBugReportUseCase: any SubmitBugReportUseCaseProtocol,
+        emailSendUseCase: any EmailSendUseCase,
+        codeCheckUseCase: any CodeCheckUseCase,
+        passwordChangeUseCase: any PasswordChangeUseCase,
+        getStudentAttendanceUseCase: any GetStudentAttendanceUseCase,
+        saveAttendanceUseCase: any SaveAttendanceUseCase,
+        getOutListUseCase: any GetOutListUseCase,
+        returnStudentsUseCase: any ReturnStudentsUseCase,
+        getEarlyReturnUseCase: any GetEarlyReturnUseCase,
+        getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase,
+        getClassroomMoveByClassroomUseCase: any GetClassroomMoveByClassroomUseCase,
+        getOutingHistoryUseCase: GetOutingHistoryUseCase
+    ) {
+        self.store = store
+        self.fetchSelfStudyTeacherUseCase = fetchSelfStudyTeacherUseCase
+        self.uploadBugImagesUseCase = uploadBugImagesUseCase
+        self.submitBugReportUseCase = submitBugReportUseCase
+        self.emailSendUseCase = emailSendUseCase
+        self.codeCheckUseCase = codeCheckUseCase
+        self.passwordChangeUseCase = passwordChangeUseCase
+        self.getStudentAttendanceUseCase = getStudentAttendanceUseCase
+        self.saveAttendanceUseCase = saveAttendanceUseCase
+        self.getOutListUseCase = getOutListUseCase
+        self.returnStudentsUseCase = returnStudentsUseCase
+        self.getEarlyReturnUseCase = getEarlyReturnUseCase
+        self.getClassroomMoveByFloorUseCase = getClassroomMoveByFloorUseCase
+        self.getClassroomMoveByClassroomUseCase = getClassroomMoveByClassroomUseCase
+        self.getOutingHistoryUseCase = getOutingHistoryUseCase
     }
 }

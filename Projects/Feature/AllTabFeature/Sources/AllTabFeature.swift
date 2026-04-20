@@ -10,7 +10,7 @@ import ClassroomMoveListDomainInterface
 import OutingHistoryDomainInterface
 
 public struct AllTabFeature: View {
-    let store: Store<AllTabReducer.State, AllTabReducer.Action>
+    let store: StoreOf<AllTabReducer>
     let fetchSelfStudyTeacherUseCase: any FetchSelfStudyTeacherUseCaseProtocol
     let uploadBugImagesUseCase: any UploadBugImagesUseCaseProtocol
     let submitBugReportUseCase: any SubmitBugReportUseCaseProtocol
@@ -27,7 +27,7 @@ public struct AllTabFeature: View {
     let getOutingHistoryUseCase: GetOutingHistoryUseCase
 
     public init(
-        store: Store<AllTabReducer.State, AllTabReducer.Action>,
+        store: StoreOf<AllTabReducer>,
         fetchSelfStudyTeacherUseCase: any FetchSelfStudyTeacherUseCaseProtocol,
         uploadBugImagesUseCase: any UploadBugImagesUseCaseProtocol,
         submitBugReportUseCase: any SubmitBugReportUseCaseProtocol,

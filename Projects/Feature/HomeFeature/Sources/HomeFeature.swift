@@ -6,14 +6,14 @@ import SchoolMealFeatureInterface
 import AcceptFeatureInterface
 
 public struct HomeFeature: View {
-    let store: Store<HomeReducer.State, HomeReducer.Action>
+    let store: StoreOf<HomeReducer>
     let allTabFactory: any AllTabFactory
     let planFactory: any PlanFactory
     let schoolMealFactory: any SchoolMealFactory
     let acceptFactory: any AcceptFactory
 
     public init(
-        store: Store<HomeReducer.State, HomeReducer.Action>,
+        store: StoreOf<HomeReducer>,
         allTabFactory: any AllTabFactory,
         planFactory: any PlanFactory,
         schoolMealFactory: any SchoolMealFactory,
