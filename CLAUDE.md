@@ -83,6 +83,69 @@ Only commit when:
 
 ---
 
+## PR / Issue Convention
+
+### Branch naming
+```
+feature/(#이슈번호)-slug
+예: feature/(#135)-tca_rollout
+```
+
+### PR 제목
+```
+[#이슈번호] 한국어 작업 요약
+예: [#135] TCA Feature 래퍼 제거 및 TDD 워크플로우 구축
+```
+
+### PR 본문 (필수 섹션)
+```markdown
+## 개요
+- #이슈번호 작업 설명입니다.
+- 주요 변경 내용 한 줄 요약
+- Closes #이슈번호
+
+## 작업사항
+- 변경 항목 1
+- 변경 항목 2
+
+## UI
+- 없음  (UI 변경 없을 때)
+```
+
+### 레이블 (택 1~2)
+| 레이블 | 용도 |
+|---|---|
+| `✨feat` | 새로운 기능 |
+| `♻️refactor` | 리팩토링 |
+| `👾bug` | 버그 수정 |
+| `⚙️setting` | 프로젝트 설정 변경 |
+| `📝docs` | 문서 추가·변경 |
+| `🛠️chore` | 기타 코드 수정 |
+
+### Assignee / Reviewer
+- Assignee: 작업자 본인 (`leejh08`)
+- Reviewer: `circle0802`, `xnlwe09`
+
+### gh CLI (주의: `gh pr edit`는 GraphQL 오류를 냄 — REST API 직접 사용)
+```bash
+# 1. PR 생성
+gh pr create --base develop --title "[#번호] 제목" --body "..."
+
+# 2. Assignee
+gh api repos/DSM-PICK/PiCK_iOS_ADMIN/issues/{PR번호}/assignees \
+  -X POST --input - <<< '{"assignees":["leejh08"]}'
+
+# 3. Reviewer
+gh api repos/DSM-PICK/PiCK_iOS_ADMIN/pulls/{PR번호}/requested_reviewers \
+  -X POST --input - <<< '{"reviewers":["circle0802","xnlwe09"]}'
+
+# 4. Label
+gh api repos/DSM-PICK/PiCK_iOS_ADMIN/issues/{PR번호}/labels \
+  -X POST --input - <<< '{"labels":["✨feat"]}'
+```
+
+---
+
 ## Verification Checklist (before any commit)
 
 - [ ] `git diff --check` clean
