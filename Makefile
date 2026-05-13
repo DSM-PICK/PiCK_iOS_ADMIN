@@ -53,12 +53,20 @@ WORKSPACE  = PiCK_iOS_ADMIN.xcworkspace
 test:
 	@if [ -z "$(SCHEME)" ]; then echo "❌ Usage: make test SCHEME=<SchemeName>"; exit 1; fi
 	@echo "🧪 Testing $(SCHEME) on $(SIMULATOR)..."
-	@xcodebuild test \
+	@rm -rf /tmp/$(SCHEME)-result.xcresult
+	@RESULT=$$(xcodebuild test \
 		-workspace $(WORKSPACE) \
 		-scheme $(SCHEME) \
 		-destination 'platform=iOS Simulator,name=$(SIMULATOR)' \
 		-resultBundlePath /tmp/$(SCHEME)-result.xcresult \
-		2>&1 | grep -E "Test Suite|Test Case|FAILED|error:|BUILD SUCCEEDED|BUILD FAILED" || true
+		2>&1); \
+	echo "$$RESULT" | grep -E "Test Suite|Test Case|FAILED|error:|BUILD SUCCEEDED|BUILD FAILED" || true; \
+	if echo "$$RESULT" | grep -q "TEST SUCCEEDED"; then \
+		echo "  ✅ $(SCHEME) PASSED"; \
+	else \
+		echo "  ❌ $(SCHEME) FAILED"; \
+		exit 1; \
+	fi
 	@echo "✅ $(SCHEME) done"
 
 # 디렉토리명 → 스킴명 매핑 (BugReport→BugReportFeature 등)
