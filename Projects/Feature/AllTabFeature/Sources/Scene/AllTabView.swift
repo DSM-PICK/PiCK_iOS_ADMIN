@@ -24,7 +24,7 @@ import OutingHistoryFeature
 import SelfStudyCheckFeature
 
 public struct AllTabView: View {
-    let store: StoreOf<AllTabReducer>
+    @Perception.Bindable var store: StoreOf<AllTabReducer>
     let fetchSelfStudyTeacherUseCase: any FetchSelfStudyTeacherUseCaseProtocol
     let uploadBugImagesUseCase: any UploadBugImagesUseCaseProtocol
     let submitBugReportUseCase: any SubmitBugReportUseCaseProtocol
@@ -132,7 +132,7 @@ public struct AllTabView: View {
                 .navigationDestination(for: AppRoute.self) { route in
                     switch route {
                     case .checkSelfStudyTeacher:
-                        CheckSelfStudyTeacherFeature(
+                        CheckSelfStudyTeacherView(
                             store: .init(
                                 initialState: CheckSelfStudyTeacherReducer.State(),
                                 reducer: {
@@ -143,7 +143,7 @@ public struct AllTabView: View {
                             )
                         )
                     case .bugReport:
-                        BugReportFeature(
+                        BugReportView(
                             store: .init(
                                 initialState: BugReportReducer.State(),
                                 reducer: {
@@ -184,7 +184,7 @@ public struct AllTabView: View {
                             }
                         )
                     case .selfStudyCheck:
-                        SelfStudyCheckFeature(
+                        SelfStudyCheckView(
                             store: .init(
                                 initialState: SelfStudyCheckReducer.State(),
                                 reducer: {
