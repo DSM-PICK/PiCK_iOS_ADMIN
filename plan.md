@@ -25,16 +25,16 @@ Remove the passthrough `*Feature.swift` wrapper structs from 4 features and have
 
 SelfStudyCheck has only 1 test. Add Reducer coverage before touching the structure.
 
-- [ ] RED: `testFetchStudents_StoresStudentItemsAndClearsLoading` — onAppear triggers fetch, success stores items and sets isLoading false
-- [ ] GREEN: verify SelfStudyCheckReducer.fetchStudents path makes the test pass
-- [ ] RED: `testSelectPeriod_UpdatesSelectedPeriodAndRefetches` — sending `.selectPeriod(.third)` updates state and triggers a new fetch
-- [ ] GREEN: verify selectPeriod reducer path passes
-- [ ] RED: `testSelectGradeAndClass_UpdatesFilterAndRefetches` — `.selectGradeAndClass(grade:2, classNum:3)` updates selectedGrade/Class and triggers fetch
-- [ ] GREEN: verify selectGradeAndClass reducer path passes
-- [ ] RED: `testSaveAttendance_SetsIsSavingThenClearsOnSuccess` — `.saveAttendance` sets isSaving true; `.saveAttendanceResponse(.success)` clears it and resets baseline
-- [ ] GREEN: verify saveAttendance reducer path passes
-- [ ] RED: `testFetchStudents_FailureStopsLoading` — fetch failure clears isLoading, does not crash
-- [ ] GREEN: verify failure path passes
+- [x] RED: `testFetchStudents_StoresStudentItemsAndClearsLoading` — onAppear triggers fetch, success stores items and sets isLoading false
+- [x] GREEN: verify SelfStudyCheckReducer.fetchStudents path makes the test pass (existing impl satisfies)
+- [x] RED: `testSelectPeriod_UpdatesSelectedPeriodAndRefetches` — sending `.selectPeriod(.ninth)` updates state and triggers a new fetch
+- [x] GREEN: verify selectPeriod reducer path passes (existing impl satisfies)
+- [x] RED: `testSelectGradeAndClass_UpdatesFilterAndRefetches` — `.selectGradeAndClass(grade:2, classNum:3)` updates selectedGrade/Class and triggers fetch
+- [x] GREEN: verify selectGradeAndClass reducer path passes (existing impl satisfies)
+- [x] RED: `testSaveAttendance_SetsIsSavingThenClearsOnSuccess` — `.saveAttendance` sets isSaving true; `.saveAttendanceResponse(.success)` clears it and resets baseline
+- [x] GREEN: verify saveAttendance reducer path passes (existing impl satisfies)
+- [x] RED: `testFetchStudents_FailureStopsLoading` — fetch failure clears isLoading, does not crash
+- [x] GREEN: verify failure path passes (existing impl satisfies)
 
 ---
 
