@@ -13,7 +13,7 @@ public final class CheckSelfStudyTeacherComponent:
     CheckSelfStudyTeacherFactory {
     public func makeView() -> AnyView {
         AnyView(
-            CheckSelfStudyTeacherFeature(
+            CheckSelfStudyTeacherView(
                 store: .init(
                     initialState: CheckSelfStudyTeacherReducer.State(),
                     reducer: {
