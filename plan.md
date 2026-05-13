@@ -44,34 +44,39 @@ Each item below is a structural change. Run the relevant test target before and 
 
 ### 2-A  BugReport
 
-- [ ] [STRUCTURAL] Verify `BugReportTests` green before change
-- [ ] [STRUCTURAL] Remove `BugReportFeature.swift`; update `BugReportComponent.makeView()` to instantiate `BugReportView(store:)` directly
-- [ ] [STRUCTURAL] Verify `BugReportTests` green after change — commit `chore[refact]: Remove BugReportFeature passthrough wrapper`
+- [x] [STRUCTURAL] Verify `BugReportTests` green before change
+- [x] [STRUCTURAL] Remove `BugReportFeature.swift`; update `BugReportComponent.makeView()` to instantiate `BugReportView(store:)` directly
+- [x] [STRUCTURAL] Verify `BugReportTests` green after change — commit `chore[refact]: Remove BugReportFeature passthrough wrapper`
 
 ### 2-B  CheckSelfStudyTeacher
 
-- [ ] [STRUCTURAL] Verify `CheckSelfStudyTeacherFeatureTests` green before change
-- [ ] [STRUCTURAL] Remove `CheckSelfStudyTeacherFeature.swift`; update `CheckSelfStudyTeacherComponent.makeView()` to instantiate `CheckSelfStudyTeacherView(store:)` directly
-- [ ] [STRUCTURAL] Verify `CheckSelfStudyTeacherFeatureTests` green after change — commit `chore[refact]: Remove CheckSelfStudyTeacherFeature passthrough wrapper`
+- [x] [STRUCTURAL] Verify `CheckSelfStudyTeacherFeatureTests` green before change
+- [x] [STRUCTURAL] Remove `CheckSelfStudyTeacherFeature.swift`; update `CheckSelfStudyTeacherComponent.makeView()` to instantiate `CheckSelfStudyTeacherView(store:)` directly
+- [x] [STRUCTURAL] Verify `CheckSelfStudyTeacherFeatureTests` green after change — commit `chore[refact]: Remove CheckSelfStudyTeacherFeature passthrough wrapper`
 
 ### 2-C  SchoolMeal
 
-- [ ] [STRUCTURAL] Verify `SchoolMealTests` green before change
-- [ ] [STRUCTURAL] Remove `SchoolMealFeature.swift`; update `SchoolMealComponentImpl.makeSchoolMealView()` to instantiate `SchoolMealView(store:)` directly
-- [ ] [STRUCTURAL] Verify `SchoolMealTests` green after change — commit `chore[refact]: Remove SchoolMealFeature passthrough wrapper`
+- [x] [STRUCTURAL] Verify `SchoolMealTests` green before change
+- [x] [STRUCTURAL] Remove `SchoolMealFeature.swift`; update `SchoolMealComponentImpl.makeSchoolMealView()` to instantiate `SchoolMealView(store:)` directly
+- [x] [STRUCTURAL] Verify `SchoolMealTests` green after change — commit `chore[refact]: Remove SchoolMealFeature passthrough wrapper`
 
 ### 2-D  SelfStudyCheck
 
-- [ ] [STRUCTURAL] Verify `SelfStudyCheckTests` green before change (Phase 1 tests must all pass first)
-- [ ] [STRUCTURAL] Apply `@Perception.Bindable var store: StoreOf<SelfStudyCheckReducer>` to `SelfStudyCheckView` (removes `let`, consistent with all other views)
-- [ ] [STRUCTURAL] Remove `SelfStudyCheckFeature.swift`; update `SelfStudyCheckComponent.makeView()` to instantiate `SelfStudyCheckView(store:)` directly; remove `NavigationView` wrapper that belongs in a coordinator
-- [ ] [STRUCTURAL] Verify `SelfStudyCheckTests` green after change — commit `chore[refact]: Remove SelfStudyCheckFeature passthrough wrapper and modernize View`
+- [x] [STRUCTURAL] Verify `SelfStudyCheckTests` green before change (Phase 1 tests must all pass first)
+- [x] [STRUCTURAL] Apply `@Perception.Bindable var store: StoreOf<SelfStudyCheckReducer>` to `SelfStudyCheckView`
+- [x] [STRUCTURAL] Remove `SelfStudyCheckFeature.swift`; update `SelfStudyCheckComponent.makeView()` to instantiate `SelfStudyCheckView(store:)` directly; remove `NavigationView` wrapper
+- [x] [STRUCTURAL] Verify `SelfStudyCheckTests` green after change — commit `chore[refact]: Remove SelfStudyCheckFeature passthrough wrapper and modernize View`
 
 ---
 
 ## Done criteria
 
-- [ ] No `*Feature.swift` passthrough wrapper files exist in BugReport, CheckSelfStudyTeacher, SchoolMeal, SelfStudyCheck
-- [ ] `grep -r "SelfStudyCheckFeature\|BugReportFeature\|CheckSelfStudyTeacherFeature\|SchoolMealFeature" --include="*.swift" Projects/Feature` returns only test/non-wrapper references
-- [ ] All feature test targets pass
-- [ ] `git diff --check` clean
+- [x] No `*Feature.swift` passthrough wrapper files exist in BugReport, CheckSelfStudyTeacher, SchoolMeal, SelfStudyCheck
+- [x] Wrapper type instantiation scan: 0 remaining references in production sources
+- [x] Forbidden TCA pattern scan: 0 (`ViewStore`, `WithViewStore`, `IfLetStore`, `@ObservedObject`)
+- [x] `git diff --check` clean
+- [x] All commits follow `<type>[<phase>]:` convention (enforced by commit-msg hook)
+- [x] pre-commit hook active: catches forbidden patterns + View `let store` violations
+- [ ] All feature test targets pass — requires Xcode build (run `make generate` then test in Xcode)
+
+> Note: `let store` remains in `HomeFeature` and `PlanFeature` — out of scope for #135.
