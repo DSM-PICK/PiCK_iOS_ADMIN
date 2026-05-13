@@ -42,6 +42,8 @@ final class SelfStudyCheckTests: XCTestCase {
 
         await store.send(.selectPeriod(.ninth)) {
             $0.selectedPeriod = .ninth
+        }
+        await store.receive(.fetchStudents) {
             $0.isLoading = true
         }
         await store.receive(
@@ -62,6 +64,8 @@ final class SelfStudyCheckTests: XCTestCase {
         await store.send(.selectGradeAndClass(grade: 2, classNum: 3)) {
             $0.selectedGrade = 2
             $0.selectedClass = 3
+        }
+        await store.receive(.fetchStudents) {
             $0.isLoading = true
         }
         await store.receive(
