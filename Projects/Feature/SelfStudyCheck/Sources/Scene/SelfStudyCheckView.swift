@@ -5,7 +5,7 @@ import ComposableArchitecture
 
 public struct SelfStudyCheckView: View {
     @Environment(\.dismiss) var dismiss
-    let store: StoreOf<SelfStudyCheckReducer>
+    @Perception.Bindable var store: StoreOf<SelfStudyCheckReducer>
     @State private var isClassBottomSheetPresented = false
     @State private var isStatusBottomSheetPresented = false
     @State private var selectedStudentId: String?
