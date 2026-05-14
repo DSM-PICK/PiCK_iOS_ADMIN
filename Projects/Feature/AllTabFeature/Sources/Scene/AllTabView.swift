@@ -3,43 +3,24 @@ import ComposableArchitecture
 import PiCK_iOS_DesignSystem
 import Utility
 import AllTabDomainInterface
-import AuthDomainInterface
-import BugReportDomainInterface
-import ChangePasswordDomainInterface
-import CheckSelfStudyTeacherDomainInterface
-import ClassroomMoveListDomainInterface
+import BugReportFeatureInterface
+import CheckSelfStudyTeacherFeatureInterface
+import ChangePasswordFeatureInterface
 import ClassroomMoveListFeatureInterface
-import OutListDomainInterface
 import OutListFeatureInterface
-import OutingHistoryDomainInterface
 import OutingHistoryFeatureInterface
-import SelfStudyCheckDomainInterface
-import HomeFeature
-import BugReportFeature
-import ChangePasswordFeature
-import CheckSelfStudyTeacherFeature
-import ClassroomMoveListFeature
-import OutListFeature
-import OutingHistoryFeature
-import SelfStudyCheckFeature
-import SelfStudyCheckDomainInterface
+import SelfStudyCheckFeatureInterface
 
 public struct AllTabView: View {
-    let store: StoreOf<AllTabReducer>
-    let fetchSelfStudyTeacherUseCase: any FetchSelfStudyTeacherUseCaseProtocol
-    let uploadBugImagesUseCase: any UploadBugImagesUseCaseProtocol
-    let submitBugReportUseCase: any SubmitBugReportUseCaseProtocol
-    let emailSendUseCase: any EmailSendUseCase
-    let codeCheckUseCase: any CodeCheckUseCase
-    let passwordChangeUseCase: any PasswordChangeUseCase
-    let getStudentAttendanceUseCase: any GetStudentAttendanceUseCase
-    let saveAttendanceUseCase: any SaveAttendanceUseCase
-    let getOutListUseCase: any GetOutListUseCase
-    let returnStudentsUseCase: any ReturnStudentsUseCase
-    let getEarlyReturnUseCase: any GetEarlyReturnUseCase
-    let getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase
-    let getClassroomMoveByClassroomUseCase: any GetClassroomMoveByClassroomUseCase
-    let getOutingHistoryUseCase: GetOutingHistoryUseCase
+    @Perception.Bindable var store: StoreOf<AllTabReducer>
+    let checkSelfStudyTeacherFactory: any CheckSelfStudyTeacherFactory
+    let bugReportFactory: any BugReportFactory
+    let changePasswordFactory: any ChangePasswordFactory
+    let newPasswordFactory: any NewPasswordFactory
+    let selfStudyCheckFactory: any SelfStudyCheckFactory
+    let outListFactory: any OutListFactory
+    let classroomMoveListFactory: any ClassroomMoveListFactory
+    let outingHistoryFactory: any OutingHistoryFactory
     @EnvironmentObject var router: AppRouter
     @State private var navigationPath: [AppRoute] = []
     @State private var showPasswordChangeSuccess = false
@@ -48,46 +29,33 @@ public struct AllTabView: View {
 
     public init(
         store: StoreOf<AllTabReducer>,
-        fetchSelfStudyTeacherUseCase: any FetchSelfStudyTeacherUseCaseProtocol,
-        uploadBugImagesUseCase: any UploadBugImagesUseCaseProtocol,
-        submitBugReportUseCase: any SubmitBugReportUseCaseProtocol,
-        emailSendUseCase: any EmailSendUseCase,
-        codeCheckUseCase: any CodeCheckUseCase,
-        passwordChangeUseCase: any PasswordChangeUseCase,
-        getStudentAttendanceUseCase: any GetStudentAttendanceUseCase,
-        saveAttendanceUseCase: any SaveAttendanceUseCase,
-        getOutListUseCase: any GetOutListUseCase,
-        returnStudentsUseCase: any ReturnStudentsUseCase,
-        getEarlyReturnUseCase: any GetEarlyReturnUseCase,
-        getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase,
-        getClassroomMoveByClassroomUseCase: any GetClassroomMoveByClassroomUseCase,
-        getOutingHistoryUseCase: GetOutingHistoryUseCase
+        checkSelfStudyTeacherFactory: any CheckSelfStudyTeacherFactory,
+        bugReportFactory: any BugReportFactory,
+        changePasswordFactory: any ChangePasswordFactory,
+        newPasswordFactory: any NewPasswordFactory,
+        selfStudyCheckFactory: any SelfStudyCheckFactory,
+        outListFactory: any OutListFactory,
+        classroomMoveListFactory: any ClassroomMoveListFactory,
+        outingHistoryFactory: any OutingHistoryFactory
     ) {
         self.store = store
-        self.fetchSelfStudyTeacherUseCase = fetchSelfStudyTeacherUseCase
-        self.uploadBugImagesUseCase = uploadBugImagesUseCase
-        self.submitBugReportUseCase = submitBugReportUseCase
-        self.emailSendUseCase = emailSendUseCase
-        self.codeCheckUseCase = codeCheckUseCase
-        self.passwordChangeUseCase = passwordChangeUseCase
-        self.getStudentAttendanceUseCase = getStudentAttendanceUseCase
-        self.saveAttendanceUseCase = saveAttendanceUseCase
-        self.getOutListUseCase = getOutListUseCase
-        self.returnStudentsUseCase = returnStudentsUseCase
-        self.getEarlyReturnUseCase = getEarlyReturnUseCase
-        self.getClassroomMoveByFloorUseCase = getClassroomMoveByFloorUseCase
-        self.getClassroomMoveByClassroomUseCase = getClassroomMoveByClassroomUseCase
-        self.getOutingHistoryUseCase = getOutingHistoryUseCase
+        self.checkSelfStudyTeacherFactory = checkSelfStudyTeacherFactory
+        self.bugReportFactory = bugReportFactory
+        self.changePasswordFactory = changePasswordFactory
+        self.newPasswordFactory = newPasswordFactory
+        self.selfStudyCheckFactory = selfStudyCheckFactory
+        self.outListFactory = outListFactory
+        self.classroomMoveListFactory = classroomMoveListFactory
+        self.outingHistoryFactory = outingHistoryFactory
     }
 
     public var body: some View {
-        WithViewStore(self.store, observe: { $0 }) { viewStore in
+        WithPerceptionTracking {
             NavigationStack(path: $navigationPath) {
                 ScrollView {
                     VStack(spacing: 0) {
-                        TeacherInfoView(teacherName: viewStore.myName?.name)
+                        TeacherInfoView(teacherName: store.myName?.name)
                             .padding(.top, 24)
-                        
 
                         AllTabMenuList(
                             onOutListTap: {
@@ -123,9 +91,9 @@ public struct AllTabView: View {
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .onAppear {
-                    viewStore.send(.fetchMyName)
+                    store.send(.fetchMyName)
                 }
-                .onChange(of: viewStore.shouldLogout) { shouldLogout in
+                .onChange(of: store.shouldLogout) { shouldLogout in
                     if shouldLogout {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                             withAnimation(.easeInOut(duration: 0.3)) {
@@ -134,7 +102,7 @@ public struct AllTabView: View {
                         }
                     }
                 }
-                .onChange(of: viewStore.shouldResign) { shouldResign in
+                .onChange(of: store.shouldResign) { shouldResign in
                     if shouldResign {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                             withAnimation(.easeInOut(duration: 0.3)) {
@@ -150,7 +118,7 @@ public struct AllTabView: View {
                     isPresented: $showLogoutConfirm,
                     onAction: { action in
                         if action == .accept {
-                            viewStore.send(.logoutButtonTapped)
+                            store.send(.logoutButtonTapped)
                         }
                     }
                 )
@@ -161,112 +129,35 @@ public struct AllTabView: View {
                     isPresented: $showResignAlert,
                     onAction: { action in
                         if action == .accept {
-                            viewStore.send(.confirmResign)
+                            store.send(.confirmResign)
                         }
                     }
                 )
                 .navigationDestination(for: AppRoute.self) { route in
                     switch route {
                     case .checkSelfStudyTeacher:
-                        CheckSelfStudyTeacherFeature(
-                            store: .init(
-                                initialState: CheckSelfStudyTeacherReducer.State(),
-                                reducer: {
-                                    CheckSelfStudyTeacherReducer(
-                                        fetchSelfStudyTeacherUseCase: fetchSelfStudyTeacherUseCase
-                                    )
-                                }
-                            )
-                        )
+                        checkSelfStudyTeacherFactory.makeView()
                     case .bugReport:
-                        BugReportFeature(
-                            store: .init(
-                                initialState: BugReportReducer.State(),
-                                reducer: {
-                                    BugReportReducer(
-                                        uploadBugImagesUseCase: uploadBugImagesUseCase,
-                                        submitBugReportUseCase: submitBugReportUseCase
-                                    )
-                                }
-                            )
-                        )
+                        bugReportFactory.makeView()
                     case .changePassword:
-                        ChangePasswordFeature(
-                            store: .init(
-                                initialState: ChangePasswordReducer.State(),
-                                reducer: {
-                                    ChangePasswordReducer(
-                                        emailSendUseCase: emailSendUseCase,
-                                        codeCheckUseCase: codeCheckUseCase
-                                    )
-                                }
-                            )
-                        )
+                        changePasswordFactory.makeView()
                     case .newPassword(let accountId, let code):
-                        NewPasswordFeature(
-                            store: .init(
-                                initialState: NewPasswordReducer.State(),
-                                reducer: {
-                                    NewPasswordReducer(
-                                        passwordChangeUseCase: passwordChangeUseCase,
-                                        accountId: accountId,
-                                        code: code
-                                    )
-                                }
-                            ),
+                        newPasswordFactory.makeView(
+                            accountId: accountId,
+                            code: code,
                             onSuccess: {
                                 navigationPath.removeAll()
                                 showPasswordChangeSuccess = true
                             }
                         )
                     case .selfStudyCheck:
-                        SelfStudyCheckFeature(
-                            store: .init(
-                                initialState: SelfStudyCheckReducer.State(),
-                                reducer: {
-                                    SelfStudyCheckReducer(
-                                        getStudentAttendanceUseCase: getStudentAttendanceUseCase,
-                                        saveAttendanceUseCase: saveAttendanceUseCase
-                                    )
-                                }
-                            )
-                        )
+                        selfStudyCheckFactory.makeView()
                     case .outList:
-                        OutListView(
-                            store: .init(
-                                initialState: OutListReducer.State(),
-                                reducer: {
-                                    OutListReducer(
-                                        getOutListUseCase: getOutListUseCase,
-                                        returnStudentsUseCase: returnStudentsUseCase,
-                                        getEarlyReturnUseCase: getEarlyReturnUseCase
-                                    )
-                                }
-                            )
-                        )
+                        outListFactory.makeView()
                     case .classroomMoveList:
-                        ClassroomMoveListView(
-                            store: .init(
-                                initialState: ClassroomMoveListReducer.State(),
-                                reducer: {
-                                    ClassroomMoveListReducer(
-                                        getClassroomMoveByFloorUseCase: getClassroomMoveByFloorUseCase,
-                                        getClassroomMoveByClassroomUseCase: getClassroomMoveByClassroomUseCase
-                                    )
-                                }
-                            )
-                        )
+                        classroomMoveListFactory.makeView()
                     case .outingHistory:
-                        OutingHistoryView(
-                            store: .init(
-                                initialState: OutingHistoryReducer.State(),
-                                reducer: {
-                                    OutingHistoryReducer(
-                                        getOutingHistoryUseCase: getOutingHistoryUseCase
-                                    )
-                                }
-                            )
-                        )
+                        outingHistoryFactory.makeView()
                     default:
                         EmptyView()
                     }
