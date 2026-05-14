@@ -220,47 +220,29 @@ private class AllTabDependencyacdab75b3325eec9d649Provider: AllTabDependency {
     var authRepository: any AuthRepository {
         return appComponent.authRepository
     }
-    var fetchSelfStudyTeacherUseCase: any FetchSelfStudyTeacherUseCaseProtocol {
-        return appComponent.fetchSelfStudyTeacherUseCase
+    var checkSelfStudyTeacherFactory: any CheckSelfStudyTeacherFactory {
+        return appComponent.checkSelfStudyTeacherFactory
     }
-    var uploadBugImagesUseCase: any UploadBugImagesUseCaseProtocol {
-        return appComponent.uploadBugImagesUseCase
+    var bugReportFactory: any BugReportFactory {
+        return appComponent.bugReportFactory
     }
-    var submitBugReportUseCase: any SubmitBugReportUseCaseProtocol {
-        return appComponent.submitBugReportUseCase
+    var changePasswordFactory: any ChangePasswordFactory {
+        return appComponent.changePasswordFactory
     }
-    var emailSendUseCase: any EmailSendUseCase {
-        return appComponent.emailSendUseCase
+    var newPasswordFactory: any NewPasswordFactory {
+        return appComponent.newPasswordFactory
     }
-    var codeCheckUseCase: any CodeCheckUseCase {
-        return appComponent.codeCheckUseCase
+    var selfStudyCheckFactory: any SelfStudyCheckFactory {
+        return appComponent.selfStudyCheckFactory
     }
-    var passwordChangeUseCase: any PasswordChangeUseCase {
-        return appComponent.passwordChangeUseCase
+    var outListFactory: any OutListFactory {
+        return appComponent.outListFactory
     }
-    var getStudentAttendanceUseCase: any GetStudentAttendanceUseCase {
-        return appComponent.getStudentAttendanceUseCase
+    var classroomMoveListFactory: any ClassroomMoveListFactory {
+        return appComponent.classroomMoveListFactory
     }
-    var saveAttendanceUseCase: any SaveAttendanceUseCase {
-        return appComponent.saveAttendanceUseCase
-    }
-    var getOutListUseCase: any GetOutListUseCase {
-        return appComponent.getOutListUseCase
-    }
-    var returnStudentsUseCase: any ReturnStudentsUseCase {
-        return appComponent.returnStudentsUseCase
-    }
-    var getEarlyReturnUseCase: any GetEarlyReturnUseCase {
-        return appComponent.getEarlyReturnUseCase
-    }
-    var getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase {
-        return appComponent.getClassroomMoveByFloorUseCase
-    }
-    var getClassroomMoveByClassroomUseCase: any GetClassroomMoveByClassroomUseCase {
-        return appComponent.getClassroomMoveByClassroomUseCase
-    }
-    var getOutingHistoryUseCase: any GetOutingHistoryUseCase {
-        return appComponent.getOutingHistoryUseCase
+    var outingHistoryFactory: any OutingHistoryFactory {
+        return appComponent.outingHistoryFactory
     }
     private let appComponent: AppComponent
     init(appComponent: AppComponent) {
@@ -587,20 +569,14 @@ extension AllTabComponent: NeedleFoundation.Registration {
     public func registerItems() {
         keyPathToName[\AllTabDependency.getMyNameUseCase] = "getMyNameUseCase-any GetMyNameUseCaseProtocol"
         keyPathToName[\AllTabDependency.authRepository] = "authRepository-any AuthRepository"
-        keyPathToName[\AllTabDependency.fetchSelfStudyTeacherUseCase] = "fetchSelfStudyTeacherUseCase-any FetchSelfStudyTeacherUseCaseProtocol"
-        keyPathToName[\AllTabDependency.uploadBugImagesUseCase] = "uploadBugImagesUseCase-any UploadBugImagesUseCaseProtocol"
-        keyPathToName[\AllTabDependency.submitBugReportUseCase] = "submitBugReportUseCase-any SubmitBugReportUseCaseProtocol"
-        keyPathToName[\AllTabDependency.emailSendUseCase] = "emailSendUseCase-any EmailSendUseCase"
-        keyPathToName[\AllTabDependency.codeCheckUseCase] = "codeCheckUseCase-any CodeCheckUseCase"
-        keyPathToName[\AllTabDependency.passwordChangeUseCase] = "passwordChangeUseCase-any PasswordChangeUseCase"
-        keyPathToName[\AllTabDependency.getStudentAttendanceUseCase] = "getStudentAttendanceUseCase-any GetStudentAttendanceUseCase"
-        keyPathToName[\AllTabDependency.saveAttendanceUseCase] = "saveAttendanceUseCase-any SaveAttendanceUseCase"
-        keyPathToName[\AllTabDependency.getOutListUseCase] = "getOutListUseCase-any GetOutListUseCase"
-        keyPathToName[\AllTabDependency.returnStudentsUseCase] = "returnStudentsUseCase-any ReturnStudentsUseCase"
-        keyPathToName[\AllTabDependency.getEarlyReturnUseCase] = "getEarlyReturnUseCase-any GetEarlyReturnUseCase"
-        keyPathToName[\AllTabDependency.getClassroomMoveByFloorUseCase] = "getClassroomMoveByFloorUseCase-any GetClassroomMoveByFloorUseCase"
-        keyPathToName[\AllTabDependency.getClassroomMoveByClassroomUseCase] = "getClassroomMoveByClassroomUseCase-any GetClassroomMoveByClassroomUseCase"
-        keyPathToName[\AllTabDependency.getOutingHistoryUseCase] = "getOutingHistoryUseCase-any GetOutingHistoryUseCase"
+        keyPathToName[\AllTabDependency.checkSelfStudyTeacherFactory] = "checkSelfStudyTeacherFactory-any CheckSelfStudyTeacherFactory"
+        keyPathToName[\AllTabDependency.bugReportFactory] = "bugReportFactory-any BugReportFactory"
+        keyPathToName[\AllTabDependency.changePasswordFactory] = "changePasswordFactory-any ChangePasswordFactory"
+        keyPathToName[\AllTabDependency.newPasswordFactory] = "newPasswordFactory-any NewPasswordFactory"
+        keyPathToName[\AllTabDependency.selfStudyCheckFactory] = "selfStudyCheckFactory-any SelfStudyCheckFactory"
+        keyPathToName[\AllTabDependency.outListFactory] = "outListFactory-any OutListFactory"
+        keyPathToName[\AllTabDependency.classroomMoveListFactory] = "classroomMoveListFactory-any ClassroomMoveListFactory"
+        keyPathToName[\AllTabDependency.outingHistoryFactory] = "outingHistoryFactory-any OutingHistoryFactory"
     }
 }
 extension ClassroomMoveListComponent: NeedleFoundation.Registration {
