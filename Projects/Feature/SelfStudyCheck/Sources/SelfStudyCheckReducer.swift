@@ -42,6 +42,7 @@ public struct SelfStudyCheckReducer: Reducer {
         }
     }
 
+    @ObservableState
     public struct State: Equatable {
         public var studentItems: [StudentItem] = []
         public var initialStudentItems: [StudentItem] = []
