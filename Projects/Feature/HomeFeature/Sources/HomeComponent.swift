@@ -36,7 +36,7 @@ public protocol HomeDependency: NeedleFoundation.Dependency {
 public final class HomeComponent: Component<HomeDependency>, HomeFactory {
     public func makeView() -> AnyView {
         AnyView(
-            HomeFeature(
+            TabBarView(
                 store: .init(
                     initialState: HomeReducer.State(),
                     reducer: {
