@@ -70,12 +70,13 @@ AppComponent ──conforms──▶ 12개 Dependency 프로토콜 (전부 직�
 
 커밋: `feat[green]: Wire AllTabComponent to inject sub-feature factories`
 
-### 1-3. AllTabComponent를 각 Feature Component의 부모로 재편 (Phase 2 이후로 연기)
-> Phase 2 (각 Feature Component가 자체 Domain 소유) 완료 후 진행
-- [ ] BugReportComponent, CheckSelfStudyTeacherComponent, SelfStudyCheckComponent 등을 AllTabComponent 자식으로 이동
-- [ ] AllTabDependency factory 요구 제거 (getMyNameUseCase + authRepository만 유지)
-- [ ] AppComponent에서 해당 Feature 직접 생성 제거
-- [ ] NeedleGenerated.swift 재생성: `make needle`
+### 1-3. AllTabComponent를 각 Feature Component의 부모로 재편 ✅
+- [x] AllTabComponent.swift를 AllTabFeature → App 타겟으로 이동 (concrete import 허용)
+- [x] AllTabDependency: getMyNameUseCase + authRepository만 유지 (factory 요구 제거)
+- [x] AllTabComponent에서 8개 자식 Component 직접 생성 (`parent: self`)
+- [x] AppComponent: CheckSelfStudyTeacherDependency 등 7개 Dependency 준수 제거
+- [x] AppComponent: 8개 factory 프로퍼티 제거 (AllTabComponent가 직접 담당)
+- [x] NeedleGenerated.swift 재생성: `^->AppComponent->AllTabComponent->*Component` 경로 반영
 
 커밋: `chore[refact]: Move tab-feature components under AllTabComponent`
 

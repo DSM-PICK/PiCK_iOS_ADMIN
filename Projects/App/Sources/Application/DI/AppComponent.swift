@@ -29,7 +29,7 @@ import ClassroomMoveListFeatureInterface
 import OutingHistoryFeature
 import OutingHistoryFeatureInterface
 
-public final class AppComponent: BootstrapComponent, HomeDependency, AllTabDependency, PlanDependency, SchoolMealDependency, AcceptDependency, CheckSelfStudyTeacherDependency, BugReportDependency, ChangePasswordDependency, NewPasswordDependency, ClassroomMoveListDependency, OutingHistoryDependency, SelfStudyCheckDependency {
+public final class AppComponent: BootstrapComponent, HomeDependency, AllTabDependency, PlanDependency, SchoolMealDependency, AcceptDependency {
 
     private let _keychain: any Keychain
 
@@ -82,29 +82,5 @@ public extension AppComponent {
     }
     var acceptFactory: any AcceptFactory {
         AcceptComponent(parent: self)
-    }
-    var checkSelfStudyTeacherFactory: any CheckSelfStudyTeacherFactory {
-        CheckSelfStudyTeacherComponent(parent: self)
-    }
-    var bugReportFactory: any BugReportFactory {
-        BugReportComponent(parent: self)
-    }
-    var changePasswordFactory: any ChangePasswordFactory {
-        ChangePasswordComponent(parent: self)
-    }
-    var newPasswordFactory: any NewPasswordFactory {
-        NewPasswordComponent(parent: self)
-    }
-    var outListFactory: any OutListFactory {
-        OutListComponent(parent: self)
-    }
-    var selfStudyCheckFactory: any SelfStudyCheckFactory {
-        SelfStudyCheckComponent(parent: self)
-    }
-    var classroomMoveListFactory: any ClassroomMoveListFactory {
-        ClassroomMoveListComponent(parent: self)
-    }
-    var outingHistoryFactory: any OutingHistoryFactory {
-        OutingHistoryComponent(parent: self)
     }
 }
