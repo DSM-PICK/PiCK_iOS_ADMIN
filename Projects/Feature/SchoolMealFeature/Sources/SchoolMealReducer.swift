@@ -10,6 +10,7 @@ public struct SchoolMealReducer: Reducer {
         self.fetchSchoolMealsUseCase = fetchSchoolMealsUseCase
     }
 
+    @ObservableState
     public struct State: Equatable {
         public var selectedDate: Date = Date()
         public var mealData: SchoolMealEntity?

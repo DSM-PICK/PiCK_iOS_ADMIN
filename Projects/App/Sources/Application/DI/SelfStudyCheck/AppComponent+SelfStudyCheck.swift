@@ -1,7 +1,4 @@
 import Foundation
-import NeedleFoundation
-import SwiftUI
-import SelfStudyCheckFeature
 import SelfStudyCheckDomain
 import SelfStudyCheckDomainInterface
 import BaseDomain

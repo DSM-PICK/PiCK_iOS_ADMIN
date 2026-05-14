@@ -1,12 +1,11 @@
 import SwiftUI
-import HomeFeature
 import ComposableArchitecture
 import PlanDomainInterface
 import PiCK_iOS_DesignSystem
 import Utility
 
 public struct PlanView: View {
-    let store: StoreOf<PlanReducer>
+    @Perception.Bindable var store: StoreOf<PlanReducer>
     private let calendar = Calendar.current
 
     public init(store: StoreOf<PlanReducer>) {
@@ -14,13 +13,13 @@ public struct PlanView: View {
     }
 
     public var body: some View {
-        WithViewStore(self.store, observe: { $0 }) { viewStore in
+        WithPerceptionTracking {
             NavigationStack {
                 VStack(spacing: 0) {
                     MonthHeaderView(
-                        currentMonth: viewStore.currentMonth,
+                        currentMonth: store.currentMonth,
                         onMonthChange: { date in
-                            viewStore.send(.changeMonth(date))
+                            store.send(.changeMonth(date))
                         }
                     )
                     .padding(.top, 32)
@@ -29,24 +28,24 @@ public struct PlanView: View {
                     ScrollView {
                         VStack(spacing: 0) {
                             AcademicScheduleCalendarView(
-                                monthSchedule: viewStore.monthAcademicSchedule,
-                                selectedDate: viewStore.selectedDate,
-                                currentMonth: viewStore.currentMonth,
+                                monthSchedule: store.monthAcademicSchedule,
+                                selectedDate: store.selectedDate,
+                                currentMonth: store.currentMonth,
                                 onDateSelect: { date in
-                                    viewStore.send(.selectDate(date))
+                                    store.send(.selectDate(date))
                                 },
                                 onMonthChange: { date in
-                                    viewStore.send(.changeMonth(date))
+                                    store.send(.changeMonth(date))
                                 }
                             )
                             .padding(.top, 12)
                             .padding(.horizontal, 24)
-                            
+
                             ScheduleListView(
-                                selectedDate: viewStore.selectedDate,
-                                schedules: viewStore.academicSchedule
+                                selectedDate: store.selectedDate,
+                                schedules: store.academicSchedule
                             )
-                            
+
                             Spacer()
                         }
                     }
@@ -60,7 +59,7 @@ public struct PlanView: View {
                     }
                 }
                 .onAppear {
-                    viewStore.send(.loadInitialData)
+                    store.send(.loadInitialData)
                 }
             }
         }
