@@ -3,7 +3,6 @@ import SwiftUI
 import HomeFeatureInterface
 import ComposableArchitecture
 import HomeDomainInterface
-import AllTabDomainInterface
 import AcceptDomainInterface
 import AllTabFeatureInterface
 import PlanFeatureInterface

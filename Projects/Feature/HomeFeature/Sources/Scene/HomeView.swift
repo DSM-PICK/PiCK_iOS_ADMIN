@@ -2,37 +2,36 @@ import SwiftUI
 import PiCK_iOS_DesignSystem
 import ComposableArchitecture
 import HomeDomainInterface
-import AcceptDomainInterface
 import Utility
 
 public struct HomeView: View {
-    let store: StoreOf<HomeReducer>
-    
+    @Perception.Bindable var store: StoreOf<HomeReducer>
+
     public init(store: StoreOf<HomeReducer>) {
         self.store = store
     }
-    
+
     public var body: some View {
-        WithViewStore(self.store, observe: { $0 }) { viewStore in
+        WithPerceptionTracking {
             ZStack {
                 ScrollView {
                     VStack(spacing: 24) {
                         SelfStudyView(
-                            adminMessage: viewStore.adminSelfStudyTeacher
+                            adminMessage: store.adminSelfStudyTeacher
                         )
                         .frame(maxWidth: .infinity)
                         .frame(height: 72)
 
-                        if viewStore.isHomeroomTeacher {
+                        if store.isHomeroomTeacher {
                             AccordionView(
-                                badge: viewStore.classroom,
+                                badge: store.classroom,
                                 title: "외출 수락",
                                 content: {
                                     VStack(spacing: 8) {
-                                        if viewStore.outingAcceptList.isEmpty {
+                                        if store.outingAcceptList.isEmpty {
                                             emptyStateView(message: "외출 신청이 없습니다")
                                         } else {
-                                            ForEach(viewStore.outingAcceptList) { item in
+                                            ForEach(store.outingAcceptList) { item in
                                                 AcceptCell(
                                                     studentNumber: self.studentNumber(
                                                         grade: item.grade,
@@ -44,17 +43,17 @@ public struct HomeView: View {
                                                     onAccept: {
                                                         switch item.type {
                                                         case .outgoing:
-                                                            viewStore.send(.acceptApplication(id: item.id))
+                                                            store.send(.acceptApplication(id: item.id))
                                                         case .earlyReturn:
-                                                            viewStore.send(.acceptEarlyReturn(id: item.id))
+                                                            store.send(.acceptEarlyReturn(id: item.id))
                                                         }
                                                     },
                                                     onReject: {
                                                         switch item.type {
                                                         case .outgoing:
-                                                            viewStore.send(.rejectApplication(id: item.id))
+                                                            store.send(.rejectApplication(id: item.id))
                                                         case .earlyReturn:
-                                                            viewStore.send(.rejectEarlyReturn(id: item.id))
+                                                            store.send(.rejectEarlyReturn(id: item.id))
                                                         }
                                                     }
                                                 )
@@ -66,16 +65,16 @@ public struct HomeView: View {
                             )
                         }
 
-                        if viewStore.isSelfStudyTeacher {
+                        if store.isSelfStudyTeacher {
                             AccordionView(
-                                badge: viewStore.floor,
+                                badge: store.floor,
                                 title: "외출자 확인",
                                 content: {
                                     VStack(spacing: 8) {
-                                        if viewStore.outingStudentList.isEmpty {
+                                        if store.outingStudentList.isEmpty {
                                             emptyStateView(message: "외출자가 없습니다")
                                         } else {
-                                            ForEach(viewStore.outingStudentList) { item in
+                                            ForEach(store.outingStudentList) { item in
                                                 OutingCell(
                                                     studentNumber: self.studentNumber(
                                                         grade: item.grade,
@@ -93,14 +92,14 @@ public struct HomeView: View {
                             )
 
                             AccordionView(
-                                badge: viewStore.floor,
+                                badge: store.floor,
                                 title: "교실 이동자 확인",
                                 content: {
                                     VStack(spacing: 8) {
-                                        if viewStore.classroomMoveList.isEmpty {
+                                        if store.classroomMoveList.isEmpty {
                                             emptyStateView(message: "교실 이동자가 없습니다")
                                         } else {
-                                            ForEach(viewStore.classroomMoveList, id: \.id) { item in
+                                            ForEach(store.classroomMoveList, id: \.id) { item in
                                                 PiCKClassroomMoveCell(
                                                     studentNumber: self.studentNumber(
                                                         grade: item.grade,
@@ -123,7 +122,7 @@ public struct HomeView: View {
                             )
                         }
 
-                        AllSelfStudyView(selfStudyDirector: viewStore.selfStudyDirector)
+                        AllSelfStudyView(selfStudyDirector: store.selfStudyDirector)
                             .frame(maxWidth: .infinity)
                     }
                     .padding(24)
@@ -136,17 +135,17 @@ public struct HomeView: View {
                     }
                 }
                 .onAppear {
-                    viewStore.send(.fetchSelfStudyDirector(date: Date.todayString()))
-                    viewStore.send(.fetchAdminSelfStudyInfo)
-                    viewStore.send(.fetchSelfStudyAndClassroom)
+                    store.send(.fetchSelfStudyDirector(date: Date.todayString()))
+                    store.send(.fetchAdminSelfStudyInfo)
+                    store.send(.fetchSelfStudyAndClassroom)
                 }
-                if viewStore.showAlert {
+                if store.showAlert {
                     PiCKDisappearAlert(
-                        successType: viewStore.alertSuccessType,
-                        message: viewStore.alertMessage
+                        successType: store.alertSuccessType,
+                        message: store.alertMessage
                     )
                     .onDisappear {
-                        viewStore.send(.dismissAlert)
+                        store.send(.dismissAlert)
                     }
                 }
             }

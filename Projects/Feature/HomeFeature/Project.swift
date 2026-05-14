@@ -7,8 +7,12 @@ let project = Project.makeFeatureModule(
     interfaceSources: ["Interface/HomeFeatureInterface.swift"],
     implementationDependencies: [
         .Projects.homeDomainInterface,
-        .Features.planFeatureInterface,
+        .Projects.acceptDomainInterface,
+        .Projects.classroomMoveListDomainInterface,
+        .Projects.outListDomainInterface,
+        .Features.acceptFeatureInterface,
         .Features.allTabFeatureInterface,
+        .Features.planFeatureInterface,
         .Features.schoolMealFeatureInterface,
         .Shared.utility,
         .Shared.thirdPartyLib,
