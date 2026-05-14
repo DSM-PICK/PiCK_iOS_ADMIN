@@ -58,7 +58,7 @@ public final class AllTabComponent: Component<AllTabDependency>, AllTabFactory {
 
     public func makeView() -> AnyView {
         AnyView(
-            AllTabFeature(
+            AllTabView(
                 store: .init(
                     initialState: AllTabReducer.State(),
                     reducer: {
