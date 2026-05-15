@@ -183,6 +183,17 @@ private class SchoolMealDependency80df08e400a5b36d3bc3Provider: SchoolMealDepend
 private func factory354b0e0b58c0b30e89fcb7304b634b3e62c64b3c(_ component: NeedleFoundation.Scope) -> AnyObject {
     return SchoolMealDependency80df08e400a5b36d3bc3Provider(appComponent: parent2(component) as! AppComponent)
 }
+private class SignupFlowDependency7c405779e1a319f384f3Provider: SignupFlowDependency {
+
+
+    init() {
+
+    }
+}
+/// ^->AppComponent->SignupFlowComponent
+private func factory60f4d2cd682edce0f5c3e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return SignupFlowDependency7c405779e1a319f384f3Provider()
+}
 private class OnboardingDependencyf77d0055983a00cf8835Provider: OnboardingDependency {
 
 
@@ -207,7 +218,7 @@ private class CheckSelfStudyTeacherDependency9170675b14a508f4e631Provider: Check
 private func factoryc77fbcbfa8694fb5c9a8b7304b634b3e62c64b3c(_ component: NeedleFoundation.Scope) -> AnyObject {
     return CheckSelfStudyTeacherDependency9170675b14a508f4e631Provider(appComponent: parent2(component) as! AppComponent)
 }
-private class InfoSettingDependencyda5872b9bdd84990e780Provider: InfoSettingDependency {
+private class InfoSettingDependency2da677e2d184e88b101dProvider: InfoSettingDependency {
     var signupUseCase: any SignupUseCase {
         return appComponent.signupUseCase
     }
@@ -216,22 +227,22 @@ private class InfoSettingDependencyda5872b9bdd84990e780Provider: InfoSettingDepe
         self.appComponent = appComponent
     }
 }
-/// ^->AppComponent->InfoSettingComponent
-private func factory15af88ecfb834319b78cf47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return InfoSettingDependencyda5872b9bdd84990e780Provider(appComponent: parent1(component) as! AppComponent)
+/// ^->AppComponent->SignupFlowComponent->InfoSettingComponent
+private func factory8aa9f09efcb04fab79cfb7304b634b3e62c64b3c(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return InfoSettingDependency2da677e2d184e88b101dProvider(appComponent: parent2(component) as! AppComponent)
 }
-private class PasswordDependencyfd7427318599b626f4acProvider: PasswordDependency {
+private class PasswordDependencyd44d6e558dd84a1e43e2Provider: PasswordDependency {
 
 
     init() {
 
     }
 }
-/// ^->AppComponent->PasswordComponent
-private func factory9f8860811946a346ca2ae3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return PasswordDependencyfd7427318599b626f4acProvider()
+/// ^->AppComponent->SignupFlowComponent->PasswordComponent
+private func factory650cd93fc9ff352f3832e3b0c44298fc1c149afb(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return PasswordDependencyd44d6e558dd84a1e43e2Provider()
 }
-private class VerifyEmailDependencyfed6858d0bf434c6ec56Provider: VerifyEmailDependency {
+private class VerifyEmailDependencye36a386e7ebb94a6c8e7Provider: VerifyEmailDependency {
     var emailSendUseCase: any EmailSendUseCase {
         return appComponent.emailSendUseCase
     }
@@ -243,11 +254,11 @@ private class VerifyEmailDependencyfed6858d0bf434c6ec56Provider: VerifyEmailDepe
         self.appComponent = appComponent
     }
 }
-/// ^->AppComponent->VerifyEmailComponent
-private func factoryeabc669822dd3244ed10f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return VerifyEmailDependencyfed6858d0bf434c6ec56Provider(appComponent: parent1(component) as! AppComponent)
+/// ^->AppComponent->SignupFlowComponent->VerifyEmailComponent
+private func factoryb3dc21c07fd95ea1a1c5b7304b634b3e62c64b3c(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return VerifyEmailDependencye36a386e7ebb94a6c8e7Provider(appComponent: parent2(component) as! AppComponent)
 }
-private class SecretKeyDependencyb3e8d2bd4c35431acda1Provider: SecretKeyDependency {
+private class SecretKeyDependencyc2388b9b00e6709f5796Provider: SecretKeyDependency {
     var secretKeyUseCase: any SecretKeyUseCase {
         return appComponent.secretKeyUseCase
     }
@@ -256,9 +267,9 @@ private class SecretKeyDependencyb3e8d2bd4c35431acda1Provider: SecretKeyDependen
         self.appComponent = appComponent
     }
 }
-/// ^->AppComponent->SecretKeyComponent
-private func factorycc7ea4e12027ae637f9ff47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return SecretKeyDependencyb3e8d2bd4c35431acda1Provider(appComponent: parent1(component) as! AppComponent)
+/// ^->AppComponent->SignupFlowComponent->SecretKeyComponent
+private func factoryb44e87637da5f2ed93d5b7304b634b3e62c64b3c(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return SecretKeyDependencyc2388b9b00e6709f5796Provider(appComponent: parent2(component) as! AppComponent)
 }
 private class BugReportDependency37ddb4f6022e0960e049Provider: BugReportDependency {
     var uploadBugImagesUseCase: any UploadBugImagesUseCaseProtocol {
@@ -511,6 +522,12 @@ extension SchoolMealComponent: NeedleFoundation.Registration {
         keyPathToName[\SchoolMealDependency.fetchSchoolMealUseCase] = "fetchSchoolMealUseCase-any FetchSchoolMealUseCaseProtocol"
     }
 }
+extension SignupFlowComponent: NeedleFoundation.Registration {
+    public func registerItems() {
+
+
+    }
+}
 extension OnboardingComponent: NeedleFoundation.Registration {
     public func registerItems() {
 
@@ -621,12 +638,13 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent", factoryEmptyDependencyProvider)
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->HomeComponent->SchoolMealComponent", factory354b0e0b58c0b30e89fcb7304b634b3e62c64b3c)
+    registerProviderFactory("^->AppComponent->SignupFlowComponent", factory60f4d2cd682edce0f5c3e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->OnboardingComponent", factory88dc13cc29c5719e2b01e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->AllTabComponent->CheckSelfStudyTeacherComponent", factoryc77fbcbfa8694fb5c9a8b7304b634b3e62c64b3c)
-    registerProviderFactory("^->AppComponent->InfoSettingComponent", factory15af88ecfb834319b78cf47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->PasswordComponent", factory9f8860811946a346ca2ae3b0c44298fc1c149afb)
-    registerProviderFactory("^->AppComponent->VerifyEmailComponent", factoryeabc669822dd3244ed10f47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->SecretKeyComponent", factorycc7ea4e12027ae637f9ff47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->SignupFlowComponent->InfoSettingComponent", factory8aa9f09efcb04fab79cfb7304b634b3e62c64b3c)
+    registerProviderFactory("^->AppComponent->SignupFlowComponent->PasswordComponent", factory650cd93fc9ff352f3832e3b0c44298fc1c149afb)
+    registerProviderFactory("^->AppComponent->SignupFlowComponent->VerifyEmailComponent", factoryb3dc21c07fd95ea1a1c5b7304b634b3e62c64b3c)
+    registerProviderFactory("^->AppComponent->SignupFlowComponent->SecretKeyComponent", factoryb44e87637da5f2ed93d5b7304b634b3e62c64b3c)
     registerProviderFactory("^->AppComponent->AllTabComponent->BugReportComponent", factoryd6fef93a5810f389e51eb7304b634b3e62c64b3c)
     registerProviderFactory("^->AppComponent->AllTabComponent->ClassroomMoveListComponent", factory95045edcceaacbea5719b7304b634b3e62c64b3c)
     registerProviderFactory("^->AppComponent->AllTabComponent->OutListComponent", factoryd807be069474159d19eab7304b634b3e62c64b3c)

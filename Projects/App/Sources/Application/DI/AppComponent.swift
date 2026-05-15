@@ -3,7 +3,6 @@ import SwiftUI
 import Core
 import SigninFeature
 import SigninFeatureInterface
-import SignupFeature
 import SignupFeatureInterface
 import OnboardingFeature
 import OnboardingFeatureInterface
@@ -40,18 +39,13 @@ public extension AppComponent {
     var signinFactory: any SigninFactory {
         SigninComponent(parent: self)
     }
-    var secretKeyFactory: any SecretKeyFactory {
-        SecretKeyComponent(parent: self)
+    private var signupFlowComponent: SignupFlowComponent {
+        shared { SignupFlowComponent(parent: self) }
     }
-    var verifyEmailFactory: any VerifyEmailFactory {
-        VerifyEmailComponent(parent: self)
-    }
-    var passwordFactory: any PasswordFactory {
-        PasswordComponent(parent: self)
-    }
-    var infoSettingFactory: any InfoSettingFactory {
-        InfoSettingComponent(parent: self)
-    }
+    var secretKeyFactory: any SecretKeyFactory { signupFlowComponent }
+    var verifyEmailFactory: any VerifyEmailFactory { signupFlowComponent }
+    var passwordFactory: any PasswordFactory { signupFlowComponent }
+    var infoSettingFactory: any InfoSettingFactory { signupFlowComponent }
     var onboardingFactory: any OnboardingFactory {
         OnboardingComponent(parent: self)
     }
