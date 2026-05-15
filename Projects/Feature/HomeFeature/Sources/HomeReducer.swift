@@ -45,6 +45,7 @@ public struct HomeReducer: Reducer {
         self.getEarlyReturnUseCase = getEarlyReturnUseCase
     }
 
+    @ObservableState
     public struct State: Equatable {
         public var selfStudyDirector: [SelfStudyDirectorEntity] = []
         public var adminSelfStudyTeacher: String?

@@ -1,11 +1,11 @@
 import SwiftUI
-import AcceptFeature
+import BaseFeature
 import PiCK_iOS_DesignSystem
 import ComposableArchitecture
 
 public struct SelfStudyCheckView: View {
     @Environment(\.dismiss) var dismiss
-    let store: StoreOf<SelfStudyCheckReducer>
+    @Perception.Bindable var store: StoreOf<SelfStudyCheckReducer>
     @State private var isClassBottomSheetPresented = false
     @State private var isStatusBottomSheetPresented = false
     @State private var selectedStudentId: String?
@@ -17,7 +17,7 @@ public struct SelfStudyCheckView: View {
     }
 
     public var body: some View {
-        WithViewStore(store, observe: { $0 }) { viewStore in
+        WithPerceptionTracking {
             ZStack {
                 VStack(alignment: .leading, spacing: 0) {
                     HStack(spacing: 0) {
@@ -42,7 +42,7 @@ public struct SelfStudyCheckView: View {
                         Spacer()
 
                         ClassroomFilterButton(
-                            selectedClassroom: "\(viewStore.selectedGrade)학년 \(viewStore.selectedClass)반",
+                            selectedClassroom: "\(store.selectedGrade)학년 \(store.selectedClass)반",
                             onTap: { isClassBottomSheetPresented = true }
                         )
                         .padding(.trailing, 24)
@@ -59,17 +59,17 @@ public struct SelfStudyCheckView: View {
                     HStack(spacing: 8) {
                         ForEach(SelfStudyCheckReducer.Period.allCases, id: \.self) { period in
                             Button {
-                                viewStore.send(.selectPeriod(period), animation: .spring())
+                                store.send(.selectPeriod(period), animation: .spring())
                             } label: {
                                 Text(period.title)
                                     .pickText(
                                         type: .body1,
-                                        textColor: viewStore.selectedPeriod == period ? .Primary.primary500 : .Gray.gray600
+                                        textColor: store.selectedPeriod == period ? .Primary.primary500 : .Gray.gray600
                                     )
                                     .frame(maxWidth: .infinity)
                                     .frame(height: 32)
                                     .background(
-                                        viewStore.selectedPeriod == period
+                                        store.selectedPeriod == period
                                         ? Color.Primary.primary50
                                         : Color.clear
                                     )
@@ -81,7 +81,7 @@ public struct SelfStudyCheckView: View {
                     .padding(.top, 16)
 
                 ScrollView {
-                    if viewStore.studentItems.isEmpty {
+                    if store.studentItems.isEmpty {
                         VStack(spacing: 12) {
                             PiCKImage.blackLogo
                                 .resizable()
@@ -93,7 +93,7 @@ public struct SelfStudyCheckView: View {
                         .frame(maxWidth: .infinity, minHeight: UIScreen.main.bounds.height - 400)
                     } else {
                         VStack(spacing: 16) {
-                            ForEach(viewStore.studentItems) { item in
+                            ForEach(store.studentItems) { item in
                                 HStack(spacing: 0) {
                                     Text("\(item.grade)\(item.classNum)\(String(format: "%02d", item.num)) \(item.userName)")
                                         .pickText(type: .subTitle3, textColor: .Normal.black)
@@ -126,16 +126,16 @@ public struct SelfStudyCheckView: View {
 
                 PiCKButton(
                     buttonText: "상태 저장하기",
-                    isEnabled: viewStore.isChanged && !viewStore.isSaving,
+                    isEnabled: store.isChanged && !store.isSaving,
                     action: {
-                        viewStore.send(.saveAttendance)
+                        store.send(.saveAttendance)
                     }
                 )
                 .padding(.horizontal, 24)
                 .padding(.bottom, 24)
                 }
                 .onAppear {
-                    viewStore.send(.fetchStudents)
+                    store.send(.fetchStudents)
                 }
                 .navigationBarBackButtonHidden(true)
                 .toolbar(.hidden, for: .navigationBar)
@@ -152,7 +152,7 @@ public struct SelfStudyCheckView: View {
                         secondOptions: ["1", "2", "3", "4"],
                         onComplete: { grade, classNum in
                             if let gradeInt = Int(grade), let classInt = Int(classNum) {
-                                viewStore.send(.selectGradeAndClass(grade: gradeInt, classNum: classInt))
+                                store.send(.selectGradeAndClass(grade: gradeInt, classNum: classInt))
                             }
                         }
                     )
@@ -166,7 +166,7 @@ public struct SelfStudyCheckView: View {
                         options: ["출석", "이동", "귀가", "외출", "현체", "취업중"],
                         onComplete: { status in
                             if let studentId = selectedStudentId {
-                                viewStore.send(.updateStudentStatus(id: studentId, status: status))
+                                store.send(.updateStudentStatus(id: studentId, status: status))
                             }
                         }
                     )

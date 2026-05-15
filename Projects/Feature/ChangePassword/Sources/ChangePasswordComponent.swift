@@ -2,15 +2,8 @@ import NeedleFoundation
 import SwiftUI
 import AuthDomainInterface
 import ChangePasswordDomainInterface
+import ChangePasswordFeatureInterface
 import ComposableArchitecture
-
-public protocol ChangePasswordFactory {
-    func makeView() -> AnyView
-}
-
-public protocol NewPasswordFactory {
-    func makeView(accountId: String, code: String) -> AnyView
-}
 
 public protocol ChangePasswordDependency: NeedleFoundation.Dependency {
     var emailSendUseCase: any EmailSendUseCase { get }
@@ -38,7 +31,7 @@ public protocol NewPasswordDependency: NeedleFoundation.Dependency {
 }
 
 public final class NewPasswordComponent: Component<NewPasswordDependency>, NewPasswordFactory {
-    public func makeView(accountId: String, code: String) -> AnyView {
+    public func makeView(accountId: String, code: String, onSuccess: @escaping () -> Void) -> AnyView {
         AnyView(NewPasswordView(
             store: .init(
                 initialState: NewPasswordReducer.State(),
@@ -49,7 +42,8 @@ public final class NewPasswordComponent: Component<NewPasswordDependency>, NewPa
                         code: code
                     )
                 }
-            )
+            ),
+            onSuccess: onSuccess
         ))
     }
 }

@@ -15,6 +15,7 @@ public struct AllTabReducer: Reducer {
         self.authRepository = authRepository
     }
 
+    @ObservableState
     public struct State: Equatable {
         public var myName: MyNameEntity?
         public var shouldLogout = false

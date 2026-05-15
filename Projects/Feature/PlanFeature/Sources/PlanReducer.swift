@@ -15,6 +15,7 @@ public struct PlanReducer: Reducer {
         self.fetchAcademicScheduleUseCase = fetchAcademicScheduleUseCase
     }
 
+    @ObservableState
     public struct State: Equatable {
         public var monthAcademicSchedule: AcademicScheduleEntity = []
         public var academicSchedule: AcademicScheduleEntity = []

@@ -7,10 +7,14 @@ let project = Project.makeFeatureModule(
     interfaceSources: ["Interface/AllTabFeatureInterface.swift"],
     implementationDependencies: [
         .Projects.allTabDomainInterface,
-        .Features.homeFeature,
-        .Features.checkSelfStudyTeacherFeature,
-        .Features.bugReportFeature,
-        .Features.selfStudyCheckFeature,
+        .Projects.authDomainInterface,
+        .Features.bugReportFeatureInterface,
+        .Features.checkSelfStudyTeacherFeatureInterface,
+        .Features.changePasswordFeatureInterface,
+        .Features.classroomMoveListFeatureInterface,
+        .Features.outListFeatureInterface,
+        .Features.outingHistoryFeatureInterface,
+        .Features.selfStudyCheckFeatureInterface,
         .Shared.utility,
         .Shared.thirdPartyLib,
     ]
