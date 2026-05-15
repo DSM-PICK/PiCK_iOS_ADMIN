@@ -75,7 +75,10 @@ public struct SchoolMealView: View {
                 }
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
-                        PiCKNavigationBar()
+                        PiCKImage.pickLogo
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 20)
                             .padding(.leading, 8)
                     }
                 }

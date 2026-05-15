@@ -54,7 +54,10 @@ public struct PlanView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
-                        PiCKNavigationBar()
+                        PiCKImage.pickLogo
+                            .resizable()
+                            .scaledToFit()
+                            .frame(height: 20)
                             .padding(.leading, 8)
                     }
                 }
