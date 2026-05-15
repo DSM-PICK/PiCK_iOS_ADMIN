@@ -1,5 +1,5 @@
 import SwiftUI
-import AcceptFeature
+import BaseFeature
 import PiCK_iOS_DesignSystem
 import ComposableArchitecture
 
@@ -70,8 +70,8 @@ public struct SelfStudyCheckView: View {
                                     .frame(height: 32)
                                     .background(
                                         store.selectedPeriod == period
-                                            ? Color.Primary.primary50
-                                            : Color.clear
+                                        ? Color.Primary.primary50
+                                        : Color.clear
                                     )
                                     .cornerRadius(8)
                             }
@@ -80,59 +80,59 @@ public struct SelfStudyCheckView: View {
                     .padding(.horizontal, 24)
                     .padding(.top, 16)
 
-                    ScrollView {
-                        if store.studentItems.isEmpty {
-                            VStack(spacing: 12) {
-                                PiCKImage.blackLogo
-                                    .resizable()
-                                    .frame(width: 88, height: 91)
+                ScrollView {
+                    if store.studentItems.isEmpty {
+                        VStack(spacing: 12) {
+                            PiCKImage.blackLogo
+                                .resizable()
+                                .frame(width: 88, height: 91)
 
-                                Text("출결 정보가 없습니다")
-                                    .pickText(type: .subTitle2, textColor: .Gray.gray500)
-                            }
-                            .frame(maxWidth: .infinity, minHeight: UIScreen.main.bounds.height - 400)
-                        } else {
-                            VStack(spacing: 16) {
-                                ForEach(store.studentItems) { item in
-                                    HStack(spacing: 0) {
-                                        Text(studentDisplayText(item))
-                                            .pickText(type: .subTitle3, textColor: .Normal.black)
+                            Text("출결 정보가 없습니다")
+                                .pickText(type: .subTitle2, textColor: .Gray.gray500)
+                        }
+                        .frame(maxWidth: .infinity, minHeight: UIScreen.main.bounds.height - 400)
+                    } else {
+                        VStack(spacing: 16) {
+                            ForEach(store.studentItems) { item in
+                                HStack(spacing: 0) {
+                                    Text("\(item.grade)\(item.classNum)\(String(format: "%02d", item.num)) \(item.userName)")
+                                        .pickText(type: .subTitle3, textColor: .Normal.black)
 
-                                        Spacer()
+                                    Spacer()
 
-                                        Button {
-                                            selectedStudentId = item.id
-                                            isStatusBottomSheetPresented = true
-                                        } label: {
-                                            Text(item.status)
-                                                .pickText(type: .body1, textColor: .Normal.white)
-                                                .frame(width: 55, height: 29)
-                                                .background(statusColor(item.status))
-                                                .cornerRadius(8)
-                                        }
+                                    Button {
+                                        selectedStudentId = item.id
+                                        isStatusBottomSheetPresented = true
+                                    } label: {
+                                        Text(item.status)
+                                            .pickText(type: .body1, textColor: .Normal.white)
+                                            .frame(width: 55, height: 29)
+                                            .background(statusColor(item.status))
+                                            .cornerRadius(8)
                                     }
-                                    .frame(maxWidth: .infinity)
-                                    .frame(height: 53)
-                                    .padding(.horizontal, 24)
-                                    .background(Color.Gray.gray50)
-                                    .cornerRadius(12)
                                 }
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 53)
+                                .padding(.horizontal, 24)
+                                .background(Color.Gray.gray50)
+                                .cornerRadius(12)
                             }
-                            .padding(.horizontal, 24)
                         }
+                        .padding(.horizontal, 24)
                     }
-                    .padding(.top, 20)
-                    .padding(.bottom, 60)
+                }
+                .padding(.top, 20)
+                .padding(.bottom, 60)
 
-                    PiCKButton(
-                        buttonText: "상태 저장하기",
-                        isEnabled: store.isChanged && !store.isSaving,
-                        action: {
-                            store.send(.saveAttendance)
-                        }
-                    )
-                    .padding(.horizontal, 24)
-                    .padding(.bottom, 24)
+                PiCKButton(
+                    buttonText: "상태 저장하기",
+                    isEnabled: store.isChanged && !store.isSaving,
+                    action: {
+                        store.send(.saveAttendance)
+                    }
+                )
+                .padding(.horizontal, 24)
+                .padding(.bottom, 24)
                 }
                 .onAppear {
                     store.send(.fetchStudents)
@@ -179,11 +179,6 @@ public struct SelfStudyCheckView: View {
 }
 
 extension SelfStudyCheckView {
-    private func studentDisplayText(_ item: SelfStudyCheckReducer.StudentItem) -> String {
-        let studentNumber = "\(item.grade)\(item.classNum)\(String(format: "%02d", item.num))"
-        return "\(studentNumber) \(item.userName)"
-    }
-
     private func statusColor(_ status: String) -> Color {
         switch status {
         case "출석":

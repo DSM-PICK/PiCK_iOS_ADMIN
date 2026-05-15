@@ -3,33 +3,13 @@ import SwiftUI
 import Core
 import SigninFeature
 import SigninFeatureInterface
-import SignupFeature
 import SignupFeatureInterface
 import OnboardingFeature
 import OnboardingFeatureInterface
-import HomeFeature
 import HomeFeatureInterface
-import AllTabFeature
 import AllTabFeatureInterface
-import SchoolMealFeature
-import SchoolMealFeatureInterface
-import AcceptFeature
-import AcceptFeatureInterface
-import CheckSelfStudyTeacherFeature
-import CheckSelfStudyTeacherFeatureInterface
-import BugReportFeature
-import BugReportFeatureInterface
-import ChangePasswordFeature
-import OutListFeature
-import OutListFeatureInterface
-import SelfStudyCheckFeature
-import SelfStudyCheckFeatureInterface
-import ClassroomMoveListFeature
-import ClassroomMoveListFeatureInterface
-import OutingHistoryFeature
-import OutingHistoryFeatureInterface
 
-public final class AppComponent: BootstrapComponent, HomeDependency, AllTabDependency, PlanDependency, SchoolMealDependency, AcceptDependency, CheckSelfStudyTeacherDependency, BugReportDependency, ChangePasswordDependency, NewPasswordDependency, ClassroomMoveListDependency, OutingHistoryDependency, SelfStudyCheckDependency {
+public final class AppComponent: BootstrapComponent, HomeDependency, AllTabDependency {
 
     private let _keychain: any Keychain
 
@@ -59,18 +39,13 @@ public extension AppComponent {
     var signinFactory: any SigninFactory {
         SigninComponent(parent: self)
     }
-    var secretKeyFactory: any SecretKeyFactory {
-        SecretKeyComponent(parent: self)
+    private var signupFlowComponent: SignupFlowComponent {
+        shared { SignupFlowComponent(parent: self) }
     }
-    var verifyEmailFactory: any VerifyEmailFactory {
-        VerifyEmailComponent(parent: self)
-    }
-    var passwordFactory: any PasswordFactory {
-        PasswordComponent(parent: self)
-    }
-    var infoSettingFactory: any InfoSettingFactory {
-        InfoSettingComponent(parent: self)
-    }
+    var secretKeyFactory: any SecretKeyFactory { signupFlowComponent }
+    var verifyEmailFactory: any VerifyEmailFactory { signupFlowComponent }
+    var passwordFactory: any PasswordFactory { signupFlowComponent }
+    var infoSettingFactory: any InfoSettingFactory { signupFlowComponent }
     var onboardingFactory: any OnboardingFactory {
         OnboardingComponent(parent: self)
     }
@@ -79,32 +54,5 @@ public extension AppComponent {
     }
     var allTabFactory: any AllTabFactory {
         AllTabComponent(parent: self)
-    }
-    var acceptFactory: any AcceptFactory {
-        AcceptComponent(parent: self)
-    }
-    var checkSelfStudyTeacherFactory: any CheckSelfStudyTeacherFactory {
-        CheckSelfStudyTeacherComponent(parent: self)
-    }
-    var bugReportFactory: any BugReportFactory {
-        BugReportComponent(parent: self)
-    }
-    var changePasswordFactory: any ChangePasswordFactory {
-        ChangePasswordComponent(parent: self)
-    }
-    var newPasswordFactory: any NewPasswordFactory {
-        NewPasswordComponent(parent: self)
-    }
-    var outListFactory: any OutListFactory {
-        OutListComponent(parent: self)
-    }
-    var selfStudyCheckFactory: any SelfStudyCheckFactory {
-        SelfStudyCheckComponent(parent: self)
-    }
-    var classroomMoveListFactory: any ClassroomMoveListFactory {
-        ClassroomMoveListComponent(parent: self)
-    }
-    var outingHistoryFactory: any OutingHistoryFactory {
-        OutingHistoryComponent(parent: self)
     }
 }

@@ -9,12 +9,11 @@ let project = Project.makeFeatureModule(
     implementationDependencies: [
         .Projects.homeDomainInterface,
         .Projects.acceptDomainInterface,
-        .Projects.allTabDomainInterface,
         .Projects.classroomMoveListDomainInterface,
         .Projects.outListDomainInterface,
-        .Features.planFeatureInterface,
         .Features.acceptFeatureInterface,
         .Features.allTabFeatureInterface,
+        .Features.planFeatureInterface,
         .Features.schoolMealFeatureInterface,
         .Shared.utility,
         .Shared.thirdPartyLib

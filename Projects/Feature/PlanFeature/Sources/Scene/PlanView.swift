@@ -4,7 +4,8 @@ import PiCK_iOS_DesignSystem
 import Utility
 
 public struct PlanView: View {
-    let store: StoreOf<PlanReducer>
+    @Perception.Bindable var store: StoreOf<PlanReducer>
+    private let calendar = Calendar.current
 
     public init(store: StoreOf<PlanReducer>) {
         self.store = store

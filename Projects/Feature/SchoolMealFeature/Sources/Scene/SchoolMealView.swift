@@ -12,7 +12,7 @@ public struct SchoolMealView: View {
     public init(store: StoreOf<SchoolMealReducer>) {
         self.store = store
     }
-    
+
     public var body: some View {
         WithPerceptionTracking {
             NavigationStack {
@@ -55,10 +55,13 @@ public struct SchoolMealView: View {
                             }
                         }
                     )
-                    
+
                     PiCKCalendarView(
                         calendarType: .schoolMeal,
-                        selectedDate: $store.selectedDate,
+                        selectedDate: Binding(
+                            get: { store.selectedDate },
+                            set: { store.send(.dateChanged($0)) }
+                        ),
                         currentPage: $currentPage,
                         isWeekMode: $isWeekMode,
                         dateSelected: { _ in

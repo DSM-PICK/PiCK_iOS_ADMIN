@@ -50,9 +50,4 @@ public extension AppComponent {
         }
     }
     
-    var planFactory: any PlanFactory {
-        shared {
-            PlanComponent(parent: self)
-        }
-    }
 }

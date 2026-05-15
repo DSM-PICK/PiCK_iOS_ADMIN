@@ -69,12 +69,6 @@ test:
 	fi
 	@echo "✅ $(SCHEME) done"
 
-# 디렉토리명 → 스킴명 매핑 (BugReport→BugReportFeature 등)
-_scheme_for_dir = $(shell echo "$(1)" | sed \
-	-e 's/^BugReport$$/BugReportFeature/' \
-	-e 's/^SelfStudyCheck$$/SelfStudyCheckFeature/' \
-	-e 's/^ChangePassword$$/ChangePasswordFeature/')
-
 test-changed:
 	@echo "🔍 Detecting changed Feature schemes since develop..."
 	@CHANGED=$$(git diff develop...HEAD --name-only | grep 'Projects/Feature/' | \

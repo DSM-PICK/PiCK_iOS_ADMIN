@@ -1,8 +1,4 @@
 import Foundation
-import NeedleFoundation
-import SwiftUI
-import OutingHistoryFeature
-import OutingHistoryFeatureInterface
 import OutingHistoryDomain
 import OutingHistoryDomainInterface
 import BaseDomain

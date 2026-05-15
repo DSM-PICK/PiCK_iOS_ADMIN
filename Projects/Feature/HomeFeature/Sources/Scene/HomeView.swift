@@ -2,11 +2,10 @@ import SwiftUI
 import PiCK_iOS_DesignSystem
 import ComposableArchitecture
 import HomeDomainInterface
-import AcceptDomainInterface
 import Utility
 
 public struct HomeView: View {
-    let store: StoreOf<HomeReducer>
+    @Perception.Bindable var store: StoreOf<HomeReducer>
 
     public init(store: StoreOf<HomeReducer>) {
         self.store = store
