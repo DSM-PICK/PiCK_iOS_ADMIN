@@ -1,13 +1,11 @@
 import SwiftUI
 import PiCK_iOS_DesignSystem
 import ComposableArchitecture
-import BaseFeature
 import CheckSelfStudyTeacherDomainInterface
 
 public struct CheckSelfStudyTeacherView: View {
     @Environment(\.dismiss) var dismiss
-    let store: StoreOf<CheckSelfStudyTeacherReducer>
-    @State private var selectedDate = Date()
+    @Perception.Bindable var store: StoreOf<CheckSelfStudyTeacherReducer>
     @State private var currentPage = Date()
     @State private var isWeekMode = true
 
@@ -16,18 +14,18 @@ public struct CheckSelfStudyTeacherView: View {
     }
 
     public var body: some View {
-        WithViewStore(store, observe: { $0 }) { viewStore in
+        WithPerceptionTracking {
             ZStack {
                 Color.Background.background
                     .ignoresSafeArea()
 
                 VStack(alignment: .leading, spacing: 0) {
-                    titleView(selectedDate: viewStore.selectedDate)
+                    titleView(selectedDate: store.selectedDate)
                         .padding(.top, 32)
                         .padding(.leading, 24)
 
-                    if !viewStore.teachers.isEmpty {
-                        teacherListView(teachers: viewStore.teachers)
+                    if !store.teachers.isEmpty {
+                        teacherListView(teachers: store.teachers)
                             .padding(.leading, 24)
                             .padding(.top, 32)
                     }
@@ -36,7 +34,7 @@ public struct CheckSelfStudyTeacherView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-                if viewStore.teachers.isEmpty {
+                if store.teachers.isEmpty {
                     VStack {
                         Spacer()
                         Text("등록된 자습 감독 선생님이 없습니다.")
@@ -51,13 +49,10 @@ public struct CheckSelfStudyTeacherView: View {
 
                     PiCKCalendarView(
                         calendarType: .selfStudy,
-                        selectedDate: $selectedDate,
+                        selectedDate: $store.selectedDate,
                         currentPage: $currentPage,
                         isWeekMode: $isWeekMode,
-                        dateSelected: { date in
-                            selectedDate = date
-                            viewStore.send(.dateSelected(date))
-                        }
+                        dateSelected: { _ in }
                     )
                 }
                 .ignoresSafeArea(edges: .bottom)
@@ -81,7 +76,8 @@ public struct CheckSelfStudyTeacherView: View {
                 }
             }
             .onAppear {
-                viewStore.send(.onAppear)
+                currentPage = store.selectedDate
+                store.send(.onAppear)
             }
         }
     }

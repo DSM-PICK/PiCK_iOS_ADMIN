@@ -3,6 +3,7 @@ import CheckSelfStudyTeacherDomainInterface
 import Foundation
 import Combine
 
+@Reducer
 public struct CheckSelfStudyTeacherReducer: Reducer {
     private let fetchSelfStudyTeacherUseCase: any FetchSelfStudyTeacherUseCaseProtocol
 
@@ -12,6 +13,7 @@ public struct CheckSelfStudyTeacherReducer: Reducer {
         self.fetchSelfStudyTeacherUseCase = fetchSelfStudyTeacherUseCase
     }
 
+    @ObservableState
     public struct State: Equatable {
         public var isLoading: Bool = false
         public var teachers: [SelfStudyTeacherEntity] = []
@@ -20,33 +22,27 @@ public struct CheckSelfStudyTeacherReducer: Reducer {
         public init() {}
     }
 
-    public enum Action {
+    public enum Action: BindableAction {
+        case binding(BindingAction<State>)
         case onAppear
-        case dateSelected(Date)
-        case fetchSelfStudyTeacher(String)
-        case selfStudyTeacherResponse(Result<[SelfStudyTeacherEntity], Error>)
+        case selfStudyTeacherResponse(TaskResult<[SelfStudyTeacherEntity]>)
     }
 
-    public var body: some Reducer<State, Action> {
+    private enum CancelID {
+        case fetchSelfStudyTeacher
+    }
+
+    public var body: some ReducerOf<Self> {
+        BindingReducer()
+
         Reduce { state, action in
             switch action {
-            case .onAppear:
-                let dateString = formatDate(state.selectedDate)
-                return .send(.fetchSelfStudyTeacher(dateString))
-
-            case let .dateSelected(date):
-                state.selectedDate = date
-                let dateString = formatDate(date)
-                return .send(.fetchSelfStudyTeacher(dateString))
-
-            case let .fetchSelfStudyTeacher(date):
+            case .binding(\.selectedDate), .onAppear:
                 state.isLoading = true
-                return .publisher {
-                    fetchSelfStudyTeacherUseCase.execute(date: date)
-                        .mapError { $0 as Error }
-                        .map { Action.selfStudyTeacherResponse(.success($0)) }
-                        .catch { Just(Action.selfStudyTeacherResponse(.failure($0))) }
-                }
+                return fetchSelfStudyTeacher(date: state.selectedDate)
+
+            case .binding:
+                return .none
 
             case let .selfStudyTeacherResponse(.success(teachers)):
                 state.teachers = teachers
@@ -59,8 +55,21 @@ public struct CheckSelfStudyTeacherReducer: Reducer {
             }
         }
     }
+}
 
-    private func formatDate(_ date: Date) -> String {
+private extension CheckSelfStudyTeacherReducer {
+    func fetchSelfStudyTeacher(date: Date) -> Effect<Action> {
+        let dateString = formatDate(date)
+
+        return .publisher {
+            fetchSelfStudyTeacherUseCase.execute(date: dateString)
+                .map { Action.selfStudyTeacherResponse(.success($0)) }
+                .catch { Just(Action.selfStudyTeacherResponse(.failure($0))) }
+        }
+        .cancellable(id: CancelID.fetchSelfStudyTeacher, cancelInFlight: true)
+    }
+
+    func formatDate(_ date: Date) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         return formatter.string(from: date)

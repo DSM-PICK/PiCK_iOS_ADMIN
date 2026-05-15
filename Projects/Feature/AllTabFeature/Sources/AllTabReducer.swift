@@ -3,6 +3,7 @@ import AllTabDomainInterface
 import AuthDomainInterface
 import Combine
 
+@Reducer
 public struct AllTabReducer: Reducer {
     private let getMyNameUseCase: any GetMyNameUseCaseProtocol
     private let authRepository: any AuthRepository
@@ -33,7 +34,7 @@ public struct AllTabReducer: Reducer {
         case resignResponse(TaskResult<Void>)
     }
 
-    public var body: some Reducer<State, Action> {
+    public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .fetchMyName:
@@ -47,9 +48,9 @@ public struct AllTabReducer: Reducer {
                 state.myName = myName
                 return .none
 
-            case let .myNameResponse(.failure(error)):
+            case .myNameResponse(.failure):
                 return .none
-                
+
             case .tokenRefreshNeeded:
                 authRepository.logout()
                 state.shouldLogout = true

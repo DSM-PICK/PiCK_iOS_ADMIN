@@ -12,7 +12,7 @@ public protocol BugReportDependency: NeedleFoundation.Dependency {
 public final class BugReportComponent: Component<BugReportDependency>, BugReportFactory {
     public func makeView() -> AnyView {
         AnyView(
-            BugReportFeature(
+            BugReportView(
                 store: .init(
                     initialState: BugReportReducer.State(),
                     reducer: {

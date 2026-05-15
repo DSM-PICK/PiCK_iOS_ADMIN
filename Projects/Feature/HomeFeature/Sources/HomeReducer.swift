@@ -6,6 +6,7 @@ import OutListDomainInterface
 import ClassroomMoveListDomainInterface
 import Combine
 
+@Reducer
 public struct HomeReducer: Reducer {
     private let getSelfStudyDirectorUseCase: any GetSelfStudyDirectorUseCaseProtocol
     private let getAdminSelfStudyInfoUseCase: any GetAdminSelfStudyInfoUseCaseProtocol
@@ -62,11 +63,11 @@ public struct HomeReducer: Reducer {
         var outList: [OutListEntity] = []
         var acceptList: [ApplicationEntity] = []
         var earlyReturnAcceptList: [EarlyReturnAcceptEntity] = []
-        
+
         // View에서 사용할 합쳐진 리스트
         public var outingStudentList: [OutingStudentViewModel] = []
         public var outingAcceptList: [OutingAcceptViewModel] = []
-        
+
         public var classroomMoveList: [ClassroomMoveListEntity] = []
 
         public init() {}
@@ -99,7 +100,7 @@ public struct HomeReducer: Reducer {
         case dismissAlert
     }
 
-    public var body: some Reducer<State, Action> {
+    public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case let .fetchSelfStudyDirector(date):
@@ -259,7 +260,7 @@ public struct HomeReducer: Reducer {
             case let .classroomMoveResponse(.success(students)):
                 state.classroomMoveList = students
                 return .none
-            case .classroomMoveResponse(.failure(_)):
+            case .classroomMoveResponse(.failure):
                 return .none
 
             case let .outListResponse(.success(students)):
@@ -326,7 +327,7 @@ extension HomeReducer {
                 .catch { Just(Action.earlyReturnListResponse(.failure($0))) }
         }
     }
-    
+
     private func loadEarlyReturnAcceptList(grade: Int, classNum: Int) -> Effect<Action> {
         .publisher {
             getEarlyReturnByGradeUseCase.execute(grade: grade, classNum: classNum)
@@ -342,9 +343,9 @@ extension HomeReducer {
     ) -> [OutingStudentViewModel] {
         let outViewModels = outList.map { OutingStudentViewModel(from: $0) }
         let earlyReturnViewModels = earlyReturnList.map { OutingStudentViewModel(from: $0) }
-        
+
         let combined = outViewModels + earlyReturnViewModels
-        
+
         return combined.sorted {
             ($0.grade, $0.classNum, $0.num) < ($1.grade, $1.classNum, $1.num)
         }
@@ -355,9 +356,9 @@ extension HomeReducer {
     ) -> [OutingAcceptViewModel] {
         let outViewModels = acceptList.map { OutingAcceptViewModel(from: $0) }
         let earlyReturnViewModels = earlyReturnAcceptList.map { OutingAcceptViewModel(from: $0) }
-        
+
         let combined = outViewModels + earlyReturnViewModels
-        
+
         return combined.sorted {
             ($0.grade, $0.classNum, $0.num) < ($1.grade, $1.classNum, $1.num)
         }

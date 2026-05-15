@@ -9,6 +9,6 @@ let project = Project.makeFeatureModule(
         .Projects.selfStudyCheckDomainInterface,
         .Features.baseFeature,
         .SPM.NeedleFoundation,
-        .SPM.ComposableArchitecture,
+        .SPM.ComposableArchitecture
     ]
 )

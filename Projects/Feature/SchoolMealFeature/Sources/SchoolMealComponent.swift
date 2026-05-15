@@ -20,6 +20,6 @@ public struct SchoolMealComponentImpl: SchoolMealFactory {
             }
         )
         
-        return AnyView(SchoolMealFeature(store: store))
+        return AnyView(SchoolMealView(store: store))
     }
 }

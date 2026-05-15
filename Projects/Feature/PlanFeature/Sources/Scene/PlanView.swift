@@ -1,6 +1,5 @@
 import SwiftUI
 import ComposableArchitecture
-import PlanDomainInterface
 import PiCK_iOS_DesignSystem
 import Utility
 
@@ -76,9 +75,9 @@ struct MonthHeaderView: View {
 
     var body: some View {
         HStack(spacing: 0) {
-            Button(action: {
+            Button {
                 changeMonth(by: -1)
-            }) {
+            } label: {
                 Image(systemName: "chevron.left")
                     .foregroundColor(.black)
                     .frame(width: 24, height: 24)
@@ -94,9 +93,9 @@ struct MonthHeaderView: View {
             Spacer()
                 .frame(width: 12)
 
-            Button(action: {
+            Button {
                 changeMonth(by: 1)
-            }) {
+            } label: {
                 Image(systemName: "chevron.right")
                     .foregroundColor(.black)
                     .frame(width: 24, height: 24)
@@ -107,7 +106,7 @@ struct MonthHeaderView: View {
     private var headerText: String {
         return currentMonth.toKoreanYearMonthString()
     }
-    
+
     private func changeMonth(by value: Int) {
         if let newMonth = calendar.date(byAdding: .month, value: value, to: currentMonth) {
             onMonthChange(newMonth)

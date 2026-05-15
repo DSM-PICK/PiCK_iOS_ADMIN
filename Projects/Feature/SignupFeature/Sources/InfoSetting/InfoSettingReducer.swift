@@ -2,6 +2,7 @@ import Foundation
 import ComposableArchitecture
 import AuthDomainInterface
 
+@Reducer
 public struct InfoSettingReducer: Reducer {
     private let signupUseCase: any SignupUseCase
 
@@ -9,6 +10,7 @@ public struct InfoSettingReducer: Reducer {
         self.signupUseCase = signupUseCase
     }
 
+    @ObservableState
     public struct State: Equatable {
         public var secretKey = ""
         public var accountId = ""
@@ -18,9 +20,14 @@ public struct InfoSettingReducer: Reducer {
         public var selectedGrade = 0
         public var selectedClass = 0
         public var isSignupSuccessful = false
-        public var errorMessage: String? = nil
+        public var errorMessage: String?
 
-        public init(secretKey: String = "", accountId: String = "", code: String = "", password: String = "") {
+        public init(
+            secretKey: String = "",
+            accountId: String = "",
+            code: String = "",
+            password: String = ""
+        ) {
             self.secretKey = secretKey
             self.accountId = accountId
             self.code = code
@@ -28,26 +35,19 @@ public struct InfoSettingReducer: Reducer {
         }
     }
 
-    public enum Action {
-        case nameChanged(String)
-        case selectedGradeChanged(Int?)
-        case selectedClassChanged(Int?)
+    public enum Action: BindableAction {
+        case binding(BindingAction<State>)
         case finishButtonTapped
         case signupResponse(TaskResult<Void>)
         case clearError
     }
 
-    public var body: some Reducer<State, Action> {
+    public var body: some ReducerOf<Self> {
+        BindingReducer()
+
         Reduce { state, action in
             switch action {
-            case let .nameChanged(name):
-                state.name = name
-                return .none
-            case let .selectedGradeChanged(grade):
-                state.selectedGrade = grade ?? 0
-                return .none
-            case let .selectedClassChanged(klass):
-                state.selectedClass = klass ?? 0
+            case .binding:
                 return .none
             case .finishButtonTapped:
                 return performSignup(with: state)

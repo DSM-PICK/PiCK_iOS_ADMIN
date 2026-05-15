@@ -3,6 +3,7 @@ import Foundation
 import AuthDomainInterface
 import Core
 
+@Reducer
 public struct SigninReducer: Reducer {
     private let signinUseCase: any SigninUseCase
 
@@ -10,32 +11,29 @@ public struct SigninReducer: Reducer {
         self.signinUseCase = signinUseCase
     }
 
+    @ObservableState
     public struct State: Equatable {
         public var email = ""
         public var password = ""
         public var isSigninSuccessful = false
         public var isLoading = false
-        public var errorMessage: String? = nil
+        public var errorMessage: String?
         public init() {}
     }
 
-    public enum Action {
-        case emailChanged(String)
-        case passwordChanged(String)
+    public enum Action: BindableAction {
+        case binding(BindingAction<State>)
         case signinButtonTapped
         case signinResponse(TaskResult<Void>)
         case clearError
     }
 
-    public var body: some Reducer<State, Action> {
+    public var body: some ReducerOf<Self> {
+        BindingReducer()
+
         Reduce { state, action in
             switch action {
-            case let .emailChanged(email):
-                state.email = email
-                return .none
-                
-            case let .passwordChanged(password):
-                state.password = password
+            case .binding:
                 return .none
 
             case .signinButtonTapped:

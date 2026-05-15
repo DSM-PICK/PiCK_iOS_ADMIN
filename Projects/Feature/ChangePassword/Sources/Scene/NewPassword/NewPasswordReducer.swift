@@ -1,7 +1,9 @@
 import Foundation
+import Combine
 import ComposableArchitecture
 import ChangePasswordDomainInterface
 
+@Reducer
 public struct NewPasswordReducer: Reducer {
     private let passwordChangeUseCase: any PasswordChangeUseCase
     private let accountId: String
@@ -17,6 +19,7 @@ public struct NewPasswordReducer: Reducer {
         self.code = code
     }
 
+    @ObservableState
     public struct State: Equatable {
         public var newPassword = ""
         public var newPasswordCheck = ""
@@ -25,23 +28,18 @@ public struct NewPasswordReducer: Reducer {
         public init() {}
     }
 
-    public enum Action {
-        case newPasswordChanged(String)
-        case newPasswordCheckChanged(String)
+    public enum Action: BindableAction {
+        case binding(BindingAction<State>)
         case changeButtonTapped
         case passwordChangeResponse(TaskResult<Void>)
     }
 
     public var body: some Reducer<State, Action> {
+        BindingReducer()
+
         Reduce { state, action in
             switch action {
-            case let .newPasswordChanged(password):
-                state.newPassword = password
-                state.errorMessage = nil
-                return .none
-
-            case let .newPasswordCheckChanged(passwordCheck):
-                state.newPasswordCheck = passwordCheck
+            case .binding:
                 state.errorMessage = nil
                 return .none
 
@@ -63,7 +61,7 @@ public struct NewPasswordReducer: Reducer {
                     return .none
                 }
 
-                return performPasswordChange(with: state)
+                return performPasswordChange(password: state.newPassword)
 
             case .passwordChangeResponse(.success):
                 state.isChangeSuccessful = true
@@ -77,19 +75,17 @@ public struct NewPasswordReducer: Reducer {
         }
     }
 
-    private func performPasswordChange(with state: State) -> Effect<Action> {
-        .run { send in
-            await send(.passwordChangeResponse(
-                await TaskResult {
-                    for try await _ in passwordChangeUseCase.execute(
-                        req: .init(
-                            password: state.newPassword,
-                            adminId: accountId,
-                            code: code
-                        )
-                    ).values {}
-                }
-            ))
+    private func performPasswordChange(password: String) -> Effect<Action> {
+        .publisher {
+            passwordChangeUseCase.execute(
+                req: .init(
+                    password: password,
+                    adminId: accountId,
+                    code: code
+                )
+            )
+            .map { Action.passwordChangeResponse(.success(())) }
+            .catch { Just(Action.passwordChangeResponse(.failure($0))) }
         }
     }
 }

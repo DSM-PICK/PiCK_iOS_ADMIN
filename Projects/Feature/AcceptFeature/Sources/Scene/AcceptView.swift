@@ -1,8 +1,8 @@
-import SwiftUI
-import PiCK_iOS_DesignSystem
-import ComposableArchitecture
 import AcceptDomainInterface
 import BaseFeature
+import ComposableArchitecture
+import PiCK_iOS_DesignSystem
+import SwiftUI
 
 public enum ApplicationType: String, Equatable, Hashable {
     case outgoing = "외출 수락"
@@ -13,179 +13,42 @@ public enum ApplicationType: String, Equatable, Hashable {
 }
 
 public struct AcceptView: View {
-    @Environment(\.dismiss) var dismiss
     @State private var isApplyBottomSheetPresented = false
-    @State private var selectedOption: ApplicationType = .outgoing
-    @State private var selectedFloor: Int = 3
     @State private var showApprovePopup = false
     @State private var showRejectPopup = false
-    let store: StoreOf<AcceptReducer>
+    @Perception.Bindable var store: StoreOf<AcceptReducer>
 
     public init(store: StoreOf<AcceptReducer>) {
         self.store = store
     }
 
     public var body: some View {
-        WithViewStore(store, observe: { $0 }) { viewStore in
+        WithPerceptionTracking {
             ZStack {
                 VStack(alignment: .leading, spacing: 0) {
-                HStack(spacing: 0) {
-                    HStack(spacing: 16) {
-                        AcceptFilterButton(
-                            selectedOption: selectedOption,
-                            onTap: { isApplyBottomSheetPresented = true }
-                        )
+                    header
 
-                        Text(Date().koreanMonthDayString)
-                            .pickText(type: .body2, textColor: .Gray.gray700)
-                    }
-                    .padding(.leading, 24)
-
-                    Spacer()
-
-                    AcceptActionButtons(
-                        isEnabled: !viewStore.selectedItemIds.isEmpty,
-                        onAccept: {
-                            showApprovePopup = true
-                        },
-                        onReject: {
-                            showRejectPopup = true
-                        }
-                    )
-                    .padding(.trailing, 24)
-                }
-                .padding(.top, 24)
-
-                Rectangle()
-                    .fill(Color.Gray.gray200)
-                    .frame(height: 0.5)
-                    .cornerRadius(0.5)
-                    .padding(.top, 20)
-                    .padding(.horizontal, 24)
-
-                if selectedOption == .classroomMove {
-                    ScrollViewReader { proxy in
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 8) {
-                                ForEach([1, 2, 3, 4, 5], id: \.self) { floor in
-                                    Button {
-                                        selectedFloor = floor
-                                        viewStore.send(.fetchApplicationsByFloor(floor: floor))
-                                    } label: {
-                                        Text("\(floor)층")
-                                            .pickText(
-                                                type: .body1,
-                                                textColor: selectedFloor == floor ? .Primary.primary500 : .Gray.gray600
-                                            )
-                                            .frame(width: 114, height: 32)
-                                            .background(
-                                                selectedFloor == floor
-                                                ? Color.Primary.primary50
-                                                : Color.clear
-                                            )
-                                            .cornerRadius(8)
-                                    }
-                                    .id(floor)
-                                }
-                            }
-                            .padding(.horizontal, 24)
-                        }
-                        .onAppear {
-                            proxy.scrollTo(3, anchor: .center)
-                        }
-                        .onChange(of: selectedOption) { newValue in
-                            if newValue == .classroomMove {
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                                    proxy.scrollTo(3, anchor: .center)
-                                }
-                            }
-                        }
-                        .padding(.top, 16)
-                    }
-                }
-
-                HStack(spacing: 0) {
-                    Text("\(selectedOption == .outgoing ? "외출 수락" : selectedOption == .classroomMove ? "교실 이동" : "조기 귀가") 신청한 학생")
-                        .pickText(type: .body2, textColor: .Gray.gray600)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                .padding(.top, selectedOption == .classroomMove ? 16 : 10)
-                .padding(.leading, 24)
-                .padding(.trailing, 24)
-
-                ScrollView {
-                    if viewStore.studentItems.isEmpty {
-                        VStack(spacing: 12) {
-                            PiCKImage.blackLogo
-                                .resizable()
-                                .frame(width: 88, height: 91)
-
-                            Text(selectedOption == .outgoing ? "아직 외출을 신청한 학생이 없어요" : selectedOption == .classroomMove ? "아직 교실 이동을 신청한 학생이 없어요" : "아직 조기 귀가를 신청한 학생이 없어요")
-                                .pickText(type: .subTitle2, textColor: .Gray.gray500)
-                        }
-                        .frame(maxWidth: .infinity, minHeight: UIScreen.main.bounds.height - 400)
-                    } else {
-                        VStack(spacing: 16) {
-                            ForEach(viewStore.studentItems) { item in
-                                switch item {
-                                case .application(let application):
-                                    PiCKAcceptStudentCell(
-                                        studentNumber: "\(application.grade)\(application.classNum)\(String(format: "%02d", application.num))",
-                                        studentName: application.userName,
-                                        startTime: application.start,
-                                        endTime: application.end,
-                                        activityType: "외출 수락",
-                                        reason: application.reason,
-                                        isSelected: viewStore.selectedItemIds.contains(application.id),
-                                        onTap: {
-                                            viewStore.send(.toggleSelection(id: application.id))
-                                        }
-                                    )
-                                case .classroomMove(let move):
-                                    PiCKClassroomMoveCell(
-                                        studentNumber: "\(move.grade)\(move.classNum)\(String(format: "%02d", move.num))",
-                                        studentName: move.userName,
-                                        startPeriod: move.start,
-                                        endPeriod: move.end,
-                                        currentClassroom: "\(move.grade)학년 \(move.classNum)반",
-                                        moveToClassroom: move.classroomName,
-                                        isSelected: viewStore.selectedItemIds.contains(move.id),
-                                        onTap: {
-                                            viewStore.send(.toggleSelection(id: move.id))
-                                        }
-                                    )
-                                case .earlyReturn(let earlyReturn):
-                                    PiCKAcceptStudentCell(
-                                        studentNumber: "\(earlyReturn.grade)\(earlyReturn.classNum)\(String(format: "%02d", earlyReturn.num))",
-                                        studentName: earlyReturn.userName,
-                                        startTime: earlyReturn.start,
-                                        endTime: "",
-                                        activityType: "조기 귀가",
-                                        reason: earlyReturn.reason,
-                                        isSelected: viewStore.selectedItemIds.contains(earlyReturn.id),
-                                        onTap: {
-                                            viewStore.send(.toggleSelection(id: earlyReturn.id))
-                                        }
-                                    )
-                                }
-                            }
-                        }
+                    Divider()
+                        .overlay(Color.Gray.gray200)
                         .padding(.top, 20)
                         .padding(.horizontal, 24)
+
+                    if store.currentType == .classroomMove {
+                        classroomMoveFloorFilter
                     }
-                }
+
+                    Text("\(store.currentType.title) 신청한 학생")
+                        .pickText(type: .body2, textColor: .Gray.gray600)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.top, store.currentType == .classroomMove ? 16 : 10)
+                        .padding(.horizontal, 24)
+
+                    content
 
                     Spacer()
                 }
                 .onAppear {
-                    switch selectedOption {
-                    case .outgoing:
-                        viewStore.send(.fetchApplications(type: .outgoing, grade: 5, classNum: 5))
-                    case .classroomMove:
-                        viewStore.send(.fetchApplicationsByFloor(floor: selectedFloor))
-                    case .earlyReturn:
-                        viewStore.send(.fetchApplications(type: .earlyReturn, grade: 5, classNum: 5))
-                    }
+                    sendInitialFetch()
                 }
                 .navigationBarBackButtonHidden(true)
                 .toolbar {
@@ -198,69 +61,44 @@ public struct AcceptView: View {
                     PiCK_iOS_DesignSystem.SinglePickerBottomSheet(
                         isPresented: $isApplyBottomSheetPresented,
                         title: "수락 항목을 선택해주세요",
-                        options: ["외출 수락", "교실 이동", "조기 귀가"],
-                        onComplete: { option in
-                            if option == "외출 수락" {
-                                selectedOption = .outgoing
-                                viewStore.send(.fetchApplications(type: .outgoing, grade: 5, classNum: 5))
-                            } else if option == "교실 이동" {
-                                selectedOption = .classroomMove
-                                viewStore.send(.fetchApplicationsByFloor(floor: selectedFloor))
-                            } else if option == "조기 귀가" {
-                                selectedOption = .earlyReturn
-                                viewStore.send(.fetchApplications(type: .earlyReturn, grade: 5, classNum: 5))
-                            }
-                        }
+                        options: [
+                            ApplicationType.outgoing.rawValue,
+                            ApplicationType.classroomMove.rawValue,
+                            ApplicationType.earlyReturn.rawValue
+                        ],
+                        onComplete: handleSelection
                     )
                     .presentationDetents([.height(400)])
                     .presentationDragIndicator(.hidden)
                 }
 
                 if showApprovePopup {
-                    Color.black.opacity(0.4)
-                        .ignoresSafeArea()
-                        .onTapGesture {
-                            showApprovePopup = false
-                        }
-
-                    PiCKConfirmPopUp(
+                    confirmationPopup(
                         title: "선택한 신청을 수락하시겠습니까?",
                         explain: "수락하면 학생에게 알림이 전송됩니다.",
-                        type: .accept,
-                        isPresented: $showApprovePopup
-                    ) { action in
-                        if action == .accept {
-                            viewStore.send(.approveSelectedApplications)
-                        }
-                    }
+                        isReject: false,
+                        isPresented: $showApprovePopup,
+                        action: .approveSelectedApplications
+                    )
                 }
 
                 if showRejectPopup {
-                    Color.black.opacity(0.4)
-                        .ignoresSafeArea()
-                        .onTapGesture {
-                            showRejectPopup = false
-                        }
-
-                    PiCKConfirmPopUp(
+                    confirmationPopup(
                         title: "선택한 신청을 거절하시겠습니까?",
                         explain: "거절하면 학생에게 알림이 전송됩니다.",
-                        type: .reject,
-                        isPresented: $showRejectPopup
-                    ) { action in
-                        if action == .accept {
-                            viewStore.send(.rejectSelectedApplications)
-                        }
-                    }
+                        isReject: true,
+                        isPresented: $showRejectPopup,
+                        action: .rejectSelectedApplications
+                    )
                 }
 
-                if viewStore.showAlert {
+                if store.showAlert {
                     PiCKDisappearAlert(
-                        successType: viewStore.alertSuccessType,
-                        message: viewStore.alertMessage
+                        successType: store.alertSuccessType,
+                        message: store.alertMessage
                     )
                     .onDisappear {
-                        viewStore.send(.dismissAlert)
+                        store.send(.dismissAlert)
                     }
                 }
             }
@@ -268,3 +106,239 @@ public struct AcceptView: View {
     }
 }
 
+private extension AcceptView {
+    var header: some View {
+        HStack(spacing: 0) {
+            HStack(spacing: 16) {
+                AcceptFilterButton(
+                    selectedOption: store.currentType,
+                    onTap: { isApplyBottomSheetPresented = true }
+                )
+
+                Text(Date().koreanMonthDayString)
+                    .pickText(type: .body2, textColor: .Gray.gray700)
+            }
+            .padding(.leading, 24)
+
+            Spacer()
+
+            AcceptActionButtons(
+                isEnabled: !store.selectedItemIds.isEmpty,
+                onAccept: {
+                    showApprovePopup = true
+                },
+                onReject: {
+                    showRejectPopup = true
+                }
+            )
+            .padding(.trailing, 24)
+        }
+        .padding(.top, 24)
+    }
+
+    var classroomMoveFloorFilter: some View {
+        ScrollViewReader { proxy in
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach([1, 2, 3, 4, 5], id: \.self) { floor in
+                        Button {
+                            store.send(.fetchApplicationsByFloor(floor: floor))
+                        } label: {
+                            Text("\(floor)층")
+                                .pickText(
+                                    type: .body1,
+                                    textColor: store.currentFloor == floor ? .Primary.primary500 : .Gray.gray600
+                                )
+                                .frame(width: 114, height: 32)
+                                .background(
+                                    store.currentFloor == floor
+                                        ? Color.Primary.primary50
+                                        : Color.clear
+                                )
+                                .cornerRadius(8)
+                        }
+                        .id(floor)
+                    }
+                }
+                .padding(.horizontal, 24)
+            }
+            .onAppear {
+                proxy.scrollTo(store.currentFloor, anchor: .center)
+            }
+            .onChange(of: store.currentType) { newValue in
+                guard newValue == .classroomMove else { return }
+                let currentFloor = store.currentFloor
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                    proxy.scrollTo(currentFloor, anchor: .center)
+                }
+            }
+            .padding(.top, 16)
+        }
+    }
+
+    var content: some View {
+        ScrollView {
+            if store.studentItems.isEmpty {
+                VStack(spacing: 12) {
+                    PiCKImage.blackLogo
+                        .resizable()
+                        .frame(width: 88, height: 91)
+
+                    Text(emptyStateMessage)
+                        .pickText(type: .subTitle2, textColor: .Gray.gray500)
+                }
+                .frame(maxWidth: .infinity, minHeight: UIScreen.main.bounds.height - 400)
+            } else {
+                VStack(spacing: 16) {
+                    ForEach(store.studentItems) { item in
+                        studentCell(for: item)
+                    }
+                }
+                .padding(.top, 20)
+                .padding(.horizontal, 24)
+            }
+        }
+    }
+
+    @ViewBuilder
+    func studentCell(for item: AcceptReducer.StudentItem) -> some View {
+        switch item {
+        case let .application(application):
+            applicationCell(application)
+        case let .classroomMove(move):
+            classroomMoveCell(move)
+        case let .earlyReturn(earlyReturn):
+            earlyReturnCell(earlyReturn)
+        }
+    }
+
+    func applicationCell(_ application: ApplicationEntity) -> some View {
+        PiCKAcceptStudentCell(
+            studentNumber: formattedStudentNumber(
+                grade: application.grade,
+                classNum: application.classNum,
+                num: application.num
+            ),
+            studentName: application.userName,
+            startTime: application.start,
+            endTime: application.end,
+            activityType: ApplicationType.outgoing.rawValue,
+            reason: application.reason,
+            isSelected: store.selectedItemIds.contains(application.id),
+            onTap: {
+                store.send(.toggleSelection(id: application.id))
+            }
+        )
+    }
+
+    func classroomMoveCell(_ move: ClassroomMoveEntity) -> some View {
+        PiCKClassroomMoveCell(
+            studentNumber: formattedStudentNumber(
+                grade: move.grade,
+                classNum: move.classNum,
+                num: move.num
+            ),
+            studentName: move.userName,
+            startPeriod: move.start,
+            endPeriod: move.end,
+            currentClassroom: "\(move.grade)학년 \(move.classNum)반",
+            moveToClassroom: move.classroomName,
+            isSelected: store.selectedItemIds.contains(move.id),
+            onTap: {
+                store.send(.toggleSelection(id: move.id))
+            }
+        )
+    }
+
+    func earlyReturnCell(_ earlyReturn: EarlyReturnAcceptEntity) -> some View {
+        PiCKAcceptStudentCell(
+            studentNumber: formattedStudentNumber(
+                grade: earlyReturn.grade,
+                classNum: earlyReturn.classNum,
+                num: earlyReturn.num
+            ),
+            studentName: earlyReturn.userName,
+            startTime: earlyReturn.start,
+            endTime: "",
+            activityType: ApplicationType.earlyReturn.rawValue,
+            reason: earlyReturn.reason,
+            isSelected: store.selectedItemIds.contains(earlyReturn.id),
+            onTap: {
+                store.send(.toggleSelection(id: earlyReturn.id))
+            }
+        )
+    }
+
+    var emptyStateMessage: String {
+        switch store.currentType {
+        case .outgoing:
+            "아직 외출을 신청한 학생이 없어요"
+        case .classroomMove:
+            "아직 교실 이동을 신청한 학생이 없어요"
+        case .earlyReturn:
+            "아직 조기 귀가를 신청한 학생이 없어요"
+        }
+    }
+
+    func sendInitialFetch() {
+        switch store.currentType {
+        case .outgoing, .earlyReturn:
+            store.send(
+                .fetchApplications(
+                    type: store.currentType,
+                    grade: store.currentGrade,
+                    classNum: store.currentClassNum
+                )
+            )
+        case .classroomMove:
+            store.send(.fetchApplicationsByFloor(floor: store.currentFloor))
+        }
+    }
+
+    func handleSelection(_ option: String) {
+        guard let selectedType = ApplicationType(rawValue: option) else { return }
+
+        switch selectedType {
+        case .classroomMove:
+            store.send(.fetchApplicationsByFloor(floor: store.currentFloor))
+        case .outgoing, .earlyReturn:
+            store.send(
+                .fetchApplications(
+                    type: selectedType,
+                    grade: store.currentGrade,
+                    classNum: store.currentClassNum
+                )
+            )
+        }
+    }
+
+    func formattedStudentNumber(grade: Int, classNum: Int, num: Int) -> String {
+        "\(grade)\(classNum)\(String(format: "%02d", num))"
+    }
+
+    @ViewBuilder
+    func confirmationPopup(
+        title: String,
+        explain: String,
+        isReject: Bool,
+        isPresented: Binding<Bool>,
+        action: AcceptReducer.Action
+    ) -> some View {
+        Color.black.opacity(0.4)
+            .ignoresSafeArea()
+            .onTapGesture {
+                isPresented.wrappedValue = false
+            }
+
+        PiCKConfirmPopUp(
+            title: title,
+            explain: explain,
+            type: isReject ? .reject : .accept,
+            isPresented: isPresented
+        ) { popupAction in
+            if popupAction == .accept {
+                store.send(action)
+            }
+        }
+    }
+}

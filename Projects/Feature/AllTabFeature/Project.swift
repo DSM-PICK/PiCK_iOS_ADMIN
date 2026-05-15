@@ -5,6 +5,7 @@ import DependencyPlugin
 let project = Project.makeFeatureModule(
     name: "AllTabFeature",
     interfaceSources: ["Interface/AllTabFeatureInterface.swift"],
+    includeUnitTests: true,
     implementationDependencies: [
         .Projects.allTabDomainInterface,
         .Projects.authDomainInterface,
@@ -16,6 +17,6 @@ let project = Project.makeFeatureModule(
         .Features.outingHistoryFeatureInterface,
         .Features.selfStudyCheckFeatureInterface,
         .Shared.utility,
-        .Shared.thirdPartyLib,
+        .Shared.thirdPartyLib
     ]
 )

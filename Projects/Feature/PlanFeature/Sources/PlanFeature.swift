@@ -2,10 +2,10 @@ import SwiftUI
 import ComposableArchitecture
 
 public struct PlanFeature: View {
-    let store: Store<PlanReducer.State, PlanReducer.Action>
+    let store: StoreOf<PlanReducer>
 
     public init(
-        store: Store<PlanReducer.State, PlanReducer.Action>
+        store: StoreOf<PlanReducer>
     ) {
         self.store = store
     }

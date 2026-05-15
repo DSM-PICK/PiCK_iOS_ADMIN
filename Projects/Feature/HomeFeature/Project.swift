@@ -5,6 +5,7 @@ import DependencyPlugin
 let project = Project.makeFeatureModule(
     name: "HomeFeature",
     interfaceSources: ["Interface/HomeFeatureInterface.swift"],
+    includeUnitTests: true,
     implementationDependencies: [
         .Projects.homeDomainInterface,
         .Projects.acceptDomainInterface,
@@ -15,6 +16,12 @@ let project = Project.makeFeatureModule(
         .Features.planFeatureInterface,
         .Features.schoolMealFeatureInterface,
         .Shared.utility,
-        .Shared.thirdPartyLib,
+        .Shared.thirdPartyLib
+    ],
+    testDependencies: [
+        .Projects.homeDomainInterface,
+        .Projects.acceptDomainInterface,
+        .Projects.classroomMoveListDomainInterface,
+        .Projects.outListDomainInterface
     ]
 )

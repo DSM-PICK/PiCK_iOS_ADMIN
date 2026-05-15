@@ -52,3 +52,24 @@ Avoid tool-vendor-specific orchestration policy in this file unless the reposito
 - Keep infra refactors and app logic changes separated when possible.
 - Do not add new dependencies unless the user explicitly requests it.
 - Prefer small, reviewable diffs and preserve existing feature-local ownership.
+
+## TDD + Tidy First workflow
+- Follow the Red → Green → Refactor cycle for all behavioral changes.
+- Structural changes (wrapper removal, rename, extract) are Tidy First — commit separately before behavioral changes.
+- See CLAUDE.md for the full methodology and commit convention.
+
+## Commit convention
+```
+<type>[<phase>]: <description>
+```
+- `feat[red]` — failing test added
+- `feat[green]` — minimum code to pass
+- `feat[refact]` — refactor while green
+- `chore[refact]` — structural / tidy-first cleanup
+- `fix[red]` / `fix[green]` — bug fix cycle
+- `add[green]` — new file/resource with no failing test phase needed
+
+## Modern TCA pattern (target state for this repo)
+- Views: `@Perception.Bindable var store: StoreOf<Reducer>` + `WithPerceptionTracking { }`
+- Components: NeedleFoundation `Component<Dependency>` instantiates View directly — no `*Feature.swift` passthrough wrapper.
+- No `ViewStore`, `WithViewStore`, `IfLetStore`, `@ObservedObject` anywhere.

@@ -1,9 +1,10 @@
-import ComposableArchitecture
-import PiCK_iOS_DesignSystem
-import Foundation
 import Combine
+import ComposableArchitecture
+import Foundation
 import OutListDomainInterface
+import PiCK_iOS_DesignSystem
 
+@Reducer
 public struct OutListReducer: Reducer {
     private let getOutListUseCase: any GetOutListUseCase
     private let returnStudentsUseCase: any ReturnStudentsUseCase
@@ -19,6 +20,7 @@ public struct OutListReducer: Reducer {
         self.getEarlyReturnUseCase = getEarlyReturnUseCase
     }
 
+    @ObservableState
     public struct State: Equatable {
         public var studentItems: [OutListEntity] = []
         public var earlyReturnItems: [EarlyReturnEntity] = []
@@ -26,7 +28,7 @@ public struct OutListReducer: Reducer {
         public var currentType: OutListType = .outing
         public var isLoading: Bool = false
         public var selectedStudents: Set<String> = []
-        public var errorMessage: String? = nil
+        public var errorMessage: String?
         public var hasAppeared = false
         public var showAlert = false
         public var alertSuccessType: SuccessType = .success
@@ -48,19 +50,21 @@ public struct OutListReducer: Reducer {
         case dismissAlert
     }
 
-    public var body: some Reducer<State, Action> {
+    public var body: some ReducerOf<Self> {
         Reduce { state, action in
             switch action {
             case .onAppear:
-                if state.hasAppeared { return .none }
+                guard !state.hasAppeared else { return .none }
                 state.hasAppeared = true
                 state.isLoading = true
+                state.errorMessage = nil
                 return loadOutList(floor: state.currentFloor)
 
             case let .floorChanged(floor):
                 state.currentFloor = floor
                 state.isLoading = true
                 state.selectedStudents.removeAll()
+                state.errorMessage = nil
                 if state.currentType == .earlyReturn {
                     return loadEarlyReturn(floor: floor)
                 } else {
@@ -71,15 +75,17 @@ public struct OutListReducer: Reducer {
                 state.currentType = type
                 state.isLoading = true
                 state.selectedStudents.removeAll()
-                if state.currentType == .outing {
+                state.errorMessage = nil
+                if type == .outing {
                     return loadOutList(floor: state.currentFloor)
                 } else {
                     return loadEarlyReturn(floor: state.currentFloor)
                 }
 
-            case .outListResponse(.success(let students)):
+            case let .outListResponse(.success(students)):
                 state.isLoading = false
                 state.studentItems = students
+                state.errorMessage = nil
                 return .none
 
             case let .outListResponse(.failure(error)):
@@ -90,6 +96,7 @@ public struct OutListReducer: Reducer {
             case let .earlyReturnResponse(.success(students)):
                 state.isLoading = false
                 state.earlyReturnItems = students
+                state.errorMessage = nil
                 return .none
 
             case let .earlyReturnResponse(.failure(error)):
@@ -106,6 +113,7 @@ public struct OutListReducer: Reducer {
                 return .none
 
             case .returnStudents:
+                guard !state.selectedStudents.isEmpty else { return .none }
                 let ids = Array(state.selectedStudents)
                 return .publisher {
                     returnStudentsUseCase.execute(ids: ids)
@@ -116,6 +124,7 @@ public struct OutListReducer: Reducer {
 
             case .returnStudentsResponse(.success):
                 state.selectedStudents.removeAll()
+                state.errorMessage = nil
                 state.showAlert = true
                 state.alertSuccessType = .success
                 state.alertMessage = "복귀가 완료되었습니다!"

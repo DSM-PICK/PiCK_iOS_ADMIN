@@ -71,7 +71,6 @@ public struct SchoolMealView: View {
                     .shadow(color: Color.black.opacity(0.25), radius: 20, x: 0, y: 0)
                     .background(Color.Background.background)
                     .frame(maxHeight: .infinity, alignment: .top)
-                    .allowsHitTesting(true)
                 }
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
