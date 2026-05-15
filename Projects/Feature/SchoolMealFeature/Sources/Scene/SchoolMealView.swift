@@ -58,10 +58,7 @@ public struct SchoolMealView: View {
 
                     PiCKCalendarView(
                         calendarType: .schoolMeal,
-                        selectedDate: Binding(
-                            get: { store.selectedDate },
-                            set: { store.send(.dateChanged($0)) }
-                        ),
+                        selectedDate: $store.selectedDate,
                         currentPage: $currentPage,
                         isWeekMode: $isWeekMode,
                         dateSelected: { _ in
