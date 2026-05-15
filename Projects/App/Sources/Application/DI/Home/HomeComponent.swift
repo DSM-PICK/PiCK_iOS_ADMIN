@@ -1,15 +1,14 @@
 import NeedleFoundation
 import SwiftUI
-import HomeFeatureInterface
 import ComposableArchitecture
+import HomeFeature
+import HomeFeatureInterface
 import HomeDomainInterface
 import AcceptDomainInterface
-import AllTabFeatureInterface
-import PlanFeatureInterface
-import SchoolMealFeatureInterface
-import AcceptFeatureInterface
 import ClassroomMoveListDomainInterface
 import OutListDomainInterface
+import AllTabFeatureInterface
+import AcceptFeature
 
 public protocol HomeDependency: NeedleFoundation.Dependency {
     var getSelfStudyDirectorUseCase: any GetSelfStudyDirectorUseCaseProtocol { get }
@@ -27,9 +26,6 @@ public protocol HomeDependency: NeedleFoundation.Dependency {
     var getEarlyReturnUseCase: any GetEarlyReturnUseCase { get }
 
     var allTabFactory: any AllTabFactory { get }
-    var planFactory: any PlanFactory { get }
-    var schoolMealFactory: any SchoolMealFactory { get }
-    var acceptFactory: any AcceptFactory { get }
 }
 
 public final class HomeComponent: Component<HomeDependency>, HomeFactory {
@@ -54,9 +50,9 @@ public final class HomeComponent: Component<HomeDependency>, HomeFactory {
                     }
                 ),
                 allTabFactory: self.dependency.allTabFactory,
-                planFactory: self.dependency.planFactory,
-                schoolMealFactory: self.dependency.schoolMealFactory,
-                acceptFactory: self.dependency.acceptFactory
+                planFactory: PlanComponent(parent: self),
+                schoolMealFactory: SchoolMealComponent(parent: self),
+                acceptFactory: AcceptComponent(parent: self)
             )
         )
     }

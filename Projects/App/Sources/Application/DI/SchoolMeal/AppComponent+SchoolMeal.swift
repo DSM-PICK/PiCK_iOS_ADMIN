@@ -40,7 +40,4 @@ public extension AppComponent {
         }
     }
 
-    var schoolMealFactory: any SchoolMealFactory {
-        SchoolMealComponent(parent: self)
-    }
 }

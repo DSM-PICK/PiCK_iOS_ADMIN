@@ -7,29 +7,10 @@ import SignupFeature
 import SignupFeatureInterface
 import OnboardingFeature
 import OnboardingFeatureInterface
-import HomeFeature
 import HomeFeatureInterface
-import AllTabFeature
 import AllTabFeatureInterface
-import SchoolMealFeature
-import SchoolMealFeatureInterface
-import AcceptFeature
-import AcceptFeatureInterface
-import CheckSelfStudyTeacherFeature
-import CheckSelfStudyTeacherFeatureInterface
-import BugReportFeature
-import BugReportFeatureInterface
-import ChangePasswordFeature
-import OutListFeature
-import OutListFeatureInterface
-import SelfStudyCheckFeature
-import SelfStudyCheckFeatureInterface
-import ClassroomMoveListFeature
-import ClassroomMoveListFeatureInterface
-import OutingHistoryFeature
-import OutingHistoryFeatureInterface
 
-public final class AppComponent: BootstrapComponent, HomeDependency, AllTabDependency, PlanDependency, SchoolMealDependency, AcceptDependency {
+public final class AppComponent: BootstrapComponent, HomeDependency, AllTabDependency {
 
     private let _keychain: any Keychain
 
@@ -79,8 +60,5 @@ public extension AppComponent {
     }
     var allTabFactory: any AllTabFactory {
         AllTabComponent(parent: self)
-    }
-    var acceptFactory: any AcceptFactory {
-        AcceptComponent(parent: self)
     }
 }

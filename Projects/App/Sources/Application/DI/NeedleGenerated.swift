@@ -82,7 +82,50 @@ private func parent2(_ component: NeedleFoundation.Scope) -> NeedleFoundation.Sc
 
 #if !NEEDLE_DYNAMIC
 
-private class PlanDependency0acb045bed3f80b42d39Provider: PlanDependency {
+private class HomeDependency443c4e1871277bd8432aProvider: HomeDependency {
+    var getSelfStudyDirectorUseCase: any GetSelfStudyDirectorUseCaseProtocol {
+        return appComponent.getSelfStudyDirectorUseCase
+    }
+    var getAdminSelfStudyInfoUseCase: any GetAdminSelfStudyInfoUseCaseProtocol {
+        return appComponent.getAdminSelfStudyInfoUseCase
+    }
+    var getSelfStudyAndClassroomUseCase: any GetSelfStudyAndClassroomUseCase {
+        return appComponent.getSelfStudyAndClassroomUseCase
+    }
+    var getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol {
+        return appComponent.getAllApplicationsUseCase
+    }
+    var updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol {
+        return appComponent.updateApplicationStatusUseCase
+    }
+    var getEarlyReturnByGradeUseCase: any GetEarlyReturnByGradeUseCaseProtocol {
+        return appComponent.getEarlyReturnByGradeUseCase
+    }
+    var updateEarlyReturnStatusUseCase: any UpdateEarlyReturnStatusUseCaseProtocol {
+        return appComponent.updateEarlyReturnStatusUseCase
+    }
+    var getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase {
+        return appComponent.getClassroomMoveByFloorUseCase
+    }
+    var getOutListUseCase: any GetOutListUseCase {
+        return appComponent.getOutListUseCase
+    }
+    var getEarlyReturnUseCase: any GetEarlyReturnUseCase {
+        return appComponent.getEarlyReturnUseCase
+    }
+    var allTabFactory: any AllTabFactory {
+        return appComponent.allTabFactory
+    }
+    private let appComponent: AppComponent
+    init(appComponent: AppComponent) {
+        self.appComponent = appComponent
+    }
+}
+/// ^->AppComponent->HomeComponent
+private func factory67229cdf0f755562b2b1f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return HomeDependency443c4e1871277bd8432aProvider(appComponent: parent1(component) as! AppComponent)
+}
+private class PlanDependency598ef68688890897ecfaProvider: PlanDependency {
     var fetchAcademicScheduleUseCase: any FetchAcademicScheduleUseCaseProtocol {
         return appComponent.fetchAcademicScheduleUseCase
     }
@@ -94,9 +137,9 @@ private class PlanDependency0acb045bed3f80b42d39Provider: PlanDependency {
         self.appComponent = appComponent
     }
 }
-/// ^->AppComponent->PlanComponent
-private func factory84293b45082cab95c524f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return PlanDependency0acb045bed3f80b42d39Provider(appComponent: parent1(component) as! AppComponent)
+/// ^->AppComponent->HomeComponent->PlanComponent
+private func factory3816f306e57691f6cbc3b7304b634b3e62c64b3c(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return PlanDependency598ef68688890897ecfaProvider(appComponent: parent2(component) as! AppComponent)
 }
 private class AllTabDependencyacdab75b3325eec9d649Provider: AllTabDependency {
     var getMyNameUseCase: any GetMyNameUseCaseProtocol {
@@ -127,7 +170,7 @@ private class RootDependency3944cc797a4a88956fb5Provider: RootDependency {
 private func factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return RootDependency3944cc797a4a88956fb5Provider(appComponent: parent1(component) as! AppComponent)
 }
-private class SchoolMealDependencya734efcf6966c6d8c144Provider: SchoolMealDependency {
+private class SchoolMealDependency80df08e400a5b36d3bc3Provider: SchoolMealDependency {
     var fetchSchoolMealUseCase: any FetchSchoolMealUseCaseProtocol {
         return appComponent.fetchSchoolMealUseCase
     }
@@ -136,9 +179,9 @@ private class SchoolMealDependencya734efcf6966c6d8c144Provider: SchoolMealDepend
         self.appComponent = appComponent
     }
 }
-/// ^->AppComponent->SchoolMealComponent
-private func factorya99b85c0783e43e9302df47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return SchoolMealDependencya734efcf6966c6d8c144Provider(appComponent: parent1(component) as! AppComponent)
+/// ^->AppComponent->HomeComponent->SchoolMealComponent
+private func factory354b0e0b58c0b30e89fcb7304b634b3e62c64b3c(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return SchoolMealDependency80df08e400a5b36d3bc3Provider(appComponent: parent2(component) as! AppComponent)
 }
 private class OnboardingDependencyf77d0055983a00cf8835Provider: OnboardingDependency {
 
@@ -281,58 +324,6 @@ private class SigninDependencyde06a9d0b22764487733Provider: SigninDependency {
 private func factory2882a056d84a613debccf47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
     return SigninDependencyde06a9d0b22764487733Provider(appComponent: parent1(component) as! AppComponent)
 }
-private class HomeDependency443c4e1871277bd8432aProvider: HomeDependency {
-    var getSelfStudyDirectorUseCase: any GetSelfStudyDirectorUseCaseProtocol {
-        return appComponent.getSelfStudyDirectorUseCase
-    }
-    var getAdminSelfStudyInfoUseCase: any GetAdminSelfStudyInfoUseCaseProtocol {
-        return appComponent.getAdminSelfStudyInfoUseCase
-    }
-    var getSelfStudyAndClassroomUseCase: any GetSelfStudyAndClassroomUseCase {
-        return appComponent.getSelfStudyAndClassroomUseCase
-    }
-    var getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol {
-        return appComponent.getAllApplicationsUseCase
-    }
-    var updateApplicationStatusUseCase: any UpdateApplicationStatusUseCaseProtocol {
-        return appComponent.updateApplicationStatusUseCase
-    }
-    var getEarlyReturnByGradeUseCase: any GetEarlyReturnByGradeUseCaseProtocol {
-        return appComponent.getEarlyReturnByGradeUseCase
-    }
-    var updateEarlyReturnStatusUseCase: any UpdateEarlyReturnStatusUseCaseProtocol {
-        return appComponent.updateEarlyReturnStatusUseCase
-    }
-    var getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase {
-        return appComponent.getClassroomMoveByFloorUseCase
-    }
-    var getOutListUseCase: any GetOutListUseCase {
-        return appComponent.getOutListUseCase
-    }
-    var getEarlyReturnUseCase: any GetEarlyReturnUseCase {
-        return appComponent.getEarlyReturnUseCase
-    }
-    var allTabFactory: any AllTabFactory {
-        return appComponent.allTabFactory
-    }
-    var planFactory: any PlanFactory {
-        return appComponent.planFactory
-    }
-    var schoolMealFactory: any SchoolMealFactory {
-        return appComponent.schoolMealFactory
-    }
-    var acceptFactory: any AcceptFactory {
-        return appComponent.acceptFactory
-    }
-    private let appComponent: AppComponent
-    init(appComponent: AppComponent) {
-        self.appComponent = appComponent
-    }
-}
-/// ^->AppComponent->HomeComponent
-private func factory67229cdf0f755562b2b1f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return HomeDependency443c4e1871277bd8432aProvider(appComponent: parent1(component) as! AppComponent)
-}
 private class ChangePasswordDependency5eba0402bbcbcd261d42Provider: ChangePasswordDependency {
     var emailSendUseCase: any EmailSendUseCase {
         return appComponent.emailSendUseCase
@@ -391,7 +382,7 @@ private class SelfStudyCheckDependency4136fbacab02a58f4193Provider: SelfStudyChe
 private func factory16eaf6e424be7fbccc0ab7304b634b3e62c64b3c(_ component: NeedleFoundation.Scope) -> AnyObject {
     return SelfStudyCheckDependency4136fbacab02a58f4193Provider(appComponent: parent2(component) as! AppComponent)
 }
-private class AcceptDependency380d0282470c8b91ca89Provider: AcceptDependency {
+private class AcceptDependency65aa8b2a4111fcb6c343Provider: AcceptDependency {
     var getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol {
         return appComponent.getAllApplicationsUseCase
     }
@@ -418,12 +409,28 @@ private class AcceptDependency380d0282470c8b91ca89Provider: AcceptDependency {
         self.appComponent = appComponent
     }
 }
-/// ^->AppComponent->AcceptComponent
-private func factorye0727acbbfbe9e00fe23f47b58f8f304c97af4d5(_ component: NeedleFoundation.Scope) -> AnyObject {
-    return AcceptDependency380d0282470c8b91ca89Provider(appComponent: parent1(component) as! AppComponent)
+/// ^->AppComponent->HomeComponent->AcceptComponent
+private func factory6619f4a5130bf1e2dcacb7304b634b3e62c64b3c(_ component: NeedleFoundation.Scope) -> AnyObject {
+    return AcceptDependency65aa8b2a4111fcb6c343Provider(appComponent: parent2(component) as! AppComponent)
 }
 
 #else
+extension HomeComponent: NeedleFoundation.Registration {
+    public func registerItems() {
+        keyPathToName[\HomeDependency.getSelfStudyDirectorUseCase] = "getSelfStudyDirectorUseCase-any GetSelfStudyDirectorUseCaseProtocol"
+        keyPathToName[\HomeDependency.getAdminSelfStudyInfoUseCase] = "getAdminSelfStudyInfoUseCase-any GetAdminSelfStudyInfoUseCaseProtocol"
+        keyPathToName[\HomeDependency.getSelfStudyAndClassroomUseCase] = "getSelfStudyAndClassroomUseCase-any GetSelfStudyAndClassroomUseCase"
+        keyPathToName[\HomeDependency.getAllApplicationsUseCase] = "getAllApplicationsUseCase-any GetAllApplicationsUseCaseProtocol"
+        keyPathToName[\HomeDependency.updateApplicationStatusUseCase] = "updateApplicationStatusUseCase-any UpdateApplicationStatusUseCaseProtocol"
+        keyPathToName[\HomeDependency.getEarlyReturnByGradeUseCase] = "getEarlyReturnByGradeUseCase-any GetEarlyReturnByGradeUseCaseProtocol"
+        keyPathToName[\HomeDependency.updateEarlyReturnStatusUseCase] = "updateEarlyReturnStatusUseCase-any UpdateEarlyReturnStatusUseCaseProtocol"
+        keyPathToName[\HomeDependency.getClassroomMoveByFloorUseCase] = "getClassroomMoveByFloorUseCase-any GetClassroomMoveByFloorUseCase"
+        keyPathToName[\HomeDependency.getOutListUseCase] = "getOutListUseCase-any GetOutListUseCase"
+        keyPathToName[\HomeDependency.getEarlyReturnUseCase] = "getEarlyReturnUseCase-any GetEarlyReturnUseCase"
+        keyPathToName[\HomeDependency.allTabFactory] = "allTabFactory-any AllTabFactory"
+
+    }
+}
 extension PlanComponent: NeedleFoundation.Registration {
     public func registerItems() {
         keyPathToName[\PlanDependency.fetchAcademicScheduleUseCase] = "fetchAcademicScheduleUseCase-any FetchAcademicScheduleUseCaseProtocol"
@@ -460,7 +467,6 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["getClassroomMoveByClassroomUseCase-any GetClassroomMoveByClassroomUseCase"] = { [unowned self] in self.getClassroomMoveByClassroomUseCase as Any }
         localTable["fetchAcademicScheduleUseCase-any FetchAcademicScheduleUseCaseProtocol"] = { [unowned self] in self.fetchAcademicScheduleUseCase as Any }
         localTable["fetchMonthAcademicScheduleUseCase-any FetchMonthAcademicScheduleUseCaseProtocol"] = { [unowned self] in self.fetchMonthAcademicScheduleUseCase as Any }
-        localTable["planFactory-any PlanFactory"] = { [unowned self] in self.planFactory as Any }
         localTable["getMyNameUseCase-any GetMyNameUseCaseProtocol"] = { [unowned self] in self.getMyNameUseCase as Any }
         localTable["signinFactory-any SigninFactory"] = { [unowned self] in self.signinFactory as Any }
         localTable["secretKeyFactory-any SecretKeyFactory"] = { [unowned self] in self.secretKeyFactory as Any }
@@ -470,7 +476,6 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["onboardingFactory-any OnboardingFactory"] = { [unowned self] in self.onboardingFactory as Any }
         localTable["homeFactory-any HomeFactory"] = { [unowned self] in self.homeFactory as Any }
         localTable["allTabFactory-any AllTabFactory"] = { [unowned self] in self.allTabFactory as Any }
-        localTable["acceptFactory-any AcceptFactory"] = { [unowned self] in self.acceptFactory as Any }
         localTable["fetchSelfStudyTeacherUseCase-any FetchSelfStudyTeacherUseCaseProtocol"] = { [unowned self] in self.fetchSelfStudyTeacherUseCase as Any }
         localTable["changePasswordProvider-MoyaProvider<ChangePasswordAPI>"] = { [unowned self] in self.changePasswordProvider as Any }
         localTable["remoteChangePasswordDataSource-any RemoteChangePasswordDataSource"] = { [unowned self] in self.remoteChangePasswordDataSource as Any }
@@ -482,7 +487,6 @@ extension AppComponent: NeedleFoundation.Registration {
         localTable["getStudentAttendanceUseCase-any GetStudentAttendanceUseCase"] = { [unowned self] in self.getStudentAttendanceUseCase as Any }
         localTable["saveAttendanceUseCase-any SaveAttendanceUseCase"] = { [unowned self] in self.saveAttendanceUseCase as Any }
         localTable["fetchSchoolMealUseCase-any FetchSchoolMealUseCaseProtocol"] = { [unowned self] in self.fetchSchoolMealUseCase as Any }
-        localTable["schoolMealFactory-any SchoolMealFactory"] = { [unowned self] in self.schoolMealFactory as Any }
         localTable["userDefault-any UserDefault"] = { [unowned self] in self.userDefault as Any }
         localTable["authProvider-MoyaProvider<AuthAPI>"] = { [unowned self] in self.authProvider as Any }
         localTable["localAuthDataSource-any LocalAuthDataSource"] = { [unowned self] in self.localAuthDataSource as Any }
@@ -562,24 +566,6 @@ extension SigninComponent: NeedleFoundation.Registration {
         keyPathToName[\SigninDependency.signinUseCase] = "signinUseCase-any SigninUseCase"
     }
 }
-extension HomeComponent: NeedleFoundation.Registration {
-    public func registerItems() {
-        keyPathToName[\HomeDependency.getSelfStudyDirectorUseCase] = "getSelfStudyDirectorUseCase-any GetSelfStudyDirectorUseCaseProtocol"
-        keyPathToName[\HomeDependency.getAdminSelfStudyInfoUseCase] = "getAdminSelfStudyInfoUseCase-any GetAdminSelfStudyInfoUseCaseProtocol"
-        keyPathToName[\HomeDependency.getSelfStudyAndClassroomUseCase] = "getSelfStudyAndClassroomUseCase-any GetSelfStudyAndClassroomUseCase"
-        keyPathToName[\HomeDependency.getAllApplicationsUseCase] = "getAllApplicationsUseCase-any GetAllApplicationsUseCaseProtocol"
-        keyPathToName[\HomeDependency.updateApplicationStatusUseCase] = "updateApplicationStatusUseCase-any UpdateApplicationStatusUseCaseProtocol"
-        keyPathToName[\HomeDependency.getEarlyReturnByGradeUseCase] = "getEarlyReturnByGradeUseCase-any GetEarlyReturnByGradeUseCaseProtocol"
-        keyPathToName[\HomeDependency.updateEarlyReturnStatusUseCase] = "updateEarlyReturnStatusUseCase-any UpdateEarlyReturnStatusUseCaseProtocol"
-        keyPathToName[\HomeDependency.getClassroomMoveByFloorUseCase] = "getClassroomMoveByFloorUseCase-any GetClassroomMoveByFloorUseCase"
-        keyPathToName[\HomeDependency.getOutListUseCase] = "getOutListUseCase-any GetOutListUseCase"
-        keyPathToName[\HomeDependency.getEarlyReturnUseCase] = "getEarlyReturnUseCase-any GetEarlyReturnUseCase"
-        keyPathToName[\HomeDependency.allTabFactory] = "allTabFactory-any AllTabFactory"
-        keyPathToName[\HomeDependency.planFactory] = "planFactory-any PlanFactory"
-        keyPathToName[\HomeDependency.schoolMealFactory] = "schoolMealFactory-any SchoolMealFactory"
-        keyPathToName[\HomeDependency.acceptFactory] = "acceptFactory-any AcceptFactory"
-    }
-}
 extension ChangePasswordComponent: NeedleFoundation.Registration {
     public func registerItems() {
         keyPathToName[\ChangePasswordDependency.emailSendUseCase] = "emailSendUseCase-any EmailSendUseCase"
@@ -629,11 +615,12 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
 #if !NEEDLE_DYNAMIC
 
 @inline(never) private func register1() {
-    registerProviderFactory("^->AppComponent->PlanComponent", factory84293b45082cab95c524f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->HomeComponent", factory67229cdf0f755562b2b1f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->HomeComponent->PlanComponent", factory3816f306e57691f6cbc3b7304b634b3e62c64b3c)
     registerProviderFactory("^->AppComponent->AllTabComponent", factoryfffd4c52463116b1a1a9f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent", factoryEmptyDependencyProvider)
     registerProviderFactory("^->AppComponent->RootComponent", factory264bfc4d4cb6b0629b40f47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->SchoolMealComponent", factorya99b85c0783e43e9302df47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->HomeComponent->SchoolMealComponent", factory354b0e0b58c0b30e89fcb7304b634b3e62c64b3c)
     registerProviderFactory("^->AppComponent->OnboardingComponent", factory88dc13cc29c5719e2b01e3b0c44298fc1c149afb)
     registerProviderFactory("^->AppComponent->AllTabComponent->CheckSelfStudyTeacherComponent", factoryc77fbcbfa8694fb5c9a8b7304b634b3e62c64b3c)
     registerProviderFactory("^->AppComponent->InfoSettingComponent", factory15af88ecfb834319b78cf47b58f8f304c97af4d5)
@@ -644,12 +631,11 @@ private func registerProviderFactory(_ componentPath: String, _ factory: @escapi
     registerProviderFactory("^->AppComponent->AllTabComponent->ClassroomMoveListComponent", factory95045edcceaacbea5719b7304b634b3e62c64b3c)
     registerProviderFactory("^->AppComponent->AllTabComponent->OutListComponent", factoryd807be069474159d19eab7304b634b3e62c64b3c)
     registerProviderFactory("^->AppComponent->SigninComponent", factory2882a056d84a613debccf47b58f8f304c97af4d5)
-    registerProviderFactory("^->AppComponent->HomeComponent", factory67229cdf0f755562b2b1f47b58f8f304c97af4d5)
     registerProviderFactory("^->AppComponent->AllTabComponent->ChangePasswordComponent", factory467160258c9ac01b7c5bb7304b634b3e62c64b3c)
     registerProviderFactory("^->AppComponent->AllTabComponent->NewPasswordComponent", factory72c947c482b2178b6ac8b7304b634b3e62c64b3c)
     registerProviderFactory("^->AppComponent->AllTabComponent->OutingHistoryComponent", factory9b4dc0b099c64971113cb7304b634b3e62c64b3c)
     registerProviderFactory("^->AppComponent->AllTabComponent->SelfStudyCheckComponent", factory16eaf6e424be7fbccc0ab7304b634b3e62c64b3c)
-    registerProviderFactory("^->AppComponent->AcceptComponent", factorye0727acbbfbe9e00fe23f47b58f8f304c97af4d5)
+    registerProviderFactory("^->AppComponent->HomeComponent->AcceptComponent", factory6619f4a5130bf1e2dcacb7304b634b3e62c64b3c)
 }
 #endif
 

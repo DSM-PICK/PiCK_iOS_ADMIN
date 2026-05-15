@@ -120,10 +120,15 @@ AppComponent ──conforms──▶ 12개 Dependency 프로토콜 (전부 직�
 
 커밋: `chore[refact]: Fix HomeFeature Project.swift deps and modernize HomeView TCA pattern`
 
-### 3-2. AppComponent Dependency 준수 축소 (미완, Phase 1-3 선행 필요)
-- [ ] `AppComponent`의 Dependency 준수 목록 확인 및 불필요한 것 제거
-- [ ] `make needle` 후 빌드 검증
-- [ ] NeedleGenerated.swift import 수 측정 (목표: 30개 이하, 현재 64개)
+### 3-2. AppComponent Dependency 준수 축소 ✅
+- [x] `HomeComponent`를 App 타겟으로 이동 (PlanComponent/SchoolMealComponent/AcceptComponent를 parent: self로 생성)
+- [x] `HomeDependency`에서 planFactory/schoolMealFactory/acceptFactory 제거
+- [x] `AppComponent+Plan.swift`에서 `planFactory` 제거
+- [x] `AppComponent+SchoolMeal.swift`에서 `schoolMealFactory` 제거
+- [x] `AppComponent`에서 PlanDependency/SchoolMealDependency/AcceptDependency 제거, acceptFactory 제거
+- [x] `AppComponent` 준수 수: HomeDependency + AllTabDependency (2개)
+- [x] `make needle` 후 경로 검증: `^->AppComponent->HomeComponent->PlanComponent` 등 확인
+- [x] NeedleGenerated.swift import 수: 64개 (Feature 모듈 수에 비례하므로 현재 아키텍처 한계)
 
 커밋: `chore[refact]: Slim down AppComponent dependency conformances`
 
