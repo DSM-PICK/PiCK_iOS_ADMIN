@@ -56,24 +56,23 @@ public struct SelfStudyCheckView: View {
                         .padding(.top, 20)
                         .padding(.horizontal, 24)
 
-                    HStack(spacing: 8) {
-                        ForEach(SelfStudyCheckReducer.Period.allCases, id: \.self) { period in
-                            Button {
-                                store.send(.selectPeriod(period), animation: .spring())
-                            } label: {
-                                Text(period.title)
-                                    .pickText(
-                                        type: .body1,
-                                        textColor: store.selectedPeriod == period ? .Primary.primary500 : .Gray.gray600
-                                    )
-                                    .frame(maxWidth: .infinity)
-                                    .frame(height: 32)
-                                    .background(
-                                        store.selectedPeriod == period
-                                        ? Color.Primary.primary50
-                                        : Color.clear
-                                    )
-                                    .cornerRadius(8)
+                    VStack(spacing: 8) {
+                        if store.periods.count == 5 {
+                            HStack(spacing: 8) {
+                                ForEach(store.periods.prefix(2), id: \.self) { period in
+                                    periodButton(period)
+                                }
+                            }
+                            HStack(spacing: 8) {
+                                ForEach(store.periods.suffix(3), id: \.self) { period in
+                                    periodButton(period)
+                                }
+                            }
+                        } else {
+                            HStack(spacing: 8) {
+                                ForEach(store.periods, id: \.self) { period in
+                                    periodButton(period)
+                                }
                             }
                         }
                     }
@@ -179,6 +178,29 @@ public struct SelfStudyCheckView: View {
 }
 
 extension SelfStudyCheckView {
+    @ViewBuilder
+    private func periodButton(_ period: SelfStudyCheckReducer.Period) -> some View {
+        WithPerceptionTracking {
+            Button {
+                store.send(.selectPeriod(period), animation: .spring())
+            } label: {
+                Text(period.title)
+                    .pickText(
+                        type: .body1,
+                        textColor: store.selectedPeriod == period ? .Primary.primary500 : .Gray.gray600
+                    )
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 32)
+                    .background(
+                        store.selectedPeriod == period
+                        ? Color.Primary.primary50
+                        : Color.clear
+                    )
+                    .cornerRadius(8)
+            }
+        }
+    }
+
     private func statusColor(_ status: String) -> Color {
         switch status {
         case "출석":
