@@ -56,27 +56,14 @@ public struct SelfStudyCheckView: View {
                         .padding(.top, 20)
                         .padding(.horizontal, 24)
 
-                    VStack(spacing: 8) {
-                        if store.periods.count == 5 {
-                            HStack(spacing: 8) {
-                                ForEach(store.periods.prefix(2), id: \.self) { period in
-                                    periodButton(period)
-                                }
-                            }
-                            HStack(spacing: 8) {
-                                ForEach(store.periods.suffix(3), id: \.self) { period in
-                                    periodButton(period)
-                                }
-                            }
-                        } else {
-                            HStack(spacing: 8) {
-                                ForEach(store.periods, id: \.self) { period in
-                                    periodButton(period)
-                                }
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 8) {
+                            ForEach(store.periods, id: \.self) { period in
+                                periodButton(period)
                             }
                         }
+                        .padding(.horizontal, 24)
                     }
-                    .padding(.horizontal, 24)
                     .padding(.top, 16)
 
                 ScrollView {
@@ -189,8 +176,7 @@ extension SelfStudyCheckView {
                         type: .body1,
                         textColor: store.selectedPeriod == period ? .Primary.primary500 : .Gray.gray600
                     )
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 32)
+                    .frame(width: 114, height: 32)
                     .background(
                         store.selectedPeriod == period
                         ? Color.Primary.primary50
