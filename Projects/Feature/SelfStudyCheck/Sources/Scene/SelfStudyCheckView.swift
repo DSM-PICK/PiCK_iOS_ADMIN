@@ -56,14 +56,34 @@ public struct SelfStudyCheckView: View {
                         .padding(.top, 20)
                         .padding(.horizontal, 24)
 
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 8) {
-                            ForEach(store.periods, id: \.self) { period in
-                                periodButton(period)
+                    ScrollViewReader { proxy in
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 0) {
+                                Color.clear.frame(width: 0).id("periodStart")
+                                HStack(spacing: 8) {
+                                    ForEach(store.periods, id: \.self) { period in
+                                        periodButton(period)
+                                            .id(period)
+                                    }
+                                }
+                                .padding(.horizontal, 24)
                             }
                         }
-                        .padding(.horizontal, 24)
+                        .onAppear {
+                            guard let last = store.periods.last else { return }
+                            Task { @MainActor in
+                                try? await Task.sleep(for: .seconds(0.4))
+                                withAnimation(.easeInOut(duration: 0.4)) {
+                                    proxy.scrollTo(last, anchor: .trailing)
+                                }
+                                try? await Task.sleep(for: .seconds(0.6))
+                                withAnimation(.easeInOut(duration: 0.4)) {
+                                    proxy.scrollTo("periodStart", anchor: .leading)
+                                }
+                            }
+                        }
                     }
+                    .fixedSize(horizontal: false, vertical: true)
                     .padding(.top, 16)
 
                 ScrollView {
