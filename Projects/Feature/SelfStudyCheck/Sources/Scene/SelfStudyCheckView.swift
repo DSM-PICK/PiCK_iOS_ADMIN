@@ -56,28 +56,34 @@ public struct SelfStudyCheckView: View {
                         .padding(.top, 20)
                         .padding(.horizontal, 24)
 
-                    HStack(spacing: 8) {
-                        ForEach(SelfStudyCheckReducer.Period.allCases, id: \.self) { period in
-                            Button {
-                                store.send(.selectPeriod(period), animation: .spring())
-                            } label: {
-                                Text(period.title)
-                                    .pickText(
-                                        type: .body1,
-                                        textColor: store.selectedPeriod == period ? .Primary.primary500 : .Gray.gray600
-                                    )
-                                    .frame(maxWidth: .infinity)
-                                    .frame(height: 32)
-                                    .background(
-                                        store.selectedPeriod == period
-                                        ? Color.Primary.primary50
-                                        : Color.clear
-                                    )
-                                    .cornerRadius(8)
+                    ScrollViewReader { proxy in
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 0) {
+                                Color.clear.frame(width: 0).id("periodStart")
+                                HStack(spacing: 8) {
+                                    ForEach(store.periods, id: \.self) { period in
+                                        periodButton(period)
+                                            .id(period)
+                                    }
+                                }
+                                .padding(.horizontal, 24)
+                            }
+                        }
+                        .onAppear {
+                            guard let last = store.periods.last else { return }
+                            Task { @MainActor in
+                                try? await Task.sleep(for: .seconds(0.4))
+                                withAnimation(.easeInOut(duration: 0.4)) {
+                                    proxy.scrollTo(last, anchor: .trailing)
+                                }
+                                try? await Task.sleep(for: .seconds(0.6))
+                                withAnimation(.easeInOut(duration: 0.4)) {
+                                    proxy.scrollTo("periodStart", anchor: .leading)
+                                }
                             }
                         }
                     }
-                    .padding(.horizontal, 24)
+                    .fixedSize(horizontal: false, vertical: true)
                     .padding(.top, 16)
 
                 ScrollView {
@@ -179,6 +185,28 @@ public struct SelfStudyCheckView: View {
 }
 
 extension SelfStudyCheckView {
+    @ViewBuilder
+    private func periodButton(_ period: SelfStudyCheckReducer.Period) -> some View {
+        WithPerceptionTracking {
+            Button {
+                store.send(.selectPeriod(period), animation: .spring())
+            } label: {
+                Text(period.title)
+                    .pickText(
+                        type: .body1,
+                        textColor: store.selectedPeriod == period ? .Primary.primary500 : .Gray.gray600
+                    )
+                    .frame(width: 114, height: 32)
+                    .background(
+                        store.selectedPeriod == period
+                        ? Color.Primary.primary50
+                        : Color.clear
+                    )
+                    .cornerRadius(8)
+            }
+        }
+    }
+
     private func statusColor(_ status: String) -> Color {
         switch status {
         case "출석":

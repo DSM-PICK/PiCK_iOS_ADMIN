@@ -1,3 +1,4 @@
+import Foundation
 import ComposableArchitecture
 import SelfStudyCheckDomainInterface
 import Combine
@@ -16,6 +17,8 @@ public struct SelfStudyCheckReducer: Reducer {
     }
 
     public enum Period: Int, CaseIterable, Equatable {
+        case sixth = 6
+        case seventh = 7
         case eighth = 8
         case ninth = 9
         case tenth = 10
@@ -47,6 +50,7 @@ public struct SelfStudyCheckReducer: Reducer {
     public struct State: Equatable {
         public var studentItems: [StudentItem] = []
         public var initialStudentItems: [StudentItem] = []
+        public var periods: [Period] = [.eighth, .ninth, .tenth]
         public var selectedPeriod: Period = .eighth
         public var selectedGrade: Int = 1
         public var selectedClass: Int = 1
@@ -57,7 +61,15 @@ public struct SelfStudyCheckReducer: Reducer {
             studentItems != initialStudentItems
         }
 
-        public init() {}
+        public init(isFriday: Bool = Calendar.current.component(.weekday, from: Date()) == 6) {
+            if isFriday {
+                self.periods = [.sixth, .seventh, .eighth, .ninth, .tenth]
+                self.selectedPeriod = .sixth
+            } else {
+                self.periods = [.eighth, .ninth, .tenth]
+                self.selectedPeriod = .eighth
+            }
+        }
     }
 
     public enum Action {

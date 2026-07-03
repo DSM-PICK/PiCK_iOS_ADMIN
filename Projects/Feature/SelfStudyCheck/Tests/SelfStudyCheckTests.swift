@@ -157,10 +157,16 @@ final class SelfStudyCheckTests: XCTestCase {
         XCTAssertFalse(store.state.isChanged)
     }
 
+    func testInitialState_OnFriday_IncludesSixthAndSeventhPeriods() async {
+        let store = makeStore(initialState: .init(isFriday: true))
+        XCTAssertEqual(store.state.periods, [.sixth, .seventh, .eighth, .ninth, .tenth])
+        XCTAssertEqual(store.state.selectedPeriod, .sixth)
+    }
+
     private func makeStore(
         attendanceUseCase: any GetStudentAttendanceUseCase = GetStudentAttendanceUseCaseSpy(),
         saveUseCase: any SaveAttendanceUseCase = SaveAttendanceUseCaseSpy(),
-        initialState: SelfStudyCheckReducer.State = .init()
+        initialState: SelfStudyCheckReducer.State = .init(isFriday: false)
     ) -> TestStore<SelfStudyCheckReducer.State, SelfStudyCheckReducer.Action> {
         TestStore(initialState: initialState) {
             SelfStudyCheckReducer(
