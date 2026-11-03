@@ -3,6 +3,7 @@ import SwiftUI
 import OutingHistoryFeatureInterface
 import ComposableArchitecture
 import OutingHistoryDomainInterface
+import BaseFeature
 
 public protocol OutingHistoryDependency: NeedleFoundation.Dependency {
     var getOutingHistoryUseCase: any GetOutingHistoryUseCase { get }
@@ -20,7 +21,7 @@ public final class OutingHistoryComponent: Component<OutingHistoryDependency>, O
                         )
                     }
                 )
-            )
+            ).trackScreen("OutingHistory")
         )
     }
 }

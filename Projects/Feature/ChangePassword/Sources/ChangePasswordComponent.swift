@@ -4,6 +4,7 @@ import AuthDomainInterface
 import ChangePasswordDomainInterface
 import ChangePasswordFeatureInterface
 import ComposableArchitecture
+import BaseFeature
 
 public protocol ChangePasswordDependency: NeedleFoundation.Dependency {
     var emailSendUseCase: any EmailSendUseCase { get }
@@ -22,7 +23,7 @@ public final class ChangePasswordComponent: Component<ChangePasswordDependency>,
                     )
                 }
             )
-        ))
+        ).trackScreen("ChangePassword"))
     }
 }
 
@@ -44,6 +45,6 @@ public final class NewPasswordComponent: Component<NewPasswordDependency>, NewPa
                 }
             ),
             onSuccess: onSuccess
-        ))
+        ).trackScreen("NewPassword"))
     }
 }

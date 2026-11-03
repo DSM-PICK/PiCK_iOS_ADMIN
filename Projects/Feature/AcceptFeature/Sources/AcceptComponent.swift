@@ -3,6 +3,7 @@ import SwiftUI
 import AcceptFeatureInterface
 import ComposableArchitecture
 import AcceptDomainInterface
+import BaseFeature
 
 public protocol AcceptDependency: NeedleFoundation.Dependency {
     var getAllApplicationsUseCase: any GetAllApplicationsUseCaseProtocol { get }
@@ -34,7 +35,7 @@ public final class AcceptComponent: Component<AcceptDependency>, AcceptFactory {
                         }
                     )
                 )
-            }
+            }.trackScreen("Accept")
         )
     }
 }

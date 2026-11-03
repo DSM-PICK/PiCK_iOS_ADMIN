@@ -3,6 +3,7 @@ import SwiftUI
 import BugReportFeatureInterface
 import ComposableArchitecture
 import BugReportDomainInterface
+import BaseFeature
 
 public protocol BugReportDependency: NeedleFoundation.Dependency {
     var uploadBugImagesUseCase: any UploadBugImagesUseCaseProtocol { get }
@@ -22,7 +23,7 @@ public final class BugReportComponent: Component<BugReportDependency>, BugReport
                         )
                     }
                 )
-            )
+            ).trackScreen("BugReport")
         )
     }
 }

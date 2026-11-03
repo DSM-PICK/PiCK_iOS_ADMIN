@@ -2,6 +2,7 @@ import SwiftUI
 import ComposableArchitecture
 import SchoolMealFeatureInterface
 import SchoolMealDomainInterface
+import BaseFeature
 
 public struct SchoolMealComponentImpl: SchoolMealFactory {
     private let fetchSchoolMealsUseCase: FetchSchoolMealUseCaseProtocol
@@ -20,6 +21,6 @@ public struct SchoolMealComponentImpl: SchoolMealFactory {
             }
         )
         
-        return AnyView(SchoolMealView(store: store))
+        return AnyView(SchoolMealView(store: store).trackScreen("SchoolMeal"))
     }
 }
