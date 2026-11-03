@@ -2,6 +2,8 @@ import Combine
 import ComposableArchitecture
 import OutListDomainInterface
 import XCTest
+import enum Utility.AnalyticsService
+import protocol Utility.AnalyticsLogging
 @testable import OutListFeature
 
 @MainActor
@@ -275,5 +277,54 @@ final class OutListTests: XCTestCase {
         )
 
         XCTAssertEqual(store.state.studentItems, existingItems)
+    }
+
+    func testReturnStudentsResponseSuccess_LogsStudentReturn() async {
+        let analytics = AnalyticsLoggerSpy()
+        AnalyticsService.configure(logger: analytics)
+        addTeardownBlock { AnalyticsService.configure(logger: nil) }
+        let store = makeOutListStore(
+            outListUseCase: GetOutListUseCaseSpy(),
+            returnStudentsUseCase: ReturnStudentsUseCaseSpy(),
+            earlyReturnUseCase: GetEarlyReturnUseCaseSpy()
+        )
+        store.exhaustivity = .off
+
+        await store.send(.returnStudentsResponse(.success(())))
+        await store.finish()
+
+        XCTAssertEqual(analytics.events, [.init(name: "student_return", parameters: ["result": "success"])])
+    }
+
+    func testReturnStudentsResponseFailure_LogsFailedStudentReturn() async {
+        let analytics = AnalyticsLoggerSpy()
+        AnalyticsService.configure(logger: analytics)
+        addTeardownBlock { AnalyticsService.configure(logger: nil) }
+        let store = makeOutListStore(
+            outListUseCase: GetOutListUseCaseSpy(),
+            returnStudentsUseCase: ReturnStudentsUseCaseSpy(),
+            earlyReturnUseCase: GetEarlyReturnUseCaseSpy()
+        )
+        store.exhaustivity = .off
+
+        await store.send(.returnStudentsResponse(.failure(TestError("return failed"))))
+
+        XCTAssertEqual(analytics.events, [.init(name: "student_return", parameters: ["result": "fail"])])
+    }
+}
+
+private final class AnalyticsLoggerSpy: AnalyticsLogging {
+    struct LoggedEvent: Equatable {
+        let name: String
+        let parameters: [String: String]
+    }
+
+    private(set) var events: [LoggedEvent] = []
+
+    func logEvent(_ name: String, parameters: [String: Any]?) {
+        events.append(LoggedEvent(
+            name: name,
+            parameters: parameters?.compactMapValues { $0 as? String } ?? [:]
+        ))
     }
 }

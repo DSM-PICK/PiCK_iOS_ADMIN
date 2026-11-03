@@ -1,4 +1,6 @@
 import XCTest
+import enum Utility.AnalyticsService
+import protocol Utility.AnalyticsLogging
 import Combine
 import ComposableArchitecture
 import HomeDomainInterface
@@ -119,6 +121,52 @@ final class HomeFeatureTests: XCTestCase {
                 .init(from: initialState.outList[0])
             ]
         }
+    }
+
+    func testAcceptApplication_LogsApproveDecisionFromHome() async {
+        let analytics = AnalyticsLoggerSpy()
+        AnalyticsService.configure(logger: analytics)
+        addTeardownBlock { AnalyticsService.configure(logger: nil) }
+        let store = makeStore(updateApplicationStatusUseCase: UpdateStatusUseCaseStub())
+        store.exhaustivity = .off
+
+        await store.send(.acceptApplication(id: "application-1"))
+        await store.finish()
+
+        XCTAssertEqual(analytics.events, [
+            .init(
+                name: "application_decision",
+                parameters: [
+                    "application_type": "outing",
+                    "decision": "approve",
+                    "source": "home",
+                    "result": "success"
+                ]
+            )
+        ])
+    }
+
+    func testRejectEarlyReturn_WhenFails_LogsFailedRejectDecisionFromHome() async {
+        let analytics = AnalyticsLoggerSpy()
+        AnalyticsService.configure(logger: analytics)
+        addTeardownBlock { AnalyticsService.configure(logger: nil) }
+        let store = makeStore(updateEarlyReturnStatusUseCase: UpdateStatusUseCaseStub(shouldFail: true))
+        store.exhaustivity = .off
+
+        await store.send(.rejectEarlyReturn(id: "early-return-1"))
+        await store.finish()
+
+        XCTAssertEqual(analytics.events, [
+            .init(
+                name: "application_decision",
+                parameters: [
+                    "application_type": "early_return",
+                    "decision": "reject",
+                    "source": "home",
+                    "result": "fail"
+                ]
+            )
+        ])
     }
 }
 
@@ -250,6 +298,40 @@ private final class GetEarlyReturnUseCaseSpy: GetEarlyReturnUseCase {
     func execute(floor: Int, status: String) -> AnyPublisher<[EarlyReturnEntity], Error> {
         requestedArguments.append((floor, status))
         return Empty(completeImmediately: true)
+            .setFailureType(to: Error.self)
+            .eraseToAnyPublisher()
+    }
+}
+
+private final class AnalyticsLoggerSpy: AnalyticsLogging {
+    struct LoggedEvent: Equatable {
+        let name: String
+        let parameters: [String: String]
+    }
+
+    private(set) var events: [LoggedEvent] = []
+
+    func logEvent(_ name: String, parameters: [String: Any]?) {
+        events.append(LoggedEvent(
+            name: name,
+            parameters: parameters?.compactMapValues { $0 as? String } ?? [:]
+        ))
+    }
+}
+
+private final class UpdateStatusUseCaseStub: UpdateApplicationStatusUseCaseProtocol, UpdateEarlyReturnStatusUseCaseProtocol {
+    private let shouldFail: Bool
+
+    init(shouldFail: Bool = false) {
+        self.shouldFail = shouldFail
+    }
+
+    func execute(status: String, idList: [String]) -> AnyPublisher<Void, Error> {
+        if shouldFail {
+            return Fail(error: URLError(.badServerResponse))
+                .eraseToAnyPublisher()
+        }
+        return Just(())
             .setFailureType(to: Error.self)
             .eraseToAnyPublisher()
     }
