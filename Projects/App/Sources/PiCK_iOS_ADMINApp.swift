@@ -17,7 +17,9 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         // 크래시를 최대한 빨리 잡기 위해 가장 먼저 호출 (PROD 에서만 동작)
         SentryConfiguration.setup()
 
+        AnalyticsConfiguration.applyCollectionState()
         FirebaseApp.configure()
+        AnalyticsConfiguration.setup()
         
         UNUserNotificationCenter.current().delegate = self
         
