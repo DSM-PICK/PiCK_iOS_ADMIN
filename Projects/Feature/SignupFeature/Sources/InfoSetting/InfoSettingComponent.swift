@@ -3,6 +3,7 @@ import SwiftUI
 import AuthDomainInterface
 import SignupFeatureInterface
 import ComposableArchitecture
+import BaseFeature
 
 public protocol InfoSettingDependency: NeedleFoundation.Dependency {
     var signupUseCase: any SignupUseCase { get }
@@ -23,7 +24,7 @@ public final class InfoSettingComponent: Component<InfoSettingDependency>, InfoS
                         InfoSettingReducer(signupUseCase: self.dependency.signupUseCase)
                     }
                 )
-            )
+            ).trackScreen("InfoSetting")
         )
     }
 }

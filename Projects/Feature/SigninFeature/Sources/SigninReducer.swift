@@ -2,6 +2,8 @@ import ComposableArchitecture
 import Foundation
 import AuthDomainInterface
 import Core
+import enum Utility.AnalyticsService
+import enum Utility.AnalyticsEvent
 
 @Reducer
 public struct SigninReducer: Reducer {
@@ -43,6 +45,7 @@ public struct SigninReducer: Reducer {
             case .signinResponse(.success):
                 state.isLoading = false
                 state.isSigninSuccessful = true
+                AnalyticsService.log(.login)
                 return .none
 
             case let .signinResponse(.failure(error)):

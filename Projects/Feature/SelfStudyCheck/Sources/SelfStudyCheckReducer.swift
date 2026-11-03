@@ -2,6 +2,8 @@ import Foundation
 import ComposableArchitecture
 import SelfStudyCheckDomainInterface
 import Combine
+import enum Utility.AnalyticsService
+import enum Utility.AnalyticsEvent
 
 @Reducer
 public struct SelfStudyCheckReducer: Reducer {
@@ -181,10 +183,12 @@ public struct SelfStudyCheckReducer: Reducer {
             case .saveAttendanceResponse(.success):
                 state.isSaving = false
                 state.initialStudentItems = state.studentItems
+                AnalyticsService.log(.attendanceSave(result: .success))
                 return .none
 
             case .saveAttendanceResponse(.failure):
                 state.isSaving = false
+                AnalyticsService.log(.attendanceSave(result: .fail))
                 return .none
             }
         }

@@ -1,5 +1,6 @@
 import SwiftUI
 import Core
+import Utility
 import BaseFeature
 import FirebaseCore
 import FirebaseMessaging
@@ -13,7 +14,12 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil
     ) -> Bool {
+        // 크래시를 최대한 빨리 잡기 위해 가장 먼저 호출 (PROD 에서만 동작)
+        SentryConfiguration.setup()
+
+        AnalyticsConfiguration.applyCollectionState()
         FirebaseApp.configure()
+        AnalyticsConfiguration.setup()
         
         UNUserNotificationCenter.current().delegate = self
         

@@ -46,7 +46,8 @@ let package = Package(
         .package(url: "https://github.com/ReactorKit/ReactorKit.git", from: "3.0.0"),
         .package(url: "https://github.com/kean/Pulse.git", from: "4.2.0"),
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture.git", from: "1.25.5"),
-        .package(url: "https://github.com/uber/needle.git", from: "0.24.0")
+        .package(url: "https://github.com/uber/needle.git", from: "0.24.0"),
+        .package(url: "https://github.com/getsentry/sentry-cocoa", from: "9.32.0")
     ],
     targets: [
         .target(
@@ -70,9 +71,10 @@ let package = Package(
                 "NeedleFoundation",
                 .product(name: "FirebaseMessaging", package: "firebase-ios-sdk"),
                 .product(name: "FirebaseAnalytics", package: "firebase-ios-sdk"),
-                .product(name: "FirebaseAnalyticsWithoutAdIdSupport", package: "firebase-ios-sdk"),
+                .product(name: "FirebaseAnalyticsCore", package: "firebase-ios-sdk"),
                 .product(name: "FirebaseCrashlytics", package: "firebase-ios-sdk"),
-                .product(name: "FirebasePerformance", package: "firebase-ios-sdk")
+                .product(name: "FirebasePerformance", package: "firebase-ios-sdk"),
+                .product(name: "Sentry", package: "sentry-cocoa")
             ]
         )
     ]

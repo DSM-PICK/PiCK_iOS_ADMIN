@@ -9,6 +9,7 @@ import ClassroomMoveListDomainInterface
 import OutListDomainInterface
 import AllTabFeatureInterface
 import AcceptFeature
+import BaseFeature
 
 public protocol HomeDependency: NeedleFoundation.Dependency {
     var getSelfStudyDirectorUseCase: any GetSelfStudyDirectorUseCaseProtocol { get }
@@ -53,7 +54,7 @@ public final class HomeComponent: Component<HomeDependency>, HomeFactory {
                 planFactory: PlanComponent(parent: self),
                 schoolMealFactory: SchoolMealComponent(parent: self),
                 acceptFactory: AcceptComponent(parent: self)
-            )
+            ).trackScreen("Home")
         )
     }
 }

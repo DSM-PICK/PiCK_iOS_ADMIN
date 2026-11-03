@@ -3,6 +3,7 @@ import SwiftUI
 import CheckSelfStudyTeacherFeatureInterface
 import CheckSelfStudyTeacherDomainInterface
 import ComposableArchitecture
+import BaseFeature
 
 public protocol CheckSelfStudyTeacherDependency: NeedleFoundation.Dependency {
     var fetchSelfStudyTeacherUseCase: any FetchSelfStudyTeacherUseCaseProtocol { get }
@@ -22,7 +23,7 @@ public final class CheckSelfStudyTeacherComponent:
                         )
                     }
                 )
-            )
+            ).trackScreen("CheckSelfStudyTeacher")
         )
     }
 }

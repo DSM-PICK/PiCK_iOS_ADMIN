@@ -5,6 +5,8 @@ import PhotosUI
 import SwiftUI
 import BugReportDomainInterface
 import Combine
+import enum Utility.AnalyticsService
+import enum Utility.AnalyticsEvent
 
 @Reducer
 public struct BugReportReducer: Reducer {
@@ -117,6 +119,7 @@ public struct BugReportReducer: Reducer {
                 state.bugDescription = ""
                 state.selectedImages = []
                 state.isSubmitButtonEnabled = false
+                AnalyticsService.log(.bugReportSubmit(result: .success))
                 return .none
 
             case .submitBugReportResponse(.failure):
@@ -124,6 +127,7 @@ public struct BugReportReducer: Reducer {
                 state.alertSuccessType = .fail
                 state.alertMessage = "버그 제보를 실패했어요"
                 state.showAlert = true
+                AnalyticsService.log(.bugReportSubmit(result: .fail))
                 return .none
 
             case .dismissAlert:

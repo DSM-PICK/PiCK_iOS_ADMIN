@@ -1,4 +1,6 @@
 import XCTest
+import enum Utility.AnalyticsService
+import protocol Utility.AnalyticsLogging
 import Combine
 import ComposableArchitecture
 import SelfStudyCheckDomainInterface
@@ -175,6 +177,30 @@ final class SelfStudyCheckTests: XCTestCase {
             )
         }
     }
+
+    func testSaveAttendanceResponseSuccess_LogsAttendanceSave() async {
+        let analytics = AnalyticsLoggerSpy()
+        AnalyticsService.configure(logger: analytics)
+        addTeardownBlock { AnalyticsService.configure(logger: nil) }
+        let store = makeStore()
+        store.exhaustivity = .off
+
+        await store.send(.saveAttendanceResponse(.success(())))
+
+        XCTAssertEqual(analytics.events, [.init(name: "attendance_save", parameters: ["result": "success"])])
+    }
+
+    func testSaveAttendanceResponseFailure_LogsFailedAttendanceSave() async {
+        let analytics = AnalyticsLoggerSpy()
+        AnalyticsService.configure(logger: analytics)
+        addTeardownBlock { AnalyticsService.configure(logger: nil) }
+        let store = makeStore()
+        store.exhaustivity = .off
+
+        await store.send(.saveAttendanceResponse(.failure(TestError("save failed"))))
+
+        XCTAssertEqual(analytics.events, [.init(name: "attendance_save", parameters: ["result": "fail"])])
+    }
 }
 
 private final class GetStudentAttendanceUseCaseSpy: GetStudentAttendanceUseCase {
@@ -219,4 +245,20 @@ private struct TestError: LocalizedError {
     let message: String
     init(_ message: String) { self.message = message }
     var errorDescription: String? { message }
+}
+
+private final class AnalyticsLoggerSpy: AnalyticsLogging {
+    struct LoggedEvent: Equatable {
+        let name: String
+        let parameters: [String: String]
+    }
+
+    private(set) var events: [LoggedEvent] = []
+
+    func logEvent(_ name: String, parameters: [String: Any]?) {
+        events.append(LoggedEvent(
+            name: name,
+            parameters: parameters?.compactMapValues { $0 as? String } ?? [:]
+        ))
+    }
 }

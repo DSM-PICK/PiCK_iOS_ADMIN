@@ -8,7 +8,11 @@ let project = Project.makeFeatureModule(
     implementationDependencies: [
         .Projects.selfStudyCheckDomainInterface,
         .Features.baseFeature,
+        .Shared.utility,
         .SPM.NeedleFoundation,
         .SPM.ComposableArchitecture
+    ],
+    testDependencies: [
+        .Shared.utility
     ]
 )

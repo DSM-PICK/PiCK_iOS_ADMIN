@@ -3,6 +3,7 @@ import SwiftUI
 import AuthDomainInterface
 import SignupFeatureInterface
 import ComposableArchitecture
+import BaseFeature
 
 public protocol SecretKeyDependency: NeedleFoundation.Dependency {
     var secretKeyUseCase: any SecretKeyUseCase { get }
@@ -17,6 +18,6 @@ public final class SecretKeyComponent: Component<SecretKeyDependency>, SecretKey
                     SecretKeyReducer(secretKeyUseCase: self.dependency.secretKeyUseCase)
                 }
             )
-        ))
+        ).trackScreen("SecretKey"))
     }
 }

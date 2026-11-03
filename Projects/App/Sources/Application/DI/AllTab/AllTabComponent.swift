@@ -12,6 +12,7 @@ import OutListFeature
 import SelfStudyCheckFeature
 import ClassroomMoveListFeature
 import OutingHistoryFeature
+import BaseFeature
 
 public protocol AllTabDependency: NeedleFoundation.Dependency {
     var getMyNameUseCase: any GetMyNameUseCaseProtocol { get }
@@ -39,7 +40,7 @@ public final class AllTabComponent: Component<AllTabDependency>, AllTabFactory {
                 outListFactory: OutListComponent(parent: self),
                 classroomMoveListFactory: ClassroomMoveListComponent(parent: self),
                 outingHistoryFactory: OutingHistoryComponent(parent: self)
-            )
+            ).trackScreen("AllTab")
         )
     }
 }

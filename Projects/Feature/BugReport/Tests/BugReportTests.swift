@@ -99,6 +99,30 @@ final class BugReportTests: XCTestCase {
         state.isSubmitButtonEnabled = isSubmitButtonEnabled
         return state
     }
+
+    func testSubmitBugReportResponseSuccess_LogsBugReportSubmit() async {
+        let analytics = AnalyticsLoggerSpy()
+        AnalyticsService.configure(logger: analytics)
+        addTeardownBlock { AnalyticsService.configure(logger: nil) }
+        let store = makeStore()
+        store.exhaustivity = .off
+
+        await store.send(.submitBugReportResponse(.success(())))
+
+        XCTAssertEqual(analytics.events, [.init(name: "bug_report_submit", parameters: ["result": "success"])])
+    }
+
+    func testSubmitBugReportResponseFailure_LogsFailedBugReportSubmit() async {
+        let analytics = AnalyticsLoggerSpy()
+        AnalyticsService.configure(logger: analytics)
+        addTeardownBlock { AnalyticsService.configure(logger: nil) }
+        let store = makeStore()
+        store.exhaustivity = .off
+
+        await store.send(.submitBugReportResponse(.failure(URLError(.badServerResponse))))
+
+        XCTAssertEqual(analytics.events, [.init(name: "bug_report_submit", parameters: ["result": "fail"])])
+    }
 }
 
 private final class UploadBugImagesUseCaseSpy: UploadBugImagesUseCaseProtocol {
@@ -134,5 +158,21 @@ private final class SubmitBugReportUseCaseSpy: SubmitBugReportUseCaseProtocol {
 
     func execute(title: String, content: String, fileNames: [String]) -> AnyPublisher<Void, Error> {
         executeHandler(title, content, fileNames)
+    }
+}
+
+private final class AnalyticsLoggerSpy: AnalyticsLogging {
+    struct LoggedEvent: Equatable {
+        let name: String
+        let parameters: [String: String]
+    }
+
+    private(set) var events: [LoggedEvent] = []
+
+    func logEvent(_ name: String, parameters: [String: Any]?) {
+        events.append(LoggedEvent(
+            name: name,
+            parameters: parameters?.compactMapValues { $0 as? String } ?? [:]
+        ))
     }
 }

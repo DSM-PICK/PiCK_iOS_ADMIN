@@ -71,6 +71,8 @@ let needleScript: TargetScript = .pre(
 
 let appDependencies: [TargetDependency] = [
     .external(name: "FirebaseMessaging"),
+    .external(name: "FirebaseAnalyticsCore"),
+    .external(name: "Sentry"),
     .Features.baseFeature,
     .Features.signinFeature,
     .Features.signinFeatureInterface,

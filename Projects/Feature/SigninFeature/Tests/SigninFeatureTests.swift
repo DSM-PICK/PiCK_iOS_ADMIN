@@ -3,6 +3,8 @@ import AuthDomainInterface
 import Core
 import Combine
 import XCTest
+import enum Utility.AnalyticsService
+import protocol Utility.AnalyticsLogging
 @testable import SigninFeature
 
 @MainActor
@@ -111,6 +113,30 @@ final class SigninFeatureTests: XCTestCase {
             SigninReducer(signinUseCase: useCase)
         }
     }
+
+    func testSigninResponseSuccess_LogsLoginEvent() async {
+        let analytics = AnalyticsLoggerSpy()
+        AnalyticsService.configure(logger: analytics)
+        addTeardownBlock { AnalyticsService.configure(logger: nil) }
+        let store = makeStore()
+        store.exhaustivity = .off
+
+        await store.send(.signinResponse(.success(())))
+
+        XCTAssertEqual(analytics.events, [.init(name: "login", parameters: ["method": "id_password"])])
+    }
+
+    func testSigninResponseFailure_DoesNotLogLoginEvent() async {
+        let analytics = AnalyticsLoggerSpy()
+        AnalyticsService.configure(logger: analytics)
+        addTeardownBlock { AnalyticsService.configure(logger: nil) }
+        let store = makeStore()
+        store.exhaustivity = .off
+
+        await store.send(.signinResponse(.failure(PiCKError.error(message: "로그인 실패"))))
+
+        XCTAssertTrue(analytics.events.isEmpty)
+    }
 }
 
 private final class SigninUseCaseSpy: SigninUseCase {
@@ -130,5 +156,21 @@ private final class SigninUseCaseSpy: SigninUseCase {
     func execute(req: SigninRequestParams) -> AnyPublisher<Void, Error> {
         receivedRequests.append(req)
         return executeHandler(req)
+    }
+}
+
+private final class AnalyticsLoggerSpy: AnalyticsLogging {
+    struct LoggedEvent: Equatable {
+        let name: String
+        let parameters: [String: String]
+    }
+
+    private(set) var events: [LoggedEvent] = []
+
+    func logEvent(_ name: String, parameters: [String: Any]?) {
+        events.append(LoggedEvent(
+            name: name,
+            parameters: parameters?.compactMapValues { $0 as? String } ?? [:]
+        ))
     }
 }

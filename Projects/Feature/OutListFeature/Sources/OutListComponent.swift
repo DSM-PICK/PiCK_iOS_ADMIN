@@ -3,6 +3,7 @@ import SwiftUI
 import OutListFeatureInterface
 import ComposableArchitecture
 import OutListDomainInterface
+import BaseFeature
 
 public protocol OutListDependency: NeedleFoundation.Dependency {
     var getOutListUseCase: any GetOutListUseCase { get }
@@ -24,7 +25,7 @@ public final class OutListComponent: Component<OutListDependency>, OutListFactor
                         )
                     }
                 )
-            )
+            ).trackScreen("OutList")
         )
     }
 }

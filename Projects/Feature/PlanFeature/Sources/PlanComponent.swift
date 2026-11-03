@@ -2,6 +2,7 @@ import SwiftUI
 import ComposableArchitecture
 import PlanFeatureInterface
 import PlanDomainInterface
+import BaseFeature
 
 public class PlanComponentImpl: PlanFactory {
     private let fetchMonthAcademicScheduleUseCase: FetchMonthAcademicScheduleUseCaseProtocol
@@ -28,6 +29,6 @@ public class PlanComponentImpl: PlanFactory {
     }
 
     public func makePlanView() -> AnyView {
-        return AnyView(PlanFeature(store: store))
+        return AnyView(PlanFeature(store: store).trackScreen("Plan"))
     }
 }

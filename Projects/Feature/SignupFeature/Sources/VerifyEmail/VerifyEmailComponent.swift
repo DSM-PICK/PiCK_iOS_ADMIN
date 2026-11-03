@@ -3,6 +3,7 @@ import SwiftUI
 import AuthDomainInterface
 import SignupFeatureInterface
 import ComposableArchitecture
+import BaseFeature
 
 public protocol VerifyEmailDependency: NeedleFoundation.Dependency {
     var emailSendUseCase: any EmailSendUseCase { get }
@@ -22,7 +23,7 @@ public final class VerifyEmailComponent: Component<VerifyEmailDependency>, Verif
                         )
                     }
                 )
-            )
+            ).trackScreen("VerifyEmail")
         )
     }
 }

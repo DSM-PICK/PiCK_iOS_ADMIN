@@ -14,5 +14,6 @@ let project = Project.makeFeatureModule(
     ],
     testDependencies: [
         .Projects.acceptDomainInterface,
+        .Shared.utility,
     ]
 )

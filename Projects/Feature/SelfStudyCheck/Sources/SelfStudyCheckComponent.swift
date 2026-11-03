@@ -3,6 +3,7 @@ import SwiftUI
 import SelfStudyCheckFeatureInterface
 import SelfStudyCheckDomainInterface
 import ComposableArchitecture
+import BaseFeature
 
 public protocol SelfStudyCheckDependency: NeedleFoundation.Dependency {
     var getStudentAttendanceUseCase: any GetStudentAttendanceUseCase { get }
@@ -22,7 +23,7 @@ public final class SelfStudyCheckComponent: Component<SelfStudyCheckDependency>,
                         )
                     }
                 )
-            )
+            ).trackScreen("SelfStudyCheck")
         )
     }
 }

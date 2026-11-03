@@ -3,6 +3,7 @@ import SwiftUI
 import AuthDomainInterface
 import SignupFeatureInterface
 import ComposableArchitecture
+import BaseFeature
 
 public protocol PasswordDependency: NeedleFoundation.Dependency {}
 
@@ -20,7 +21,7 @@ public final class PasswordComponent: Component<PasswordDependency>, PasswordFac
                         PasswordReducer()
                     }
                 )
-            )
+            ).trackScreen("SignupPassword")
         )
     }
 }

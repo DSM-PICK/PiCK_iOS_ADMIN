@@ -3,6 +3,7 @@ import SwiftUI
 import ClassroomMoveListFeatureInterface
 import ComposableArchitecture
 import ClassroomMoveListDomainInterface
+import BaseFeature
 
 public protocol ClassroomMoveListDependency: NeedleFoundation.Dependency {
     var getClassroomMoveByFloorUseCase: any GetClassroomMoveByFloorUseCase { get }
@@ -22,7 +23,7 @@ public final class ClassroomMoveListComponent: Component<ClassroomMoveListDepend
                         )
                     }
                 )
-            )
+            ).trackScreen("ClassroomMoveList")
         )
     }
 }

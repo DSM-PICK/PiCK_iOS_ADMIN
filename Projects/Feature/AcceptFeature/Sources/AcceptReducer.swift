@@ -2,6 +2,8 @@ import AcceptDomainInterface
 import Combine
 import ComposableArchitecture
 import PiCK_iOS_DesignSystem
+import enum Utility.AnalyticsService
+import enum Utility.AnalyticsEvent
 
 @Reducer
 public struct AcceptReducer: Reducer {
@@ -186,8 +188,14 @@ public struct AcceptReducer: Reducer {
                     }
 
                     return publisher
-                        .map { Action.updateStatusResponse(.success("\(count)명의 \(typeText) 수락이 완료되었습니다!")) }
-                        .catch { Just(Action.updateStatusResponse(.failure($0))) }
+                        .map { _ -> Action in
+                            logDecision(type: currentType, decision: .approve, result: .success)
+                            return Action.updateStatusResponse(.success("\(count)명의 \(typeText) 수락이 완료되었습니다!"))
+                        }
+                        .catch { error -> Just<Action> in
+                            logDecision(type: currentType, decision: .approve, result: .fail)
+                            return Just(Action.updateStatusResponse(.failure(error)))
+                        }
                 }
 
             case .rejectSelectedApplications:
@@ -219,8 +227,14 @@ public struct AcceptReducer: Reducer {
                     }
 
                     return publisher
-                        .map { Action.updateStatusResponse(.success("\(count)명의 \(typeText) 거절이 완료되었습니다!")) }
-                        .catch { Just(Action.updateStatusResponse(.failure($0))) }
+                        .map { _ -> Action in
+                            logDecision(type: currentType, decision: .reject, result: .success)
+                            return Action.updateStatusResponse(.success("\(count)명의 \(typeText) 거절이 완료되었습니다!"))
+                        }
+                        .catch { error -> Just<Action> in
+                            logDecision(type: currentType, decision: .reject, result: .fail)
+                            return Just(Action.updateStatusResponse(.failure(error)))
+                        }
                 }
 
             case let .updateStatusResponse(.success(message)):
@@ -247,5 +261,30 @@ public struct AcceptReducer: Reducer {
                 return .none
             }
         }
+    }
+}
+
+extension AcceptReducer {
+    // 같은 응답 액션으로 수락/거절을 모두 처리하므로, 요청을 보낸 시점에 결정을 구분해서 기록
+    private func logDecision(
+        type: ApplicationType,
+        decision: AnalyticsEvent.Decision,
+        result: AnalyticsEvent.ResultType
+    ) {
+        let analyticsType: AnalyticsEvent.ApplicationType
+        switch type {
+        case .outgoing:
+            analyticsType = .outing
+        case .classroomMove:
+            analyticsType = .classroomMove
+        case .earlyReturn:
+            analyticsType = .earlyReturn
+        }
+        AnalyticsService.log(.applicationDecision(
+            type: analyticsType,
+            decision: decision,
+            source: .acceptList,
+            result: result
+        ))
     }
 }

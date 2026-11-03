@@ -3,6 +3,8 @@ import Combine
 import ComposableArchitecture
 import PiCK_iOS_DesignSystem
 import XCTest
+import enum Utility.AnalyticsService
+import protocol Utility.AnalyticsLogging
 @testable import AcceptFeature
 
 @MainActor
@@ -126,6 +128,110 @@ final class AcceptFeatureTests: XCTestCase {
 
         XCTAssertEqual(updateUseCase.requestedArguments.map { $0.status }, ["NO"])
         XCTAssertEqual(updateUseCase.requestedArguments.map { $0.idList }, [[selectedReturn.id]])
+    }
+
+    func testApproveSelectedApplications_LogsApproveDecision() async {
+        let analytics = AnalyticsLoggerSpy()
+        AnalyticsService.configure(logger: analytics)
+        addTeardownBlock { AnalyticsService.configure(logger: nil) }
+        let application = sampleApplication(id: "application-1")
+        let store = makeStore(
+            updateApplicationStatusUseCase: UpdateApplicationStatusUseCaseSpy { _, _ in
+                Just(())
+                    .setFailureType(to: Error.self)
+                    .eraseToAnyPublisher()
+            },
+            initialState: makeState(
+                studentItems: [.application(application)],
+                selectedItemIds: [application.id],
+                currentType: .outgoing
+            )
+        )
+        store.exhaustivity = .off
+
+        await store.send(.approveSelectedApplications)
+        await store.finish()
+
+        XCTAssertEqual(analytics.events, [
+            .init(
+                name: "application_decision",
+                parameters: [
+                    "application_type": "outing",
+                    "decision": "approve",
+                    "source": "accept_list",
+                    "result": "success"
+                ]
+            )
+        ])
+    }
+
+    func testRejectSelectedApplications_LogsRejectDecisionSeparatelyFromApprove() async {
+        let analytics = AnalyticsLoggerSpy()
+        AnalyticsService.configure(logger: analytics)
+        addTeardownBlock { AnalyticsService.configure(logger: nil) }
+        let move = sampleClassroomMove(id: "move-1")
+        let store = makeStore(
+            updateClassroomMoveStatusUseCase: UpdateClassroomMoveStatusUseCaseSpy { _, _ in
+                Just(())
+                    .setFailureType(to: Error.self)
+                    .eraseToAnyPublisher()
+            },
+            initialState: makeState(
+                studentItems: [.classroomMove(move)],
+                selectedItemIds: [move.id],
+                currentType: .classroomMove
+            )
+        )
+        store.exhaustivity = .off
+
+        await store.send(.rejectSelectedApplications)
+        await store.finish()
+
+        XCTAssertEqual(analytics.events, [
+            .init(
+                name: "application_decision",
+                parameters: [
+                    "application_type": "classroom_move",
+                    "decision": "reject",
+                    "source": "accept_list",
+                    "result": "success"
+                ]
+            )
+        ])
+    }
+
+    func testRejectSelectedApplications_WhenFails_LogsFailedRejectDecision() async {
+        let analytics = AnalyticsLoggerSpy()
+        AnalyticsService.configure(logger: analytics)
+        addTeardownBlock { AnalyticsService.configure(logger: nil) }
+        let earlyReturn = sampleEarlyReturn(id: "early-return-1")
+        let store = makeStore(
+            updateEarlyReturnStatusUseCase: UpdateEarlyReturnStatusUseCaseSpy { _, _ in
+                Fail(error: URLError(.badServerResponse))
+                    .eraseToAnyPublisher()
+            },
+            initialState: makeState(
+                studentItems: [.earlyReturn(earlyReturn)],
+                selectedItemIds: [earlyReturn.id],
+                currentType: .earlyReturn
+            )
+        )
+        store.exhaustivity = .off
+
+        await store.send(.rejectSelectedApplications)
+        await store.finish()
+
+        XCTAssertEqual(analytics.events, [
+            .init(
+                name: "application_decision",
+                parameters: [
+                    "application_type": "early_return",
+                    "decision": "reject",
+                    "source": "accept_list",
+                    "result": "fail"
+                ]
+            )
+        ])
     }
 }
 
@@ -350,5 +456,21 @@ private final class UpdateEarlyReturnStatusUseCaseSpy: UpdateEarlyReturnStatusUs
     func execute(status: String, idList: [String]) -> AnyPublisher<Void, Error> {
         requestedArguments.append((status: status, idList: idList))
         return executeHandler(status, idList)
+    }
+}
+
+private final class AnalyticsLoggerSpy: AnalyticsLogging {
+    struct LoggedEvent: Equatable {
+        let name: String
+        let parameters: [String: String]
+    }
+
+    private(set) var events: [LoggedEvent] = []
+
+    func logEvent(_ name: String, parameters: [String: Any]?) {
+        events.append(LoggedEvent(
+            name: name,
+            parameters: parameters?.compactMapValues { $0 as? String } ?? [:]
+        ))
     }
 }
