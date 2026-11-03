@@ -3,6 +3,8 @@ import ComposableArchitecture
 import Foundation
 import OutListDomainInterface
 import PiCK_iOS_DesignSystem
+import enum Utility.AnalyticsService
+import enum Utility.AnalyticsEvent
 
 @Reducer
 public struct OutListReducer: Reducer {
@@ -128,12 +130,14 @@ public struct OutListReducer: Reducer {
                 state.showAlert = true
                 state.alertSuccessType = .success
                 state.alertMessage = "복귀가 완료되었습니다!"
+                AnalyticsService.log(.studentReturn(result: .success))
                 return loadOutList(floor: state.currentFloor)
 
             case .returnStudentsResponse(.failure):
                 state.showAlert = true
                 state.alertSuccessType = .fail
                 state.alertMessage = "복귀를 실패하였습니다"
+                AnalyticsService.log(.studentReturn(result: .fail))
                 return .none
 
             case .clearError:

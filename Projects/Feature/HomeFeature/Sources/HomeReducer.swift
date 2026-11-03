@@ -5,6 +5,8 @@ import AcceptDomainInterface
 import OutListDomainInterface
 import ClassroomMoveListDomainInterface
 import Combine
+import enum Utility.AnalyticsService
+import enum Utility.AnalyticsEvent
 
 @Reducer
 public struct HomeReducer: Reducer {
@@ -194,29 +196,53 @@ public struct HomeReducer: Reducer {
                 return .publisher {
                     updateApplicationStatusUseCase.execute(status: "OK", idList: [id])
                         .mapError { $0 as Error }
-                        .map { Action.updateStatusResponse(.success($0)) }
-                        .catch { Just(Action.updateStatusResponse(.failure($0))) }
+                        .map { value -> Action in
+                            logDecision(type: .outing, decision: .approve, result: .success)
+                            return Action.updateStatusResponse(.success(value))
+                        }
+                        .catch { error -> Just<Action> in
+                            logDecision(type: .outing, decision: .approve, result: .fail)
+                            return Just(Action.updateStatusResponse(.failure(error)))
+                        }
                 }
             case let .rejectApplication(id):
                 return .publisher {
                     updateApplicationStatusUseCase.execute(status: "NO", idList: [id])
                         .mapError { $0 as Error }
-                        .map { Action.updateStatusResponse(.success($0)) }
-                        .catch { Just(Action.updateStatusResponse(.failure($0))) }
+                        .map { value -> Action in
+                            logDecision(type: .outing, decision: .reject, result: .success)
+                            return Action.updateStatusResponse(.success(value))
+                        }
+                        .catch { error -> Just<Action> in
+                            logDecision(type: .outing, decision: .reject, result: .fail)
+                            return Just(Action.updateStatusResponse(.failure(error)))
+                        }
                 }
             case let .acceptEarlyReturn(id):
                 return .publisher {
                     updateEarlyReturnStatusUseCase.execute(status: "OK", idList: [id])
                         .mapError { $0 as Error }
-                        .map { Action.updateEarlyReturnStatusResponse(.success($0)) }
-                        .catch { Just(Action.updateEarlyReturnStatusResponse(.failure($0))) }
+                        .map { value -> Action in
+                            logDecision(type: .earlyReturn, decision: .approve, result: .success)
+                            return Action.updateEarlyReturnStatusResponse(.success(value))
+                        }
+                        .catch { error -> Just<Action> in
+                            logDecision(type: .earlyReturn, decision: .approve, result: .fail)
+                            return Just(Action.updateEarlyReturnStatusResponse(.failure(error)))
+                        }
                 }
             case let .rejectEarlyReturn(id):
                 return .publisher {
                     updateEarlyReturnStatusUseCase.execute(status: "NO", idList: [id])
                         .mapError { $0 as Error }
-                        .map { Action.updateEarlyReturnStatusResponse(.success($0)) }
-                        .catch { Just(Action.updateEarlyReturnStatusResponse(.failure($0))) }
+                        .map { value -> Action in
+                            logDecision(type: .earlyReturn, decision: .reject, result: .success)
+                            return Action.updateEarlyReturnStatusResponse(.success(value))
+                        }
+                        .catch { error -> Just<Action> in
+                            logDecision(type: .earlyReturn, decision: .reject, result: .fail)
+                            return Just(Action.updateEarlyReturnStatusResponse(.failure(error)))
+                        }
                 }
 
             case .updateStatusResponse(.success):
@@ -362,5 +388,21 @@ extension HomeReducer {
         return combined.sorted {
             ($0.grade, $0.classNum, $0.num) < ($1.grade, $1.classNum, $1.num)
         }
+    }
+}
+
+extension HomeReducer {
+    // 같은 응답 액션으로 수락/거절을 모두 처리하므로, 요청을 보낸 시점에 결정을 구분해서 기록
+    private func logDecision(
+        type: AnalyticsEvent.ApplicationType,
+        decision: AnalyticsEvent.Decision,
+        result: AnalyticsEvent.ResultType
+    ) {
+        AnalyticsService.log(.applicationDecision(
+            type: type,
+            decision: decision,
+            source: .home,
+            result: result
+        ))
     }
 }
