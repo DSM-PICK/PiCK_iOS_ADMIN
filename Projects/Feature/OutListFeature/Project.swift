@@ -9,9 +9,11 @@ let project = Project.makeFeatureModule(
         .Projects.outListDomainInterface,
         .SPM.NeedleFoundation,
         .SPM.ComposableArchitecture,
+        .Shared.utility,
         .Shared.thirdPartyLib
     ],
     testDependencies: [
-        .Projects.outListDomainInterface
+        .Projects.outListDomainInterface,
+        .Shared.utility
     ]
 )

@@ -22,6 +22,7 @@ let project = Project.makeFeatureModule(
         .Projects.homeDomainInterface,
         .Projects.acceptDomainInterface,
         .Projects.classroomMoveListDomainInterface,
-        .Projects.outListDomainInterface
+        .Projects.outListDomainInterface,
+        .Shared.utility
     ]
 )
